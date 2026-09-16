@@ -90,6 +90,10 @@ export interface LeaderboardEntry {
   xp: number;
   avatarInitial: string;
   isCurrentUser?: boolean;
+  solvedCount?: number;
+  streak?: number;
+  levelTitle?: string;
+  badge?: string;
 }
 
 export type NotificationType =

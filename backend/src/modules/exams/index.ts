@@ -192,12 +192,24 @@ export async function submitExamHandler(request: CallableRequest) {
   const user = getAuthenticatedUser(request);
   const { examId, answers } = validateInput(SubmitExamSchema, request.data);
 
-  // 1. Prevent duplicate submission
+  // 1. Prevent duplicate submission & return existing result gracefully without crash
   const resultDocId = `${examId}_${user.uid}`;
   const resultRef = db.collection("results").doc(resultDocId);
   const existingResult = await resultRef.get();
   if (existingResult.exists) {
-    throw new HttpsError("already-exists", "تم تسجيل نتيجتك لهذا الامتحان مسبقاً.");
+    const existing = existingResult.data()!;
+    return {
+      success: true,
+      resultId: resultDocId,
+      score: existing.score ?? existing.mcqScore ?? 0,
+      total: existing.total ?? 0,
+      mcqScore: existing.mcqScore ?? 0,
+      totalMcqPossible: existing.total ?? existing.mcqScore ?? 0,
+      hasEssay: existing.status === "pending_essay",
+      status: existing.status ?? "graded",
+      alreadySubmitted: true,
+      wrongAnswers: existing.wrongAnswers || []
+    };
   }
 
   // 2. Fetch full exam with secret correct answers from Firestore
@@ -219,20 +231,43 @@ export async function submitExamHandler(request: CallableRequest) {
     }
   }
 
-  // 4. Server-side Grading
+  // 4. Server-side Grading & Wrong Answers Extraction
   let mcqScore = 0;
   let totalMcqPossible = 0;
   let hasEssay = false;
   const essayScores: (number | null)[] = [];
+  const wrongAnswers: any[] = [];
 
   questions.forEach((q: any, idx: number) => {
     const studentAnswer = answers[idx];
     const degree = Number(q.degree || 1);
 
-    if (q.type === "mcq") {
+    if (q.type === "mcq" || !q.type) {
       totalMcqPossible += degree;
-      if (studentAnswer !== null && studentAnswer !== undefined && Number(studentAnswer) === Number(q.correct)) {
+      const isCorrect = studentAnswer !== null && studentAnswer !== undefined && Number(studentAnswer) === Number(q.correct);
+      if (isCorrect) {
         mcqScore += degree;
+      } else {
+        const studentAnsText = (studentAnswer !== null && studentAnswer !== undefined && Array.isArray(q.options) && q.options[studentAnswer] !== undefined)
+          ? q.options[studentAnswer]
+          : (studentAnswer !== null && studentAnswer !== undefined ? String(studentAnswer) : "لم تتم الإجابة");
+        const correctAnsText = (Array.isArray(q.options) && q.options[q.correct] !== undefined)
+          ? q.options[q.correct]
+          : String(q.correct);
+
+        wrongAnswers.push({
+          questionIndex: idx,
+          questionNumber: idx + 1,
+          questionTitle: q.title || `السؤال ${idx + 1}`,
+          question: q.question || "",
+          studentAnswer: studentAnsText,
+          correctAnswer: correctAnsText,
+          scoreReceived: 0,
+          maxScore: degree,
+          type: q.type || "mcq",
+          level: q.level || "متوسط",
+          explanation: q.explanation || "تأكد من مراجعة الدرس الخاص بهذا المفهوم لترسيخ الإجابة الصحيحة."
+        });
       }
     } else {
       hasEssay = true;
@@ -257,6 +292,7 @@ export async function submitExamHandler(request: CallableRequest) {
     score: mcqScore,
     total: mcqScore,
     essayScores,
+    wrongAnswers,
     status: hasEssay ? "pending_essay" : "graded",
     submittedAt: new Date()
   };
@@ -287,6 +323,7 @@ export async function submitExamHandler(request: CallableRequest) {
     mcqScore,
     totalMcqPossible,
     hasEssay,
+    wrongAnswers,
     status: resultRecord.status
   };
 }

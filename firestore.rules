@@ -207,5 +207,24 @@ service cloud.firestore {
       allow update: if isStaff() || (isAuthenticated() && resource.data.recipientUid == request.auth.uid);
       allow create, delete: if isStaff();
     }
+
+    // ========================================================
+    // 14. CODING PROBLEMS (Python Problem Solving Library)
+    // ========================================================
+    match /coding_problems/{problemId} {
+      // All authenticated students can read problems (sanitized by functions or filtered client-side)
+      allow read: if isAuthenticated();
+      // Only teachers and admins can create/update problems
+      allow write: if isStaff();
+    }
+
+    // ========================================================
+    // 15. CODING SUBMISSIONS (Student Code Attempts & History)
+    // ========================================================
+    match /coding_submissions/{submissionId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.studentUid == request.auth.uid;
+      allow update, delete: if isStaff();
+    }
   }
 }

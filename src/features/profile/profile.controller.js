@@ -55,11 +55,37 @@ export const ProfileController = {
       this.bindPasswordForm();
     }
 
-    setHtml(container, renderProfileCard({ student: currentStudent }));
+    const profileHtml = `
+      ${renderProfileCard({ student: currentStudent })}
+      <div id="competitiveProfileSection" class="mt-6">
+        <div class="p-4 text-center text-muted text-sm">
+          <span>جاري تحميل بيانات السجل التنافسي والأوسمة البرمجية... ⏳</span>
+        </div>
+      </div>
+    `;
+
+    setHtml(container, profileHtml);
 
     document.getElementById("openChangePasswordModalBtn")?.addEventListener("click", () => {
       openModal("userChangePasswordModal");
     });
+
+    // Load competitive profile data asynchronously
+    import("../problem-solving/problem-solving.service.js")
+      .then(({ ProblemSolvingService }) => ProblemSolvingService.getStudentCompetitiveProfile(currentStudent))
+      .then((compData) => {
+        const slot = document.getElementById("competitiveProfileSection");
+        if (slot) {
+          import("./components/competitive-profile.component.js").then(({ renderCompetitiveProfileCard }) => {
+            slot.innerHTML = renderCompetitiveProfileCard({ competitiveData: compData });
+          });
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed to load competitive profile data:", err);
+        const slot = document.getElementById("competitiveProfileSection");
+        if (slot) slot.innerHTML = "";
+      });
   },
 
   /**

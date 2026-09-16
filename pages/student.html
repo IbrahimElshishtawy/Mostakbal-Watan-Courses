@@ -137,6 +137,8 @@
         exams: () => import("../src/features/exams/exam.controller.js").then((m) => m.ExamController),
         tasks: () => import("../src/features/assignments/assignment.controller.js").then((m) => m.AssignmentController),
         adventure: () => import("../src/features/python-adventure/python-adventure.controller.js").then((m) => m.PythonAdventureController),
+        problemSolving: () => import("../src/features/problem-solving/problem-solving.controller.js").then((m) => m.ProblemSolvingController),
+        leaderboard: () => import("../src/features/leaderboard/leaderboard.controller.js").then((m) => m.LeaderboardController),
         profile: () => Promise.all([
           import("../src/features/profile/profile.controller.js"),
           import("../src/features/attendance/attendance.service.js"),
@@ -148,6 +150,32 @@
         }))
       };
 
+      function loadCompetitiveWidget(studentUser) {
+        const container = document.getElementById("competitiveDashboardWidgetContainer");
+        if (!container) return;
+        import("../src/features/problem-solving/problem-solving.service.js")
+          .then(({ ProblemSolvingService }) => ProblemSolvingService.getStudentCompetitiveProfile(studentUser))
+          .then((stats) => {
+            import("../src/features/problem-solving/components/competitive-dashboard-widget.component.js")
+              .then(({ renderCompetitiveDashboardWidget }) => {
+                container.innerHTML = renderCompetitiveDashboardWidget({ stats });
+                document.getElementById("dashGoToProblemsBtn")?.addEventListener("click", () => {
+                  layout.switchTab("python-adventure");
+                  lazyLoaders.adventure().then((ctrl) => ctrl.openWorldMapTrack("problem-solving", "ps-level-1"));
+                });
+                document.getElementById("dashGoToLeaderboardBtn")?.addEventListener("click", () => layout.switchTab("leaderboard"));
+                document.getElementById("dashSolveDailyBtn")?.addEventListener("click", (e) => {
+                  const pid = e.currentTarget.getAttribute("data-problem-id") || "prob-l1-sum";
+                  layout.switchTab("python-adventure");
+                  lazyLoaders.adventure().then((ctrl) => ctrl.openProblemSolvingChallenge(pid));
+                });
+              });
+          })
+          .catch((err) => {
+            console.warn("Competitive widget load warning:", err);
+          });
+      }
+
       // 2. Mount UI Layout Shell IMMEDIATELY (no waiting for slow network queries)
       const layout = mountStudentLayout(root, {
         onLogout: () => AuthController.logout(),
@@ -155,6 +183,7 @@
           if (tabId === "videos") {
             LecturesController.loadStudentLectures("videoListContainer", student);
             AttendanceController.loadDashboardWidget("attendanceDashboardWidgetContainer", student, (tab) => layout.switchTab(tab));
+            loadCompetitiveWidget(student);
           } else if (tabId === "exams") {
             lazyLoaders.exams().then((ctrl) => ctrl.loadStudentExams("examListContainer", student));
           } else if (tabId === "tasks") {
@@ -163,6 +192,10 @@
             AttendanceController.loadStudentAttendance("attendanceContainer", student);
           } else if (tabId === "python-adventure") {
             lazyLoaders.adventure().then((ctrl) => ctrl.init("pythonAdventureContainer", student));
+          } else if (tabId === "problem-solving") {
+            lazyLoaders.problemSolving().then((ctrl) => ctrl.init("problemSolvingContainer", student));
+          } else if (tabId === "leaderboard") {
+            lazyLoaders.leaderboard().then((ctrl) => ctrl.init("leaderboardContainer", student));
           } else if (tabId === "profile") {
             lazyLoaders.profile().then(({ ProfileController, AttendanceService, renderProfileAttendanceCard }) => {
               ProfileController.loadProfileView("profileContainer", student);
@@ -210,6 +243,10 @@
         layout.switchTab("attendance");
       } else if (targetTab === "python-adventure") {
         layout.switchTab("python-adventure");
+      } else if (targetTab === "problem-solving") {
+        layout.switchTab("problem-solving");
+      } else if (targetTab === "leaderboard") {
+        layout.switchTab("leaderboard");
       } else if (targetTab === "exams") {
         layout.switchTab("exams");
       } else if (targetTab === "tasks") {
@@ -217,6 +254,7 @@
       } else {
         LecturesController.loadStudentLectures("videoListContainer", student);
         AttendanceController.loadDashboardWidget("attendanceDashboardWidgetContainer", student, (tab) => layout.switchTab(tab));
+        loadCompetitiveWidget(student);
       }
 
       // 5. In Background: Fetch Enriched Student Profile & Update UI without blocking

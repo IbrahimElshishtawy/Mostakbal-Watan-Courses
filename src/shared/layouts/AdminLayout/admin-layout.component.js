@@ -71,6 +71,11 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
             <span>الامتحانات والاختبارات</span>
           </button>
 
+          <button type="button" class="sidebar-item" data-section="coding-problems">
+            <span class="side-icon" aria-hidden="true">🐍</span>
+            <span>تحديات بايثون البرمجية</span>
+          </button>
+
           <div class="sidebar-menu-title">النظام العام</div>
 
           <button type="button" class="sidebar-item" data-section="settings">
@@ -128,6 +133,10 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
             <div id="adminExamsContainer"></div>
           </section>
 
+          <section id="sec-coding-problems" class="tab-content" aria-labelledby="heading-a-coding-problems">
+            <div id="adminCodingProblemsContainer"></div>
+          </section>
+
           <section id="sec-settings" class="tab-content" aria-labelledby="heading-a-settings">
             <div class="page-header">
               <div>
@@ -152,6 +161,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
     attendance: "📊 الغياب والحضور العام",
     students: "👥 إدارة شؤون الطلاب",
     exams: "📝 الامتحانات والاختبارات",
+    "coding-problems": "🐍 إدارة تحديات بايثون البرمجية",
     settings: "⚙️ إعدادات النظام والمظهر"
   };
 

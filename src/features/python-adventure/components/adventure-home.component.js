@@ -64,6 +64,10 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
             <button type="button" class="btn btn-secondary adventure-map-quick-btn" id="adventureQuickMapBtn">
               <span>🗺 خريطة العوالم</span>
             </button>
+
+            <button type="button" class="btn btn-secondary adventure-problems-quick-btn" id="adventureQuickProblemsBtn" style="border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">
+              <span>⚡ تحديات البرمجة (5 مستويات)</span>
+            </button>
           </div>
         </div>
 

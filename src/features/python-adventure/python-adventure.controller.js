@@ -55,6 +55,14 @@ export const PythonAdventureController = {
         this.renderCurrentView(state);
       });
 
+      if (!this._hasTrackListener) {
+        this._hasTrackListener = true;
+        window.addEventListener("open-python-track", (e) => {
+          const { track, worldId } = e.detail || {};
+          this.openWorldMapTrack(track || "all", worldId || null);
+        });
+      }
+
       this.renderCurrentView(adventureStore.getState());
 
     } catch (err) {
@@ -102,7 +110,8 @@ export const PythonAdventureController = {
       case "world-map":
         containerElement.innerHTML = renderWorldMap({
           progress,
-          selectedWorldId
+          selectedWorldId,
+          activeTrack: state.activeTrack || "all"
         });
         this.wireWorldMapEvents();
         break;
@@ -171,7 +180,11 @@ export const PythonAdventureController = {
     });
 
     document.getElementById("adventureQuickMapBtn")?.addEventListener("click", () => {
-      this.navigateTo("world-map");
+      this.openWorldMapTrack("all", "world-1");
+    });
+
+    document.getElementById("adventureQuickProblemsBtn")?.addEventListener("click", () => {
+      this.openWorldMapTrack("problem-solving", "ps-level-1");
     });
 
     containerElement.querySelectorAll(".adventure-hub-card[data-nav]").forEach((card) => {
@@ -207,18 +220,68 @@ export const PythonAdventureController = {
   },
 
   // ========================================================
-  // WORLD MAP ACTIONS
+  // WORLD MAP ACTIONS & PROBLEM SOLVING INTEGRATION
   // ========================================================
+  openWorldMapTrack(track = "all", worldId = null) {
+    const defaultWorld = track === "problem-solving" ? "ps-level-1" : "world-1";
+    adventureStore.setState({
+      activeView: "world-map",
+      activeTrack: track,
+      selectedWorldId: worldId || defaultWorld
+    });
+  },
+
+  async openProblemSolvingChallenge(problemId) {
+    try {
+      const { ProblemSolvingController } = await import("../problem-solving/problem-solving.controller.js");
+      ProblemSolvingController._container = containerElement;
+      ProblemSolvingController._student = currentStudent;
+      ProblemSolvingController._onBackToMap = async (worldId) => {
+        try {
+          const studentId = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId;
+          const freshProgress = await PythonAdventureService.getStudentProgress(studentId);
+          adventureStore.setState({
+            progress: freshProgress,
+            activeView: "world-map",
+            selectedWorldId: worldId || "ps-level-1",
+            activeTrack: "problem-solving"
+          });
+        } catch (_) {
+          adventureStore.setState({
+            activeView: "world-map",
+            selectedWorldId: worldId || "ps-level-1",
+            activeTrack: "problem-solving"
+          });
+        }
+      };
+
+      await ProblemSolvingController.openProblemWorkspace(problemId);
+    } catch (err) {
+      console.error("Failed to open problem solving challenge:", err);
+      alert(err.message || "تعذر فتح مساحة حل المشكلة البرمجية.");
+    }
+  },
+
   wireWorldMapEvents() {
     document.getElementById("mapBackToHomeBtn")?.addEventListener("click", () => {
       this.navigateTo("home");
     });
 
+    // Track Switcher Pills (All / Concepts / Problem-Solving)
+    containerElement.querySelectorAll(".map-track-pill[data-track]").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        const track = pill.getAttribute("data-track");
+        adventureStore.setState({ activeTrack: track });
+      });
+    });
+
+    // World & Level Cards selection
     containerElement.querySelectorAll(".world-card[data-world-id]").forEach((card) => {
       card.addEventListener("click", () => {
         const worldId = card.getAttribute("data-world-id");
         const { progress } = adventureStore.getState();
-        const isUnlocked = (progress?.unlockedWorlds || ["world-1"]).includes(worldId);
+        const isUnlocked =
+          worldId.startsWith("ps-level-") || (progress?.unlockedWorlds || ["world-1"]).includes(worldId);
         if (isUnlocked) {
           adventureStore.setState({ selectedWorldId: worldId });
           // Scroll levels section smoothly into view
@@ -227,6 +290,7 @@ export const PythonAdventureController = {
       });
     });
 
+    // Concept Challenge Cards
     containerElement.querySelectorAll(".level-card[data-challenge-id]").forEach((card) => {
       card.addEventListener("click", () => {
         const challengeId = card.getAttribute("data-challenge-id");
@@ -234,6 +298,16 @@ export const PythonAdventureController = {
         const isUnlocked = (progress?.unlockedChallenges || ["world-1-level-1"]).includes(challengeId);
         if (isUnlocked && challengeId) {
           this.startMissionFlow(challengeId);
+        }
+      });
+    });
+
+    // Problem Solving Coding Problem Cards
+    containerElement.querySelectorAll(".ps-challenge-card[data-problem-id]").forEach((card) => {
+      card.addEventListener("click", () => {
+        const problemId = card.getAttribute("data-problem-id");
+        if (problemId) {
+          this.openProblemSolvingChallenge(problemId);
         }
       });
     });

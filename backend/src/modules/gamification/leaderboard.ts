@@ -89,6 +89,40 @@ export async function getScopedLeaderboard(
     ...doc.data()
   }));
 
+  // Fetch registered students from students collection to ensure no student is missing from leaderboard
+  try {
+    let studentsSnap: FirebaseFirestore.QuerySnapshot;
+    if (scope === "group" && studentGroup && studentGroup !== "ALL") {
+      studentsSnap = await db.collection(STUDENTS_COLLECTION).where("group", "==", studentGroup).limit(50).get();
+    } else {
+      studentsSnap = await db.collection(STUDENTS_COLLECTION).limit(50).get();
+    }
+
+    studentsSnap.docs.forEach(doc => {
+      const sData = doc.data();
+      const sUid = doc.id;
+      if (!allProfiles.some(p => p.studentUid === sUid)) {
+        allProfiles.push({
+          id: sUid,
+          studentUid: sUid,
+          studentName: sData.name || sData.studentName || "طالب مسجل",
+          studentPhone: sData.studentPhone || sData.phone || "",
+          group: sData.group || sData.studentGroup || "ALL",
+          competitionPoints: 0,
+          xp: 0,
+          level: 1,
+          challengesCompleted: 0,
+          currentStreak: 1,
+          rank: allProfiles.length + 1,
+          previousRank: allProfiles.length + 1,
+          rankChange: 0
+        });
+      }
+    });
+  } catch (err) {
+    console.warn("Could not merge students collection in leaderboard:", err);
+  }
+
   // Ensure current user is in the list even if not initialized yet
   let userInList = allProfiles.find(p => p.studentUid === currentStudentUid);
   if (!userInList) {
@@ -106,6 +140,8 @@ export async function getScopedLeaderboard(
         competitionPoints: 0,
         xp: 0,
         level: 1,
+        challengesCompleted: 0,
+        currentStreak: 1,
         rank: allProfiles.length + 1,
         previousRank: allProfiles.length + 1,
         rankChange: 0
@@ -116,6 +152,15 @@ export async function getScopedLeaderboard(
 
   // 3. Deterministic Sort
   allProfiles.sort(sortStudentsDeterministically);
+
+  // Helper for level titles
+  const getLevelTitle = (lvl: number): string => {
+    if (lvl >= 5) return "خبير (Expert) 💎";
+    if (lvl === 4) return "متقدم (Advanced) 🧠";
+    if (lvl === 3) return "متوسط (Intermediate) 🔥";
+    if (lvl === 2) return "سهل (Easy) ⚡";
+    return "مبتدئ (Beginner) 🥉";
+  };
 
   // 4. Assign dynamic ranks
   let currentUserRank = 1;
@@ -133,6 +178,17 @@ export async function getScopedLeaderboard(
 
     const name = p.studentName || "طالب مسجل";
     const avatarInitial = name.trim().charAt(0) || "ط";
+    const points = Number(p.competitionPoints || 0);
+    const lvl = Number(p.level || 1);
+    const solved = Number(p.challengesCompleted || p.stats?.totalCompleted || (points > 0 ? Math.floor(points / 20) : 0));
+    const streak = Number(p.currentStreak || p.streak?.count || 1);
+
+    let badge = "🌟 مبرمج واعد";
+    if (rank === 1 && points > 0) badge = "🥇 المتصدر الأول";
+    else if (rank === 2 && points > 0) badge = "🥈 وصيف البطولة";
+    else if (rank === 3 && points > 0) badge = "🥉 المركز الثالث";
+    else if (rank <= 10 && points > 0) badge = "🔥 نخبة العشرة الأوائل";
+    else if (points >= 100) badge = "⚡ مبرمج نشط";
 
     return {
       rank,
@@ -140,11 +196,15 @@ export async function getScopedLeaderboard(
       studentName: name,
       studentPhoneMasked: maskPhone(p.studentPhone || ""),
       group: p.group || "ALL",
-      competitionPoints: Number(p.competitionPoints || 0),
-      level: Number(p.level || 1),
+      competitionPoints: points,
+      level: lvl,
       xp: Number(p.xp || 0),
       avatarInitial,
-      isCurrentUser
+      isCurrentUser,
+      solvedCount: solved,
+      streak: streak,
+      levelTitle: getLevelTitle(lvl),
+      badge
     };
   });
 

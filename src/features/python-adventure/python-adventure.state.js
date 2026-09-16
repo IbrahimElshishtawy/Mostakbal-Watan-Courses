@@ -6,6 +6,7 @@ class PythonAdventureStore {
       student: null,
       progress: null,
       activeView: "home", // home | world-map | challenge | skill-tree | achievements | daily | profile
+      activeTrack: "all", // all | concepts | problem-solving
       selectedWorldId: "world-1",
       activeChallengeId: null,
       activeChallenge: null,

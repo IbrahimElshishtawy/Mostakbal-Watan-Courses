@@ -1110,10 +1110,16 @@ export const ExamController = {
       });
     } catch (err) {
       console.error("Submit exam error:", err);
-      showToast(err.message || "تعذر تسليم الامتحان. حاول مرة أخرى.", "error");
-
-      // Re-render exam view to allow retry without losing student answers
-      this.renderExamModeView(activeContainer, examId, currentStudent);
+      const isAlreadySubmitted = err?.message?.includes("مسبقاً") || err?.message?.includes("already");
+      if (isAlreadySubmitted) {
+        showToast("تم اعتماد نتيجتك مسبقاً لهذا الامتحان. جاري عرض تفاصيل النتيجة...", "info");
+        this.cleanupExamSession();
+        await this.showExamResult(examId, currentStudent);
+      } else {
+        showToast(err.message || "تعذر تسليم الامتحان. حاول مرة أخرى.", "error");
+        // Re-render exam view to allow retry without losing student answers
+        this.renderExamModeView(activeContainer, examId, currentStudent);
+      }
     } finally {
       this._isSubmittingExam = false;
     }

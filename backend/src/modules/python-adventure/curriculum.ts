@@ -30,6 +30,55 @@ export const ACHIEVEMENTS_LIST = {
     title: "بطل بايثون الأسطوري",
     description: "أنهيت المشروع الختامي وأتممت مسار مغامرة بايثون كاملاً!",
     icon: "🏆"
+  },
+  // New Competitive Titles & Badges
+  beginner_solver: {
+    id: "beginner_solver",
+    title: "🥉 مبتدئ بايثون (Beginner)",
+    description: "نجحت في حل أول مسألة برمجية وبدأت رحلتك في التحديات.",
+    icon: "🥉"
+  },
+  problem_solver: {
+    id: "problem_solver",
+    title: "🥈 حلال المشكلات (Problem Solver)",
+    description: "أتممت حل 5 مشكلات برمجية في بايثون بنجاح.",
+    icon: "🥈"
+  },
+  python_solver: {
+    id: "python_solver",
+    title: "🥇 خبير المسائل (Python Solver)",
+    description: "حللت 15 مسألة برمجية بنجاح وأثبتت تمكنك من أساسيات ومفاهيم بايثون.",
+    icon: "🥇"
+  },
+  code_warrior: {
+    id: "code_warrior",
+    title: "🔥 محارب الأكواد (Code Warrior)",
+    description: "حافظت على تتابع 7 أيام متتالية أو قمت بحل 25 مسألة برمجية.",
+    icon: "🔥"
+  },
+  speed_coder: {
+    id: "speed_coder",
+    title: "⚡ المبرمج السريع (Speed Coder)",
+    description: "حللت 3 مسائل برمجية من المحاولة الأولى بنجاح بدون طلب تلميحات.",
+    icon: "⚡"
+  },
+  algo_master: {
+    id: "algo_master",
+    title: "🧠 سيد الخوارزميات (Algorithm Master)",
+    description: "أتقنت 5 مسائل في خوارزميات البحث والترتيب والـ Recursion في المستوى المتقدم.",
+    icon: "🧠"
+  },
+  python_expert: {
+    id: "python_expert",
+    title: "💎 خبير بايثون المتقدم (Python Expert)",
+    description: "حققت 500+ نقطة تنافسية وتجاوزت مسألتين في مستوى الخبير والتحديات القصوى.",
+    icon: "💎"
+  },
+  python_champion: {
+    id: "python_champion",
+    title: "👑 بطل بايثون المتصدر (Python Champion)",
+    description: "بلغت قمة المتصدرين (Top 3) وأكملت المستوى الخامس بكفاءة استثنائية.",
+    icon: "👑"
   }
 };
 
@@ -981,3 +1030,783 @@ export const PYTHON_ADVENTURE_CHALLENGES: Record<string, any> = {
     nextChallengeId: null
   }
 };
+
+// ========================================================
+// 5 PROGRESSIVE PROBLEM SOLVING LEVELS CONFIGURATION
+// ========================================================
+export const PROBLEM_SOLVING_LEVELS_CONFIG = [
+  {
+    level: 1,
+    id: "level-1",
+    title: "المستوى الأول: مبتدئ (Beginner)",
+    shortTitle: "Level 1: Beginner",
+    badge: "Level 1",
+    difficulty: "easy",
+    color: "#10b981",
+    icon: "🌱",
+    concepts: ["Variables", "Data Types", "Input / Output", "Operators", "Basic Conditions"],
+    description: "أسئلة تأسيسية تركز على إتقان المتغيرات، أنواع البيانات، الإدخال والإخراج، والعمليات الحسابية والشروط الأساسية.",
+    pointsPerProblem: 10,
+    completionBonus: 50
+  },
+  {
+    level: 2,
+    id: "level-2",
+    title: "المستوى الثاني: سهل (Easy)",
+    shortTitle: "Level 2: Easy",
+    badge: "Level 2",
+    difficulty: "easy",
+    color: "#3b82f6",
+    icon: "⚡",
+    concepts: ["if / elif / else", "for loops", "while loops", "Basic Strings", "Basic Lists"],
+    description: "مسائل تدريبية على اتخاذ القرارات وحلقات التكرار والتعامل المباشر مع النصوص والقوائم البسيطة.",
+    pointsPerProblem: 10,
+    completionBonus: 75
+  },
+  {
+    level: 3,
+    id: "level-3",
+    title: "المستوى الثالث: متوسط (Intermediate)",
+    shortTitle: "Level 3: Intermediate",
+    badge: "Level 3",
+    difficulty: "medium",
+    color: "#f59e0b",
+    icon: "🔥",
+    concepts: ["Nested loops", "Lists & Dicts", "Sets & Tuples", "String Manipulation", "Functions"],
+    description: "تحديات تجمع أكثر من مفهوم معاً: هياكل البيانات المترابطة، القواميس، الدوال، والبحث الذكي.",
+    pointsPerProblem: 25,
+    completionBonus: 100
+  },
+  {
+    level: 4,
+    id: "level-4",
+    title: "المستوى الرابع: متقدم (Advanced)",
+    shortTitle: "Level 4: Advanced",
+    badge: "Level 4",
+    difficulty: "hard",
+    color: "#8b5cf6",
+    icon: "🧠",
+    concepts: ["Algorithms", "Binary Search", "Custom Sorting", "Recursion", "Data Optimization"],
+    description: "مسائل خوارزمية وتفكير منطقي عميق: البحث، الترتيب اليدوي، الاستدعاء الذاتي، واكتشاف الأنماط.",
+    pointsPerProblem: 50,
+    completionBonus: 150
+  },
+  {
+    level: 5,
+    id: "level-5",
+    title: "المستوى الخامس: خبير / تحدي (Challenge / Expert)",
+    shortTitle: "Level 5: Expert",
+    badge: "Level 5",
+    difficulty: "expert",
+    color: "#ef4444",
+    icon: "💎",
+    concepts: ["Advanced Algorithms", "Edge Cases", "Time & Space Complexity", "Optimization", "Multi-concept"],
+    description: "تحديات برمجية قوية مخصصة للنخبة، تركز على الكفاءة الزمنية والمكانية والحالات الحدية (Edge Cases).",
+    pointsPerProblem: 100,
+    completionBonus: 250
+  }
+];
+
+// ========================================================
+// 25 REAL CODING PROBLEMS ACROSS THE 5 LEVELS
+// ========================================================
+export const PROBLEM_SOLVING_CHALLENGES: Record<string, any> = {
+  // ------------------------------------------------------
+  // LEVEL 1: BEGINNER (Variables, Types, IO, Operators, Conditions)
+  // ------------------------------------------------------
+  "prob-l1-sum": {
+    id: "prob-l1-sum",
+    title: "مجموع رقمين (Sum of Two Numbers)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["variables", "input", "arithmetic"],
+    description: "اكتب برنامجاً بلغة بايثون يستقبل رقمين صحيحين (كل رقم في سطر مستقل) ويطبع ناتج جمعهما فقط.",
+    inputDescription: "سطران: السطر الأول يحتوي على العدد الصحيح a، والسطر الثاني يحتوي على العدد الصحيح b.",
+    outputDescription: "اطبع عدداً صحيحاً واحداً يمثل المجموع a + b.",
+    examples: [
+      { input: "5\n7", output: "12", explanation: "5 + 7 = 12" },
+      { input: "-3\n8", output: "5", explanation: "-3 + 8 = 5" }
+    ],
+    constraints: ["-10^5 <= a, b <= 10^5"],
+    publicTestCases: [
+      { input: "5\n7", expectedOutput: "12", description: "جمع عددين موجبين" },
+      { input: "-3\n8", expectedOutput: "5", description: "جمع عدد سالب وعدد موجب" }
+    ],
+    hiddenTestCases: [
+      { input: "0\n0", expectedOutput: "0" },
+      { input: "150\n350", expectedOutput: "500" },
+      { input: "-20\n-30", expectedOutput: "-50" }
+    ],
+    starterCode: "# اقرأ رقمين واطبع مجموعهما\na = int(input())\nb = int(input())\nprint(a + b)\n"
+  },
+
+  "prob-l1-even-odd": {
+    id: "prob-l1-even-odd",
+    title: "فاحص الرقم الزوجي والفردي (Even or Odd)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["conditions", "modulus", "input"],
+    description: "اكتب برنامجاً يستقبل رقماً صحيحاً n. إذا كان الرقم زوجياً اطبع كلمة 'Even'، وإذا كان فردياً اطبع كلمة 'Odd'.",
+    inputDescription: "سطر واحد يحتوي على عدد صحيح n.",
+    outputDescription: "اطبع 'Even' أو 'Odd' بدقة.",
+    examples: [
+      { input: "4", output: "Even", explanation: "4 يقبل القسمة على 2 بدون باقٍ فهو زوجي." },
+      { input: "7", output: "Odd", explanation: "7 عدد فردي." }
+    ],
+    constraints: ["-10^6 <= n <= 10^6"],
+    publicTestCases: [
+      { input: "4", expectedOutput: "Even", description: "اختبار عدد زوجي موجب" },
+      { input: "7", expectedOutput: "Odd", description: "اختبار عدد فردي موجب" }
+    ],
+    hiddenTestCases: [
+      { input: "0", expectedOutput: "Even" },
+      { input: "-5", expectedOutput: "Odd" },
+      { input: "1000", expectedOutput: "Even" }
+    ],
+    starterCode: "# اقرأ رقماً وافحص هل هو زوجي أم فردي\nn = int(input())\nif n % 2 == 0:\n    print('Even')\nelse:\n    print('Odd')\n"
+  },
+
+  "prob-l1-temp-converter": {
+    id: "prob-l1-temp-converter",
+    title: "تحويل درجة الحرارة (Temperature Converter)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["math", "floats", "formatting"],
+    description: "اكتب برنامجاً يستقبل درجة الحرارة بالسيليزيوس C، ويحولها إلى فهرنهايت F وفق القانون: F = (C * 9/5) + 32. اطبع الناتج كعدد عشري بدقة منزلة واحدة.",
+    inputDescription: "عدد عشري أو صحيح يمثل درجة الحرارة المئوية C.",
+    outputDescription: "درجة الحرارة بالفهرنهايت F.",
+    examples: [
+      { input: "0", output: "32.0", explanation: "(0 * 9/5) + 32 = 32.0" },
+      { input: "100", output: "212.0", explanation: "(100 * 9/5) + 32 = 212.0" }
+    ],
+    constraints: ["-273.15 <= C <= 1000"],
+    publicTestCases: [
+      { input: "0", expectedOutput: "32.0", description: "درجة تجمد الماء" },
+      { input: "100", expectedOutput: "212.0", description: "درجة غليان الماء" }
+    ],
+    hiddenTestCases: [
+      { input: "25", expectedOutput: "77.0" },
+      { input: "-40", expectedOutput: "-40.0" },
+      { input: "37", expectedOutput: "98.6" }
+    ],
+    starterCode: "c = float(input())\nf = (c * 9/5) + 32\nprint(f'{f:.1f}')\n"
+  },
+
+  "prob-l1-rect-area": {
+    id: "prob-l1-rect-area",
+    title: "مساحة ومحيط المستطيل (Rectangle Area & Perimeter)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["geometry", "math", "formatting"],
+    description: "اكتب برنامجاً يستقبل طول المستطيل L وعرضه W في سطرين منفصلين، ويطبع المساحة والمحيط بالصيغة:\nArea: X\nPerimeter: Y",
+    inputDescription: "سطران يحتويان على عددين صحيحين موجبين L و W.",
+    outputDescription: "سطران بالصيغة المحددة.",
+    examples: [
+      { input: "5\n4", output: "Area: 20\nPerimeter: 18", explanation: "المساحة = 5*4=20، المحيط = 2*(5+4)=18" }
+    ],
+    constraints: ["1 <= L, W <= 10^4"],
+    publicTestCases: [
+      { input: "5\n4", expectedOutput: "Area: 20\nPerimeter: 18", description: "مستطيل 5x4" }
+    ],
+    hiddenTestCases: [
+      { input: "10\n10", expectedOutput: "Area: 100\nPerimeter: 40" },
+      { input: "7\n3", expectedOutput: "Area: 21\nPerimeter: 20" }
+    ],
+    starterCode: "l = int(input())\nw = int(input())\nprint(f'Area: {l * w}')\nprint(f'Perimeter: {2 * (l + w)}')\n"
+  },
+
+  "prob-l1-average": {
+    id: "prob-l1-average",
+    title: "متوسط ثلاثة أرقام (Average of Three Numbers)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["math", "division", "rounding"],
+    description: "اكتب برنامجاً يستقبل 3 أعداد صحيحة (كل عدد في سطر) ويطبع متوسطها الحسابي كعدد عشري.",
+    inputDescription: "3 أسطر تحتوي على 3 أعداد صحيحة a, b, c.",
+    outputDescription: "المتوسط الحسابي للقيم الثلاث.",
+    examples: [
+      { input: "10\n20\n30", output: "20.0", explanation: "(10+20+30)/3 = 20.0" }
+    ],
+    constraints: ["-10^4 <= a, b, c <= 10^4"],
+    publicTestCases: [
+      { input: "10\n20\n30", expectedOutput: "20.0", description: "أعداد متدرجة" }
+    ],
+    hiddenTestCases: [
+      { input: "5\n5\n5", expectedOutput: "5.0" },
+      { input: "1\n2\n3", expectedOutput: "2.0" },
+      { input: "14\n18\n22", expectedOutput: "18.0" }
+    ],
+    starterCode: "a = int(input())\nb = int(input())\nc = int(input())\navg = (a + b + c) / 3\nprint(f'{avg:.1f}')\n"
+  },
+
+  // ------------------------------------------------------
+  // LEVEL 2: EASY (Conditions, Loops, Strings, Lists)
+  // ------------------------------------------------------
+  "prob-l2-max-num": {
+    id: "prob-l2-max-num",
+    title: "إيجاد أكبر رقم (Find the Maximum Number)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 60,
+    timeLimit: 3000,
+    skills: ["logic", "comparisons", "nested_conditions"],
+    description: "اكتب برنامجاً يستقبل 3 أرقام صحيحة في 3 أسطر منفصلة، ويطبع الرقم الأكبر بينها بدون استخدام الدالة الجاهزة max().",
+    inputDescription: "3 أسطر تحتوي على 3 أرقام صحيحة.",
+    outputDescription: "العدد الأكبر بين الأعداد الثلاثة.",
+    examples: [
+      { input: "12\n45\n23", output: "45", explanation: "45 هو الأكبر بين 12 و 45 و 23." }
+    ],
+    constraints: ["-10^5 <= x, y, z <= 10^5"],
+    publicTestCases: [
+      { input: "12\n45\n23", expectedOutput: "45", description: "العدد الثاني هو الأكبر" }
+    ],
+    hiddenTestCases: [
+      { input: "-5\n-1\n-10", expectedOutput: "-1" },
+      { input: "100\n100\n50", expectedOutput: "100" }
+    ],
+    starterCode: "a = int(input())\nb = int(input())\nc = int(input())\n# أوجد الأكبر دون استخدام max()\n"
+  },
+
+  "prob-l2-sum-digits": {
+    id: "prob-l2-sum-digits",
+    title: "مجموع الأرقام الموجبة (Sum of Positive Numbers)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 60,
+    timeLimit: 3000,
+    skills: ["loops", "filtering", "lists"],
+    description: "اقرأ سطراً واحداً يحتوي على أرقام صحيحة مفصولة بمسافات. احسب واطبع مجموع الأرقام الموجبة فقط (الأرقام الأكبر تماماً من الصفر).",
+    inputDescription: "سطر من الأرقام الصحيحة مفصولة بمسافة.",
+    outputDescription: "مجموع الأرقام الموجبة (0 إذا لم توجد أرقام موجبة).",
+    examples: [
+      { input: "1 -2 3 4 -5", output: "8", explanation: "الأرقام الموجبة هي 1 و 3 و 4، مجموعها = 8." },
+      { input: "-1 -2 -3", output: "0", explanation: "لا توجد أرقام موجبة فالناتج 0." }
+    ],
+    constraints: ["طول القائمة بين 1 و 100 عنصر"],
+    publicTestCases: [
+      { input: "1 -2 3 4 -5", expectedOutput: "8", description: "أرقام موجبة وسالبة" },
+      { input: "-1 -2 -3", expectedOutput: "0", description: "كل الأرقام سالبة" }
+    ],
+    hiddenTestCases: [
+      { input: "10 20 30", expectedOutput: "60" },
+      { input: "0 5 0 15 -10", expectedOutput: "20" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\npos_sum = sum(x for x in nums if x > 0)\nprint(pos_sum)\n"
+  },
+
+  "prob-l2-count-char": {
+    id: "prob-l2-count-char",
+    title: "عد تكرار حرف في نص (Count Character Occurrences)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 60,
+    timeLimit: 3000,
+    skills: ["strings", "loops", "counters"],
+    description: "اكتب برنامجاً يستقبل نصاً في السطر الأول، وحرفاً مفرداً في السطر الثاني، ثم يطبع عدد مرات ظهور هذا الحرف داخل النص.",
+    inputDescription: "السطر الأول: نص S، السطر الثاني: حرف C.",
+    outputDescription: "عدد تكرار الحرف C في النص S.",
+    examples: [
+      { input: "programming\nm", output: "2", explanation: "حرف m ظهر مرتين في كلمة programming." }
+    ],
+    constraints: ["طول النص S لا يتجاوز 1000 حرف"],
+    publicTestCases: [
+      { input: "programming\nm", expectedOutput: "2", description: "حرف متكرر" }
+    ],
+    hiddenTestCases: [
+      { input: "hello world\nl", expectedOutput: "3" },
+      { input: "python\nz", expectedOutput: "0" }
+    ],
+    starterCode: "text = input()\nchar = input()\ncount = sum(1 for c in text if c == char)\nprint(count)\n"
+  },
+
+  "prob-l2-reverse-string": {
+    id: "prob-l2-reverse-string",
+    title: "عكس النص البرمجي (Reverse String)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 60,
+    timeLimit: 3000,
+    skills: ["strings", "slicing", "indexing"],
+    description: "اكتب برنامجاً يستقبل نصاً ويطبع حروفه معكوسة بالكامل.",
+    inputDescription: "سطر واحد يحتوي على نص.",
+    outputDescription: "النص بعد عكس ترتيب حروفه.",
+    examples: [
+      { input: "python", output: "nohtyp", explanation: "عكس كلمة python." }
+    ],
+    constraints: ["طول النص بين 1 و 500 حرف"],
+    publicTestCases: [
+      { input: "python", expectedOutput: "nohtyp", description: "كلمة بايثون" }
+    ],
+    hiddenTestCases: [
+      { input: "racecar", expectedOutput: "racecar" },
+      { input: "12345", expectedOutput: "54321" }
+    ],
+    starterCode: "text = input()\nprint(text[::-1])\n"
+  },
+
+  "prob-l2-count-evens": {
+    id: "prob-l2-count-evens",
+    title: "عد الأرقام الزوجية (Count Even Numbers)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 60,
+    timeLimit: 3000,
+    skills: ["lists", "modulus", "loops"],
+    description: "اقرأ قائمة أرقام صحيحة مفصولة بمسافات واطبع عدد الأرقام الزوجية الموجودة فيها.",
+    inputDescription: "سطر يحتوي على أرقام صحيحة مفصولة بمسافة.",
+    outputDescription: "عدد الأرقام الزوجية.",
+    examples: [
+      { input: "1 2 3 4 5 6", output: "3", explanation: "الأرقام الزوجية هي 2، 4، 6 وعددها 3." }
+    ],
+    constraints: ["1 <= طول القائمة <= 100"],
+    publicTestCases: [
+      { input: "1 2 3 4 5 6", expectedOutput: "3", description: "ستة أرقام متتالية" }
+    ],
+    hiddenTestCases: [
+      { input: "1 3 5 7", expectedOutput: "0" },
+      { input: "2 4 8 10 12", expectedOutput: "5" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\nevens = sum(1 for x in nums if x % 2 == 0)\nprint(evens)\n"
+  },
+
+  // ------------------------------------------------------
+  // LEVEL 3: INTERMEDIATE (Nested loops, Dicts, Sets, Functions)
+  // ------------------------------------------------------
+  "prob-l3-remove-duplicates": {
+    id: "prob-l3-remove-duplicates",
+    title: "إزالة العناصر المكررة مع الحفاظ على الترتيب (Remove Duplicates Preserving Order)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["sets", "lists", "order_preservation"],
+    description: "اقرأ قائمة أرقام مفصولة بمسافات، وقم بإزالة التكرارات بحيث يتبقى أول ظهور فقط لكل رقم، واطبع القائمة الناتجة مفصولة بمسافات.",
+    inputDescription: "سطر يحتوي على أرقام صحيحة.",
+    outputDescription: "الأرقام الفريدة مع الحفاظ على ترتيب أول ظهور مفصولة بمسافة.",
+    examples: [
+      { input: "1 2 2 3 4 4 1 5", output: "1 2 3 4 5", explanation: "تم الإبقاء على أول ظهور للعناصر 1, 2, 3, 4, 5." }
+    ],
+    constraints: ["1 <= عدد العناصر <= 1000"],
+    publicTestCases: [
+      { input: "1 2 2 3 4 4 1 5", expectedOutput: "1 2 3 4 5", description: "أرقام بها تكرارات متعددة" }
+    ],
+    hiddenTestCases: [
+      { input: "7 7 7 7", expectedOutput: "7" },
+      { input: "5 4 3 2 1", expectedOutput: "5 4 3 2 1" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\nseen = set()\nresult = []\nfor x in nums:\n    if x not in seen:\n        seen.add(x)\n        result.append(x)\nprint(' '.join(map(str, result)))\n"
+  },
+
+  "prob-l3-most-frequent": {
+    id: "prob-l3-most-frequent",
+    title: "أكثر عنصر تكراراً في القائمة (Most Frequent Element)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["dictionaries", "frequency_map", "tuples"],
+    description: "اقرأ أرقاماً مفصولة بمسافات. أوجد العنصر الذي تكرر أكبر عدد من المرات واطبع النتيجة بالصيغة:\nElement: X, Count: Y",
+    inputDescription: "سطر أرقام صحيحة مفصولة بمسافات.",
+    outputDescription: "Element: X, Count: Y (إذا تساوى أكثر من عنصر، اختر أصغر عنصر قيمة).",
+    examples: [
+      { input: "1 3 2 3 4 3 5", output: "Element: 3, Count: 3", explanation: "الرقم 3 تكرر 3 مرات وهو الأكثر تكراراً." }
+    ],
+    constraints: ["1 <= عدد العناصر <= 1000"],
+    publicTestCases: [
+      { input: "1 3 2 3 4 3 5", expectedOutput: "Element: 3, Count: 3", description: "عنصر واضح الأكثر تكراراً" }
+    ],
+    hiddenTestCases: [
+      { input: "9 9 1 1 9", expectedOutput: "Element: 9, Count: 3" },
+      { input: "4", expectedOutput: "Element: 4, Count: 1" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\ncounts = {}\nfor x in nums:\n    counts[x] = counts.get(x, 0) + 1\nbest_elem = None\nmax_c = -1\nfor elem in sorted(counts.keys()):\n    if counts[elem] > max_c:\n        max_c = counts[elem]\n        best_elem = elem\nprint(f'Element: {best_elem}, Count: {max_c}')\n"
+  },
+
+  "prob-l3-word-frequency": {
+    id: "prob-l3-word-frequency",
+    title: "تحليل تكرار الكلمات (Word Frequency Counter)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["strings", "dictionaries", "sorting"],
+    description: "اقرأ جملة باللغة الإنجليزية، وقم بحساب تكرار كل كلمة، ثم اطبع كل كلمة وتكرارها بالصيغة 'word: count' مرتبة أبجدياً حسب اسم الكلمة تصاعدياً.",
+    inputDescription: "سطر واحد يحتوي على كلمات مفصولة بمسافات.",
+    outputDescription: "أسطر تمثل كل كلمة وعدد تكرارها مرتبة أبجدياً.",
+    examples: [
+      { input: "apple banana apple orange banana apple", output: "apple: 3\nbanana: 2\norange: 1", explanation: "apple تكررت 3 مرات، banana مرتان، orange مرة واحدة." }
+    ],
+    constraints: ["جميع الكلمات بحروف صغيرة (lowercase)"],
+    publicTestCases: [
+      { input: "apple banana apple orange banana apple", expectedOutput: "apple: 3\nbanana: 2\norange: 1", description: "ثلاث فواكه متكررة" }
+    ],
+    hiddenTestCases: [
+      { input: "cat dog cat", expectedOutput: "cat: 2\ndog: 1" },
+      { input: "one", expectedOutput: "one: 1" }
+    ],
+    starterCode: "words = input().split()\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\nfor w in sorted(counts.keys()):\n    print(f'{w}: {counts[w]}')\n"
+  },
+
+  "prob-l3-student-manager": {
+    id: "prob-l3-student-manager",
+    title: "نظام تصفية الطلاب المتفوقين (Student Records Filter)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["data_structures", "dictionaries", "filtering"],
+    description: "اقرأ عدد الطلاب N في السطر الأول، ثم N أسطر يحتوي كل سطر على اسم الطالب ودرجته مفصولين بمسافة. اطبع أسماء ودرجات الطلاب الناجحين (الذين حصلوا على 50 أو أكثر) بنفس ترتيب الإدخال، بالصيغة 'Name: Score'. إذا لم ينجح أحد، اطبع 'None'.",
+    inputDescription: "السطر الأول عدد صحيح N، يليه N أسطر من 'الاسم الدرجة'.",
+    outputDescription: "قائمة الطلاب الناجحين أو 'None'.",
+    examples: [
+      { input: "3\nAhmed 85\nSara 45\nOmar 92", output: "Ahmed: 85\nOmar: 92", explanation: "سارة درجتها 45 راسبة، أما أحمد وعمر فدرجاتهما أعلى من 50." }
+    ],
+    constraints: ["1 <= N <= 100", "0 <= Score <= 100"],
+    publicTestCases: [
+      { input: "3\nAhmed 85\nSara 45\nOmar 92", expectedOutput: "Ahmed: 85\nOmar: 92", description: "طالبان ناجحان وطالب راسب" }
+    ],
+    hiddenTestCases: [
+      { input: "2\nAli 30\nKhaled 49", expectedOutput: "None" },
+      { input: "2\nNour 100\nZaid 50", expectedOutput: "Nour: 100\nZaid: 50" }
+    ],
+    starterCode: "n = int(input())\npassed = []\nfor _ in range(n):\n    parts = input().split()\n    name = parts[0]\n    score = int(parts[1])\n    if score >= 50:\n        passed.append(f'{name}: {score}')\nif passed:\n    for p in passed:\n        print(p)\nelse:\n    print('None')\n"
+  },
+
+  "prob-l3-filter-search": {
+    id: "prob-l3-filter-search",
+    title: "البحث والتصفية بالقسمة (Divisible Filter Search)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["functions", "lists", "modulus"],
+    description: "اقرأ قائمة أرقام في السطر الأول، وقيمة القاسم K في السطر الثاني. اطبع جميع الأرقام التي تقبل القسمة على K بدون باقٍ مفصولة بمسافة. إذا لم يوجد أي رقم يقبل القسمة، اطبع 'None'.",
+    inputDescription: "السطر 1: أرقام صحيحة مفصولة بمسافات. السطر 2: القاسم K.",
+    outputDescription: "الأرقام التي تقبل القسمة على K أو 'None'.",
+    examples: [
+      { input: "12 15 20 25 30\n5", output: "15 20 25 30", explanation: "الأرقام التي تقبل القسمة على 5 هي 15، 20، 25، 30." }
+    ],
+    constraints: ["K >= 1"],
+    publicTestCases: [
+      { input: "12 15 20 25 30\n5", expectedOutput: "15 20 25 30", description: "أربعة أرقام تقبل القسمة على 5" }
+    ],
+    hiddenTestCases: [
+      { input: "7 11 13\n3", expectedOutput: "None" },
+      { input: "4 8 12 16\n4", expectedOutput: "4 8 12 16" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\nk = int(input())\nfiltered = [x for x in nums if x % k == 0]\nif filtered:\n    print(' '.join(map(str, filtered)))\nelse:\n    print('None')\n"
+  },
+
+  // ------------------------------------------------------
+  // LEVEL 4: ADVANCED (Algorithms, Searching, Sorting, Recursion)
+  // ------------------------------------------------------
+  "prob-l4-binary-search": {
+    id: "prob-l4-binary-search",
+    title: "البحث الثنائي (Binary Search Algorithm)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 200,
+    timeLimit: 3000,
+    skills: ["binary_search", "algorithms", "logarithmic_time"],
+    description: "اقرأ مصفوفة مرتبة تصاعدياً في السطر الأول، والهدف Target في السطر الثاني. طبق خوارزمية البحث الثنائي (Binary Search) واطبع الفهرس (0-indexed) للهدف، أو اطبع -1 إذا لم يكن موجوداً.",
+    inputDescription: "السطر 1: أرقام مرتبة تصاعدياً. السطر 2: العدد المطلوب البحث عنه Target.",
+    outputDescription: "فهرس العنصر أو -1.",
+    examples: [
+      { input: "2 5 8 12 16 23 38 56 72 91\n23", output: "5", explanation: "العدد 23 يقع في الفهرس رقم 5." },
+      { input: "1 3 5 7 9\n4", output: "-1", explanation: "العدد 4 غير موجود في القائمة." }
+    ],
+    constraints: ["1 <= طول القائمة <= 10^5", "العناصر مرتبة تصاعدياً بشكل مؤكد"],
+    publicTestCases: [
+      { input: "2 5 8 12 16 23 38 56 72 91\n23", expectedOutput: "5", description: "عنصر موجود في المنتصف" },
+      { input: "1 3 5 7 9\n4", expectedOutput: "-1", description: "عنصر غير موجود" }
+    ],
+    hiddenTestCases: [
+      { input: "10 20 30\n10", expectedOutput: "0" },
+      { input: "10 20 30\n30", expectedOutput: "2" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\ntarget = int(input())\n\nleft, right = 0, len(nums) - 1\nans = -1\nwhile left <= right:\n    mid = (left + right) // 2\n    if nums[mid] == target:\n        ans = mid\n        break\n    elif nums[mid] < target:\n        left = mid + 1\n    else:\n        right = mid - 1\nprint(ans)\n"
+  },
+
+  "prob-l4-custom-sort": {
+    id: "prob-l4-custom-sort",
+    title: "الترتيب بدون الدوال الجاهزة (Custom Sort Algorithm)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 200,
+    timeLimit: 3000,
+    skills: ["sorting", "bubble_sort", "selection_sort"],
+    description: "اقرأ قائمة أرقام صحيحة مفصولة بمسافات. قم بترتيبها تصاعدياً باستخدام خوارزمية ترتيب يدوية (مثل Bubble Sort أو Selection Sort) دون استخدام دالتي sort() أو sorted() نهائياً. اطبع القائمة المرتبة مفصولة بمسافات.",
+    inputDescription: "سطر من الأرقام الصحيحة غير المرتبة.",
+    outputDescription: "الأرقام مرتبة تصاعدياً مفصولة بمسافة.",
+    examples: [
+      { input: "64 25 12 22 11", output: "11 12 22 25 64", explanation: "تم الترتيب تصاعدياً من الأصغر للأكبر." }
+    ],
+    constraints: ["1 <= عدد العناصر <= 500", "يمنع استخدام sort أو sorted في كود الحل"],
+    forbiddenPatterns: [
+      { regex: "\\.sort\\s*\\(", messageAr: "ممنوع استخدام الدالة المدمجة .sort() - الهدف هو كتابة خوارزمية ترتيب يدوية." },
+      { regex: "sorted\\s*\\(", messageAr: "ممنوع استخدام دالة sorted() الجاهزة." }
+    ],
+    publicTestCases: [
+      { input: "64 25 12 22 11", expectedOutput: "11 12 22 25 64", description: "خمسة أرقام عشوائية" }
+    ],
+    hiddenTestCases: [
+      { input: "5 4 3 2 1", expectedOutput: "1 2 3 4 5" },
+      { input: "-3 0 -10 8", expectedOutput: "-10 -3 0 8" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\nn = len(nums)\nfor i in range(n):\n    for j in range(0, n - i - 1):\n        if nums[j] > nums[j + 1]:\n            nums[j], nums[j + 1] = nums[j + 1], nums[j]\nprint(' '.join(map(str, nums)))\n"
+  },
+
+  "prob-l4-fibonacci-recursive": {
+    id: "prob-l4-fibonacci-recursive",
+    title: "متتالية فيبوناتشي المحسنة (Fibonacci with Memoization)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 200,
+    timeLimit: 3000,
+    skills: ["recursion", "memoization", "dynamic_programming"],
+    description: "اكتب دالة استدعاء ذاتي (Recursion) لحساب الرقم n في متتالية فيبوناتشي مع تطبيق الـ Memoization لتفادي التكرار والبطء الزمني. تذكر: F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2).",
+    inputDescription: "عدد صحيح موجب n.",
+    outputDescription: "قيمة F(n).",
+    examples: [
+      { input: "7", output: "13", explanation: "F(0)=0, F(1)=1, F(2)=1, F(3)=2, F(4)=3, F(5)=5, F(6)=8, F(7)=13." }
+    ],
+    constraints: ["0 <= n <= 50"],
+    publicTestCases: [
+      { input: "7", expectedOutput: "13", description: "الرقم السابع" },
+      { input: "10", expectedOutput: "55", description: "الرقم العاشر" }
+    ],
+    hiddenTestCases: [
+      { input: "0", expectedOutput: "0" },
+      { input: "1", expectedOutput: "1" },
+      { input: "20", expectedOutput: "6765" }
+    ],
+    starterCode: "memo = {}\ndef fib(n):\n    if n <= 0: return 0\n    if n == 1: return 1\n    if n in memo: return memo[n]\n    memo[n] = fib(n - 1) + fib(n - 2)\n    return memo[n]\n\nn = int(input())\nprint(fib(n))\n"
+  },
+
+  "prob-l4-palindrome-pattern": {
+    id: "prob-l4-palindrome-pattern",
+    title: "فحص التناظر النصي المتقدم (Advanced Palindrome Check)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 200,
+    timeLimit: 3000,
+    skills: ["string_manipulation", "pointers", "cleaning"],
+    description: "اقرأ نصاً وافحص هل هو متناظر (Palindrome) بحيث يُقرأ من اليمين كما من اليسار، مع تجاهل جميع المسافات وعلامات الترقيم والرموز، وتجاهل حالة الأحرف (Case-insensitive). اطبع True أو False.",
+    inputDescription: "سطر يحتوي على جملة نصية.",
+    outputDescription: "True أو False.",
+    examples: [
+      { input: "A man, a plan, a canal: Panama", output: "True", explanation: "بعد تصفية الرموز تصبح 'amanaplanacanalpanama' وهي متناظرة تماماً." }
+    ],
+    constraints: ["1 <= طول النص <= 10^4"],
+    publicTestCases: [
+      { input: "A man, a plan, a canal: Panama", expectedOutput: "True", description: "جملة متناظرة مشهورة مع علامات ترقيم" },
+      { input: "race a car", expectedOutput: "False", description: "جملة غير متناظرة" }
+    ],
+    hiddenTestCases: [
+      { input: "Was it a car or a cat I saw?", expectedOutput: "True" },
+      { input: "hello", expectedOutput: "False" }
+    ],
+    starterCode: "text = input()\nclean = [c.lower() for c in text if c.isalnum()]\nprint(str(clean == clean[::-1]))\n"
+  },
+
+  "prob-l4-merge-sorted": {
+    id: "prob-l4-merge-sorted",
+    title: "دمج قائمتين مرتبتين بكفاءة (Merge Two Sorted Lists)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 200,
+    timeLimit: 3000,
+    skills: ["two_pointers", "algorithms", "linear_time"],
+    description: "اقرأ قائمتين من الأرقام الصحيحة المرتبة تصاعدياً في سطرين منفصلين. قم بدمجهما في قائمة واحدة مرتبة تصاعدياً بتعقيد O(N + M) باستخدام مؤشرين (Two Pointers) دون دمج القائمتين ثم استخدام دالة ترتيب. اطبع القائمة المدمجة مفصولة بمسافات.",
+    inputDescription: "السطر 1: أرقام مرتبة للقائمة الأولى. السطر 2: أرقام مرتبة للقائمة الثانية.",
+    outputDescription: "القائمة المدمجة مرتبة تصاعدياً.",
+    examples: [
+      { input: "1 3 5 7\n2 4 6 8", output: "1 2 3 4 5 6 7 8", explanation: "دمج متداخل بكفاءة خطية." }
+    ],
+    constraints: ["1 <= N, M <= 10^4"],
+    publicTestCases: [
+      { input: "1 3 5 7\n2 4 6 8", expectedOutput: "1 2 3 4 5 6 7 8", description: "قائمتان متساويتان في الطول" }
+    ],
+    hiddenTestCases: [
+      { input: "1 2\n3 4 5", expectedOutput: "1 2 3 4 5" },
+      { input: "5\n1 2 3", expectedOutput: "1 2 3 5" }
+    ],
+    starterCode: "a = [int(x) for x in input().split()]\nb = [int(x) for x in input().split()]\ni = j = 0\nres = []\nwhile i < len(a) and j < len(b):\n    if a[i] <= b[j]:\n        res.append(a[i])\n        i += 1\n    else:\n        res.append(b[j])\n        j += 1\nres.extend(a[i:])\nres.extend(b[j:])\nprint(' '.join(map(str, res)))\n"
+  },
+
+  // ------------------------------------------------------
+  // LEVEL 5: CHALLENGE / EXPERT (Advanced DSA, Optimization, Edge Cases)
+  // ------------------------------------------------------
+  "prob-l5-two-sum": {
+    id: "prob-l5-two-sum",
+    title: "المجموع المستهدف بكفاءة خطية (Two Sum Target O(N))",
+    level: 5,
+    difficulty: "expert",
+    points: 100,
+    baseXp: 350,
+    timeLimit: 3000,
+    skills: ["hash_table", "time_complexity", "optimization"],
+    description: "اقرأ قائمة أرقام في السطر الأول، والقيمة المستهدفة Target في السطر الثاني. أوجد فهرسي رقمين مختلفين (i < j) بحيث يكون مجموعهما مساوياً للـ Target تماماً، وذلك بتعقيد زمني خطي O(N) باستخدام Hash Table (Dictionary). اطبع الفهرسين مفصولين بمسافة، أو اطبع 'None' إذا لم يوجد حل.",
+    inputDescription: "السطر 1: أرقام صحيحة. السطر 2: العدد المستهدف Target.",
+    outputDescription: "الفهرسان i j مفصولين بمسافة حيث i < j، أو 'None'.",
+    examples: [
+      { input: "2 7 11 15\n9", output: "0 1", explanation: "العنصر 2 في الفهرس 0 والعنصر 7 في الفهرس 1 مجموعهما = 9." },
+      { input: "3 2 4\n6", output: "1 2", explanation: "العنصر 2 في الفهرس 1 والعنصر 4 في الفهرس 2 مجموعهما = 6." }
+    ],
+    constraints: ["2 <= طول القائمة <= 10^5", "الحل يجب أن يعمل في تعقيد زمني O(N)"],
+    publicTestCases: [
+      { input: "2 7 11 15\n9", expectedOutput: "0 1", description: "أول رقمين يكونان المجموع" },
+      { input: "3 2 4\n6", expectedOutput: "1 2", description: "الرقم الثاني والثالث" }
+    ],
+    hiddenTestCases: [
+      { input: "3 3\n6", expectedOutput: "0 1" },
+      { input: "1 2 3\n10", expectedOutput: "None" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\ntarget = int(input())\n\nseen = {}\nfound = False\nfor j, val in enumerate(nums):\n    diff = target - val\n    if diff in seen:\n        print(f'{seen[diff]} {j}')\n        found = True\n        break\n    seen[val] = j\nif not found:\n    print('None')\n"
+  },
+
+  "prob-l5-longest-unique-substr": {
+    id: "prob-l5-longest-unique-substr",
+    title: "أطول نص فرعي بدون تكرار (Longest Substring Without Repeating)",
+    level: 5,
+    difficulty: "expert",
+    points: 100,
+    baseXp: 350,
+    timeLimit: 3000,
+    skills: ["sliding_window", "hash_map", "two_pointers"],
+    description: "اقرأ نصاً S وأوجد طول أطول نص فرعي متصل (Substring) لا يحتوي على أي حرف مكرر، باستخدام خوارزمية النافذة المنزلقة (Sliding Window) بتعقيد زمني O(N). اطبع الطول فقط كعدد صحيح.",
+    inputDescription: "سطر يحتوي على نص S.",
+    outputDescription: "عدد صحيح يمثل طول أطول نص فرعي بدون تكرار.",
+    examples: [
+      { input: "abcabcbb", output: "3", explanation: "أطول نص فرعي بدون تكرار هو 'abc' بطول 3." },
+      { input: "bbbbb", output: "1", explanation: "أطول نص فرعي هو 'b' بطول 1." }
+    ],
+    constraints: ["0 <= طول النص <= 5 * 10^4"],
+    publicTestCases: [
+      { input: "abcabcbb", expectedOutput: "3", description: "سلسلة حروف متكررة بنمط" },
+      { input: "bbbbb", expectedOutput: "1", description: "حرف واحد مكرر بالكامل" }
+    ],
+    hiddenTestCases: [
+      { input: "pwwkew", expectedOutput: "3" },
+      { input: "abcdef", expectedOutput: "6" }
+    ],
+    starterCode: "s = input()\nlast_pos = {}\nstart = max_len = 0\nfor i, ch in enumerate(s):\n    if ch in last_pos and last_pos[ch] >= start:\n        start = last_pos[ch] + 1\n    last_pos[ch] = i\n    max_len = max(max_len, i - start + 1)\nprint(max_len)\n"
+  },
+
+  "prob-l5-balanced-brackets": {
+    id: "prob-l5-balanced-brackets",
+    title: "التحقق من توازن الأقواس (Balanced Parentheses & Stacks)",
+    level: 5,
+    difficulty: "expert",
+    points: 100,
+    baseXp: 350,
+    timeLimit: 3000,
+    skills: ["stack", "data_structures", "parsing"],
+    description: "اقرأ نصاً يحتوي على أنواع الأقواس المختلفة '()', '[]', '{}'. تحقق هل الأقواس متوازنة تماماً (بحيث يُغلق كل قوس مفتوح بالنوع المقابل له وفي الترتيب السليم). اطبع 'Balanced' أو 'Unbalanced'.",
+    inputDescription: "سطر يحتوي على سلسلة من الأقواس.",
+    outputDescription: "'Balanced' أو 'Unbalanced'.",
+    examples: [
+      { input: "{[()]}", output: "Balanced", explanation: "جميع الأقواس متداخلة ومغلقة بترتيب صحيح." },
+      { input: "{[(])}", output: "Unbalanced", explanation: "تم إغلاق القوس المربع قبل الدائري وهذا غير متوازن." }
+    ],
+    constraints: ["1 <= طول النص <= 10^4"],
+    publicTestCases: [
+      { input: "{[()]}", expectedOutput: "Balanced", description: "أقواس متوازنة تماماً" },
+      { input: "{[(])}", expectedOutput: "Unbalanced", description: "أقواس متداخلة خطأ" }
+    ],
+    hiddenTestCases: [
+      { input: "()[]{}", expectedOutput: "Balanced" },
+      { input: "(", expectedOutput: "Unbalanced" },
+      { input: "][", expectedOutput: "Unbalanced" }
+    ],
+    starterCode: "s = input()\npairs = {')': '(', ']': '[', '}': '{'}\nstack = []\nbalanced = True\nfor ch in s:\n    if ch in '([{':\n        stack.append(ch)\n    elif ch in ')]}':\n        if not stack or stack.pop() != pairs[ch]:\n            balanced = False\n            break\nif balanced and len(stack) == 0:\n    print('Balanced')\nelse:\n    print('Unbalanced')\n"
+  },
+
+  "prob-l5-max-subarray": {
+    id: "prob-l5-max-subarray",
+    title: "أقصى مجموع لمصفوفة فرعية (Maximum Subarray / Kadane's Algorithm)",
+    level: 5,
+    difficulty: "expert",
+    points: 100,
+    baseXp: 350,
+    timeLimit: 3000,
+    skills: ["kadane_algorithm", "dynamic_programming", "arrays"],
+    description: "اقرأ قائمة أرقام صحيحة قد تحتوي أرقاماً موجبة وسالبة. أوجد أكبر مجموع ممكن لمصفوفة فرعية متصلة غير فارغة (Contiguous Subarray) باستخدام خوارزمية كادان (Kadane's Algorithm) بتعقيد O(N). اطبع الناتج فقط.",
+    inputDescription: "سطر يحتوي على أرقام صحيحة مفصولة بمسافة.",
+    outputDescription: "أقصى مجموع متصل.",
+    examples: [
+      { input: "-2 1 -3 4 -1 2 1 -5 4", output: "6", explanation: "المصفوفة الفرعية [4, -1, 2, 1] تعطي أكبر مجموع = 6." }
+    ],
+    constraints: ["1 <= عدد الأرقام <= 10^5"],
+    publicTestCases: [
+      { input: "-2 1 -3 4 -1 2 1 -5 4", expectedOutput: "6", description: "مصفوفة مختلطة بمجموع أقصى 6" }
+    ],
+    hiddenTestCases: [
+      { input: "1", expectedOutput: "1" },
+      { input: "5 4 -1 7 8", expectedOutput: "23" },
+      { input: "-1 -2 -3", expectedOutput: "-1" }
+    ],
+    starterCode: "nums = [int(x) for x in input().split()]\nmax_so_far = current_max = nums[0]\nfor x in nums[1:]:\n    current_max = max(x, current_max + x)\n    max_so_far = max(max_so_far, current_max)\nprint(max_so_far)\n"
+  },
+
+  "prob-l5-prime-factors-sieve": {
+    id: "prob-l5-prime-factors-sieve",
+    title: "غربال الأعداد الأولية (Sieve of Eratosthenes)",
+    level: 5,
+    difficulty: "expert",
+    points: 100,
+    baseXp: 350,
+    timeLimit: 3000,
+    skills: ["math", "sieve_of_eratosthenes", "number_theory"],
+    description: "اقرأ عدداً صحيحاً موجبياً N. اطبع جميع الأعداد الأولية من 2 وحتى N تصاعدياً مفصولة بمسافات، باستخدام غربال إراتوستينس (Sieve of Eratosthenes) بكفاءة عالية.",
+    inputDescription: "عدد صحيح N.",
+    outputDescription: "الأعداد الأولية حتى N مفصولة بمسافة.",
+    examples: [
+      { input: "20", output: "2 3 5 7 11 13 17 19", explanation: "الأعداد الأولية الأصغر من أو تساوي 20." }
+    ],
+    constraints: ["2 <= N <= 10^5"],
+    publicTestCases: [
+      { input: "20", expectedOutput: "2 3 5 7 11 13 17 19", description: "الأوليات حتى 20" }
+    ],
+    hiddenTestCases: [
+      { input: "2", expectedOutput: "2" },
+      { input: "10", expectedOutput: "2 3 5 7" },
+      { input: "30", expectedOutput: "2 3 5 7 11 13 17 19 23 29" }
+    ],
+    starterCode: "n = int(input())\nis_prime = [True] * (n + 1)\nis_prime[0] = is_prime[1] = False\np = 2\nwhile p * p <= n:\n    if is_prime[p]:\n        for i in range(p * p, n + 1, p):\n            is_prime[i] = False\n    p += 1\nprimes = [str(i) for i in range(2, n + 1) if is_prime[i]]\nprint(' '.join(primes))\n"
+  }
+};
+
+// Merge Problem Solving challenges into main PYTHON_ADVENTURE_CHALLENGES dictionary
+Object.assign(PYTHON_ADVENTURE_CHALLENGES, PROBLEM_SOLVING_CHALLENGES);
+

@@ -82,6 +82,11 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
             <span>مغامرة بايثون</span>
           </button>
 
+          <button type="button" class="sidebar-item" data-section="leaderboard">
+            <span class="side-icon" aria-hidden="true">🏆</span>
+            <span>لوحة المتصدرين</span>
+          </button>
+
           <div class="sidebar-menu-title">الحساب والتفضيلات</div>
 
           <button type="button" class="sidebar-item" data-section="profile">
@@ -131,6 +136,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
                 <p class="page-subtitle">استكشف المحاضرات والمواد التعليمية الخاصة بمجموعتك.</p>
               </div>
             </div>
+            <div id="competitiveDashboardWidgetContainer"></div>
             <div id="attendanceDashboardWidgetContainer"></div>
             <div id="videoListContainer"></div>
           </section>
@@ -166,6 +172,16 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
           <!-- Python Adventure Section -->
           <section id="sec-python-adventure" class="tab-content" aria-labelledby="heading-python-adventure">
             <div id="pythonAdventureContainer"></div>
+          </section>
+
+          <!-- Problem Solving Section (5 Levels) -->
+          <section id="sec-problem-solving" class="tab-content" aria-labelledby="heading-problem-solving">
+            <div id="problemSolvingContainer"></div>
+          </section>
+
+          <!-- Leaderboard Section -->
+          <section id="sec-leaderboard" class="tab-content" aria-labelledby="heading-leaderboard">
+            <div id="leaderboardContainer"></div>
           </section>
 
           <!-- Profile Section -->
@@ -208,6 +224,8 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
     tasks: "📋 التاسكات والواجبات",
     attendance: "📊 الغياب والحضور",
     "python-adventure": "🐍 مغامرة بايثون",
+    "problem-solving": "⚡ تحديات البرمجة (5 مستويات)",
+    leaderboard: "🏆 لوحة المتصدرين والأبطال",
     profile: "👤 حسابي الشخصي",
     settings: "⚙️ الإعدادات والمظهر"
   };
@@ -225,6 +243,13 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
   overlay?.addEventListener("click", closeMobile);
 
   function setActiveTab(sectionId) {
+    if (sectionId === "problem-solving") {
+      sectionId = "python-adventure";
+      try {
+        window.dispatchEvent(new CustomEvent("open-python-track", { detail: { track: "problem-solving", worldId: "ps-level-1" } }));
+      } catch (_) {}
+    }
+
     navItems.forEach((btn) => {
       const match = btn.getAttribute("data-section") === sectionId;
       btn.classList.toggle("active", match);

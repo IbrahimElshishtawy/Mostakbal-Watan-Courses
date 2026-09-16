@@ -1,4 +1,6 @@
 // src/features/python-adventure/python-adventure-data.js
+import { PROBLEM_SOLVING_LEVELS_DATA, PROBLEM_SOLVING_CHALLENGES_DATA } from "../problem-solving/problem-solving-data.js";
+export { PROBLEM_SOLVING_LEVELS_DATA, PROBLEM_SOLVING_CHALLENGES_DATA };
 
 export const WORLDS_DATA = [
   {
@@ -98,6 +100,92 @@ export const WORLDS_DATA = [
     requiredWorldId: "world-7"
   }
 ];
+
+// PROBLEM SOLVING COMPETITIVE LEVEL WORLDS (5 PROGRESSIVE LEVELS)
+export const PROBLEM_SOLVING_WORLDS_DATA = [
+  {
+    id: "ps-level-1",
+    level: 1,
+    number: 1,
+    title: "مستوى المبتدئين: الأساسيات",
+    englishTitle: "Level 1: Beginner",
+    shortTitle: "المستوى 1: مبتدئ",
+    icon: "🌱",
+    concept: "المدخلات والمتغيرات والعمليات الحسابية والشروط",
+    description: "انطلاقة قوية في حل المشكلات البرمجية: التعامل مع المتغيرات وقراءة المدخلات والعمليات الحسابية والشروط.",
+    color: "#10b981",
+    track: "problem-solving",
+    levelsCount: 5,
+    pointsPerProblem: 10,
+    requiredWorldId: null
+  },
+  {
+    id: "ps-level-2",
+    level: 2,
+    number: 2,
+    title: "المستوى السهل: التكرار والنصوص",
+    englishTitle: "Level 2: Easy",
+    shortTitle: "المستوى 2: سهل",
+    icon: "⚡",
+    concept: "حلقات التكرار for و while ومعالجة النصوص والقوائم",
+    description: "مسائل تدريبية على اتخاذ القرارات وحلقات التكرار والتعامل المباشر مع النصوص والقوائم البسيطة.",
+    color: "#3b82f6",
+    track: "problem-solving",
+    levelsCount: 5,
+    pointsPerProblem: 10,
+    requiredWorldId: null
+  },
+  {
+    id: "ps-level-3",
+    level: 3,
+    number: 3,
+    title: "المستوى المتوسط: الهياكل والدوال",
+    englishTitle: "Level 3: Intermediate",
+    shortTitle: "المستوى 3: متوسط",
+    icon: "🔥",
+    concept: "القوائم المتقدمة والقواميس ومجموعات البيانات والدوال",
+    description: "تحديات تجمع أكثر من مفهوم معاً: هياكل البيانات المترابطة، القواميس، الدوال، والبحث الذكي.",
+    color: "#f59e0b",
+    track: "problem-solving",
+    levelsCount: 5,
+    pointsPerProblem: 25,
+    requiredWorldId: null
+  },
+  {
+    id: "ps-level-4",
+    level: 4,
+    number: 4,
+    title: "المستوى المتقدم: الخوارزميات",
+    englishTitle: "Level 4: Advanced",
+    shortTitle: "المستوى 4: متقدم",
+    icon: "🧠",
+    concept: "خوارزميات البحث والترتيب والـ Recursion والتعقيد",
+    description: "مسائل خوارزمية وتفكير منطقي عميق: البحث الثنائي، الترتيب اليدوي، الاستدعاء الذاتي، واكتشاف الأنماط.",
+    color: "#8b5cf6",
+    track: "problem-solving",
+    levelsCount: 5,
+    pointsPerProblem: 50,
+    requiredWorldId: null
+  },
+  {
+    id: "ps-level-5",
+    level: 5,
+    number: 5,
+    title: "مستوى الخبراء: التحديات القصوى",
+    englishTitle: "Level 5: Expert & Challenge",
+    shortTitle: "المستوى 5: خبير",
+    icon: "💎",
+    concept: "كفاءة الخوارزميات والحالات الحدية والتعقيد الزمني",
+    description: "تحديات برمجية قوية مخصصة للنخبة، تركز على الكفاءة الزمنية والمكانية والحالات الحدية (Edge Cases).",
+    color: "#ef4444",
+    track: "problem-solving",
+    levelsCount: 5,
+    pointsPerProblem: 100,
+    requiredWorldId: null
+  }
+];
+
+export const ALL_WORLDS_DATA = [...WORLDS_DATA, ...PROBLEM_SOLVING_WORLDS_DATA];
 
 export const ACHIEVEMENTS_DATA = [
   {

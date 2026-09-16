@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="../src/styles/components.css">
   <link rel="stylesheet" href="../src/styles/layouts.css">
   <link rel="stylesheet" href="../src/styles/utilities.css">
+  <link rel="stylesheet" href="../src/styles/python-adventure.css">
   <link rel="stylesheet" href="../src/styles/print.css">
 </head>
 <body>
@@ -107,6 +108,7 @@
       const lazyLoaders = {
         students: () => import("../src/features/students/students.controller.js").then((m) => m.StudentsController),
         exams: () => import("../src/features/exams/exam.controller.js").then((m) => m.ExamController),
+        codingProblems: () => import("../src/features/problem-solving/admin-problem.controller.js").then((m) => m.AdminProblemController),
         profile: () => import("../src/features/profile/profile.controller.js").then((m) => m.ProfileController)
       };
 
@@ -120,6 +122,8 @@
             lazyLoaders.students().then((c) => c.loadStudentsList("adminStudentsContainer", { canDelete: true }));
           } else if (tabId === "exams") {
             lazyLoaders.exams().then((c) => c.loadAdminExams("adminExamsContainer"));
+          } else if (tabId === "coding-problems") {
+            lazyLoaders.codingProblems().then((c) => c.init("adminCodingProblemsContainer"));
           } else if (tabId === "settings") {
             lazyLoaders.profile().then((c) => c.loadSettingsView("adminSettingsContainer"));
           }

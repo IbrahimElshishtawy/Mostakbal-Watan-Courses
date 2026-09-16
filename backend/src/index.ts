@@ -35,7 +35,11 @@ import {
   getPythonAdventureProgressHandler,
   getPythonAdventureChallengeHandler,
   submitPythonAdventureChallengeHandler,
-  getDailyChallengeHandler
+  getDailyChallengeHandler,
+  getProblemSolvingCatalogHandler,
+  getProblemDetailsHandler,
+  saveAdminProblemHandler,
+  toggleAdminProblemStatusHandler
 } from "./modules/python-adventure";
 
 import {
@@ -98,6 +102,10 @@ export const getPythonAdventureProgress = onCall(getPythonAdventureProgressHandl
 export const getPythonAdventureChallenge = onCall(getPythonAdventureChallengeHandler);
 export const submitPythonAdventureChallenge = onCall(submitPythonAdventureChallengeHandler);
 export const getDailyChallenge = onCall(getDailyChallengeHandler);
+export const getProblemSolvingCatalog = onCall(getProblemSolvingCatalogHandler);
+export const getProblemDetails = onCall(getProblemDetailsHandler);
+export const saveAdminProblem = onCall(saveAdminProblemHandler);
+export const toggleAdminProblemStatus = onCall(toggleAdminProblemStatusHandler);
 
 // ==========================================
 // 7. GAMIFICATION, RANKINGS & COMPETITIONS

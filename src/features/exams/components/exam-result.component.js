@@ -5,6 +5,8 @@ import { renderButton } from "../../../shared/components/Button/button.component
 import { renderBadge } from "../../../shared/components/Badge/badge.component.js";
 import { formatDate } from "../../../shared/utils/date.utils.js";
 
+import { renderMyMistakesSection } from "./my-mistakes.component.js";
+
 /**
  * Returns HTML string for the Official Exam Result Screen.
  * @param {object} options
@@ -30,6 +32,7 @@ export function renderExamResult({ exam, result }) {
   const examTitle = exam?.title || "الامتحان";
   const mcqScore = result.mcqScore !== undefined ? Number(result.mcqScore) : null;
   const totalScore = result.total !== undefined ? Number(result.total) : Number(result.score || 0);
+  const wrongAnswers = Array.isArray(result.wrongAnswers) ? result.wrongAnswers : [];
 
   // If totalQuestions or totalPossible is available
   const totalPossible =
@@ -164,11 +167,33 @@ export function renderExamResult({ exam, result }) {
       `
           : ""
       }
+
+      <!-- My Mistakes (Wrong Answers Review) Section -->
+      ${
+        !isPendingEssay
+          ? `
+        <div class="exam-mistakes-toggle-wrap mt-6 text-start">
+          <details class="mistakes-accordion" ${wrongAnswers.length > 0 ? "open" : ""}>
+            <summary class="mistakes-accordion-summary">
+              <span class="d-flex items-center gap-2">
+                <span>❌</span>
+                <strong>مراجعة الأخطاء والإجابات غير الصحيحة (${wrongAnswers.length})</strong>
+              </span>
+              <span class="text-xs text-muted">اضغط للعرض / الإخفاء</span>
+            </summary>
+            <div class="mt-4">
+              ${renderMyMistakesSection({ wrongAnswers, examTitle })}
+            </div>
+          </details>
+        </div>
+      `
+          : ""
+      }
     </div>
   `;
 
   const footerHtml = `
-    <div class="d-flex items-center justify-center gap-3 w-full">
+    <div class="d-flex items-center justify-center gap-3 w-full flex-wrap">
       ${renderButton({
         id: "backToExamsListBtn",
         text: "العودة إلى قائمة الامتحانات ↵",
