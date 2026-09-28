@@ -1,17 +1,9 @@
 // src/features/exams/components/exam-filters.component.js
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 import { GROUPS } from "../../../core/constants.js";
-import { renderSearchBar } from "../../../shared/components/SearchBar/search-bar.component.js";
 
 /**
- * Returns HTML string for the Admin Exams Filter Bar.
- * @param {object} options
- * @param {string} [options.searchQuery=""]
- * @param {string} [options.groupFilter="ALL"]
- * @param {string} [options.statusFilter="ALL"]
- * @param {string} [options.sortOrder="newest"]
- * @param {"cards"|"table"} [options.viewMode="cards"]
- * @returns {string}
+ * Returns HTML string for the Admin Exams Filter Bar matching Image 4.png.
  */
 export function renderExamFilters({
   searchQuery = "",
@@ -21,18 +13,18 @@ export function renderExamFilters({
   viewMode = "cards"
 } = {}) {
   const groupOptions = [
-    `<option value="ALL" ${groupFilter === "ALL" ? "selected" : ""}>جميع المجموعات</option>`,
+    `<option value="ALL" ${groupFilter === "ALL" ? "selected" : ""}>المجموعة: جميع المجموعات</option>`,
     ...GROUPS.map(
-      (g) => `<option value="${escapeHtml(g)}" ${groupFilter === g ? "selected" : ""}>${escapeHtml(g)}</option>`
+      (g) => `<option value="${escapeHtml(g)}" ${groupFilter === g ? "selected" : ""}>المجموعة: ${escapeHtml(g)}</option>`
     )
   ].join("");
 
   const statusOptions = [
-    { value: "ALL", label: "جميع الحالات" },
-    { value: "ACTIVE", label: "● نشط" },
-    { value: "INACTIVE", label: "○ معطل" },
-    { value: "UPCOMING", label: "⏰ قريباً" },
-    { value: "EXPIRED", label: "⌛ منتهي" }
+    { value: "ALL", label: "الحالة: جميع الحالات" },
+    { value: "ACTIVE", label: "الحالة: نشط حالياً" },
+    { value: "UPCOMING", label: "الحالة: مجدول" },
+    { value: "EXPIRED", label: "الحالة: مكتمل ومؤرشف" },
+    { value: "INACTIVE", label: "الحالة: معطل" }
   ]
     .map(
       (s) => `<option value="${s.value}" ${statusFilter === s.value ? "selected" : ""}>${s.label}</option>`
@@ -40,8 +32,9 @@ export function renderExamFilters({
     .join("");
 
   const sortOptions = [
-    { value: "newest", label: "الأحدث أولاً" },
-    { value: "oldest", label: "الأقدم أولاً" }
+    { value: "newest", label: "الترتيب: الأحدث أولاً" },
+    { value: "oldest", label: "الترتيب: الأقدم أولاً" },
+    { value: "highest_score", label: "الترتيب: الأعلى نسبة نجاح" }
   ]
     .map(
       (s) => `<option value="${s.value}" ${sortOrder === s.value ? "selected" : ""}>${s.label}</option>`
@@ -49,64 +42,60 @@ export function renderExamFilters({
     .join("");
 
   return `
-    <div class="card mb-4" style="padding: var(--space-4);">
-      <div class="d-flex items-center justify-between gap-3 flex-wrap">
-        <!-- Search bar -->
-        <div style="flex: 1; min-width: 220px; max-width: 380px;">
-          ${renderSearchBar({
-            id: "adminExamSearchInput",
-            placeholder: "بحث باسم الامتحان أو الوصف...",
-            value: searchQuery
-          })}
-        </div>
+    <div class="admin-filter-toolbar">
+      <!-- Search input -->
+      <div class="admin-search-wrapper" style="flex: 2; min-width: 260px;">
+        <i class="fas fa-search admin-search-icon"></i>
+        <input
+          type="text"
+          id="adminExamSearchInput"
+          class="admin-search-input"
+          placeholder="بحث في الامتحانات، الأكواد، أو المجموعات..."
+          value="${escapeHtml(searchQuery)}"
+        />
+      </div>
 
-        <!-- Filter Selects -->
-        <div class="d-flex items-center gap-2 flex-wrap" style="flex: 2; justify-content: flex-end;">
-          <!-- Group Select -->
-          <div style="min-width: 170px;">
-            <select id="adminExamGroupFilter" class="form-select" aria-label="تصفية حسب المجموعة" style="font-size: var(--font-size-xs); padding-block: 0.55rem;">
-              ${groupOptions}
-            </select>
-          </div>
+      <!-- Group Select -->
+      <div class="admin-select-wrapper" style="min-width: 200px;">
+        <select id="adminExamGroupFilter" class="admin-select" aria-label="تصفية حسب المجموعة">
+          ${groupOptions}
+        </select>
+      </div>
 
-          <!-- Status Select -->
-          <div style="min-width: 130px;">
-            <select id="adminExamStatusFilter" class="form-select" aria-label="تصفية حسب الحالة" style="font-size: var(--font-size-xs); padding-block: 0.55rem;">
-              ${statusOptions}
-            </select>
-          </div>
+      <!-- Status Select -->
+      <div class="admin-select-wrapper" style="min-width: 170px;">
+        <select id="adminExamStatusFilter" class="admin-select" aria-label="تصفية حسب الحالة">
+          ${statusOptions}
+        </select>
+      </div>
 
-          <!-- Sort Select -->
-          <div style="min-width: 120px;">
-            <select id="adminExamSortFilter" class="form-select" aria-label="ترتيب حسب التاريخ" style="font-size: var(--font-size-xs); padding-block: 0.55rem;">
-              ${sortOptions}
-            </select>
-          </div>
+      <!-- Sort Select -->
+      <div class="admin-select-wrapper" style="min-width: 160px;">
+        <select id="adminExamSortFilter" class="admin-select" aria-label="ترتيب حسب التاريخ">
+          ${sortOptions}
+        </select>
+      </div>
 
-          <!-- View Mode Toggle (Cards vs Table) -->
-          <div class="d-flex items-center gap-1 p-1" style="background: var(--color-bg-secondary); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
-            <button
-              type="button"
-              id="adminExamViewCardsBtn"
-              class="btn btn-ghost btn-sm ${viewMode === "cards" ? "active" : ""}"
-              title="عرض كبطاقات"
-              aria-label="عرض كبطاقات"
-              style="padding: 0.35rem 0.6rem; min-height: auto; ${viewMode === "cards" ? "background: var(--color-surface-elevated); box-shadow: var(--shadow-sm);" : ""}"
-            >
-              <span aria-hidden="true">🗂️</span>
-            </button>
-            <button
-              type="button"
-              id="adminExamViewTableBtn"
-              class="btn btn-ghost btn-sm ${viewMode === "table" ? "active" : ""}"
-              title="عرض كجدول"
-              aria-label="عرض كجدول"
-              style="padding: 0.35rem 0.6rem; min-height: auto; ${viewMode === "table" ? "background: var(--color-surface-elevated); box-shadow: var(--shadow-sm);" : ""}"
-            >
-              <span aria-hidden="true">📋</span>
-            </button>
-          </div>
-        </div>
+      <!-- View Mode Toggle -->
+      <div class="d-flex items-center gap-2">
+        <button
+          type="button"
+          id="adminExamViewCardsBtn"
+          class="btn btn-secondary btn-sm ${viewMode === "cards" ? "active" : ""}"
+          title="عرض كبطاقات تفصيلية"
+          aria-label="عرض كبطاقات"
+        >
+          <i class="fas fa-th-large"></i>
+        </button>
+        <button
+          type="button"
+          id="adminExamViewTableBtn"
+          class="btn btn-secondary btn-sm ${viewMode === "table" ? "active" : ""}"
+          title="عرض كجدول"
+          aria-label="عرض كجدول"
+        >
+          <i class="fas fa-list"></i>
+        </button>
       </div>
     </div>
   `;

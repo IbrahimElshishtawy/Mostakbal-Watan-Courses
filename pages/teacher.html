@@ -7,10 +7,66 @@
   <title>لوحة تحكم المعلم | حزب مستقبل وطن</title>
   <link rel="icon" type="image/jpeg" href="../assets/images/logo_union.jpeg">
 
-  <!-- Google Fonts: Cairo -->
+  <!-- Google Fonts: Cairo & Fira Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS v3 with Plugins & Exact Theme Config -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+              dark: '#0c1017',
+              navy: '#111723',
+              card: '#161e2e',
+              border: '#222f46',
+              emerald: '#10b981',
+              cyan: '#06b6d4',
+              gold: '#f59e0b',
+            },
+            surface: {
+              lowest: '#070b14',
+              base: '#0b1120',
+              card: '#111827',
+              lighter: '#1a2337',
+              border: '#1e293b',
+              hover: '#243049'
+            },
+            accent: {
+              cyan: '#38bdf8',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+              indigo: '#6366f1'
+            }
+          },
+          fontFamily: {
+            sans: ['Cairo', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 20px -3px rgba(56, 189, 248, 0.25)',
+            'glow-emerald': '0 0 20px -3px rgba(16, 185, 129, 0.25)',
+          }
+        }
+      }
+    };
+  </script>
 
   <!-- Modular Design System Styles -->
   <link rel="stylesheet" href="../src/styles/variables.css">
@@ -19,6 +75,7 @@
   <link rel="stylesheet" href="../src/styles/components.css">
   <link rel="stylesheet" href="../src/styles/layouts.css">
   <link rel="stylesheet" href="../src/styles/utilities.css">
+  <link rel="stylesheet" href="../src/styles/admin-dashboard.css">
   <link rel="stylesheet" href="../src/styles/print.css">
 </head>
 <body>

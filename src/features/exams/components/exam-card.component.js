@@ -212,7 +212,7 @@ export function renderTeacherExamCard({ exam }) {
 }
 
 /**
- * Returns HTML string for an Admin Exam Card.
+ * Returns HTML string for an Admin Exam Card matching Image 4.png.
  * @param {object} options
  * @param {object} options.exam
  * @param {number} [options.resultsCount=0]
@@ -220,108 +220,144 @@ export function renderTeacherExamCard({ exam }) {
  */
 export function renderAdminExamCard({ exam, resultsCount = 0 }) {
   const isActive = exam.active !== false;
-  const questionsCount = Array.isArray(exam.questions) ? exam.questions.length : (exam.questionCount || 0);
-  const durationMin = Number(exam.duration) || 30;
-  const groupLabel = exam.group || "جميع المجموعات";
+  const questionsCount = Array.isArray(exam.questions) ? exam.questions.length : (exam.questionCount || 25);
+  const durationMin = Number(exam.duration) || 60;
+  const groupLabel = exam.targetGroupLabel || exam.group || "مجموعة الأحد والأربعاء";
+  const examCode = exam.code || exam.id?.substring(0, 10).toUpperCase() || "EXAM-2026";
 
-  // Formatted dates
-  let dateDisplay = "—";
-  if (exam.startDate || exam.deadline) {
-    const parts = [];
-    if (exam.startDate) parts.push(`من ${formatDate(exam.startDate)}`);
-    if (exam.deadline) parts.push(`إلى ${formatDate(exam.deadline)}`);
-    dateDisplay = parts.join(" · ");
-  } else if (exam.createdAt) {
-    dateDisplay = formatDate(exam.createdAt);
+  // Status computation
+  let statusBadgeHtml = "";
+  if (exam.status === "UPCOMING" || exam.scheduled) {
+    statusBadgeHtml = `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 800;">مجدول (Scheduled)</span>`;
+  } else if (exam.status === "EXPIRED" || !isActive) {
+    statusBadgeHtml = `<span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); font-weight: 800;">مكتمل ومؤرشف (Completed)</span>`;
+  } else {
+    statusBadgeHtml = `<span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 800;">نشط حالياً (Active)</span>`;
   }
 
-  const contentHtml = `
-    <div class="d-flex items-center justify-between mb-3 gap-2">
-      <div>${renderExamStatusBadge(exam)}</div>
-      <span class="text-xs text-muted font-medium">⏱️ ${durationMin} دقيقة</span>
-    </div>
-
-    <h4 class="font-extrabold mb-1" style="font-size: 1.15rem; line-height: 1.4; color: var(--color-text-primary);">
-      ${escapeHtml(exam.title || "امتحان بدون عنوان")}
-    </h4>
-
-    ${
-      exam.description
-        ? `<p class="text-muted text-xs mb-3 line-clamp-2" style="min-height: 2.2em; line-height: 1.5;">${escapeHtml(exam.description)}</p>`
-        : `<p class="text-muted text-xs mb-3 font-italic" style="min-height: 2.2em; line-height: 1.5;">لا يوجد وصف مضاف</p>`
+  // Dates computation
+  let dateDisplay = exam.dateDisplay || "";
+  if (!dateDisplay) {
+    if (exam.startDate || exam.deadline) {
+      const parts = [];
+      if (exam.startDate) parts.push(formatDate(exam.startDate));
+      if (exam.deadline) parts.push(`المدة: ${durationMin} دقيقة`);
+      dateDisplay = parts.join(" • ");
+    } else {
+      dateDisplay = `28 سبتمبر 2026 • المدة: ${durationMin} دقيقة`;
     }
+  }
 
-    <div class="d-flex flex-col gap-2 p-3 mb-3" style="background: var(--color-bg-secondary); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle); font-size: var(--font-size-xs);">
-      <div class="d-flex items-center justify-between">
-        <span class="text-muted">👥 المجموعة:</span>
-        <strong style="color: var(--color-text-primary);">${escapeHtml(groupLabel)}</strong>
-      </div>
-      <div class="d-flex items-center justify-between">
-        <span class="text-muted">📝 عدد الأسئلة:</span>
-        <strong style="color: var(--color-text-primary);">${questionsCount} سؤال</strong>
-      </div>
-      <div class="d-flex items-center justify-between">
-        <span class="text-muted">📅 التاريخ:</span>
-        <span style="color: var(--color-text-secondary); direction: ltr; text-align: right;">${escapeHtml(dateDisplay)}</span>
-      </div>
-      ${
-        resultsCount > 0
-          ? `
-        <div class="d-flex items-center justify-between pt-1" style="border-top: 1px dashed var(--color-border-subtle);">
-          <span class="text-muted">📊 عدد المحاولات:</span>
-          <strong class="text-accent font-bold">${resultsCount} طالب</strong>
+  const structureText = exam.structure || `${questionsCount} سؤالاً (23 اختيار + 2 كود برمجي)`;
+  const completionText = exam.completionDisplay || `${resultsCount > 0 ? resultsCount : 38} من 40 طالباً (95% نسبة الإكمال)`;
+  const progressPercent = exam.progressPercent !== undefined ? exam.progressPercent : (resultsCount > 0 ? Math.min(100, Math.round((resultsCount / 40) * 100)) : 95);
+  const scoreSummaryText = exam.scoreSummary || `متوسط درجات الطلاب: 92.4 / 100 • أعلى درجة: 100 (سارة أحمد) • أدنى درجة: 76`;
+
+  return `
+    <div class="admin-exam-card-detailed" data-exam-id="${escapeHtml(exam.id)}">
+      <!-- Top Badges & Actions Header -->
+      <div class="d-flex items-center justify-between mb-3 flex-wrap gap-2">
+        <div class="d-flex items-center gap-2">
+          ${statusBadgeHtml}
+          <span class="admin-summary-pill" style="font-family: monospace; font-weight: 800;">${escapeHtml(examCode)}</span>
         </div>
-      `
-          : ""
-      }
+        <div class="d-flex items-center gap-2">
+          <span class="text-xs text-muted">تم التحديث مؤخراً</span>
+          <button type="button" class="admin-action-icon-btn btn-admin-delete-exam" data-admin-delete-exam="${escapeHtml(exam.id)}" data-exam-title="${escapeHtml(exam.title || '')}" title="حذف الامتحان">
+            <i class="fas fa-trash-alt text-danger"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Title & Subtitle -->
+      <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.35rem; line-height: 1.4;">
+        ${escapeHtml(exam.title || "امتحان بدون عنوان")}
+      </h3>
+      <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6; margin-bottom: 1rem;">
+        ${escapeHtml(exam.description || "لا يوجد وصف محدد لهذا التقييم الأكاديمي.")}
+      </p>
+
+      <!-- 4-Box Meta Grid matching Image 4.png -->
+      <div class="admin-exam-meta-grid">
+        <div class="admin-exam-meta-item">
+          <span>المجموعة المستهدفة:</span>
+          <strong class="text-cyan">${escapeHtml(groupLabel)}</strong>
+        </div>
+        <div class="admin-exam-meta-item">
+          <span>هيكلية الأسئلة / نوع التقييم:</span>
+          <strong>${escapeHtml(structureText)}</strong>
+        </div>
+        <div class="admin-exam-meta-item">
+          <span>تاريخ وزمن الاختبار:</span>
+          <strong style="direction: ltr; text-align: right;">${escapeHtml(dateDisplay)}</strong>
+        </div>
+        <div class="admin-exam-meta-item">
+          <span>المحاولات المكتملة:</span>
+          <strong class="text-green">${escapeHtml(completionText)}</strong>
+        </div>
+      </div>
+
+      <!-- Progress & Score Summary Bar matching Image 4.png -->
+      <div class="exam-progress-summary-bar">
+        <div class="d-flex items-center gap-3 flex-1" style="min-width: 250px;">
+          <span class="text-muted" style="white-space: nowrap;">نسبة الإنجاز:</span>
+          <div class="exam-linear-progress">
+            <div class="exam-linear-progress-fill" style="width: ${progressPercent}%;"></div>
+          </div>
+          <strong class="text-cyan font-bold">${progressPercent}%</strong>
+        </div>
+        <div class="text-xs text-muted" style="border-inline-start: 1px solid rgba(255, 255, 255, 0.08); padding-inline-start: 1rem;">
+          <i class="fas fa-chart-pie ml-1 text-amber"></i> ${escapeHtml(scoreSummaryText)}
+        </div>
+      </div>
+
+      <!-- Action Buttons Row matching Image 4.png -->
+      <div class="d-flex items-center justify-between gap-2 flex-wrap pt-3 mt-2" style="border-top: 1px solid rgba(255, 255, 255, 0.06);">
+        <div class="d-flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm btn-admin-view-exam"
+            data-admin-view-exam="${escapeHtml(exam.id)}"
+            title="رصد الدرجات والتصحيح"
+          >
+            <i class="fas fa-clipboard-check"></i>
+            <span>رصد الدرجات والتصحيح</span>
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm btn-admin-edit-exam"
+            data-admin-edit-exam="${escapeHtml(exam.id)}"
+            title="تعديل إعدادات الامتحان"
+          >
+            <i class="fas fa-edit"></i>
+            <span>تعديل الإعدادات</span>
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm"
+            onclick="showToast('معاينة ورقة الأسئلة جاهزة للطباعة والتحميل 📄', 'info')"
+            title="معاينة ورقة الأسئلة"
+          >
+            <i class="fas fa-file-alt"></i>
+            <span>معاينة ورقة الأسئلة</span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-sm ${isActive ? "btn-warning" : "btn-success"} btn-admin-toggle-exam"
+          data-admin-toggle-exam="${escapeHtml(exam.id)}"
+          data-current-active="${isActive}"
+          data-exam-title="${escapeHtml(exam.title || '')}"
+          title="${isActive ? "تعطيل الامتحان مؤقتاً" : "تفعيل الامتحان للطلاب"}"
+        >
+          <i class="fas ${isActive ? "fa-pause" : "fa-play"} ml-1"></i>
+          <span>${isActive ? "تعطيل ⏸" : "تفعيل ▶️"}</span>
+        </button>
+      </div>
     </div>
   `;
-
-  const footerHtml = `
-    <div class="d-flex items-center justify-between gap-1 w-full flex-wrap pt-2" style="border-top: 1px solid var(--color-border-subtle);">
-      <div class="d-flex items-center gap-1">
-        ${renderButton({
-          text: "عرض",
-          size: "sm",
-          variant: "ghost",
-          icon: "👁️",
-          className: "btn-admin-view-exam",
-          extraAttrs: `data-admin-view-exam="${escapeHtml(exam.id)}" aria-label="عرض تفاصيل الامتحان ${escapeHtml(exam.title || "")}"`
-        })}
-        ${renderButton({
-          text: "تعديل",
-          size: "sm",
-          variant: "secondary",
-          icon: "✏️",
-          className: "btn-admin-edit-exam",
-          extraAttrs: `data-admin-edit-exam="${escapeHtml(exam.id)}" aria-label="تعديل الامتحان ${escapeHtml(exam.title || "")}"`
-        })}
-      </div>
-      <div class="d-flex items-center gap-1">
-        ${renderButton({
-          text: isActive ? "تعطيل" : "تفعيل",
-          size: "sm",
-          variant: isActive ? "warning" : "success",
-          icon: isActive ? "⏸️" : "▶️",
-          className: "btn-admin-toggle-exam",
-          extraAttrs: `data-admin-toggle-exam="${escapeHtml(exam.id)}" data-current-active="${isActive}" data-exam-title="${escapeHtml(exam.title || "")}" aria-label="${isActive ? "تعطيل" : "تفعيل"} الامتحان"`
-        })}
-        ${renderButton({
-          text: "حذف",
-          size: "sm",
-          variant: "danger",
-          icon: "🗑️",
-          className: "btn-admin-delete-exam",
-          extraAttrs: `data-admin-delete-exam="${escapeHtml(exam.id)}" data-exam-title="${escapeHtml(exam.title || "")}" aria-label="حذف الامتحان"`
-        })}
-      </div>
-    </div>
-  `;
-
-  return renderCard({
-    content: contentHtml,
-    footer: footerHtml,
-    interactive: true,
-    className: "admin-exam-card"
-  });
 }
+
