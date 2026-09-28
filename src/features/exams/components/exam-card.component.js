@@ -221,18 +221,23 @@ export function renderTeacherExamCard({ exam }) {
 export function renderAdminExamCard({ exam, resultsCount = 0 }) {
   const isActive = exam.active !== false;
   const questionsCount = Array.isArray(exam.questions) ? exam.questions.length : (exam.questionCount || 25);
-  const durationMin = Number(exam.duration) || 60;
-  const groupLabel = exam.targetGroupLabel || exam.group || "مجموعة الأحد والأربعاء";
-  const examCode = exam.code || exam.id?.substring(0, 10).toUpperCase() || "EXAM-2026";
+  const durationMin = Number(exam.duration) || 30;
+  const groupLabel = exam.targetGroupLabel || exam.group || "مجموعة الأحد والأربعاء | 7:00 - 8:30 م";
+  const examCode = exam.code || (exam.id ? String(exam.id).substring(0, 10).toUpperCase() : "PY-101-MID");
 
-  // Status computation
-  let statusBadgeHtml = "";
+  // Status computation matching Image 4.png
+  let statusBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+  let statusDotClass = "bg-emerald-400 animate-pulse";
+  let statusLabel = "متاح الآن • Active";
+
   if (exam.status === "UPCOMING" || exam.scheduled) {
-    statusBadgeHtml = `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 800;">مجدول (Scheduled)</span>`;
+    statusBadgeClass = "bg-amber-500/10 text-amber-300 border border-amber-500/30";
+    statusDotClass = "bg-amber-400";
+    statusLabel = "مجدول • Scheduled";
   } else if (exam.status === "EXPIRED" || !isActive) {
-    statusBadgeHtml = `<span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); font-weight: 800;">مكتمل ومؤرشف (Completed)</span>`;
-  } else {
-    statusBadgeHtml = `<span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 800;">نشط حالياً (Active)</span>`;
+    statusBadgeClass = "bg-rose-500/10 text-rose-300 border border-rose-500/30";
+    statusDotClass = "bg-rose-400";
+    statusLabel = "مؤرشف • Completed";
   }
 
   // Dates computation
@@ -241,123 +246,179 @@ export function renderAdminExamCard({ exam, resultsCount = 0 }) {
     if (exam.startDate || exam.deadline) {
       const parts = [];
       if (exam.startDate) parts.push(formatDate(exam.startDate));
-      if (exam.deadline) parts.push(`المدة: ${durationMin} دقيقة`);
-      dateDisplay = parts.join(" • ");
+      dateDisplay = parts.join(" • ") || "28 سبتمبر 2026";
     } else {
-      dateDisplay = `28 سبتمبر 2026 • المدة: ${durationMin} دقيقة`;
+      dateDisplay = "28 سبتمبر 2026";
     }
   }
 
-  const structureText = exam.structure || `${questionsCount} سؤالاً (23 اختيار + 2 كود برمجي)`;
-  const completionText = exam.completionDisplay || `${resultsCount > 0 ? resultsCount : 38} من 40 طالباً (95% نسبة الإكمال)`;
-  const progressPercent = exam.progressPercent !== undefined ? exam.progressPercent : (resultsCount > 0 ? Math.min(100, Math.round((resultsCount / 40) * 100)) : 95);
-  const scoreSummaryText = exam.scoreSummary || `متوسط درجات الطلاب: 92.4 / 100 • أعلى درجة: 100 (سارة أحمد) • أدنى درجة: 76`;
+  const structureText = exam.structure || `${questionsCount} سؤال (23 اختيار + 2 كود)`;
+  const completedNumber = resultsCount > 0 ? resultsCount : 38;
+  const totalEnrolled = 40;
+  const completionText = `${completedNumber} طالب أتموا الاختبار من أصل ${totalEnrolled}`;
+  const progressPercent = exam.progressPercent !== undefined ? exam.progressPercent : (resultsCount > 0 ? Math.min(100, Math.round((resultsCount / totalEnrolled) * 100)) : 95);
+  const averageScoreText = "92.4 / 100";
 
   return `
-    <div class="admin-exam-card-detailed" data-exam-id="${escapeHtml(exam.id)}">
-      <!-- Top Badges & Actions Header -->
-      <div class="d-flex items-center justify-between mb-3 flex-wrap gap-2">
-        <div class="d-flex items-center gap-2">
-          ${statusBadgeHtml}
-          <span class="admin-summary-pill" style="font-family: monospace; font-weight: 800;">${escapeHtml(examCode)}</span>
+    <article class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-6 shadow-lg hover:border-emerald-500/40 transition-all space-y-4" data-exam-id="${escapeHtml(exam.id)}">
+      <!-- Top Badges & Status Bar matching Image 4.png -->
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${statusBadgeClass}">
+            <span class="w-2 h-2 rounded-full ${statusDotClass}"></span>
+            <span>${statusLabel}</span>
+          </span>
+          <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#182338] text-cyan-300 border border-[#273754]">
+            ${escapeHtml(examCode)}
+          </span>
         </div>
-        <div class="d-flex items-center gap-2">
-          <span class="text-xs text-muted">تم التحديث مؤخراً</span>
-          <button type="button" class="admin-action-icon-btn btn-admin-delete-exam" data-admin-delete-exam="${escapeHtml(exam.id)}" data-exam-title="${escapeHtml(exam.title || '')}" title="حذف الامتحان">
-            <i class="fas fa-trash-alt text-danger"></i>
-          </button>
+
+        <div class="flex items-center gap-2 bg-[#151d2d] border border-[#223049] px-3 py-1 rounded-lg text-xs text-slate-300 font-mono">
+          <span>نظام تصحيح فوري</span>
+          <span class="text-slate-600">•</span>
+          <span class="flex items-center gap-1 text-slate-200">
+            <i class="fa-regular fa-clock text-amber-400"></i>
+            <span>${durationMin} دقيقة</span>
+          </span>
         </div>
       </div>
 
-      <!-- Title & Subtitle -->
-      <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 0.35rem; line-height: 1.4;">
-        ${escapeHtml(exam.title || "امتحان بدون عنوان")}
-      </h3>
-      <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6; margin-bottom: 1rem;">
-        ${escapeHtml(exam.description || "لا يوجد وصف محدد لهذا التقييم الأكاديمي.")}
-      </p>
-
-      <!-- 4-Box Meta Grid matching Image 4.png -->
-      <div class="admin-exam-meta-grid">
-        <div class="admin-exam-meta-item">
-          <span>المجموعة المستهدفة:</span>
-          <strong class="text-cyan">${escapeHtml(groupLabel)}</strong>
-        </div>
-        <div class="admin-exam-meta-item">
-          <span>هيكلية الأسئلة / نوع التقييم:</span>
-          <strong>${escapeHtml(structureText)}</strong>
-        </div>
-        <div class="admin-exam-meta-item">
-          <span>تاريخ وزمن الاختبار:</span>
-          <strong style="direction: ltr; text-align: right;">${escapeHtml(dateDisplay)}</strong>
-        </div>
-        <div class="admin-exam-meta-item">
-          <span>المحاولات المكتملة:</span>
-          <strong class="text-green">${escapeHtml(completionText)}</strong>
-        </div>
+      <!-- Title & Description -->
+      <div>
+        <h3 class="text-lg font-bold text-white hover:text-cyan-300 transition-colors">
+          ${escapeHtml(exam.title || "امتحان بدون عنوان")}
+        </h3>
+        <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">
+          ${escapeHtml(exam.description || "اختبار تجريبي على المفاهيم الأساسية، المتغيرات، والعمليات الحسابية والشرطية وقوائم بايثون.")}
+        </p>
       </div>
 
-      <!-- Progress & Score Summary Bar matching Image 4.png -->
-      <div class="exam-progress-summary-bar">
-        <div class="d-flex items-center gap-3 flex-1" style="min-width: 250px;">
-          <span class="text-muted" style="white-space: nowrap;">نسبة الإنجاز:</span>
-          <div class="exam-linear-progress">
-            <div class="exam-linear-progress-fill" style="width: ${progressPercent}%;"></div>
+      <!-- Inner 3-Column Specifications Box matching Image 4.png -->
+      <div class="bg-[#0d121c] border border-[#1b2538] rounded-xl p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <!-- Column 1: Target Group -->
+        <div class="space-y-1">
+          <div class="text-slate-400 flex items-center gap-1.5 font-medium">
+            <i class="fa-solid fa-users text-cyan-400"></i>
+            <span>المجموعة المستهدفة:</span>
           </div>
-          <strong class="text-cyan font-bold">${progressPercent}%</strong>
+          <div class="text-white font-semibold pr-4">
+            ${escapeHtml(groupLabel)}
+          </div>
         </div>
-        <div class="text-xs text-muted" style="border-inline-start: 1px solid rgba(255, 255, 255, 0.08); padding-inline-start: 1rem;">
-          <i class="fas fa-chart-pie ml-1 text-amber"></i> ${escapeHtml(scoreSummaryText)}
+
+        <!-- Column 2: Question Count & Date -->
+        <div class="space-y-2 border-y md:border-y-0 md:border-x border-[#1b2538] py-2 md:py-0 md:px-4">
+          <div>
+            <div class="text-slate-400 flex items-center gap-1.5 font-medium">
+              <i class="fa-solid fa-file-pen text-amber-400"></i>
+              <span>عدد الأسئلة:</span>
+            </div>
+            <div class="text-white font-semibold pr-4 font-mono">
+              ${escapeHtml(structureText)}
+            </div>
+          </div>
+          <div>
+            <div class="text-slate-400 flex items-center gap-1.5 font-medium">
+              <i class="fa-regular fa-calendar text-rose-400"></i>
+              <span>تاريخ الانعقاد:</span>
+            </div>
+            <div class="text-white font-semibold pr-4 font-mono">
+              ${escapeHtml(dateDisplay)}
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Completed Attempts -->
+        <div class="space-y-1">
+          <div class="text-slate-400 flex items-center gap-1.5 font-medium">
+            <i class="fa-solid fa-chart-column text-cyan-400"></i>
+            <span>عدد المحاولات المسجلة:</span>
+          </div>
+          <div class="flex items-center gap-2 pr-4 pt-1">
+            <span class="px-3 py-1.5 rounded-lg bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 font-bold font-mono text-xs">
+              ${escapeHtml(completionText)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Performance & Progress Bar matching Image 4.png -->
+      <div class="space-y-2 pt-2 border-t border-[#1a2538]">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400">نسبة الإنجاز:</span>
+            <span class="text-white font-bold font-mono">${progressPercent}%</span>
+          </div>
+          <div class="flex items-center gap-1 text-slate-300">
+            <i class="fa-solid fa-chart-pie text-amber-400 text-[10px]"></i>
+            <span class="text-slate-400">متوسط درجات الطلاب:</span>
+            <strong class="text-emerald-400 font-mono font-bold">${averageScoreText}</strong>
+          </div>
+        </div>
+        <div class="w-full bg-[#1b263b] h-2 rounded-full overflow-hidden">
+          <div class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-full rounded-full" style="width: ${progressPercent}%"></div>
         </div>
       </div>
 
       <!-- Action Buttons Row matching Image 4.png -->
-      <div class="d-flex items-center justify-between gap-2 flex-wrap pt-3 mt-2" style="border-top: 1px solid rgba(255, 255, 255, 0.06);">
-        <div class="d-flex items-center gap-2 flex-wrap">
+      <div class="flex items-center justify-between gap-2 flex-wrap pt-2 border-t border-[#1a2538]">
+        <div class="flex items-center gap-2 flex-wrap">
           <button
             type="button"
-            class="btn btn-primary btn-sm btn-admin-view-exam"
+            class="btn-admin-view-exam px-3.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
             data-admin-view-exam="${escapeHtml(exam.id)}"
             title="رصد الدرجات والتصحيح"
           >
-            <i class="fas fa-clipboard-check"></i>
+            <i class="fa-solid fa-clipboard-check text-xs"></i>
             <span>رصد الدرجات والتصحيح</span>
           </button>
 
           <button
             type="button"
-            class="btn btn-secondary btn-sm btn-admin-edit-exam"
+            class="btn-admin-edit-exam px-3 py-1.5 rounded-lg bg-[#182336] hover:bg-[#202e47] text-slate-200 border border-[#273856] text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer"
             data-admin-edit-exam="${escapeHtml(exam.id)}"
             title="تعديل إعدادات الامتحان"
           >
-            <i class="fas fa-edit"></i>
+            <i class="fa-solid fa-pen-to-square text-xs"></i>
             <span>تعديل الإعدادات</span>
           </button>
 
           <button
             type="button"
-            class="btn btn-secondary btn-sm"
-            onclick="showToast('معاينة ورقة الأسئلة جاهزة للطباعة والتحميل 📄', 'info')"
+            class="px-3 py-1.5 rounded-lg bg-[#182336] hover:bg-[#202e47] text-slate-300 border border-[#273856] text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer"
+            onclick="showToast('معاينة ورقة الأسئلة جاهزة للطباعة 📄', 'info')"
             title="معاينة ورقة الأسئلة"
           >
-            <i class="fas fa-file-alt"></i>
-            <span>معاينة ورقة الأسئلة</span>
+            <i class="fa-solid fa-print text-xs"></i>
+            <span>معاينة للطباعة</span>
           </button>
         </div>
 
-        <button
-          type="button"
-          class="btn btn-sm ${isActive ? "btn-warning" : "btn-success"} btn-admin-toggle-exam"
-          data-admin-toggle-exam="${escapeHtml(exam.id)}"
-          data-current-active="${isActive}"
-          data-exam-title="${escapeHtml(exam.title || '')}"
-          title="${isActive ? "تعطيل الامتحان مؤقتاً" : "تفعيل الامتحان للطلاب"}"
-        >
-          <i class="fas ${isActive ? "fa-pause" : "fa-play"} ml-1"></i>
-          <span>${isActive ? "تعطيل ⏸" : "تفعيل ▶️"}</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="btn-admin-toggle-exam px-3 py-1.5 rounded-lg ${isActive ? 'bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'} border text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+            data-admin-toggle-exam="${escapeHtml(exam.id)}"
+            data-current-active="${isActive}"
+            data-exam-title="${escapeHtml(exam.title || '')}"
+            title="${isActive ? 'تعطيل الامتحان' : 'تفعيل الامتحان'}"
+          >
+            <i class="fa-solid ${isActive ? 'fa-pause' : 'fa-play'} text-[10px]"></i>
+            <span>${isActive ? 'تعطيل ⏸' : 'تفعيل ▶'}</span>
+          </button>
+
+          <button
+            type="button"
+            class="btn-admin-delete-exam p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all cursor-pointer"
+            data-admin-delete-exam="${escapeHtml(exam.id)}"
+            data-exam-title="${escapeHtml(exam.title || '')}"
+            title="حذف الامتحان"
+          >
+            <i class="fa-solid fa-trash-can text-xs"></i>
+          </button>
+        </div>
       </div>
-    </div>
+    </article>
   `;
 }
 

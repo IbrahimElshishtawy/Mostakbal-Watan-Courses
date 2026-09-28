@@ -2,7 +2,7 @@
 import { escapeHtml } from "../../utils/dom.utils.js";
 
 /**
- * Mounts the Teacher Application Shell Layout matching the design system.
+ * Mounts the high-fidelity Teacher Application Shell Layout matching Image 8.html & Image 2.html design standards.
  * @param {HTMLElement} container
  * @param {object} options
  * @param {Function} options.onLogout
@@ -14,179 +14,210 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
   const isSubdir = window.location.pathname.includes("/pages/");
   const logoSrc = isSubdir ? "../assets/images/logo_union.jpeg" : "assets/images/logo_union.jpeg";
 
+  container.className = "bg-[#0b0e14] text-slate-100 font-sans antialiased min-h-screen flex overflow-x-hidden selection:bg-brand-500 selection:text-white";
+
   container.innerHTML = `
-    <!-- Topbar Header (Sticky) matching Admin Layout -->
-    <header class="admin-topbar" dir="rtl">
-      <!-- Right: Brand Logo & Title -->
-      <div class="admin-topbar-right">
-        <button type="button" id="mobileTeacherMenuToggle" class="mobile-menu-btn d-lg-none" aria-label="فتح القائمة" style="display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;">
-          ☰
-        </button>
-        <div class="admin-brand-emblem">
-          <img src="${logoSrc}" alt="شعار حزب مستقبل وطن" />
-        </div>
-        <div class="admin-brand-text">
-          <h1>حزب مستقبل وطن</h1>
-          <p>أمانة أول المحلة الكبرى • البوابة الأكاديمية للمعلم</p>
-        </div>
-        <span class="admin-location-pill d-none d-md-inline-flex">
-          <span>🏛️</span>
-          <span>أمانة أول المحلة</span>
-        </span>
-      </div>
-
-      <!-- Center / Left: Server status, Season, Notifications & User Pill -->
-      <div class="admin-topbar-left">
-        <div class="admin-breadcrumb-pill d-none d-lg-flex">
-          <span>بوابة المعلم</span>
-          <span>&gt;</span>
-          <span id="teacherTopbarCurrentTab" class="crumb-active">إدارة المحاضرات والداتا</span>
-        </div>
-
-        <div class="admin-status-pill online" title="حالة الاتصال بالخادم الرئيسي">
-          <span class="admin-live-dot" aria-hidden="true"></span>
-          <span>الخادم : 172.20.104.203 (متصل)</span>
-        </div>
-
-        <div class="admin-season-pill d-none d-sm-inline-flex">
-          <span aria-hidden="true">📅</span>
-          <span>الموسم: 2026/2027</span>
-        </div>
-
-        <div id="teacherNotificationBellSlot" class="admin-notification-bell" title="التنبيهات والإشعارات" role="button" tabindex="0">
-          <span aria-hidden="true">🔔</span>
-          <span class="admin-notification-badge">2</span>
-        </div>
-
-        <div class="admin-user-pill" id="teacherUserPillTrigger">
-          <div class="admin-user-pill-avatar" id="teacherTopbarUserInitial">م</div>
-          <div class="admin-user-pill-info d-none d-sm-flex">
-            <strong id="teacherSidebarName">المعلم الأكاديمي</strong>
-            <span id="teacherSidebarEmail">teacher@watan.edu.eg</span>
+    <!-- BEGIN: Sidebar (Right Side in RTL) -->
+    <aside id="teacherSidebar" class="w-[285px] bg-[#101520] border-l border-[#1e293b] flex-shrink-0 flex flex-col justify-between z-30 sticky top-0 h-screen overflow-y-auto transition-transform duration-300" data-purpose="teacher-sidebar">
+      <div>
+        <!-- Platform Header / Logo -->
+        <div class="p-5 border-b border-[#1b2436] flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-accent-cyan p-[2px] shadow-lg shadow-cyan-950/50">
+              <div class="w-full h-full bg-[#101520] rounded-[10px] flex items-center justify-center text-accent-cyan text-xl font-bold">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+            </div>
+            <div>
+              <h1 class="text-base font-extrabold tracking-wide text-white flex items-center gap-1.5">
+                مستقبل وطن
+                <span class="text-[10px] bg-brand-500/15 text-accent-cyan border border-brand-500/30 px-1.5 py-0.5 rounded font-mono">Teacher</span>
+              </h1>
+              <p class="text-xs text-slate-400 font-medium leading-none mt-1">البوابة الأكاديمية للمعلم</p>
+            </div>
           </div>
-          <span style="font-size: 0.7rem; color: #fbbf24; margin-inline-start: 4px;">👨‍🏫</span>
+          <button id="mobileTeacherMenuToggle" type="button" class="text-slate-500 hover:text-slate-300 transition-colors p-1 cursor-pointer lg:hidden" title="تصغير القائمة">
+            <i class="fa-solid fa-bars-staggered text-sm"></i>
+          </button>
         </div>
-      </div>
-    </header>
 
-    <div id="mobileTeacherOverlay" class="mobile-overlay"></div>
-
-    <div class="app-shell" style="min-height: calc(100vh - 70px);">
-      <!-- Main Content Area -->
-      <div class="main-wrapper" style="flex: 1; min-width: 0;">
-        <main class="main-view" role="main" style="padding: 1.5rem 1.75rem; max-width: 1540px; margin: 0 auto; width: 100%; box-sizing: border-box;">
-          
-          <section id="sec-data" class="tab-content active" aria-labelledby="heading-t-data">
-            <div id="teacherDataContainer"></div>
-          </section>
-
-          <section id="sec-exams" class="tab-content" aria-labelledby="heading-t-exams">
-            <div id="teacherExamsContainer"></div>
-          </section>
-
-          <section id="sec-assignments" class="tab-content" aria-labelledby="heading-t-assignments">
-            <div id="teacherAssignmentsContainer"></div>
-          </section>
-
-          <section id="sec-students" class="tab-content" aria-labelledby="heading-t-students">
-            <div id="teacherStudentsContainer"></div>
-          </section>
-
-          <section id="sec-attendance" class="tab-content" aria-labelledby="heading-t-attendance">
-            <div id="teacherAttendanceContainer"></div>
-          </section>
-
-          <section id="sec-settings" class="tab-content" aria-labelledby="heading-t-settings">
-            <div id="teacherSettingsContainer"></div>
-          </section>
-        </main>
-      </div>
-
-      <!-- Right Sidebar (Fixed RTL) -->
-      <aside id="teacherSidebar" class="admin-sidebar" aria-label="القائمة الجانبية للمعلم">
-        <!-- User Profile Card -->
-        <div class="admin-sidebar-profile-card">
-          <div class="admin-sidebar-avatar-wrapper">
-            <div class="admin-sidebar-avatar" id="teacherAvatarSlot">م</div>
-            <span class="admin-avatar-status-dot online"></span>
+        <!-- Teacher Identity Card -->
+        <div class="p-4 mx-3 my-4 bg-gradient-to-r from-[#151c2c] to-[#121927] border border-[#222f47] rounded-xl flex items-center gap-3 shadow-inner">
+          <div class="relative">
+            <div id="teacherAvatarSlot" class="w-10 h-10 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 flex items-center justify-center font-bold text-sm shadow">
+              م
+            </div>
+            <span class="w-3 h-3 bg-emerald-400 border-2 border-[#101520] rounded-full absolute bottom-0 left-0"></span>
           </div>
-          <div class="admin-sidebar-user-details">
-            <h4 id="teacherSidebarNameDisplay">المعلم الأكاديمي</h4>
-            <span class="admin-user-role-badge teacher">👨‍🏫 معلم معتمد</span>
-            <p id="teacherSidebarEmailDisplay">teacher@watan.edu.eg</p>
+          <div class="overflow-hidden flex-1">
+            <div class="flex items-center justify-between">
+              <h4 id="teacherSidebarNameDisplay" class="text-sm font-bold text-white truncate">المعلم الأكاديمي</h4>
+              <span class="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded font-semibold">معلم معتمد</span>
+            </div>
+            <p id="teacherSidebarEmailDisplay" class="text-[11px] text-slate-400 font-mono truncate">teacher@watan.edu.eg</p>
           </div>
         </div>
 
-        <div class="admin-sidebar-nav-label">المهام التعليمية</div>
+        <!-- Navigation Menu: Instructional Tasks -->
+        <div class="px-4 mb-2">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">المهام التعليمية والصفية</p>
+          <nav class="space-y-1">
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="data" id="tab-btn-data">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-book-open w-4 text-center text-slate-400 group-hover:text-cyan-400"></i>
+                <span>المحاضرات والداتا</span>
+              </div>
+              <span class="text-[10px] bg-brand-500/20 text-accent-cyan px-2 py-0.5 rounded-full font-bold">دروس</span>
+            </button>
 
-        <nav class="admin-sidebar-nav" id="teacherSidebarNav" role="navigation">
-          <button type="button" class="admin-nav-item active" data-section="data">
-            <div class="admin-nav-item-content">
-              <span class="admin-nav-icon">📚</span>
-              <span>المحاضرات والداتا</span>
-            </div>
-            <span class="admin-nav-badge live">دروس</span>
-          </button>
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="exams" id="tab-btn-exams">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-file-pen w-4 text-center text-slate-400 group-hover:text-amber-400"></i>
+                <span>الاختبارات والتقييمات</span>
+              </div>
+              <span class="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded-full border border-slate-700">12</span>
+            </button>
 
-          <button type="button" class="admin-nav-item" data-section="exams">
-            <div class="admin-nav-item-content">
-              <span class="admin-nav-icon">📝</span>
-              <span>الاختبارات والتقييمات</span>
-            </div>
-            <span class="admin-nav-badge">12</span>
-          </button>
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="assignments" id="tab-btn-assignments">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-list-check w-4 text-center text-slate-400 group-hover:text-amber-400"></i>
+                <span>التاسكات والواجبات</span>
+              </div>
+              <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold">مراجعة</span>
+            </button>
 
-          <button type="button" class="admin-nav-item" data-section="assignments">
-            <div class="admin-nav-item-content">
-              <span class="admin-nav-icon">📋</span>
-              <span>التاسكات والواجبات</span>
-            </div>
-            <span class="admin-nav-badge gold">مراجعة</span>
-          </button>
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="students" id="tab-btn-students">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-users w-4 text-center text-slate-400 group-hover:text-cyan-400"></i>
+                <span>دليل الطلاب والدرجات</span>
+              </div>
+              <span class="text-[10px] bg-slate-800 text-slate-300 font-mono px-2 py-0.5 rounded-full border border-slate-700">342</span>
+            </button>
 
-          <button type="button" class="admin-nav-item" data-section="students">
-            <div class="admin-nav-item-content">
-              <span class="admin-nav-icon">👥</span>
-              <span>دليل الطلاب والدرجات</span>
-            </div>
-            <span class="admin-nav-badge">342</span>
-          </button>
+            <!-- Active Tab: Attendance Sheet (Image 2) -->
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="attendance" id="tab-btn-attendance">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-clipboard-user w-4 text-center text-slate-400 group-hover:text-emerald-400"></i>
+                <span>الغياب والحضور اليومي</span>
+              </div>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-bold">مباشر</span>
+            </button>
+          </nav>
+        </div>
 
-          <button type="button" class="admin-nav-item" data-section="attendance">
-            <div class="admin-nav-item-content">
-              <span class="admin-nav-icon">📊</span>
-              <span>الغياب والحضور اليومي</span>
-            </div>
-            <span class="admin-nav-badge live">مباشر</span>
-          </button>
-
-          <div class="admin-sidebar-nav-label">الإعدادات والتخصيص</div>
-
-          <button type="button" class="admin-nav-item" data-section="settings">
-            <div class="admin-nav-item-content">
-              <span class="admin-nav-icon">⚙️</span>
+        <!-- Navigation Menu: Settings -->
+        <div class="px-4 mt-6">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">النظام والتخصيص</p>
+          <nav class="space-y-1">
+            <button type="button" class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="settings" id="tab-btn-settings">
+              <i class="fa-solid fa-sliders w-4 text-center text-slate-400 group-hover:text-purple-400"></i>
               <span>إعدادات الحساب والمظهر</span>
-            </div>
-          </button>
-        </nav>
-
-        <div class="admin-sidebar-footer">
-          <div class="admin-security-pill">
-            <i class="fas fa-lock"></i>
-            <span>تشفير 256-bit آمن v2.6.4</span>
-          </div>
-          <button type="button" class="admin-logout-btn" id="teacherLogoutBtn">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>تسجيل الخروج الآمن</span>
-          </button>
+            </button>
+          </nav>
         </div>
-      </aside>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="p-4 border-t border-[#1b2436] space-y-3 bg-[#0d121c]">
+        <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+          <span class="flex items-center gap-1.5">
+            <i class="fa-solid fa-shield-halved text-emerald-400 text-xs"></i>
+            <span>تشفير 256-bit آمن</span>
+          </span>
+          <span class="font-mono text-slate-400">v2.6.4</span>
+        </div>
+        <button id="teacherLogoutBtn" type="button" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-all cursor-pointer">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>تسجيل الخروج الآمن</span>
+        </button>
+      </div>
+    </aside>
+    <!-- END: Sidebar -->
+
+    <!-- BEGIN: Main Work Area -->
+    <div class="flex-1 flex flex-col min-w-0 bg-[#0c1017]">
+      <!-- Topbar Header -->
+      <header class="h-16 border-b border-[#1b2537] bg-[#101623]/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-20">
+        <!-- Breadcrumbs -->
+        <div class="flex items-center gap-3 text-xs">
+          <a class="text-slate-400 hover:text-slate-200 transition-colors" href="#">بوابة المعلم</a>
+          <i class="fa-solid fa-chevron-left text-[10px] text-slate-600"></i>
+          <span id="teacherTopbarCurrentTab" class="text-accent-cyan font-bold flex items-center gap-1.5">
+            <span>المحاضرات والداتا</span>
+          </span>
+        </div>
+
+        <!-- Server & Account Status -->
+        <div class="flex items-center gap-4">
+          <!-- Mobile Sidebar Toggle -->
+          <button id="mobileTeacherOpenBtn" type="button" class="text-slate-400 hover:text-white p-1 lg:hidden cursor-pointer" title="فتح القائمة">
+            <i class="fa-solid fa-bars text-base"></i>
+          </button>
+
+          <!-- Live Server IP Indicator -->
+          <div class="hidden xl:flex items-center gap-2 bg-[#151d2d] border border-[#212e46] px-3 py-1.5 rounded-lg text-xs text-slate-300 font-mono">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]"></span>
+            <span>172.20.104.203:3000</span>
+            <span class="text-slate-500 text-[10px]">| متصل</span>
+          </div>
+
+          <!-- Academic Season -->
+          <div class="hidden sm:flex items-center gap-1.5 bg-[#172033] border border-[#24334d] px-3 py-1.5 rounded-lg text-xs text-slate-300">
+            <i class="fa-regular fa-calendar-check text-brand-400 text-xs"></i>
+            <span>الموسم: 2026/2027</span>
+          </div>
+
+          <!-- Notification Bell Slot -->
+          <div id="teacherNotificationBellSlot" class="relative">
+            <button class="relative w-9 h-9 rounded-lg bg-[#151d2d] border border-[#223049] text-slate-300 hover:text-white flex items-center justify-center transition-all hover:border-slate-500 cursor-pointer">
+              <i class="fa-regular fa-bell text-sm"></i>
+              <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-[9px] font-bold text-white flex items-center justify-center">2</span>
+            </button>
+          </div>
+
+          <!-- Teacher Profile Pill -->
+          <div class="flex items-center gap-2 border-r border-[#202b3f] pr-4">
+            <div id="teacherTopbarUserInitial" class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-accent-cyan text-white font-bold flex items-center justify-center text-xs shadow">
+              م
+            </div>
+            <div class="hidden md:flex flex-col text-right">
+              <span id="teacherTopbarUserName" class="text-xs font-semibold text-slate-200">المعلم الأكاديمي</span>
+              <span id="teacherTopbarUserEmail" class="text-[10px] text-slate-500 font-mono">teacher@watan.edu.eg</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Tab Content Area -->
+      <main class="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto" role="main">
+        <section id="sec-data" class="tab-content active" aria-labelledby="tab-btn-data">
+          <div id="teacherDataContainer"></div>
+        </section>
+
+        <section id="sec-exams" class="tab-content hidden" aria-labelledby="tab-btn-exams">
+          <div id="teacherExamsContainer"></div>
+        </section>
+
+        <section id="sec-assignments" class="tab-content hidden" aria-labelledby="tab-btn-assignments">
+          <div id="teacherAssignmentsContainer"></div>
+        </section>
+
+        <section id="sec-students" class="tab-content hidden" aria-labelledby="tab-btn-students">
+          <div id="teacherStudentsContainer"></div>
+        </section>
+
+        <section id="sec-attendance" class="tab-content hidden" aria-labelledby="tab-btn-attendance">
+          <div id="teacherAttendanceContainer"></div>
+        </section>
+
+        <section id="sec-settings" class="tab-content hidden" aria-labelledby="tab-btn-settings">
+          <div id="teacherSettingsContainer"></div>
+        </section>
+      </main>
     </div>
   `;
 
   const sidebar = document.getElementById("teacherSidebar");
-  const overlay = document.getElementById("mobileTeacherOverlay");
-  const toggleBtn = document.getElementById("mobileTeacherMenuToggle");
   const navItems = container.querySelectorAll(".admin-nav-item[data-section]");
   const topbarBreadcrumb = document.getElementById("teacherTopbarCurrentTab");
 
@@ -195,33 +226,32 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
     exams: "الاختبارات والتقييمات",
     assignments: "التاسكات والواجبات",
     students: "دليل الطلاب والدرجات",
-    attendance: "الغياب والحضور اليومي",
+    attendance: "إدارة الغياب والحضور المركزي",
     settings: "إعدادات الحساب والمظهر"
   };
 
-  function closeMobile() {
-    sidebar?.classList.remove("mobile-open");
-    overlay?.classList.remove("active");
-  }
-
-  toggleBtn?.addEventListener("click", () => {
-    sidebar?.classList.toggle("mobile-open");
-    overlay?.classList.toggle("active");
-  });
-
-  overlay?.addEventListener("click", closeMobile);
+  const activeNavClasses = "bg-gradient-to-l from-brand-600/30 to-brand-500/10 border-r-4 border-accent-cyan shadow-glow-cyan/20 text-accent-cyan font-bold";
+  const inactiveNavClasses = "text-slate-300 hover:bg-[#182133] hover:text-white";
 
   function setActiveTab(sectionId) {
     navItems.forEach((btn) => {
       const match = btn.getAttribute("data-section") === sectionId;
-      btn.classList.toggle("active", match);
+      if (match) {
+        btn.className = `admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-right ${activeNavClasses}`;
+      } else {
+        btn.className = `admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-right ${inactiveNavClasses}`;
+      }
     });
 
     const allSections = container.querySelectorAll(".tab-content");
-    allSections.forEach((sec) => sec.classList.remove("active"));
+    allSections.forEach((sec) => {
+      sec.classList.add("hidden");
+      sec.classList.remove("active");
+    });
 
     const target = document.getElementById(`sec-${sectionId}`);
     if (target) {
+      target.classList.remove("hidden");
       target.classList.add("active");
     }
 
@@ -229,7 +259,6 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
       topbarBreadcrumb.textContent = tabLabels[sectionId];
     }
 
-    closeMobile();
     if (typeof onTabChange === "function") {
       onTabChange(sectionId);
     }
@@ -242,32 +271,41 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
     });
   });
 
+  document.getElementById("mobileTeacherOpenBtn")?.addEventListener("click", () => {
+    sidebar?.classList.toggle("hidden");
+  });
+  document.getElementById("mobileTeacherMenuToggle")?.addEventListener("click", () => {
+    sidebar?.classList.add("hidden");
+  });
+
   document.getElementById("teacherLogoutBtn")?.addEventListener("click", () => {
     if (typeof onLogout === "function") {
       onLogout();
     }
   });
 
+  // Set default active tab
+  setActiveTab("data");
+
   return {
     switchTab: setActiveTab,
     updateProfile({ name, email }) {
-      const nameEl = document.getElementById("teacherSidebarName");
       const nameDisplayEl = document.getElementById("teacherSidebarNameDisplay");
-      const emailEl = document.getElementById("teacherSidebarEmail");
       const emailDisplayEl = document.getElementById("teacherSidebarEmailDisplay");
+      const topbarName = document.getElementById("teacherTopbarUserName");
+      const topbarEmail = document.getElementById("teacherTopbarUserEmail");
       const avatarSlot = document.getElementById("teacherAvatarSlot");
       const topbarAvatar = document.getElementById("teacherTopbarUserInitial");
 
-      if (name) {
-        if (nameEl) nameEl.textContent = name;
-        if (nameDisplayEl) nameDisplayEl.textContent = name;
-        if (avatarSlot) avatarSlot.textContent = name.trim().charAt(0);
-        if (topbarAvatar) topbarAvatar.textContent = name.trim().charAt(0);
-      }
-      if (email) {
-        if (emailEl) emailEl.textContent = email;
-        if (emailDisplayEl) emailDisplayEl.textContent = email;
-      }
+      const displayName = name || "المعلم الأكاديمي";
+      if (nameDisplayEl) nameDisplayEl.textContent = displayName;
+      if (topbarName) topbarName.textContent = displayName;
+      if (topbarEmail && email) topbarEmail.textContent = email;
+      if (emailDisplayEl && email) emailDisplayEl.textContent = email;
+
+      const firstChar = displayName.trim().charAt(0) || "م";
+      if (avatarSlot) avatarSlot.textContent = firstChar;
+      if (topbarAvatar) topbarAvatar.textContent = firstChar;
     }
   };
 }
