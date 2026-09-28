@@ -225,6 +225,86 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (authErr) {
     console.warn("Auth observer error in landing:", authErr);
   }
+
+  // Initialize visual animations and scroll reveals
+  initLandingAnimations();
 });
+
+/**
+ * Interactive Presentation & Scroll Reveal Animation Engine
+ */
+function initLandingAnimations() {
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const revealElements = document.querySelectorAll(".reveal-on-scroll");
+
+  if (prefersReduced || !("IntersectionObserver" in window)) {
+    revealElements.forEach((el) => el.classList.add("is-revealed"));
+    return;
+  }
+
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      rootMargin: "0px 0px -40px 0px",
+      threshold: 0.08,
+    }
+  );
+
+  revealElements.forEach((el) => revealObserver.observe(el));
+
+  // Initialize Animated Counters
+  initNumericCounters();
+}
+
+function initNumericCounters() {
+  const counterElements = document.querySelectorAll("[data-counter]");
+  if (!counterElements.length) return;
+
+  const counterObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+
+  counterElements.forEach((el) => counterObserver.observe(el));
+}
+
+function animateCounter(el) {
+  const target = parseFloat(el.getAttribute("data-counter") || "0");
+  const prefix = el.getAttribute("data-counter-prefix") || "";
+  const suffix = el.getAttribute("data-counter-suffix") || "";
+  const duration = 1400;
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Smooth ease-out quad curve
+    const ease = 1 - (1 - progress) * (1 - progress);
+    const current = Math.floor(ease * target);
+    el.textContent = `${prefix}${current}${suffix}`;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = `${prefix}${target}${suffix}`;
+    }
+  }
+
+  requestAnimationFrame(update);
+}
 
 export { AuthController };
