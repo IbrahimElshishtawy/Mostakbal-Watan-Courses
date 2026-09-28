@@ -10,7 +10,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
   if (!container) return;
 
   const isSubdir = window.location.pathname.includes("/pages/");
-  const logoSrc = isSubdir ? "../assets/images/logo.jpeg" : "assets/images/logo.jpeg";
+  const logoSrc = isSubdir ? "../assets/images/logo_union.jpeg" : "assets/images/logo_union.jpeg";
 
   container.innerHTML = `
     <!-- Mobile Top Header Bar -->

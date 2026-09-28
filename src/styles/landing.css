@@ -420,13 +420,87 @@ html, body {
 }
 
 /* ============================================================
-   RESPONSIVE UTILITIES FOR LARGE DISPLAYS (2K & 4K)
+   RESPONSIVE SCALING ENGINE (Mobile 320px -> 4K Displays 3840px+)
+   Proportional Root Font Sizing for Tailwind REM-based layouts
    ============================================================ */
-@media (min-width: 1536px) {
-  .hero-gradient-title {
-    filter: drop-shadow(0 0 45px rgba(56, 189, 248, 0.4));
-  }
-  .cyber-hud-card {
-    border-radius: 2rem;
+@media (max-width: 360px) {
+  :root {
+    font-size: 14px;
   }
 }
+
+@media (min-width: 1920px) {
+  :root {
+    font-size: 17px;
+  }
+  .ambient-orb-1 {
+    width: min(850px, 45vw);
+    height: min(850px, 45vw);
+    filter: blur(180px);
+  }
+  .ambient-orb-2 {
+    width: min(750px, 40vw);
+    height: min(750px, 40vw);
+    filter: blur(180px);
+  }
+  .ambient-orb-3 {
+    width: min(800px, 42vw);
+    height: min(800px, 42vw);
+    filter: blur(200px);
+  }
+  .hero-gradient-title {
+    filter: drop-shadow(0 0 50px rgba(56, 189, 248, 0.45));
+  }
+  .cyber-hud-card {
+    border-radius: 2.25rem;
+    box-shadow: 0 0 70px rgba(56, 189, 248, 0.22);
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    font-size: 19px;
+  }
+  .ambient-orb-1 {
+    width: min(1000px, 40vw);
+    height: min(1000px, 40vw);
+    filter: blur(220px);
+  }
+  .ambient-orb-2 {
+    width: min(900px, 38vw);
+    height: min(900px, 38vw);
+    filter: blur(220px);
+  }
+  .ambient-orb-3 {
+    width: min(950px, 40vw);
+    height: min(950px, 40vw);
+    filter: blur(240px);
+  }
+  .hero-gradient-title {
+    filter: drop-shadow(0 0 65px rgba(56, 189, 248, 0.5));
+  }
+  .cyber-hud-card {
+    border-radius: 2.5rem;
+    box-shadow: 0 0 90px rgba(56, 189, 248, 0.28);
+  }
+}
+
+@media (min-width: 3200px) {
+  :root {
+    font-size: 21px;
+  }
+}
+
+/* Touch Ergonomics & Mobile Tap Target Resiliency */
+button, a, input, select {
+  touch-action: manipulation;
+}
+
+@media (max-width: 640px) {
+  .landing-login-btn,
+  .mobile-menu-btn,
+  #gameChallengeBtn {
+    min-height: 44px;
+  }
+}
+
