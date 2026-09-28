@@ -90,15 +90,17 @@ export function renderLessonFilters({
     `;
 
   return `
-    <div class="card mb-4 lesson-filters-card">
-      <div class="lesson-filters-grid">
+    <div class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-4 shadow-sm mb-6" dir="rtl">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <!-- Search Input -->
-        <div class="search-bar-wrapper">
-          <span class="search-bar-icon" aria-hidden="true">🔍</span>
+        <div class="relative">
+          <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-500">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </span>
           <input
             type="search"
             id="lessonSearchInput"
-            class="form-input search-bar-input"
+            class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl pr-9 pl-3 py-2.5 text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
             placeholder="بحث في عنوان المحاضرة أو الوصف..."
             value="${escapeHtml(searchQuery)}"
             aria-label="بحث في المحاضرات"
@@ -106,22 +108,22 @@ export function renderLessonFilters({
         </div>
 
         <!-- Group Filter -->
-        <div class="filter-select-wrapper">
-          <select id="lessonGroupFilter" class="form-select" aria-label="تصفية حسب المجموعة">
+        <div class="relative">
+          <select id="lessonGroupFilter" class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors cursor-pointer" aria-label="تصفية حسب المجموعة">
             ${groupOptionsHtml}
           </select>
         </div>
 
         <!-- Status Filter -->
-        <div class="filter-select-wrapper">
-          <select id="lessonStatusFilter" class="form-select" aria-label="تصفية حسب الحالة">
+        <div class="relative">
+          <select id="lessonStatusFilter" class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors cursor-pointer" aria-label="تصفية حسب الحالة">
             ${statusOptionsHtml}
           </select>
         </div>
 
         <!-- Sort Order -->
-        <div class="filter-select-wrapper">
-          <select id="lessonSortOrder" class="form-select" aria-label="ترتيب المحاضرات">
+        <div class="relative">
+          <select id="lessonSortOrder" class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors cursor-pointer" aria-label="ترتيب المحاضرات">
             <option value="newest" ${sortOrder === "newest" ? "selected" : ""}>الأحدث أولاً ⬇️</option>
             <option value="oldest" ${sortOrder === "oldest" ? "selected" : ""}>الأقدم أولاً ⬆️</option>
           </select>

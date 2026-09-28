@@ -102,6 +102,15 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
               </div>
               <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-bold">مباشر</span>
             </button>
+
+            <!-- Python Adventure World & Level Management -->
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="python-adventure" id="tab-btn-python-adventure">
+              <div class="flex items-center gap-3">
+                <span class="text-sm">🐍</span>
+                <span>عالم ومستويات بايثون</span>
+              </div>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-bold">تحديات</span>
+            </button>
           </nav>
         </div>
 
@@ -210,6 +219,10 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
           <div id="teacherAttendanceContainer"></div>
         </section>
 
+        <section id="sec-python-adventure" class="tab-content hidden" aria-labelledby="tab-btn-python-adventure">
+          <div id="teacherPythonAdventureContainer"></div>
+        </section>
+
         <section id="sec-settings" class="tab-content hidden" aria-labelledby="tab-btn-settings">
           <div id="teacherSettingsContainer"></div>
         </section>
@@ -227,6 +240,7 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
     assignments: "التاسكات والواجبات",
     students: "دليل الطلاب والدرجات",
     attendance: "إدارة الغياب والحضور المركزي",
+    "python-adventure": "عالم ومستويات بايثون",
     settings: "إعدادات الحساب والمظهر"
   };
 

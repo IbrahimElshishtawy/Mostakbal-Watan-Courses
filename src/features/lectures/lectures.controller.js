@@ -153,6 +153,7 @@ export const LecturesController = {
     const totalCount = allLectures.length;
     const activeCount = allLectures.filter((l) => l.active !== false).length;
     const withFilesCount = allLectures.filter((l) => Boolean(l.fileUrl)).length;
+    const withVideosCount = allLectures.filter((l) => Boolean(l.videoUrl || l.videoId)).length;
 
     // Filter & sort
     let filtered = allLectures.filter((l) => {
@@ -184,32 +185,94 @@ export const LecturesController = {
       return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
     });
 
-    // Top Header & Stats Toolbar (Clean toolbar without duplicate title)
+    // Top Header & Stats Toolbar (Executive Dark Theme matching Image 8.html & Image 4.png)
     const headerHtml = `
-      <div class="teacher-lectures-toolbar card mb-4">
-        <div class="d-flex items-center justify-between gap-3 flex-wrap">
-          <div class="teacher-stats-pills d-flex items-center gap-2 flex-wrap">
-            <div class="stat-pill">
-              <span class="stat-icon" aria-hidden="true">📚</span>
-              <span class="stat-label">إجمالي المحاضرات:</span>
-              <strong class="stat-val">${totalCount}</strong>
+      <div class="space-y-6 mb-6" dir="rtl">
+        <!-- Executive Hero Banner -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#121927] via-[#152136] to-[#0f1726] border border-[#1e2a3f] p-6 shadow-2xl">
+          <div class="absolute -right-12 -top-12 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl shadow-lg shadow-cyan-950/50">
+                <i class="fa-solid fa-chalkboard-user"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2.5">
+                  <h2 class="text-xl font-extrabold text-white">إدارة المحاضرات والمواد التعليمية</h2>
+                  <span class="text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-2.5 py-0.5 rounded-full font-bold">بوابة المعلم</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">نشر وتنسيق المحاضرات المسجلة، إرفاق الأكواد والمذكرات، وإدارة مجموعات الطلاب.</p>
+              </div>
             </div>
-            <div class="stat-pill active-stat">
-              <span class="stat-icon text-success" aria-hidden="true">●</span>
-              <span class="stat-label">المحاضرات النشطة:</span>
-              <strong class="stat-val text-success">${activeCount}</strong>
-            </div>
-            <div class="stat-pill">
-              <span class="stat-icon" aria-hidden="true">📎</span>
-              <span class="stat-label">ملفات مرفقة:</span>
-              <strong class="stat-val">${withFilesCount}</strong>
+            <div class="flex items-center gap-3">
+              <button type="button" id="openCreateLessonBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-lg shadow-cyan-900/40 border border-cyan-400/30 transition-all cursor-pointer">
+                <i class="fa-solid fa-plus text-sm"></i>
+                <span>إضافة محاضرة جديدة</span>
+              </button>
             </div>
           </div>
-          <div>
-            <button type="button" id="openCreateLessonBtn" class="btn btn-primary">
-              <span>➕</span>
-              <span>إضافة محاضرة جديدة</span>
-            </button>
+        </div>
+
+        <!-- 4 KPI Metrics Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">إجمالي المحاضرات</span>
+              <span class="text-2xl font-extrabold text-white mt-1 block font-mono">${totalCount}</span>
+              <span class="text-[11px] text-cyan-400 mt-1 flex items-center gap-1">
+                <i class="fa-solid fa-book-bookmark text-[10px]"></i>
+                <span>جميع المواد المرفوعة</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-video"></i>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">المحاضرات النشطة</span>
+              <span class="text-2xl font-extrabold text-emerald-400 mt-1 block font-mono">${activeCount}</span>
+              <span class="text-[11px] text-emerald-400/80 mt-1 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>متاحة للطلاب حالياً</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-circle-play"></i>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">ملفات ومذكرات مرفقة</span>
+              <span class="text-2xl font-extrabold text-amber-400 mt-1 block font-mono">${withFilesCount}</span>
+              <span class="text-[11px] text-amber-400/80 mt-1 flex items-center gap-1">
+                <i class="fa-solid fa-paperclip text-[10px]"></i>
+                <span>PDF ومستندات تدريب</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-file-pdf"></i>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">جلسات فيديو مسجلة</span>
+              <span class="text-2xl font-extrabold text-purple-400 mt-1 block font-mono">${withVideosCount}</span>
+              <span class="text-[11px] text-purple-400/80 mt-1 flex items-center gap-1">
+                <i class="fa-brands fa-youtube text-[10px]"></i>
+                <span>محاضرات مشاهدة مباشرة</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-film"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -241,7 +304,7 @@ export const LecturesController = {
       });
     } else {
       listHtml = `
-        <div class="teacher-lessons-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" dir="rtl">
           ${filtered.map((lec) => renderTeacherLessonCard({ lesson: lec })).join("")}
         </div>
       `;
