@@ -7,6 +7,24 @@ import { normalizeError } from "../../core/errors.js";
 import { CHALLENGES_CLIENT_DATA, WORLDS_DATA, ACHIEVEMENTS_DATA } from "./python-adventure-data.js";
 
 const LOCAL_STORAGE_KEY = "python_adventure_local_progress";
+const CUSTOM_LEVELS_STORAGE_KEY = "python_adventure_custom_levels";
+const WORLD_ORDERS_STORAGE_KEY = "python_adventure_world_orders";
+
+// Initialize and merge custom levels into CHALLENGES_CLIENT_DATA
+function initCustomLevelsCache() {
+  try {
+    const raw = localStorage.getItem(CUSTOM_LEVELS_STORAGE_KEY);
+    if (raw) {
+      const customMap = JSON.parse(raw);
+      if (customMap && typeof customMap === "object") {
+        Object.assign(CHALLENGES_CLIENT_DATA, customMap);
+      }
+    }
+  } catch (err) {
+    console.warn("Failed to load custom levels from local storage:", err);
+  }
+}
+initCustomLevelsCache();
 
 export const PythonAdventureService = {
   /**
@@ -255,6 +273,206 @@ export const PythonAdventureService = {
       requirements: ["استخدم for loop مع range", "اطبع الناتج النهائي فقط (110)"],
       expectedOutput: "110"
     };
+  },
+
+  /**
+   * Returns all custom added levels.
+   */
+  getCustomLevels() {
+    try {
+      const raw = localStorage.getItem(CUSTOM_LEVELS_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (_) {
+      return {};
+    }
+  },
+
+  /**
+   * Returns saved world level ordering mapping: { [worldId]: [challengeId1, challengeId2, ...] }
+   */
+  getWorldLevelOrders() {
+    try {
+      const raw = localStorage.getItem(WORLD_ORDERS_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (_) {
+      return {};
+    }
+  },
+
+  /**
+   * Returns challenges for a given world, sorted in custom or default order.
+   * @param {string} worldId
+   * @returns {Array<object>}
+   */
+  getWorldChallenges(worldId) {
+    initCustomLevelsCache();
+    const allInWorld = [];
+    for (const [cId, ch] of Object.entries(CHALLENGES_CLIENT_DATA)) {
+      if (ch.worldId === worldId) {
+        allInWorld.push(ch);
+      }
+    }
+
+    const savedOrders = this.getWorldLevelOrders();
+    const orderList = savedOrders[worldId];
+
+    if (Array.isArray(orderList) && orderList.length > 0) {
+      allInWorld.sort((a, b) => {
+        const idxA = orderList.indexOf(a.id);
+        const idxB = orderList.indexOf(b.id);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return (a.levelNumber || 0) - (b.levelNumber || 0);
+      });
+    } else {
+      allInWorld.sort((a, b) => (a.levelNumber || 0) - (b.levelNumber || 0));
+    }
+
+    // Reassign sequential level numbers and nextChallengeId links
+    allInWorld.forEach((ch, idx) => {
+      ch.levelNumber = idx + 1;
+      const nextCh = allInWorld[idx + 1];
+      ch.nextChallengeId = nextCh ? nextCh.id : null;
+    });
+
+    return allInWorld;
+  },
+
+  /**
+   * Adds a new level/challenge to a world.
+   * @param {object} params
+   */
+  addCustomLevel({
+    worldId,
+    title,
+    subtitle = "",
+    difficulty = "easy",
+    type = "write_code",
+    baseXp = 50,
+    starterCode = "",
+    requirements = [],
+    expectedOutput = "",
+    hints = []
+  }) {
+    if (!worldId || !title) {
+      throw new Error("يرجى تحديد العالم وإدخال عنوان المستوى.");
+    }
+
+    const id = `${worldId}-custom-${Date.now()}`;
+    const currentChallenges = this.getWorldChallenges(worldId);
+    const worldObj = WORLDS_DATA.find((w) => w.id === worldId);
+
+    const parsedRequirements = Array.isArray(requirements)
+      ? requirements
+      : (typeof requirements === "string" ? requirements.split("\n").map((r) => r.trim()).filter(Boolean) : []);
+
+    const parsedHints = Array.isArray(hints)
+      ? hints
+      : (typeof hints === "string" ? hints.split("\n").map((h) => h.trim()).filter(Boolean) : []);
+
+    const newChallenge = {
+      id,
+      worldId,
+      worldTitle: worldObj?.title || "عالم بايثون",
+      levelNumber: currentChallenges.length + 1,
+      title: title.trim(),
+      subtitle: (subtitle || "تحدي إضافي جديد").trim(),
+      difficulty: difficulty || "easy",
+      type: type || "write_code",
+      baseXp: Number(baseXp) || 50,
+      skills: ["python", "practice"],
+      story: subtitle || title,
+      microLesson: {
+        concept: title,
+        summary: subtitle || `تدرب على كتابة الكود وحل مسألة ${title}.`,
+        exampleCode: starterCode || "# اكتب الكود المطلوب أدناه\n"
+      },
+      starterCode: starterCode || "# اكتب الكود هنا\n",
+      requirements: parsedRequirements.length > 0 ? parsedRequirements : ["اكتب البرنامج المطلوب بدقة"],
+      expectedOutput: expectedOutput.trim(),
+      hints: parsedHints.length > 0 ? parsedHints : ["تأكد من اتباع متطلبات المسألة"],
+      isCustom: true,
+      createdAt: new Date().toISOString()
+    };
+
+    // Update in-memory CHALLENGES_CLIENT_DATA
+    CHALLENGES_CLIENT_DATA[id] = newChallenge;
+
+    // Save to localStorage
+    const customLevels = this.getCustomLevels();
+    customLevels[id] = newChallenge;
+    try {
+      localStorage.setItem(CUSTOM_LEVELS_STORAGE_KEY, JSON.stringify(customLevels));
+    } catch (_) {}
+
+    // Update World Order
+    const savedOrders = this.getWorldLevelOrders();
+    const currentOrder = savedOrders[worldId] || currentChallenges.map((c) => c.id);
+    currentOrder.push(id);
+    savedOrders[worldId] = currentOrder;
+    try {
+      localStorage.setItem(WORLD_ORDERS_STORAGE_KEY, JSON.stringify(savedOrders));
+    } catch (_) {}
+
+    // Dispatch notification
+    window.dispatchEvent(new CustomEvent("python-adventure-levels-updated", { detail: { worldId, action: "add", challengeId: id } }));
+
+    return newChallenge;
+  },
+
+  /**
+   * Reorders the levels in a world based on array of challenge IDs.
+   * @param {string} worldId
+   * @param {Array<string>} orderedChallengeIds
+   */
+  reorderWorldLevels(worldId, orderedChallengeIds) {
+    if (!worldId || !Array.isArray(orderedChallengeIds)) {
+      throw new Error("بيانات إعادة الترتيب غير صحيحة.");
+    }
+
+    const savedOrders = this.getWorldLevelOrders();
+    savedOrders[worldId] = orderedChallengeIds;
+    try {
+      localStorage.setItem(WORLD_ORDERS_STORAGE_KEY, JSON.stringify(savedOrders));
+    } catch (_) {}
+
+    // Refresh and update links
+    const updatedChallenges = this.getWorldChallenges(worldId);
+
+    // Dispatch notification
+    window.dispatchEvent(new CustomEvent("python-adventure-levels-updated", { detail: { worldId, action: "reorder", orderedIds: orderedChallengeIds } }));
+
+    return updatedChallenges;
+  },
+
+  /**
+   * Deletes a custom level from a world.
+   * @param {string} worldId
+   * @param {string} challengeId
+   */
+  deleteCustomLevel(worldId, challengeId) {
+    const customLevels = this.getCustomLevels();
+    if (customLevels[challengeId]) {
+      delete customLevels[challengeId];
+      try {
+        localStorage.setItem(CUSTOM_LEVELS_STORAGE_KEY, JSON.stringify(customLevels));
+      } catch (_) {}
+    }
+
+    delete CHALLENGES_CLIENT_DATA[challengeId];
+
+    const savedOrders = this.getWorldLevelOrders();
+    if (Array.isArray(savedOrders[worldId])) {
+      savedOrders[worldId] = savedOrders[worldId].filter((id) => id !== challengeId);
+      try {
+        localStorage.setItem(WORLD_ORDERS_STORAGE_KEY, JSON.stringify(savedOrders));
+      } catch (_) {}
+    }
+
+    const updated = this.getWorldChallenges(worldId);
+    window.dispatchEvent(new CustomEvent("python-adventure-levels-updated", { detail: { worldId, action: "delete", challengeId } }));
+    return updated;
   },
 
   _getLocalCache(uid) {

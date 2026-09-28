@@ -167,6 +167,7 @@
         assignments: () => import("../src/features/assignments/assignment.controller.js").then((m) => m.AssignmentController),
         students: () => import("../src/features/students/students.controller.js").then((m) => m.StudentsController),
         attendance: () => import("../src/features/attendance/attendance.controller.js").then((m) => m.AttendanceController),
+        pythonAdventure: () => import("../src/features/python-adventure/python-adventure.controller.js").then((m) => m.PythonAdventureController),
         profile: () => import("../src/features/profile/profile.controller.js").then((m) => m.ProfileController)
       };
 
@@ -184,6 +185,8 @@
             lazyLoaders.students().then((c) => c.loadStudentsList("teacherStudentsContainer", { canDelete: false }));
           } else if (tabId === "attendance") {
             lazyLoaders.attendance().then((c) => c.loadTeacherAttendance("teacherAttendanceContainer"));
+          } else if (tabId === "python-adventure") {
+            lazyLoaders.pythonAdventure().then((c) => c.init("teacherPythonAdventureContainer", { role: "teacher", uid: "teacher_admin" }));
           } else if (tabId === "settings") {
             lazyLoaders.profile().then((c) => c.loadSettingsView("teacherSettingsContainer"));
           }

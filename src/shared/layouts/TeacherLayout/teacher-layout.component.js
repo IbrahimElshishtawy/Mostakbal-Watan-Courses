@@ -17,8 +17,11 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
   container.className = "bg-[#0b0e14] text-slate-100 font-sans antialiased min-h-screen flex overflow-x-hidden selection:bg-brand-500 selection:text-white";
 
   container.innerHTML = `
-    <!-- BEGIN: Sidebar (Right Side in RTL) -->
-    <aside id="teacherSidebar" class="w-[285px] bg-[#101520] border-l border-[#1e293b] flex-shrink-0 flex flex-col justify-between z-30 sticky top-0 h-screen overflow-y-auto transition-transform duration-300" data-purpose="teacher-sidebar">
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="teacherSidebarBackdrop" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity duration-300"></div>
+
+    <!-- BEGIN: Sidebar / Navigation Drawer (Right Side in RTL) -->
+    <aside id="teacherSidebar" class="w-[285px] bg-[#101520]/95 backdrop-blur-md border-l border-[#1e293b] flex-shrink-0 flex flex-col justify-between z-50 lg:z-30 fixed lg:sticky top-0 right-0 h-screen overflow-y-auto transition-all duration-300 shadow-2xl lg:shadow-none hidden lg:flex" data-purpose="teacher-sidebar">
       <div>
         <!-- Platform Header / Logo -->
         <div class="p-5 border-b border-[#1b2436] flex items-center justify-between gap-3">
@@ -278,19 +281,33 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
     }
   }
 
+  const backdrop = document.getElementById("teacherSidebarBackdrop");
+
+  function openMobileSidebar() {
+    sidebar?.classList.remove("hidden");
+    sidebar?.classList.add("flex");
+    backdrop?.classList.remove("hidden");
+  }
+
+  function closeMobileSidebar() {
+    if (window.innerWidth < 1024) {
+      sidebar?.classList.add("hidden");
+      sidebar?.classList.remove("flex");
+      backdrop?.classList.add("hidden");
+    }
+  }
+
   navItems.forEach((btn) => {
     btn.addEventListener("click", () => {
       const section = btn.getAttribute("data-section");
       setActiveTab(section);
+      closeMobileSidebar();
     });
   });
 
-  document.getElementById("mobileTeacherOpenBtn")?.addEventListener("click", () => {
-    sidebar?.classList.toggle("hidden");
-  });
-  document.getElementById("mobileTeacherMenuToggle")?.addEventListener("click", () => {
-    sidebar?.classList.add("hidden");
-  });
+  document.getElementById("mobileTeacherOpenBtn")?.addEventListener("click", openMobileSidebar);
+  document.getElementById("mobileTeacherMenuToggle")?.addEventListener("click", closeMobileSidebar);
+  backdrop?.addEventListener("click", closeMobileSidebar);
 
   document.getElementById("teacherLogoutBtn")?.addEventListener("click", () => {
     if (typeof onLogout === "function") {

@@ -7,6 +7,7 @@ import {
   CHALLENGES_CLIENT_DATA,
   PROBLEM_SOLVING_CHALLENGES_DATA
 } from "../python-adventure-data.js";
+import { PythonAdventureService } from "../python-adventure.service.js";
 
 /**
  * Renders the interactive World Map and Levels Drawer,
@@ -17,11 +18,10 @@ export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTr
   const completedChallenges = progress?.completedChallenges || {};
   const starsMap = progress?.stars || {};
 
-  // Group concept challenges by world
+  // Group concept challenges by world honoring custom ordering and custom levels
   const worldChallengesMap = {};
-  for (const [cId, ch] of Object.entries(CHALLENGES_CLIENT_DATA)) {
-    if (!worldChallengesMap[ch.worldId]) worldChallengesMap[ch.worldId] = [];
-    worldChallengesMap[ch.worldId].push(ch);
+  for (const w of WORLDS_DATA) {
+    worldChallengesMap[w.id] = PythonAdventureService.getWorldChallenges(w.id);
   }
 
   // Group problem solving challenges by level world
@@ -51,12 +51,20 @@ export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTr
     <div class="adventure-map-wrapper">
       <!-- Header -->
       <div class="adventure-view-header">
-        <div>
-          <button type="button" class="btn btn-sm btn-secondary adventure-back-btn" id="mapBackToHomeBtn">
-            <span>➔ العودة للرئيسية</span>
-          </button>
-          <h2 class="view-title">🗺️ خريطة عوالم بايثون وتحديات البرمجة</h2>
-          <p class="view-subtitle">تدرج عبر عوالم التأسيس الثمانية ومسار تحديات البرمجة الخمسة لإتقان 25 مسألة برمجية باختبارات حقيقية.</p>
+        <div class="d-flex items-center justify-between w-full flex-wrap gap-3">
+          <div>
+            <button type="button" class="btn btn-sm btn-secondary adventure-back-btn" id="mapBackToHomeBtn">
+              <span>➔ العودة للرئيسية</span>
+            </button>
+            <h2 class="view-title">🗺️ خريطة عوالم بايثون وتحديات البرمجة</h2>
+            <p class="view-subtitle">تدرج عبر عوالم التأسيس الثمانية ومسار تحديات البرمجة الخمسة لإتقان 25 مسألة برمجية باختبارات حقيقية.</p>
+          </div>
+          <div>
+            <button type="button" id="openLevelManagerModalBtn" class="btn btn-sm btn-primary flex items-center gap-2" style="background: linear-gradient(135deg, #10b981 0%, #0d9488 100%); border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 700; padding: 0.5rem 1rem;">
+              <span>⚙️</span>
+              <span>إدارة المستويات والترتيب</span>
+            </button>
+          </div>
         </div>
       </div>
 

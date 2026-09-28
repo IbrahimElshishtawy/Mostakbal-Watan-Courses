@@ -15,6 +15,12 @@ import { renderSkillTree } from "./components/skill-tree.component.js";
 import { renderAchievements } from "./components/achievements-modal.component.js";
 import { renderDailyChallenge } from "./components/daily-challenge.component.js";
 import { renderProfileStats } from "./components/profile-stats.component.js";
+import {
+  renderLevelManagerModal,
+  renderLevelManagerContent,
+  LEVEL_MANAGER_MODAL_ID
+} from "./components/level-manager-modal.component.js";
+import { showToast } from "../../shared/components/Toast/toast.component.js";
 
 let containerElement = null;
 let currentStudent = null;
@@ -310,6 +316,184 @@ export const PythonAdventureController = {
           this.openProblemSolvingChallenge(problemId);
         }
       });
+    });
+
+    // Open Level Manager Modal (Teacher / Admin Level Ordering & Creation)
+    document.getElementById("openLevelManagerModalBtn")?.addEventListener("click", () => {
+      const { selectedWorldId } = adventureStore.getState();
+      this.openLevelManagerModal(selectedWorldId || "world-1");
+    });
+  },
+
+  // ========================================================
+  // LEVEL MANAGER & ORDERING MODAL FLOWS
+  // ========================================================
+  openLevelManagerModal(worldId = "world-1", activeTab = "reorder") {
+    let modalEl = document.getElementById(LEVEL_MANAGER_MODAL_ID);
+    if (!modalEl) {
+      document.body.insertAdjacentHTML("beforeend", renderLevelManagerModal());
+      modalEl = document.getElementById(LEVEL_MANAGER_MODAL_ID);
+      modalEl.querySelector("#closeLevelManagerModalBtn")?.addEventListener("click", () => {
+        modalEl.classList.add("hidden");
+      });
+      // Click outside backdrop to close
+      modalEl.addEventListener("click", (e) => {
+        if (e.target === modalEl) {
+          modalEl.classList.add("hidden");
+        }
+      });
+    }
+
+    modalEl.classList.remove("hidden");
+    this.renderLevelManagerBody(worldId, activeTab);
+  },
+
+  renderLevelManagerBody(worldId = "world-1", activeTab = "reorder") {
+    const bodyEl = document.getElementById("levelManagerModalBody");
+    if (!bodyEl) return;
+    bodyEl.innerHTML = renderLevelManagerContent({ selectedWorldId: worldId, activeTab });
+    this.wireLevelManagerEvents(worldId, activeTab);
+  },
+
+  wireLevelManagerEvents(worldId, activeTab) {
+    const modalEl = document.getElementById(LEVEL_MANAGER_MODAL_ID);
+    if (!modalEl) return;
+
+    // 1. World Selector Switch
+    const worldSelect = modalEl.querySelector("#levelManagerWorldSelect");
+    worldSelect?.addEventListener("change", (e) => {
+      const newWorldId = e.target.value;
+      this.renderLevelManagerBody(newWorldId, activeTab);
+    });
+
+    // 2. Tab Switches
+    const tabReorderBtn = modalEl.querySelector("#tabBtnReorderLevels");
+    const tabAddBtn = modalEl.querySelector("#tabBtnAddNewLevel");
+
+    tabReorderBtn?.addEventListener("click", () => {
+      this.renderLevelManagerBody(worldId, "reorder");
+    });
+    tabAddBtn?.addEventListener("click", () => {
+      this.renderLevelManagerBody(worldId, "add");
+    });
+
+    // 3. Move Up / Down Buttons
+    modalEl.querySelectorAll(".btn-move-level-up, .btn-move-level-down").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const challengeId = btn.getAttribute("data-challenge-id");
+        const direction = btn.getAttribute("data-direction");
+        const listItems = Array.from(modalEl.querySelectorAll("#levelsOrderList [data-order-challenge-id]"));
+        const ids = listItems.map((item) => item.getAttribute("data-order-challenge-id"));
+        const currentIndex = ids.indexOf(challengeId);
+        if (currentIndex === -1) return;
+
+        if (direction === "up" && currentIndex > 0) {
+          const temp = ids[currentIndex];
+          ids[currentIndex] = ids[currentIndex - 1];
+          ids[currentIndex - 1] = temp;
+        } else if (direction === "down" && currentIndex < ids.length - 1) {
+          const temp = ids[currentIndex];
+          ids[currentIndex] = ids[currentIndex + 1];
+          ids[currentIndex + 1] = temp;
+        }
+
+        PythonAdventureService.reorderWorldLevels(worldId, ids);
+        this.renderLevelManagerBody(worldId, "reorder");
+        showToast("تم تحديث ترتيب المستويات. اضغط 'حفظ الترتيب الحالي' للتأكيد.", "info");
+
+        // Sync with world map if visible
+        const { activeView } = adventureStore.getState();
+        if (activeView === "world-map") {
+          adventureStore.setState({ selectedWorldId: worldId });
+        }
+      });
+    });
+
+    // 4. Save Levels Order Button
+    modalEl.querySelector("#saveLevelsOrderBtn")?.addEventListener("click", () => {
+      const listItems = Array.from(modalEl.querySelectorAll("#levelsOrderList [data-order-challenge-id]"));
+      const ids = listItems.map((item) => item.getAttribute("data-order-challenge-id"));
+      PythonAdventureService.reorderWorldLevels(worldId, ids);
+      showToast("تم حفظ ترتيب مستويات العالم بنجاح! 💾", "success");
+
+      const { activeView } = adventureStore.getState();
+      if (activeView === "world-map") {
+        adventureStore.setState({ selectedWorldId: worldId });
+      }
+    });
+
+    // 5. Delete Custom Level
+    modalEl.querySelectorAll(".btn-delete-custom-level").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const challengeId = btn.getAttribute("data-challenge-id");
+        const wId = btn.getAttribute("data-world-id") || worldId;
+        if (confirm("هل أنت متأكد من حذف هذا المستوى المخصص نهائياً؟")) {
+          PythonAdventureService.deleteCustomLevel(wId, challengeId);
+          showToast("تم حذف المستوى بنجاح.", "info");
+          this.renderLevelManagerBody(wId, "reorder");
+
+          const { activeView } = adventureStore.getState();
+          if (activeView === "world-map") {
+            adventureStore.setState({ selectedWorldId: wId });
+          }
+        }
+      });
+    });
+
+    // 6. Add New Level Form
+    const addForm = modalEl.querySelector("#addNewLevelForm");
+    addForm?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      try {
+        const title = modalEl.querySelector("#newLevelTitle")?.value?.trim();
+        const subtitle = modalEl.querySelector("#newLevelSubtitle")?.value?.trim() || "";
+        const difficulty = modalEl.querySelector("#newLevelDifficulty")?.value || "medium";
+        const type = modalEl.querySelector("#newLevelType")?.value || "write_code";
+        const baseXp = parseInt(modalEl.querySelector("#newLevelXp")?.value, 10) || 75;
+        const starterCode = modalEl.querySelector("#newLevelStarterCode")?.value || "";
+        const requirementsText = modalEl.querySelector("#newLevelRequirements")?.value || "";
+        const expectedOutput = modalEl.querySelector("#newLevelExpectedOutput")?.value?.trim() || "";
+        const hintsText = modalEl.querySelector("#newLevelHints")?.value || "";
+
+        if (!title) {
+          showToast("يرجى إدخال عنوان المستوى.", "error");
+          return;
+        }
+
+        const requirements = requirementsText
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean);
+
+        const hints = hintsText
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean);
+
+        const newChallenge = PythonAdventureService.addCustomLevel({
+          worldId,
+          title,
+          subtitle,
+          difficulty,
+          type,
+          baseXp,
+          starterCode,
+          requirements,
+          expectedOutput,
+          hints
+        });
+
+        showToast(`تمت إضافة المستوى "${newChallenge.title}" بنجاح! 🚀`, "success");
+        this.renderLevelManagerBody(worldId, "reorder");
+
+        const { activeView } = adventureStore.getState();
+        if (activeView === "world-map") {
+          adventureStore.setState({ selectedWorldId: worldId });
+        }
+      } catch (err) {
+        console.error("Error creating level:", err);
+        showToast(err.message || "تعذر إضافة المستوى.", "error");
+      }
     });
   },
 

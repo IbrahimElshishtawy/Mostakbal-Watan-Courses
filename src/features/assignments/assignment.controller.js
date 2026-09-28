@@ -511,30 +511,94 @@ export const AssignmentController = {
       return 0;
     });
 
-    // 1. Stats & Action Banner
+    // 1. Stats & Action Banner (Executive Dark matching Image 8.html & Image 4.png)
     const statsHtml = `
-      <div class="card mb-4 teacher-assignments-stats-card" dir="rtl">
-        <div class="d-flex items-center justify-between gap-3 flex-wrap">
-          <div>
-            <div class="d-flex items-center gap-2">
-              <h3 class="card-title m-0" style="font-size:1.15rem; font-weight:700;">
-                <span>📋</span>
-                <span>لوحة متابعة الواجبات والتاسكات</span>
-              </h3>
-              <span class="badge badge-gold font-bold">بوابة المعلم</span>
+      <div class="space-y-6 mb-6" dir="rtl">
+        <!-- Executive Hero Banner -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#121927] via-[#152136] to-[#0f1726] border border-[#1e2a3f] p-6 shadow-2xl">
+          <div class="absolute -right-12 -top-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl shadow-lg shadow-amber-950/50">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2.5">
+                  <h2 class="text-xl font-extrabold text-white">إدارة ومتابعة الواجبات والتاسكات</h2>
+                  <span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full font-bold">بوابة المعلم</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">تكليف الطلاب بمهام برمجية عملية، متابعة حلول المجموعات، وتقييم الأكواد بدقة.</p>
+              </div>
             </div>
-            <div class="d-flex items-center gap-3 mt-2 flex-wrap text-xs text-muted">
-              <span>إجمالي الواجبات: <strong class="text-primary font-bold">${totalCount}</strong></span>
-              <span class="text-muted">•</span>
-              <span>سارية حالياً: <strong class="text-success font-bold">${activeCount}</strong></span>
-              <span class="text-muted">•</span>
-              <span>منتهية الموعد: <strong class="text-warning font-bold">${expiredCount}</strong></span>
+            <div class="flex items-center gap-3">
+              <button type="button" id="toggleCreateTaskBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-emerald-950/50 border border-emerald-400/30 transition-all cursor-pointer">
+                <i class="fa-solid ${this._isCreateFormOpen ? 'fa-xmark' : 'fa-plus'} text-sm"></i>
+                <span>${this._isCreateFormOpen ? 'إخفاء النموذج' : 'تعيين واجب جديد'}</span>
+              </button>
             </div>
           </div>
-          <div class="d-flex items-center gap-2">
-            <button type="button" id="toggleCreateTaskBtn" class="btn ${this._isCreateFormOpen ? 'btn-secondary' : 'btn-primary'}">
-              <span>${this._isCreateFormOpen ? '✕ إخفاء النموذج' : '➕ تعيين واجب جديد'}</span>
-            </button>
+        </div>
+
+        <!-- 4 KPI Metrics Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">إجمالي التكليفات</span>
+              <span class="text-2xl font-extrabold text-white mt-1 block font-mono">${totalCount}</span>
+              <span class="text-[11px] text-amber-400 mt-1 flex items-center gap-1">
+                <i class="fa-solid fa-code text-[10px]"></i>
+                <span>جميع الواجبات المطروحة</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-list-ol"></i>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">الواجبات السارية</span>
+              <span class="text-2xl font-extrabold text-emerald-400 mt-1 block font-mono">${activeCount}</span>
+              <span class="text-[11px] text-emerald-400/80 mt-1 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>متاحة لتسليم الطلاب</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+              <i class="fa-regular fa-calendar-check"></i>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">منتهية الديدلاين</span>
+              <span class="text-2xl font-extrabold text-rose-400 mt-1 block font-mono">${expiredCount}</span>
+              <span class="text-[11px] text-rose-400/80 mt-1 flex items-center gap-1">
+                <i class="fa-solid fa-hourglass-end text-[10px]"></i>
+                <span>أغلقت فترة الاستلام</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="bg-[#121825] border border-[#1e2a3f] p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-slate-600 transition-colors">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">المجموعات الدراسية</span>
+              <span class="text-2xl font-extrabold text-cyan-400 mt-1 block font-mono">${distinctGroups.length}</span>
+              <span class="text-[11px] text-cyan-400/80 mt-1 flex items-center gap-1">
+                <i class="fa-solid fa-graduation-cap text-[10px]"></i>
+                <span>فصول ومسارات نشطة</span>
+              </span>
+            </div>
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-users"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -542,59 +606,57 @@ export const AssignmentController = {
 
     // 2. Collapsible Create Form
     const createFormHtml = `
-      <div id="createAssignmentPanel" class="card card-glass mb-4" dir="rtl" style="${this._isCreateFormOpen ? '' : 'display:none;'} border-color: var(--primary); box-shadow: 0 8px 24px rgba(16, 185, 129, 0.12);">
-        <div class="card-header pb-3 mb-4" style="border-bottom: 1px solid var(--border);">
-          <div class="d-flex items-center justify-between w-full">
-            <h4 class="m-0 font-bold d-flex items-center gap-2" style="font-size: 1.1rem; color: var(--primary);">
-              <span>✨</span>
-              <span>تعيين واجب عملي جديد للطلاب</span>
-            </h4>
-            <button type="button" id="closeCreateTaskBtn" class="btn btn-ghost btn-sm text-muted" aria-label="إغلاق">
-              <span>✕ إغلاق</span>
-            </button>
-          </div>
+      <div id="createAssignmentPanel" class="bg-[#121825] border border-emerald-500/40 rounded-2xl p-6 shadow-2xl mb-6" dir="rtl" style="${this._isCreateFormOpen ? '' : 'display:none;'}">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-[#1e2a3f]">
+          <h4 class="text-base font-bold text-emerald-400 flex items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            <span>تعيين واجب عملي جديد للطلاب</span>
+          </h4>
+          <button type="button" id="closeCreateTaskBtn" class="text-slate-400 hover:text-white text-xs p-1 cursor-pointer" aria-label="إغلاق">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
         </div>
 
-        <form id="createAssignmentForm" class="card-body p-0">
-          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem;" class="mb-4 form-row-responsive">
+        <form id="createAssignmentForm" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Title Input -->
-            <div class="form-group mb-0">
-              <label for="newTaskTitle" class="form-label font-bold">
+            <div class="md:col-span-2 space-y-1.5">
+              <label for="newTaskTitle" class="block text-xs font-bold text-slate-300">
                 <span>عنوان التاسك المطلوب *</span>
-                <span class="text-xs text-muted font-normal">🏷️ مثال: نظام تحليل درجات الطلاب بالـ OOP</span>
+                <span class="text-[10px] text-slate-500 font-normal mr-2">مثال: نظام تحليل درجات الطلاب بالـ OOP</span>
               </label>
               <input
                 type="text"
                 id="newTaskTitle"
-                class="form-input"
+                class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3.5 py-2.5 text-xs placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                 placeholder="اكتب عنواناً واضحاً ومميزاً للتاسك..."
                 required
               />
             </div>
 
             <!-- Deadline Picker -->
-            <div class="form-group mb-0">
-              <label for="newTaskDeadline" class="form-label font-bold">
+            <div class="space-y-1.5">
+              <label for="newTaskDeadline" class="block text-xs font-bold text-slate-300">
                 <span>آخر موعد للتسليم (الديدلاين) *</span>
-                <span class="text-xs text-muted font-normal">📅 تاريخ الاستحقاق</span>
+                <span class="text-[10px] text-slate-500 font-normal mr-1">تاريخ الاستحقاق</span>
               </label>
               <input
                 type="date"
                 id="newTaskDeadline"
-                class="form-input"
+                class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                 required
               />
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 1.25rem;" class="mb-4 form-row-responsive">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Target Group -->
-            <div class="form-group mb-0">
-              <label for="newTaskGroup" class="form-label font-bold">
+            <div class="space-y-1.5">
+              <label for="newTaskGroup" class="block text-xs font-bold text-slate-300">
                 <span>المجموعة المستهدفة *</span>
-                <span class="text-xs text-muted font-normal">👥 المجموعة الدراسية</span>
+                <span class="text-[10px] text-slate-500 font-normal mr-1">الفئة الموجه لها التكليف</span>
               </label>
-              <select id="newTaskGroup" class="form-select">
+              <select id="newTaskGroup" class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors cursor-pointer">
                 <option value="ALL">جميع المجموعات (واجب عام)</option>
                 ${distinctGroups
                   .filter((g) => g !== "ALL")
@@ -604,40 +666,46 @@ export const AssignmentController = {
             </div>
 
             <!-- Attachment File URL (Optional) -->
-            <div class="form-group mb-0">
-              <label for="newTaskFileUrl" class="form-label font-bold">
+            <div class="space-y-1.5">
+              <label for="newTaskFileUrl" class="block text-xs font-bold text-slate-300">
                 <span>رابط ملف مرفق أو مرجع تعليمي (اختياري)</span>
-                <span class="text-xs text-muted font-normal">📎 Google Drive / GitHub / URL</span>
+                <span class="text-[10px] text-slate-500 font-normal mr-1">GitHub / Drive / PDF</span>
               </label>
               <input
                 type="url"
                 id="newTaskFileUrl"
-                class="form-input"
+                class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3.5 py-2.5 text-xs placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                 placeholder="https://..."
               />
             </div>
           </div>
 
           <!-- Description & Code Requirements -->
-          <div class="form-group mb-4">
-            <label for="newTaskDesc" class="form-label font-bold">
+          <div class="space-y-1.5">
+            <label for="newTaskDesc" class="block text-xs font-bold text-slate-300">
               <span>شروط الكود والمطلوب البرمجي بالتفصيل</span>
-              <span class="text-xs text-muted font-normal">📝 شرح الخطوات والمدخلات والمخرجات المتوقعة</span>
+              <span class="text-[10px] text-slate-500 font-normal mr-2">شرح الخطوات والمدخلات والمخرجات المتوقعة</span>
             </label>
             <textarea
               id="newTaskDesc"
-              class="form-textarea"
               rows="4"
+              class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3.5 py-2.5 text-xs placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors leading-relaxed"
               placeholder="وضح للطلاب فكرة التاسك البرمجي، القواعد المطلوبة (Functions, Loops, OOP)، وأمثلة على الـ Inputs/Outputs..."
             ></textarea>
           </div>
 
-          <div class="d-flex items-center justify-between pt-3 flex-wrap gap-3" style="border-top: 1px solid var(--border);">
-            <span class="text-xs text-muted">سيتم إشعار طلاب المجموعة المحددة فور نشر هذا الواجب 🔔</span>
-            <div class="d-flex items-center gap-2">
-              <button type="button" id="cancelCreateTaskBtn" class="btn btn-ghost">إلغاء</button>
-              <button type="submit" id="saveNewTaskBtn" class="btn btn-primary btn-md font-bold">
-                <span>نشر وتكليف الواجب 🚀</span>
+          <div class="flex items-center justify-between pt-4 border-t border-[#1e2a3f] flex-wrap gap-3">
+            <span class="text-xs text-slate-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-bell text-amber-400"></i>
+              <span>سيتم إشعار طلاب المجموعة المحددة فور نشر هذا الواجب في بوابتهم.</span>
+            </span>
+            <div class="flex items-center gap-2">
+              <button type="button" id="cancelCreateTaskBtn" class="px-4 py-2 rounded-xl bg-[#182133] hover:bg-[#1f2b42] text-slate-300 text-xs font-semibold transition-colors cursor-pointer">
+                إلغاء
+              </button>
+              <button type="submit" id="saveNewTaskBtn" class="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/50 border border-emerald-400/30 transition-all cursor-pointer flex items-center gap-2">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+                <span>نشر وتكليف الواجب</span>
               </button>
             </div>
           </div>
@@ -647,15 +715,17 @@ export const AssignmentController = {
 
     // 3. Search & Filter Bar
     const filtersHtml = `
-      <div class="card mb-4 lesson-filters-card" dir="rtl">
-        <div class="lesson-filters-grid">
+      <div class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-4 shadow-sm mb-6" dir="rtl">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <!-- Search Input -->
-          <div class="search-bar-wrapper">
-            <span class="search-bar-icon" aria-hidden="true">🔍</span>
+          <div class="relative">
+            <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-500">
+              <i class="fa-solid fa-magnifying-glass text-xs"></i>
+            </span>
             <input
               type="search"
               id="teacherAssignmentSearchInput"
-              class="form-input search-bar-input"
+              class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl pr-9 pl-3 py-2.5 text-xs placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
               placeholder="ابحث في عناوين أو تفاصيل الواجبات..."
               value="${escapeHtml(this._teacherSearchQuery || "")}"
               aria-label="بحث في الواجبات"
@@ -663,8 +733,8 @@ export const AssignmentController = {
           </div>
 
           <!-- Group Filter -->
-          <div class="filter-select-wrapper">
-            <select id="teacherAssignmentGroupFilter" class="form-select" aria-label="تصفية المجموعات">
+          <div class="relative">
+            <select id="teacherAssignmentGroupFilter" class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors cursor-pointer" aria-label="تصفية المجموعات">
               <option value="ALL" ${groupFilter === "ALL" ? "selected" : ""}>جميع المجموعات</option>
               ${distinctGroups
                 .filter((g) => g !== "ALL")
@@ -674,8 +744,8 @@ export const AssignmentController = {
           </div>
 
           <!-- Status Filter -->
-          <div class="filter-select-wrapper">
-            <select id="teacherAssignmentStatusFilter" class="form-select" aria-label="تصفية الحالة">
+          <div class="relative">
+            <select id="teacherAssignmentStatusFilter" class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors cursor-pointer" aria-label="تصفية الحالة">
               <option value="ALL" ${statusFilter === "ALL" ? "selected" : ""}>جميع الحالات</option>
               <option value="ACTIVE" ${statusFilter === "ACTIVE" ? "selected" : ""}>سارية حالياً 🟢</option>
               <option value="EXPIRED" ${statusFilter === "EXPIRED" ? "selected" : ""}>منتهية الموعد ⌛</option>
@@ -683,11 +753,11 @@ export const AssignmentController = {
           </div>
 
           <!-- Sort Order -->
-          <div class="filter-select-wrapper">
-            <select id="teacherAssignmentSortOrder" class="form-select" aria-label="ترتيب الواجبات">
-              <option value="newest" ${sortOrder === "newest" ? "selected" : ""}>الديدلاين: الأقرب أولاً</option>
-              <option value="latest" ${sortOrder === "latest" ? "selected" : ""}>الديدلاين: الأبعد أولاً</option>
-              <option value="created_desc" ${sortOrder === "created_desc" ? "selected" : ""}>الأحدث إضافة</option>
+          <div class="relative">
+            <select id="teacherAssignmentSortOrder" class="w-full bg-[#0c1017] border border-[#1e2a3f] text-slate-100 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors cursor-pointer" aria-label="ترتيب الواجبات">
+              <option value="newest" ${sortOrder === "newest" ? "selected" : ""}>الديدلاين: الأقرب أولاً ⬇️</option>
+              <option value="latest" ${sortOrder === "latest" ? "selected" : ""}>الديدلاين: الأبعد أولاً ⬆️</option>
+              <option value="created_desc" ${sortOrder === "created_desc" ? "selected" : ""}>الأحدث إضافة ✨</option>
             </select>
           </div>
         </div>
@@ -705,12 +775,12 @@ export const AssignmentController = {
           ? "لم يتم العثور على أي واجبات مطابقة للفلاتر الحالية. جرب إعادة ضبط البحث أو اختيار مجموعة أخرى."
           : "ابدأ بتكليف الطلاب بأول واجب برمجي عملي لمتابعة تقدمهم وتقييم حلولهم.",
         actionButtonHtml: isFiltering
-          ? `<button type="button" id="resetAssignmentFiltersBtn" class="btn btn-outline btn-sm">إعادة ضبط الفلاتر 🔄</button>`
-          : `<button type="button" id="emptyAddAssignmentBtn" class="btn btn-primary btn-sm">➕ تعيين واجب جديد</button>`
+          ? `<button type="button" id="resetAssignmentFiltersBtn" class="px-4 py-2 rounded-xl bg-[#182133] hover:bg-[#1f2b42] text-slate-300 text-xs font-semibold transition-colors cursor-pointer">إعادة ضبط الفلاتر 🔄</button>`
+          : `<button type="button" id="emptyAddAssignmentBtn" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold transition-all cursor-pointer">➕ تعيين واجب جديد</button>`
       });
     } else {
       listHtml = `
-        <div class="teacher-assignments-grid" dir="rtl">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" dir="rtl">
           ${filtered.map((a) => renderTeacherAssignmentCard({ assignment: a })).join("")}
         </div>
       `;

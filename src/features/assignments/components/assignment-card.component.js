@@ -239,40 +239,69 @@ export function renderTeacherAssignmentCard({ assignment }) {
   const isExpired = isDeadlinePassed(assignment.deadline);
 
   const statusBadge = isExpired
-    ? `<span class="badge badge-danger" style="font-size:0.7rem;padding:0.2rem 0.5rem;"><span class="badge-dot">●</span> منتهي الموعد</span>`
-    : `<span class="badge badge-success" style="font-size:0.7rem;padding:0.2rem 0.5rem;"><span class="badge-dot">●</span> متاح وساري</span>`;
+    ? `<span class="text-[11px] bg-rose-500/15 text-rose-400 border border-rose-500/30 px-2.5 py-0.5 rounded-lg font-bold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> منتهي الموعد</span>`
+    : `<span class="text-[11px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg font-bold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ساري ومتاح</span>`;
 
   return `
-    <div class="teacher-assignment-card" dir="rtl">
+    <article class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-5 hover:border-amber-500/40 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group" dir="rtl">
       <div>
-        <div class="d-flex items-center justify-between mb-3">
-          <span class="badge badge-gold font-bold">${safeGroup}</span>
-          ${statusBadge}
+        <!-- Header: Group Badge + Status Badge + Points Badge -->
+        <div class="flex items-center justify-between gap-2 flex-wrap mb-3">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-[11px] bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-lg font-bold flex items-center gap-1">
+              <i class="fa-solid fa-users text-[10px]"></i>
+              <span>${safeGroup}</span>
+            </span>
+            ${statusBadge}
+          </div>
+          <span class="text-[10px] bg-purple-500/15 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md font-mono font-bold">
+            100 درجة
+          </span>
         </div>
-        
-        <h4 class="font-bold mb-2 teacher-task-title" style="font-size:1.15rem;line-height:1.45;color:var(--text-primary);min-height:2.9rem;">
+
+        <!-- Title -->
+        <h4 class="text-base font-extrabold text-white line-clamp-1 group-hover:text-amber-300 transition-colors" title="${safeTitle}">
           ${safeTitle}
         </h4>
-        
-        <p class="text-sm text-muted mb-3 teacher-task-desc" style="line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8rem;">
+
+        <!-- Description -->
+        <p class="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
           ${safeDesc}
         </p>
 
-        <div class="teacher-task-specs p-3 mb-4">
-          <div class="d-flex items-center justify-between mb-1">
-            <span class="text-muted d-flex items-center gap-1"><span>📅</span><span>الديدلاين:</span></span>
-            <strong style="color:var(--text-primary);">${formatDate(assignment.deadline)}</strong>
+        <!-- Specs Box -->
+        <div class="bg-[#0d121c] border border-[#1b2537] rounded-xl p-3 my-4 space-y-2 text-xs">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 text-slate-300">
+              <i class="fa-regular fa-clock text-slate-400 text-xs"></i>
+              <span class="text-slate-400">آخر موعد:</span>
+              <span class="font-bold text-white font-mono">${formatDate(assignment.deadline)}</span>
+            </div>
+            <span class="text-[10px] font-mono ${isExpired ? 'text-rose-400' : 'text-emerald-400'}">
+              ${isExpired ? 'انتهت الفترة ⚠️' : 'ساري حتى الديدلاين'}
+            </span>
           </div>
-          <div class="d-flex items-center justify-between">
-            <span class="text-muted d-flex items-center gap-1"><span>👥</span><span>الفئة المستهدفة:</span></span>
-            <span style="color:var(--text-secondary);">${safeGroup}</span>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 text-slate-300">
+              <i class="fa-solid fa-user-group text-slate-400 text-xs"></i>
+              <span class="text-slate-400">المجموعة:</span>
+              <span class="font-semibold text-slate-200">${safeGroup}</span>
+            </div>
           </div>
+
           ${
             assignment.fileUrl
               ? `
-            <div class="d-flex items-center justify-between pt-1 mt-1" style="border-top:1px dashed rgba(255,255,255,0.08);">
-              <span class="text-muted d-flex items-center gap-1"><span>📎</span><span>ملف مرفق:</span></span>
-              <a href="${escapeHtml(assignment.fileUrl)}" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline text-xs">عرض الرابط ↗</a>
+            <div class="flex items-center justify-between pt-2 border-t border-[#1b2537]">
+              <div class="flex items-center gap-2 text-slate-300">
+                <i class="fa-solid fa-paperclip text-slate-400 text-xs"></i>
+                <span class="text-slate-400">ملف مرفق:</span>
+              </div>
+              <a href="${escapeHtml(assignment.fileUrl)}" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 text-[11px]">
+                <span>عرض المرفق</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+              </a>
             </div>
           `
               : ""
@@ -280,26 +309,27 @@ export function renderTeacherAssignmentCard({ assignment }) {
         </div>
       </div>
 
-      <div class="d-flex items-center justify-between w-full pt-3 gap-2" style="border-top:1px solid var(--border);">
+      <!-- Actions Footer -->
+      <div class="pt-3 border-t border-[#1b2537] flex items-center gap-2">
         <button
           type="button"
-          class="btn btn-primary btn-sm flex-1"
+          class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/50 border border-emerald-400/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
           data-teacher-view-submissions="${escapeHtml(assignment.id)}"
           data-task-title="${safeTitle}"
-          style="font-weight:600;"
         >
-          <span>استعراض التسليمات والتقييم 📋</span>
+          <i class="fa-solid fa-clipboard-check text-sm"></i>
+          <span>استعراض التسليمات والتقييم</span>
         </button>
         <button
           type="button"
-          class="btn-outline-danger-subtle btn-sm"
+          class="w-10 h-10 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center transition-all cursor-pointer"
           data-teacher-delete-assignment="${escapeHtml(assignment.id)}"
           data-task-title="${safeTitle}"
           title="حذف هذا الواجب نهائياً"
         >
-          <span>🗑️</span>
+          <i class="fa-solid fa-trash-can text-sm"></i>
         </button>
       </div>
-    </div>
+    </article>
   `;
 }
