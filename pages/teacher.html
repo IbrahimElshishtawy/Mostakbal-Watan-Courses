@@ -7,10 +7,13 @@
   <title>لوحة تحكم المعلم | حزب مستقبل وطن</title>
   <link rel="icon" type="image/jpeg" href="../assets/images/logo_union.jpeg">
 
-  <!-- Google Fonts: Cairo & Fira Code -->
+  <!-- Google Fonts: Cairo, Fira Code, Plus Jakarta Sans & Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
   <!-- Font Awesome 6 CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -23,6 +26,30 @@
       theme: {
         extend: {
           colors: {
+            primary: '#8ed5ff',
+            'primary-container': '#38bdf8',
+            'on-primary': '#00354a',
+            'on-primary-container': '#004965',
+            secondary: '#c0c1ff',
+            'secondary-container': '#3131c0',
+            'on-secondary': '#1000a9',
+            tertiary: '#ffbcbf',
+            'tertiary-container': '#ff929a',
+            'on-tertiary': '#67001b',
+            'surface-container-lowest': '#090e1c',
+            'surface-container-low': '#161b2a',
+            'surface-container': '#1a1f2e',
+            'surface-container-high': '#252a39',
+            'surface-container-highest': '#303444',
+            'on-surface': '#dee2f6',
+            'on-surface-variant': '#bdc8d1',
+            'outline-variant': '#3e484f',
+            'primary-fixed-dim': '#7bd0ff',
+            'primary-fixed': '#c4e7ff',
+            'tertiary-fixed-dim': '#ffb2b7',
+            'secondary-fixed-dim': '#c0c1ff',
+            'error-container': '#93000a',
+            'on-error-container': '#ffdad6',
             brand: {
               50: '#f0f9ff',
               100: '#e0f2fe',
@@ -56,8 +83,9 @@
             }
           },
           fontFamily: {
-            sans: ['Cairo', 'sans-serif'],
+            sans: ['Cairo', 'Plus Jakarta Sans', 'sans-serif'],
             mono: ['Fira Code', 'monospace'],
+            headline: ['Space Grotesk', 'Cairo', 'sans-serif'],
           },
           boxShadow: {
             'glow-cyan': '0 0 20px -3px rgba(56, 189, 248, 0.25)',

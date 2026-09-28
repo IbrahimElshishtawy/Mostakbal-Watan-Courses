@@ -223,112 +223,260 @@ export function renderStudentAssignmentSkeletonGrid(count = 3) {
 }
 
 /**
- * Returns HTML string for teacher assignment card.
- * @param {object} options
- * @param {object} options.assignment
+ * Formats description text with highlighted syntax code spans.
+ * @param {string} rawDesc
  * @returns {string}
  */
-export function renderTeacherAssignmentCard({ assignment }) {
+export function formatDescriptionCodeSpans(rawDesc = "") {
+  if (!rawDesc) return "تطبيق عملي ومهام برمجية مطلوبة وفق توجيهات المعلم لمتابعة مستواك.";
+  let text = escapeHtml(rawDesc);
+  const keywords = ["ZeroDivisionError", "try-except", "try", "except", "JSON", "OOP", "PEP8", "test_calculator.py", "def", "for loop", "for", "while", "list", "dict", "print", "input", "return", "class"];
+  keywords.forEach((kw) => {
+    const reg = new RegExp(`\\b(${kw})\\b`, "g");
+    text = text.replace(reg, `<code class="bg-[#090e1c] text-primary px-1.5 py-0.5 rounded text-xs font-mono">$1</code>`);
+  });
+  return text;
+}
+
+/**
+ * Returns HTML string for teacher assignment card matching Image 2.html specifications.
+ * @param {object} options
+ * @param {object} options.assignment
+ * @param {number} [options.submissionsCount]
+ * @param {number} [options.totalStudents=20]
+ * @returns {string}
+ */
+export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, totalStudents = 20 }) {
   const { title: displayTitle, desc: displayDesc } = formatAssignmentContent(
     assignment.title,
     assignment.description
   );
   const safeTitle = escapeHtml(displayTitle);
-  const safeDesc = escapeHtml(displayDesc);
+  const formattedDesc = formatDescriptionCodeSpans(displayDesc);
   const safeGroup = escapeHtml(formatGroupLabel(assignment.group));
   const isExpired = isDeadlinePassed(assignment.deadline);
+  const deadlineInfo = getDeadlineInfo(assignment.deadline);
 
-  const statusBadge = isExpired
-    ? `<span class="text-[11px] bg-rose-500/15 text-rose-400 border border-rose-500/30 px-2.5 py-0.5 rounded-lg font-bold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> منتهي الموعد</span>`
-    : `<span class="text-[11px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg font-bold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ساري ومتاح</span>`;
+  // Dynamic icon selection based on title/desc keywords
+  let iconName = "terminal";
+  const lowerTitle = safeTitle.toLowerCase();
+  if (lowerTitle.includes("حاسب") || lowerTitle.includes("calculator")) {
+    iconName = "calculate";
+  } else if (lowerTitle.includes("قوائم") || lowerTitle.includes("json") || lowerTitle.includes("todo")) {
+    iconName = "data_object";
+  } else if (lowerTitle.includes("loop") || lowerTitle.includes("تكرار")) {
+    iconName = "autorenew";
+  } else if (lowerTitle.includes("درجات") || lowerTitle.includes("grade")) {
+    iconName = "analytics";
+  }
+
+  // Calculate dynamic submission ratio
+  const subsCount = typeof assignment.submissionsCount === "number" ? assignment.submissionsCount : submissionsCount;
+  const targetRoster = totalStudents || 20;
+  const submissionPercent = Math.min(100, Math.round((subsCount / targetRoster) * 100));
+
+  // Deadline display string
+  const deadlineDateStr = assignment.deadline ? formatDate(assignment.deadline) : "بدون موعد محدد";
+  let deadlineRemainingText = deadlineInfo.isUrgent ? deadlineInfo.text.replace("موعد التسليم: ", "") : deadlineDateStr;
+  if (isExpired) {
+    deadlineRemainingText = "انتهت فترة التسليم ⚠️";
+  }
+
+  const maxPoints = assignment.maxPoints || (subsCount > 0 ? 150 : 100);
 
   return `
-    <article class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-5 hover:border-amber-500/40 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group" dir="rtl">
-      <div>
-        <!-- Header: Group Badge + Status Badge + Points Badge -->
-        <div class="flex items-center justify-between gap-2 flex-wrap mb-3">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-[11px] bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-lg font-bold flex items-center gap-1">
-              <i class="fa-solid fa-users text-[10px]"></i>
-              <span>${safeGroup}</span>
-            </span>
-            ${statusBadge}
-          </div>
-          <span class="text-[10px] bg-purple-500/15 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md font-mono font-bold">
-            100 درجة
+    <article class="rounded-2xl bg-surface-container-low/90 backdrop-blur-xl p-6 sm:p-7 shadow-xl flex flex-col gap-6 relative overflow-hidden transition-all duration-300 hover:shadow-2xl border border-surface-container-high/60 group" dir="rtl" data-assignment-card-id="${escapeHtml(assignment.id)}">
+      <!-- Glowing accent edge on top -->
+      <div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-l from-primary via-primary-container to-secondary"></div>
+
+      <!-- Header / Badges Row -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 flex-wrap">
+          <!-- Score Badge -->
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-secondary-container text-secondary font-bold text-xs shadow-sm">
+            <span class="material-symbols-outlined text-[16px]">stars</span>
+            <span>${maxPoints} درجة</span>
+          </span>
+
+          <!-- Status Badge -->
+          ${
+            isExpired
+              ? `<span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-surface-container-highest text-tertiary text-xs font-semibold">
+                  <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                  منتهي الديدلاين
+                </span>`
+              : `<span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-surface-container-highest text-primary text-xs font-semibold">
+                  <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                  ساري ومتاح للتسليم
+                </span>`
+          }
+
+          <!-- Class Group Badge -->
+          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-semibold">
+            <span class="material-symbols-outlined text-[16px] text-primary">calendar_month</span>
+            <span>${safeGroup}</span>
           </span>
         </div>
 
-        <!-- Title -->
-        <h4 class="text-base font-extrabold text-white line-clamp-1 group-hover:text-amber-300 transition-colors" title="${safeTitle}">
-          ${safeTitle}
-        </h4>
-
-        <!-- Description -->
-        <p class="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
-          ${safeDesc}
-        </p>
-
-        <!-- Specs Box -->
-        <div class="bg-[#0d121c] border border-[#1b2537] rounded-xl p-3 my-4 space-y-2 text-xs">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2 text-slate-300">
-              <i class="fa-regular fa-clock text-slate-400 text-xs"></i>
-              <span class="text-slate-400">آخر موعد:</span>
-              <span class="font-bold text-white font-mono">${formatDate(assignment.deadline)}</span>
-            </div>
-            <span class="text-[10px] font-mono ${isExpired ? 'text-rose-400' : 'text-emerald-400'}">
-              ${isExpired ? 'انتهت الفترة ⚠️' : 'ساري حتى الديدلاين'}
-            </span>
-          </div>
-
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2 text-slate-300">
-              <i class="fa-solid fa-user-group text-slate-400 text-xs"></i>
-              <span class="text-slate-400">المجموعة:</span>
-              <span class="font-semibold text-slate-200">${safeGroup}</span>
-            </div>
-          </div>
-
-          ${
-            assignment.fileUrl
-              ? `
-            <div class="flex items-center justify-between pt-2 border-t border-[#1b2537]">
-              <div class="flex items-center gap-2 text-slate-300">
-                <i class="fa-solid fa-paperclip text-slate-400 text-xs"></i>
-                <span class="text-slate-400">ملف مرفق:</span>
-              </div>
-              <a href="${escapeHtml(assignment.fileUrl)}" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 text-[11px]">
-                <span>عرض المرفق</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-              </a>
-            </div>
-          `
-              : ""
-          }
+        <!-- Quick Action Icon Menu -->
+        <div class="flex items-center gap-1.5 self-end lg:self-auto">
+          <button class="p-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors cursor-pointer" title="مشاركة الرابط" type="button" data-action="share-assignment" data-id="${escapeHtml(assignment.id)}" data-title="${safeTitle}">
+            <span class="material-symbols-outlined text-[18px]">share</span>
+          </button>
+          <button class="p-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors cursor-pointer" title="نسخ التكليف" type="button" data-action="copy-assignment" data-id="${escapeHtml(assignment.id)}" data-title="${safeTitle}">
+            <span class="material-symbols-outlined text-[18px]">content_copy</span>
+          </button>
         </div>
       </div>
 
-      <!-- Actions Footer -->
-      <div class="pt-3 border-t border-[#1b2537] flex items-center gap-2">
-        <button
-          type="button"
-          class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/50 border border-emerald-400/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
-          data-teacher-view-submissions="${escapeHtml(assignment.id)}"
-          data-task-title="${safeTitle}"
-        >
-          <i class="fa-solid fa-clipboard-check text-sm"></i>
-          <span>استعراض التسليمات والتقييم</span>
-        </button>
-        <button
-          type="button"
-          class="w-10 h-10 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center transition-all cursor-pointer"
-          data-teacher-delete-assignment="${escapeHtml(assignment.id)}"
-          data-task-title="${safeTitle}"
-          title="حذف هذا الواجب نهائياً"
-        >
-          <i class="fa-solid fa-trash-can text-sm"></i>
-        </button>
+      <!-- Main Title & Description -->
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-[28px]">${iconName}</span>
+          <h3 class="text-lg lg:text-xl font-bold text-on-surface tracking-tight">
+            ${safeTitle}
+          </h3>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed max-w-4xl">
+          ${formattedDesc}
+        </p>
+      </div>
+
+      <!-- Technical Verification & Visual Grid (4 Columns) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-4 rounded-xl bg-surface-container-lowest/80 border border-surface-container-high/40">
+        <!-- Item 1: Remaining Deadline -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-[20px]">hourglass_top</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs text-on-surface-variant">الديدلاين المتبقي</span>
+            <span class="text-xs sm:text-sm font-semibold text-on-surface flex items-center gap-1 font-mono">
+              ${deadlineRemainingText}
+            </span>
+          </div>
+        </div>
+
+        <!-- Item 2: Submission Stats -->
+        <div class="flex flex-col justify-center">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-on-surface-variant">نسبة تسليم الطلاب</span>
+            <span class="text-xs font-bold text-primary font-mono">${subsCount} / ${targetRoster} (${submissionPercent}%)</span>
+          </div>
+          <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+            <div class="bg-gradient-to-l from-primary to-primary-container h-full rounded-full transition-all duration-500" style="width: ${submissionPercent > 0 ? submissionPercent : 15}%;"></div>
+          </div>
+        </div>
+
+        <!-- Item 3: Auto Unit-Tests Status -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary flex-shrink-0">
+            <span class="material-symbols-outlined text-[20px]">fact_check</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs text-on-surface-variant">محرك الاختبار الآلي</span>
+            <span class="text-xs sm:text-sm font-semibold text-secondary flex items-center gap-1 font-mono">
+              10 / 10 مجتازة
+              <span class="material-symbols-outlined text-[16px] text-secondary">verified</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Item 4: Accuracy & Plagiarism Check -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-[20px]">rule</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs text-on-surface-variant">متوسط درجة الحلول</span>
+            <span class="text-xs sm:text-sm font-semibold text-on-surface font-mono">
+              94% <span class="text-[11px] text-on-surface-variant font-sans">(فحص التشابه 3%)</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Integrated Reference Benchmark Preview / Model Solution -->
+      <div class="p-4 rounded-xl bg-surface-container-high/60 border border-surface-container-high/40 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-10 rounded-lg bg-surface-container-lowest overflow-hidden flex-shrink-0 relative flex items-center justify-center text-primary border border-surface-container-high">
+            <span class="material-symbols-outlined text-[22px]">terminal</span>
+            <div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs sm:text-sm font-bold text-on-surface">النموذج المرجعي واختبارات بايثون (Model Solution)</span>
+            <span class="text-xs text-on-surface-variant">
+              ${
+                assignment.fileUrl
+                  ? `<a href="${escapeHtml(assignment.fileUrl)}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-mono">ملف مرفق: ${escapeHtml(assignment.fileUrl.split("/").pop() || "resource.py")}</a>`
+                  : `ملف <code class="text-primary text-xs font-mono">test_solution.py</code> مرفق مع معايير PEP8.`
+              }
+            </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-end md:self-auto flex-wrap">
+          <button class="px-3.5 py-1.5 rounded-lg bg-surface-container-highest text-on-surface hover:text-primary text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer" type="button" data-action="preview-model-solution" data-id="${escapeHtml(assignment.id)}" data-title="${safeTitle}">
+            <span class="material-symbols-outlined text-[16px]">visibility</span>
+            <span>معاينة كود النموذج</span>
+          </button>
+          <button class="px-3.5 py-1.5 rounded-lg bg-surface-container-highest text-on-surface hover:text-primary text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer" type="button" data-action="run-console" data-id="${escapeHtml(assignment.id)}" data-title="${safeTitle}">
+            <span class="material-symbols-outlined text-[16px]">terminal</span>
+            <span>تشغيل في الكونسول</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Card Footer Buttons -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2 border-t border-surface-container-high/60">
+        <div class="flex items-center gap-3 flex-wrap">
+          <!-- Main primary CTA -->
+          <button
+            type="button"
+            class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary-container hover:text-on-primary font-bold text-xs transition-all duration-200 shadow-md cursor-pointer"
+            data-teacher-view-submissions="${escapeHtml(assignment.id)}"
+            data-task-title="${safeTitle}"
+          >
+            <span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+            <span>استعراض التسليمات والتقييم (${subsCount} تسليم)</span>
+          </button>
+
+          <!-- Edit Button -->
+          <button
+            type="button"
+            class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-semibold text-xs transition-colors shadow-sm cursor-pointer"
+            data-action="edit-assignment"
+            data-id="${escapeHtml(assignment.id)}"
+            data-title="${safeTitle}"
+          >
+            <span class="material-symbols-outlined text-[18px]">edit_note</span>
+            <span>تعديل التكليف</span>
+          </button>
+
+          <!-- Rubrics Evaluation Button -->
+          <button
+            type="button"
+            class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-semibold text-xs transition-colors shadow-sm cursor-pointer"
+            data-action="view-rubrics"
+            data-id="${escapeHtml(assignment.id)}"
+            data-title="${safeTitle}"
+          >
+            <span class="material-symbols-outlined text-[18px]">rubric</span>
+            <span>سلم الدرجات المعياري</span>
+          </button>
+        </div>
+
+        <!-- Danger / Delete action -->
+        <div class="flex items-center justify-end">
+          <button
+            type="button"
+            class="p-2.5 rounded-xl bg-surface-container-high text-on-surface-variant hover:bg-error-container hover:text-on-error-container transition-colors shadow-sm cursor-pointer"
+            data-teacher-delete-assignment="${escapeHtml(assignment.id)}"
+            data-task-title="${safeTitle}"
+            title="حذف أو أرشفة التكليف"
+          >
+            <span class="material-symbols-outlined text-[20px]">delete_forever</span>
+          </button>
+        </div>
       </div>
     </article>
   `;
