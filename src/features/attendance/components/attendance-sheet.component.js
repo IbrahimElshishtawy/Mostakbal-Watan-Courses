@@ -370,10 +370,15 @@ export function renderAttendanceManagementView({
             <tbody class="divide-y divide-surface-border/50 text-xs sm:text-sm" id="student-roster-rows">
               ${displayStudents
                 .map((student, idx) => {
-                  const currentStatus = sessionRecords.get(student.id) || student.defaultStatus || "present";
-                  const isPresent = currentStatus === "present";
-                  const isAbsent = currentStatus === "absent";
-                  const isExcused = currentStatus === "excused";
+                  let isPresent = false;
+                  let isAbsent = true;
+                  let isExcused = false;
+                  if (!isNewSession) {
+                    const currentStatus = sessionRecords.get(student.id) || student.defaultStatus || "absent";
+                    isPresent = currentStatus === "present";
+                    isAbsent = currentStatus === "absent";
+                    isExcused = currentStatus === "excused";
+                  }
                   const rowBgClass = isAbsent ? "bg-rose-500/[0.02]" : "";
 
                   return `
