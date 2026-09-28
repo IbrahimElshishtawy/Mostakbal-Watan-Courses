@@ -1,0 +1,289 @@
+{
+  "project": "mostakbal-watan-courses",
+  "generatedAt": "2026-09-28T00:00:00.000Z",
+  "collections": {
+    "users": [
+      {
+        "uid": "USER_AUTH_UID",
+        "displayName": "المهندس إبراهيم الششتاوي",
+        "email": "admin@admin.local",
+        "role": "admin",
+        "phoneNumber": "01020084862",
+        "active": true,
+        "createdAt": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "students": [
+      {
+        "studentName": "أحمد محمد علي",
+        "studentPhone": "01012345678",
+        "parentPhone": "01098765432",
+        "group": "مجموعة الأحد والأربعاء | 7:00 - 8:30",
+        "gender": "بنين",
+        "notes": "طالب مجتهد",
+        "active": true,
+        "createdAt": "2026-09-28T00:00:00.000Z",
+        "uid": "STUDENT_AUTH_UID",
+        "email": "01012345678@student.local"
+      }
+    ],
+    "videos": [
+      {
+        "title": "مقدمة إلى لغة بايثون والبيئة التطويرية",
+        "description": "شرح تثبيت بايثون وأول كود برمجي",
+        "videoUrl": "https://www.youtube.com/watch?v=sample",
+        "order": 1,
+        "group": "مجموعة الأحد والأربعاء | 7:00 - 8:30",
+        "duration": 45,
+        "thumbnail": "",
+        "active": true,
+        "createdAt": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "video_logs": [
+      {
+        "studentId": "STUDENT_AUTH_UID",
+        "studentPhone": "01012345678",
+        "studentName": "أحمد محمد علي",
+        "videoId": "vid_sample",
+        "videoTitle": "مقدمة إلى لغة بايثون والبيئة التطويرية",
+        "watchedDuration": 2400,
+        "totalDuration": 2700,
+        "completed": true,
+        "timestamp": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "video_progress": [
+      {
+        "studentUid": "STUDENT_AUTH_UID",
+        "videoId": "vid_sample",
+        "lastPositionSeconds": 1420,
+        "percentage": 85,
+        "updatedAt": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "exams": [
+      {
+        "title": "اختبار بايثون الشامل - المستوى الأول",
+        "description": "اختبار على المتغيرات والجمل الشرطية وحلقات التكرار",
+        "group": "مجموعة الأحد والأربعاء | 7:00 - 8:30",
+        "durationMinutes": 30,
+        "passingScore": 60,
+        "totalQuestions": 2,
+        "active": true,
+        "createdAt": "2026-09-28T00:00:00.000Z",
+        "questions": [
+          {
+            "id": 1,
+            "questionText": "ما هي الكلمة المفتاحية لتعريف دالة في بايثون؟",
+            "options": ["func", "def", "function", "define"],
+            "correctAnswer": 1,
+            "points": 10
+          },
+          {
+            "id": 2,
+            "questionText": "أي من التالي هو نوع بيانات غير قابل للتعديل (Immutable)؟",
+            "options": ["List", "Dictionary", "Tuple", "Set"],
+            "correctAnswer": 2,
+            "points": 10
+          }
+        ],
+        "_subcollections": {
+          "attempts": [
+            {
+              "studentUid": "STUDENT_AUTH_UID",
+              "studentName": "أحمد محمد علي",
+              "startedAt": "2026-09-28T10:00:00.000Z",
+              "submittedAt": "2026-09-28T10:25:00.000Z",
+              "status": "submitted",
+              "answers": {
+                "1": 1,
+                "2": 2
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "results": [
+      {
+        "examId": "exam_sample",
+        "examTitle": "اختبار بايثون الشامل - المستوى الأول",
+        "studentUid": "STUDENT_AUTH_UID",
+        "studentName": "أحمد محمد علي",
+        "studentPhone": "01012345678",
+        "group": "مجموعة الأحد والأربعاء | 7:00 - 8:30",
+        "score": 100,
+        "totalScore": 100,
+        "percentage": 100,
+        "passed": true,
+        "submittedAt": "2026-09-28T10:25:00.000Z"
+      }
+    ],
+    "assignments": [
+      {
+        "title": "مشروع بناء آلة حاسبة بلغة بايثون",
+        "description": "اكتب برنامج يستقبل رقمين وعملية حسابية ويطبع الناتج بدقة",
+        "dueDate": "2026-10-05T23:59:59.000Z",
+        "group": "مجموعة الأحد والأربعاء | 7:00 - 8:30",
+        "fileUrl": "",
+        "maxScore": 20,
+        "active": true,
+        "createdAt": "2026-09-28T00:00:00.000Z",
+        "_subcollections": {
+          "submissions": [
+            {
+              "studentUid": "STUDENT_AUTH_UID",
+              "studentName": "أحمد محمد علي",
+              "studentPhone": "01012345678",
+              "fileUrl": "https://firebasestorage.googleapis.com/.../calculator.py",
+              "notes": "تم إنجاز كافة الشروط",
+              "submittedAt": "2026-09-29T14:30:00.000Z",
+              "score": 20,
+              "feedback": "أحسنت، كود منظم جداً",
+              "graded": true,
+              "gradedAt": "2026-09-30T10:00:00.000Z"
+            }
+          ]
+        }
+      }
+    ],
+    "submissions": [
+      {
+        "assignmentId": "asg_sample",
+        "studentUid": "STUDENT_AUTH_UID",
+        "studentName": "أحمد محمد علي",
+        "studentPhone": "01012345678",
+        "fileUrl": "https://firebasestorage.googleapis.com/.../calculator.py",
+        "notes": "سجل موحد للتوافقية",
+        "submittedAt": "2026-09-29T14:30:00.000Z",
+        "score": 20,
+        "feedback": "أحسنت",
+        "graded": true
+      }
+    ],
+    "attendance_sessions": [
+      {
+        "date": "2026-09-28",
+        "title": "المحاضرة الأولى: مفاهيم البرمجة الأساسية",
+        "group": "مجموعة الأحد والأربعاء | 7:00 - 8:30",
+        "totalStudents": 25,
+        "presentCount": 24,
+        "absentCount": 1,
+        "createdAt": "2026-09-28T00:00:00.000Z",
+        "_subcollections": {
+          "records": [
+            {
+              "studentUid": "STUDENT_AUTH_UID",
+              "studentName": "أحمد محمد علي",
+              "studentPhone": "01012345678",
+              "status": "present",
+              "notes": "",
+              "markedAt": "2026-09-28T07:15:00.000Z"
+            }
+          ]
+        }
+      }
+    ],
+    "python_adventure_progress": [
+      {
+        "studentUid": "STUDENT_AUTH_UID",
+        "currentWorld": 1,
+        "currentLevel": 3,
+        "xp": 450,
+        "streak": {
+          "count": 5,
+          "lastActiveDate": "2026-09-28"
+        },
+        "completedChallenges": {
+          "w1_l1": { "completedAt": "2026-09-25T12:00:00.000Z", "score": 100 },
+          "w1_l2": { "completedAt": "2026-09-26T14:30:00.000Z", "score": 100 }
+        },
+        "unlockedBadges": ["first_code", "python_novice"],
+        "updatedAt": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "points_ledger": [
+      {
+        "studentUid": "STUDENT_AUTH_UID",
+        "points": 50,
+        "reason": "إكمال المستوى الأول من مغامرة بايثون",
+        "source": "adventure",
+        "createdAt": "2026-09-28T15:00:00.000Z"
+      }
+    ],
+    "competitions": [
+      {
+        "title": "هاكاثون المحلة الكبرى لشباب التكنولوجيا",
+        "description": "مسابقة برمجية في حل المسائل الحسابية والمنطقية",
+        "startDate": "2026-10-01T08:00:00.000Z",
+        "endDate": "2026-10-07T22:00:00.000Z",
+        "status": "upcoming",
+        "createdAt": "2026-09-28T00:00:00.000Z",
+        "_subcollections": {
+          "participants": [
+            {
+              "studentUid": "STUDENT_AUTH_UID",
+              "studentName": "أحمد محمد علي",
+              "score": 350,
+              "rank": 1,
+              "solvedCount": 4
+            }
+          ]
+        }
+      }
+    ],
+    "student_gamification": [
+      {
+        "studentUid": "STUDENT_AUTH_UID",
+        "studentName": "أحمد محمد علي",
+        "competitionPoints": 850,
+        "challengesCompleted": 12,
+        "currentStreak": 5,
+        "rankTier": "ذهبي",
+        "badges": [
+          { "id": "python_master", "name": "فارس بايثون", "awardedAt": "2026-09-28" }
+        ],
+        "updatedAt": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "notifications": [
+      {
+        "recipientUid": "STUDENT_AUTH_UID",
+        "title": "أهلاً بك في منصة مستقبل وطن التعليمية! 🚀",
+        "message": "نتمنى لك رحلة تعليمية ملهمة وموفقة في كورس البرمجة.",
+        "type": "general",
+        "link": "#",
+        "read": false,
+        "createdAt": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "coding_problems": [
+      {
+        "title": "عكس السلسلة النصية (Reverse String)",
+        "difficulty": "سهل",
+        "category": "Strings",
+        "description": "اكتب برنامج أو دالة تقبل نصاً وتقوم بطباعته معكوساً.",
+        "starterCode": "def reverse_string(s):\n    return s[::-1]\n",
+        "testCases": [
+          { "input": "hello", "expectedOutput": "olleh", "isHidden": false }
+        ],
+        "points": 25,
+        "active": true,
+        "createdAt": "2026-09-28T00:00:00.000Z"
+      }
+    ],
+    "coding_submissions": [
+      {
+        "problemId": "reverse_string",
+        "studentUid": "STUDENT_AUTH_UID",
+        "code": "s = input()\nprint(s[::-1])",
+        "language": "python",
+        "status": "ACCEPTED",
+        "passedTests": 1,
+        "totalTests": 1,
+        "submittedAt": "2026-09-28T00:00:00.000Z"
+      }
+    ]
+  }
+}
