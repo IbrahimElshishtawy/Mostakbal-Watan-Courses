@@ -2,6 +2,7 @@
    MOSTAKBAL WATAN COURSES - MODERN CYBER LANDING PAGE
    Theme: Cyber Dark (#090d16) | Sky Blue / Cyan / Indigo Accents
    File: src/styles/landing.css
+   Responsive: Mobile (320px+) -> Tablet -> Desktop -> 2K/4K (2560px+)
    ============================================================ */
 
 /* CSS Variables for Cyber Dark Aesthetics */
@@ -21,16 +22,25 @@
   --cyber-border-highlight: rgba(56, 189, 248, 0.3);
 }
 
-/* Base Resets & Typography */
+/* Base Resets & Responsive Typography */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  min-height: 100%;
   background-color: var(--cyber-bg);
   color: var(--cyber-text);
   font-family: 'Cairo', sans-serif;
   scroll-behavior: smooth;
   overscroll-behavior: none;
+  overflow-x: hidden;
   direction: rtl;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom Scrollbar */
@@ -49,7 +59,7 @@ html, body {
   background: #38bdf8;
 }
 
-/* Ambient Global Glowing Orbs */
+/* Ambient Global Glowing Orbs with Responsive Sizing */
 .ambient-orb {
   position: fixed;
   border-radius: 9999px;
@@ -57,43 +67,30 @@ html, body {
   z-index: 0;
   will-change: transform, opacity;
 }
+
 .ambient-orb-1 {
   top: 0;
   right: 25%;
-  width: 600px;
-  height: 600px;
+  width: min(600px, 80vw);
+  height: min(600px, 80vw);
   background: rgba(56, 189, 248, 0.08);
   filter: blur(140px);
 }
 .ambient-orb-2 {
   top: 33%;
   left: 0;
-  width: 500px;
-  height: 500px;
+  width: min(500px, 70vw);
+  height: min(500px, 70vw);
   background: rgba(99, 102, 241, 0.08);
   filter: blur(140px);
 }
 .ambient-orb-3 {
   bottom: 40px;
   right: 40px;
-  width: 550px;
-  height: 550px;
+  width: min(550px, 75vw);
+  height: min(550px, 75vw);
   background: rgba(6, 182, 212, 0.08);
   filter: blur(160px);
-}
-
-/* Sticky Header & Navbar */
-.landing-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  background: rgba(9, 13, 22, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(30, 41, 59, 0.8);
-  transition: all 0.3s ease;
 }
 
 /* Glass & Glow utilities */
@@ -114,7 +111,7 @@ html, body {
   box-shadow: 0 0 25px rgba(129, 140, 248, 0.2);
 }
 
-/* Hero Section */
+/* Hero Section Gradient Title */
 .hero-gradient-title {
   background: linear-gradient(135deg, #38bdf8 0%, #67e8f9 50%, #818cf8 100%);
   -webkit-background-clip: text;
@@ -140,7 +137,24 @@ html, body {
   background: linear-gradient(90deg, transparent, #38bdf8, transparent);
 }
 
-/* Modals Overlay */
+/* Mobile Menu Drawer Animation */
+#mobile-menu {
+  animation: slideDownMenu 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top;
+}
+
+@keyframes slideDownMenu {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scaleY(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* Modals Overlay & Responsive Containment */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -168,12 +182,20 @@ html, body {
   position: relative;
   width: 100%;
   max-width: 28rem;
+  max-height: 92vh;
+  overflow-y: auto;
   background: #0f172a;
   border: 1px solid #334155;
   border-radius: 1.5rem;
-  padding: 1.75rem;
+  padding: 1.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.15);
   animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  .modal-content-card {
+    padding: 1.75rem;
+  }
 }
 
 @keyframes modalPop {
@@ -198,6 +220,7 @@ html, body {
   display: none;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
@@ -223,8 +246,8 @@ html, body {
 .splash-loading-screen::before {
   content: "";
   position: absolute;
-  width: 500px;
-  height: 500px;
+  width: min(500px, 90vw);
+  height: min(500px, 90vw);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
   filter: blur(70px);
@@ -235,8 +258,8 @@ html, body {
 .splash-loading-content {
   text-align: center;
   max-width: 380px;
-  width: 90%;
-  padding: 2.5rem 1.75rem;
+  width: 100%;
+  padding: 2.25rem 1.5rem;
   background: rgba(13, 21, 39, 0.88);
   border: 1px solid rgba(56, 189, 248, 0.3);
   border-radius: 1.75rem;
@@ -260,8 +283,8 @@ html, body {
 
 .splash-loading-emblem {
   position: relative;
-  width: 96px;
-  height: 96px;
+  width: 90px;
+  height: 90px;
   margin: 0 auto 1.25rem;
   display: flex;
   align-items: center;
@@ -289,8 +312,8 @@ html, body {
 }
 
 .splash-loading-logo {
-  width: 70px;
-  height: 70px;
+  width: 66px;
+  height: 66px;
   margin: 0 auto;
   border-radius: 1rem;
   overflow: hidden;
@@ -312,14 +335,14 @@ html, body {
 }
 
 .splash-loading-content h2 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 900;
   color: #ffffff;
   margin: 0 0 0.25rem;
 }
 
 .splash-loading-content p {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: #94a3b8;
   margin: 0 0 1.25rem;
 }
@@ -393,5 +416,17 @@ html, body {
   50% {
     opacity: 0.4;
     transform: scale(0.75);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE UTILITIES FOR LARGE DISPLAYS (2K & 4K)
+   ============================================================ */
+@media (min-width: 1536px) {
+  .hero-gradient-title {
+    filter: drop-shadow(0 0 45px rgba(56, 189, 248, 0.4));
+  }
+  .cyber-hud-card {
+    border-radius: 2rem;
   }
 }

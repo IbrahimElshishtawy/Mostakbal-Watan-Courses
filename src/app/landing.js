@@ -72,8 +72,21 @@ window.closeGameModal = function () {
 
 window.toggleMobileMenu = function () {
   const nav = document.getElementById("mobile-menu");
+  const icon = document.getElementById("mobileMenuIcon");
   if (nav) {
-    nav.classList.toggle("hidden");
+    const isClosed = nav.classList.toggle("hidden");
+    if (icon) {
+      icon.textContent = isClosed ? "menu" : "close";
+    }
+  }
+};
+
+window.closeMobileMenu = function () {
+  const nav = document.getElementById("mobile-menu");
+  const icon = document.getElementById("mobileMenuIcon");
+  if (nav && !nav.classList.contains("hidden")) {
+    nav.classList.add("hidden");
+    if (icon) icon.textContent = "menu";
   }
 };
 

@@ -1,0 +1,22 @@
+{
+  "name": "mostakbal-watan-courses",
+  "version": "1.0.0",
+  "description": "منصة مستقبل وطن للتعليم التكنولوجي - أمانة أول المحلة الكبرى",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y serve -l 3000 .",
+    "dev": "npx -y serve -l 3000 .",
+    "serve": "npx -y serve -l 3000 .",
+    "functions:build": "npm --prefix backend run build",
+    "functions:serve": "npm --prefix backend run serve",
+    "deploy": "firebase deploy"
+  },
+  "keywords": [
+    "education",
+    "python",
+    "lms",
+    "mostakbal-watan"
+  ],
+  "author": "Eng. Ibrahim El-Sheshtawy",
+  "license": "ISC"
+}
