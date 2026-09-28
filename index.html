@@ -325,8 +325,10 @@
                 <span class="text-[10px] xs:text-[11px] sm:text-xs 3xl:text-sm font-bold font-headline">وحدة الملتقيات الشبابية</span>
               </div>
             </div>
-
           </div>
+        </div>
+      </section>
+
       <!-- LEADERSHIP & GOVERNANCE SECTION (Responsive 1 col on mobile -> 2 on sm -> 4 on lg/4K) -->
       <section class="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] 4xl:max-w-[2160px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12 py-8 sm:py-14 3xl:py-20" id="leadership-section">
         <div class="text-center mb-6 xs:mb-8 sm:mb-12 flex flex-col items-center">
@@ -734,7 +736,7 @@
        LOGIN MODAL (Responsive with Keyboard Safe Containment)
        ============================================================ -->
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 hidden" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <div class="relative w-full max-w-md max-h-[92vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-700 p-5 sm:p-7 shadow-2xl flex flex-col gap-4 sm:gap-5 text-right">
+    <div class="relative w-full max-w-md 3xl:max-w-lg max-h-[90dvh] overflow-y-auto overscroll-contain rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-700 p-4 xs:p-5 sm:p-7 3xl:p-8 shadow-2xl flex flex-col gap-3.5 sm:gap-5 text-right">
       
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <div class="flex items-center gap-2.5">
@@ -742,16 +744,16 @@
             <span class="material-symbols-outlined text-[18px] sm:text-[20px]">lock</span>
           </span>
           <div>
-            <h2 id="loginTitle" class="text-base sm:text-lg font-bold text-white leading-none">تسجيل دخول الطالب</h2>
-            <span class="text-[10px] sm:text-[11px] text-sky-400 font-mono">Student Authentication Portal</span>
+            <h2 id="loginTitle" class="text-base sm:text-lg 3xl:text-xl font-bold text-white leading-none">تسجيل دخول الطالب</h2>
+            <span class="text-[10px] sm:text-[11px] 3xl:text-xs text-sky-400 font-mono">Student Authentication Portal</span>
           </div>
         </div>
-        <button class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer" onclick="closeLoginModal()" aria-label="إغلاق">
+        <button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center" onclick="closeLoginModal()" aria-label="إغلاق">
           <span class="material-symbols-outlined text-[20px] sm:text-[22px]">close</span>
         </button>
       </div>
 
-      <p class="text-xs text-slate-400 leading-relaxed">
+      <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
         أدخل كود الطالب وكلمة المرور الخاصة بك لحضور المحاضرة وحل التكليفات البرمجية.
       </p>
 
@@ -760,23 +762,23 @@
 
       <form id="loginForm" class="flex flex-col gap-3.5 sm:gap-4" novalidate>
         <div class="flex flex-col gap-1.5">
-          <label for="loginUsername" class="text-xs font-bold text-slate-300">اسم المستخدم أو كود الطالب</label>
-          <input id="loginUsername" name="username" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder:text-slate-600 focus:outline-none focus:border-sky-500 text-sm font-mono transition-colors"
+          <label for="loginUsername" class="text-xs sm:text-sm font-bold text-slate-300">اسم المستخدم أو كود الطالب</label>
+          <input id="loginUsername" name="username" class="w-full px-3.5 py-2.5 sm:py-3 min-h-[44px] rounded-xl bg-slate-950 border border-slate-800 text-white placeholder:text-slate-600 focus:outline-none focus:border-sky-500 text-xs sm:text-sm font-mono transition-colors"
                  placeholder="مثال: MW-2026-042 أو رقم الهاتف" required type="text" autocomplete="username" />
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label for="loginPassword" class="text-xs font-bold text-slate-300">كلمة المرور</label>
+          <label for="loginPassword" class="text-xs sm:text-sm font-bold text-slate-300">كلمة المرور</label>
           <div class="relative">
-            <input id="loginPassword" name="password" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder:text-slate-600 focus:outline-none focus:border-sky-500 text-sm font-mono transition-colors pr-3 pl-10"
+            <input id="loginPassword" name="password" class="w-full px-3.5 py-2.5 sm:py-3 min-h-[44px] rounded-xl bg-slate-950 border border-slate-800 text-white placeholder:text-slate-600 focus:outline-none focus:border-sky-500 text-xs sm:text-sm font-mono transition-colors pr-3 pl-10"
                    placeholder="••••••••" required type="password" autocomplete="current-password" />
-            <button id="passwordToggle" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1 flex items-center justify-center cursor-pointer" onclick="togglePassword()" type="button" aria-label="إظهار كلمة المرور">
+            <button id="passwordToggle" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1 min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer" onclick="togglePassword()" type="button" aria-label="إظهار كلمة المرور">
               <span id="passwordToggleIcon" class="material-symbols-outlined text-[19px]">visibility</span>
             </button>
           </div>
         </div>
 
-        <div class="flex items-center justify-between text-xs text-slate-400">
+        <div class="flex items-center justify-between text-xs sm:text-sm text-slate-400">
           <label class="flex items-center gap-2 cursor-pointer select-none">
             <input id="rememberMe" checked class="w-4 h-4 rounded bg-slate-950 border-slate-700 text-sky-500 focus:ring-0 cursor-pointer" type="checkbox" />
             <span>تذكر بياناتي</span>
@@ -784,7 +786,7 @@
           <a class="text-sky-400 hover:underline" href="https://wa.me/201099959133" target="_blank" rel="noopener noreferrer">نسيت كلمة المرور؟</a>
         </div>
 
-        <button id="submitLoginBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all cursor-pointer flex items-center justify-center gap-2" type="submit">
+        <button id="submitLoginBtn" class="w-full py-3 min-h-[48px] rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all cursor-pointer flex items-center justify-center gap-2 touch-manipulation" type="submit">
           <span class="material-symbols-outlined text-[19px]">login</span>
           <span>تسجيل الدخول إلى المحاضرات</span>
         </button>
@@ -797,14 +799,14 @@
        CONTACT / INFO MODAL (Responsive)
        ============================================================ -->
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 hidden" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
-    <div class="relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-700 p-5 sm:p-7 shadow-2xl flex flex-col gap-4 sm:gap-5 text-right">
+    <div class="relative w-full max-w-lg 3xl:max-w-xl max-h-[90dvh] overflow-y-auto overscroll-contain rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-700 p-4 xs:p-5 sm:p-7 3xl:p-8 shadow-2xl flex flex-col gap-4 sm:gap-5 text-right">
       
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h2 id="contactTitle" class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+        <h2 id="contactTitle" class="text-base sm:text-lg 3xl:text-xl font-bold text-white flex items-center gap-2">
           <span class="material-symbols-outlined text-sky-400">domain</span>
           <span>حزب مستقبل وطن • أمانة أول المحلة الكبرى</span>
         </h2>
-        <button class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer" onclick="closeContactOptions()" aria-label="إغلاق">
+        <button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center" onclick="closeContactOptions()" aria-label="إغلاق">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
@@ -815,21 +817,21 @@
         </p>
 
         <div class="p-3 sm:p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col gap-1 text-slate-200">
-          <span class="font-bold text-sky-400 text-xs">📍 المقر الرئيسي:</span>
-          <span class="text-xs">أول المحلة الكبرى، محافظة الغربية، جمهورية مصر العربية</span>
+          <span class="font-bold text-sky-400 text-xs sm:text-sm">📍 المقر الرئيسي:</span>
+          <span class="text-xs sm:text-sm">أول المحلة الكبرى، محافظة الغربية، جمهورية مصر العربية</span>
         </div>
 
         <div class="p-3 sm:p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col gap-1 text-slate-200">
-          <span class="font-bold text-cyan-400 text-xs">📞 التواصل المباشر مع أمانة الشباب:</span>
+          <span class="font-bold text-cyan-400 text-xs sm:text-sm">📞 التواصل المباشر مع أمانة الشباب:</span>
           <div class="flex items-center justify-between mt-1">
-            <span class="font-mono text-xs dir-ltr">01099959133</span>
-            <a class="px-3 py-1 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs no-underline"
+            <span class="font-mono text-xs sm:text-sm dir-ltr">01099959133</span>
+            <a class="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs no-underline"
                href="https://wa.me/201099959133" target="_blank" rel="noopener noreferrer">مراسلة واتساب</a>
           </div>
         </div>
       </div>
 
-      <button class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-colors cursor-pointer" onclick="closeContactOptions()">
+      <button class="w-full py-2.5 sm:py-3 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold transition-colors cursor-pointer" onclick="closeContactOptions()">
         إغلاق النافذة
       </button>
 
@@ -840,14 +842,14 @@
        GAME GUIDE MODAL (Responsive)
        ============================================================ -->
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 hidden" id="game-modal" role="dialog" aria-modal="true" aria-labelledby="gameModalTitle">
-    <div class="relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-slate-900 border border-sky-500/30 p-5 sm:p-7 shadow-2xl flex flex-col gap-4 sm:gap-5 text-right">
+    <div class="relative w-full max-w-lg 3xl:max-w-xl max-h-[90dvh] overflow-y-auto overscroll-contain rounded-2xl sm:rounded-3xl bg-slate-900 border border-sky-500/30 p-4 xs:p-5 sm:p-7 3xl:p-8 shadow-2xl flex flex-col gap-4 sm:gap-5 text-right">
       
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h2 id="gameModalTitle" class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+        <h2 id="gameModalTitle" class="text-base sm:text-lg 3xl:text-xl font-bold text-white flex items-center gap-2">
           <span class="material-symbols-outlined text-indigo-400">sports_esports</span>
           <span>دليل وقواعد لعبة مغامرات بايثون 🎮</span>
         </h2>
-        <button class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer" onclick="closeGameModal()" aria-label="إغلاق">
+        <button class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center" onclick="closeGameModal()" aria-label="إغلاق">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
@@ -857,7 +859,7 @@
           تجربة تدريب تفاعلية مكونة من 15 مستوى برمجي متدرج الصعوبة، تحوّل مفاهيم بايثون إلى تحديات منطقية شيقة تكسبك نقاط خبرة (XP) وأوسمة شرف.
         </p>
 
-        <div class="grid grid-cols-2 gap-2.5 text-xs">
+        <div class="grid grid-cols-2 gap-2.5 text-xs sm:text-sm">
           <div class="p-2.5 sm:p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2">
             <span class="text-sky-400 font-bold font-mono">15</span>
             <span>مستوى تدريبي تدريجي</span>
@@ -876,16 +878,16 @@
           </div>
         </div>
 
-        <p class="text-xs text-sky-300 bg-sky-950/60 p-3 rounded-xl border border-sky-500/20">
+        <p class="text-xs sm:text-sm text-sky-300 bg-sky-950/60 p-3 rounded-xl border border-sky-500/20">
           💡 يمكنك البدء مباشرة فور تسجيل الدخول بحسابك الطلابي من بوابة الطالب!
         </p>
       </div>
 
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
-        <button class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg transition-all cursor-pointer text-center" onclick="closeGameModal(); openLoginModal();">
+        <button class="flex-1 py-2.5 sm:py-3 min-h-[44px] rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-lg transition-all cursor-pointer text-center flex items-center justify-center gap-2" onclick="closeGameModal(); openLoginModal();">
           تسجيل الدخول وخوض المغامرة 🚀
         </button>
-        <button class="py-2.5 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-colors cursor-pointer text-center" onclick="closeGameModal()">
+        <button class="py-2.5 sm:py-3 px-5 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold transition-colors cursor-pointer text-center" onclick="closeGameModal()">
           إغلاق
         </button>
       </div>
@@ -925,32 +927,32 @@
   <!-- ============================================================
        FOOTER (Responsive Grid)
        ============================================================ -->
-  <footer class="w-full bg-[#070b14] border-t border-slate-800/90 py-8 sm:py-10 mt-12">
-    <div class="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-right">
+  <footer class="w-full bg-[#070b14] border-t border-slate-800/90 py-8 sm:py-10 3xl:py-14 mt-12">
+    <div class="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] 4xl:max-w-[2160px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-6 text-center lg:text-right">
         
         <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-3.5">
-          <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800">
-            <img alt="وزارة الشباب والرياضة" class="h-7 w-7 sm:h-8 sm:w-8 object-contain rounded bg-white p-0.5"
+          <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800 shrink-0">
+            <img alt="وزارة الشباب والرياضة" class="h-7 w-7 xs:h-8 xs:w-8 sm:h-9 sm:w-9 3xl:h-11 3xl:w-11 object-contain rounded bg-white p-0.5"
                  src="assets/images/ministryofyouth.jpeg"
                  onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuCLLoF052Q_M55tziIib2JJ_HUxElfrDN1KEMgF5GprpWYUBqZGUtSf8cXSAsBATgrjKfizOT7Vm6OCfFKa8cwie0XYGGNKtGGEAUjociFQpDZFbJdlmNlqZM9ea4UCMeG1_-NsTA7OJgRGnog64nMqj9mUGSNUU561IcXn4UuTnK0kf2G0kXzI3-tQOIJe9MQDdkQwZzH3ZQXY2L6IVzeH6C4I0okIViXGDtxDhLoVbUFzGPGs1kKZllF8UGp_JaPeTis';"
-                 loading="lazy" decoding="async" width="32" height="32" />
-            <img alt="اتحاد شبابها" class="h-7 w-7 sm:h-8 sm:w-8 object-contain rounded bg-white p-0.5"
+                 loading="lazy" decoding="async" width="36" height="36" />
+            <img alt="اتحاد شبابها" class="h-7 w-7 xs:h-8 xs:w-8 sm:h-9 sm:w-9 3xl:h-11 3xl:w-11 object-contain rounded bg-white p-0.5"
                  src="assets/images/logo_union.jpeg"
                  onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuCyK48lRt5mjTECvI-I1ThZ0wj9vxhh7LWIMRTtk29XbWL_5cx4O0XByT6GRVSEeGFFKwyLl51q_vCY2PS2ezLZUBein7bLFgMCX-sCofCFW9JFXvOyBfolBkwfjoXGoAww7rzmfII26aVXJ9CnSRhxr0_eU7UzEKW1NBUKqeXVJNRFApd3M9hoL1AfmgjdhsJcJdcRaEVvApMVy4KY0VpfjArzXKBVG1oY70wCMRVH546vVm2TIwoszagAwV-T0AOYZp0';"
-                 loading="lazy" decoding="async" width="32" height="32" />
-            <img alt="Youth Forum" class="h-7 w-7 sm:h-8 sm:w-8 object-contain rounded bg-white p-0.5"
+                 loading="lazy" decoding="async" width="36" height="36" />
+            <img alt="Youth Forum" class="h-7 w-7 xs:h-8 xs:w-8 sm:h-9 sm:w-9 3xl:h-11 3xl:w-11 object-contain rounded bg-white p-0.5"
                  src="assets/images/forum.jpeg"
                  onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuDDTl9hBjsAsTkrmWQtrM-gDL9dRVLDzYkRHDqkjzXuamnwS-Y4vJvII0b8C2ZCzauUlHYlRZ0i91mZHWwp2OXpvSdlCLPNY-LrEyRtcZJhZLUfqDfzfrnMosPQfmWPZONyf4FewFGPCl_qRJN72gs92hhDchhOBakOP8qK591N6Xh8iIeD-VhX5JDevWK_-9-1iw2Us4NGBshv6OFLK9yHFkePwb7O38Kk3kQF8Tlvs10cLW0CtUkJlVkGnjNRZXyw9U';"
-                 loading="lazy" decoding="async" width="32" height="32" />
+                 loading="lazy" decoding="async" width="36" height="36" />
           </div>
           <div class="flex flex-col text-center sm:text-right">
-            <span class="text-sm font-bold text-white">منصة مستقبل وطن للتعليم التكنولوجي</span>
-            <span class="text-xs text-slate-400">بناء وتأهيل الكوادر الرقمية الشابة بالمحلة الكبرى</span>
+            <span class="text-xs sm:text-sm 3xl:text-base font-bold text-white">منصة مستقبل وطن للتعليم التكنولوجي</span>
+            <span class="text-[11px] sm:text-xs 3xl:text-sm text-slate-400">بناء وتأهيل الكوادر الرقمية الشابة بالمحلة الكبرى</span>
           </div>
         </div>
 
-        <div class="flex flex-col md:flex-row items-center gap-2 sm:gap-3 text-xs text-slate-400">
+        <div class="flex flex-col md:flex-row items-center gap-2 sm:gap-3 text-[11px] sm:text-xs 3xl:text-sm text-slate-400">
           <p>جميع الحقوق محفوظة © 2026 • حزب مستقبل وطن - أمانة أول المحلة الكبرى</p>
           <span class="hidden md:inline text-slate-700">•</span>
           <p class="text-sky-400 font-mono">Dev Team: Eng. Ibrahim El-Sheshtawy</p>
