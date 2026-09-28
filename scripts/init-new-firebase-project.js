@@ -16,14 +16,37 @@
 const fs = require("fs");
 const path = require("path");
 
-let admin;
+let initializeApp, getApps, cert, getFirestore, getAuth, FieldValue;
+
 try {
-  admin = require("firebase-admin");
+  const appMod = require(path.join(__dirname, "..", "backend", "node_modules", "firebase-admin", "lib", "app"));
+  const firestoreMod = require(path.join(__dirname, "..", "backend", "node_modules", "firebase-admin", "lib", "firestore"));
+  const authMod = require(path.join(__dirname, "..", "backend", "node_modules", "firebase-admin", "lib", "auth"));
+  initializeApp = appMod.initializeApp;
+  getApps = appMod.getApps;
+  cert = appMod.cert;
+  getFirestore = firestoreMod.getFirestore;
+  FieldValue = firestoreMod.FieldValue;
+  getAuth = authMod.getAuth;
 } catch (_) {
-  admin = require(path.join(__dirname, "..", "backend", "node_modules", "firebase-admin"));
+  const classicAdmin = require("firebase-admin");
+  initializeApp = classicAdmin.initializeApp.bind(classicAdmin);
+  getApps = () => classicAdmin.apps;
+  cert = classicAdmin.credential.cert.bind(classicAdmin.credential);
+  getFirestore = () => classicAdmin.firestore();
+  FieldValue = classicAdmin.firestore.FieldValue;
+  getAuth = () => classicAdmin.auth();
 }
 
-const serviceAccountPath = path.join(__dirname, "serviceAccountKey.json");
+let serviceAccountPath = path.join(__dirname, "serviceAccountKey.json");
+
+if (!fs.existsSync(serviceAccountPath)) {
+  const rootFiles = fs.readdirSync(path.join(__dirname, ".."));
+  const adminSdkFile = rootFiles.find(f => f.includes("firebase-adminsdk") && f.endsWith(".json"));
+  if (adminSdkFile) {
+    serviceAccountPath = path.join(__dirname, "..", adminSdkFile);
+  }
+}
 
 if (!fs.existsSync(serviceAccountPath)) {
   console.error(`
@@ -36,7 +59,7 @@ if (!fs.existsSync(serviceAccountPath)) {
 3. اضغط على الزر الأزرق: "Generate new private key".
 4. قم بتحميل الملف وإعادة تسميته إلى: serviceAccountKey.json
 5. ضعه في المسار:
-   ${serviceAccountPath}
+   ${path.join(__dirname, "serviceAccountKey.json")}
 6. أعد تشغيل السكربت مجدداً:
    node scripts/init-new-firebase-project.js
 ================================================================================
@@ -46,14 +69,12 @@ if (!fs.existsSync(serviceAccountPath)) {
 
 const serviceAccount = require(serviceAccountPath);
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });
-}
+const app = !getApps().length ? initializeApp({
+  credential: cert(serviceAccount)
+}) : getApps()[0];
 
-const auth = admin.auth();
-const db = admin.firestore();
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 // Default Staff Credentials (Can be changed in dashboard later)
 const DEFAULT_ACCOUNTS = [
@@ -111,7 +132,7 @@ async function seedAuthAccounts() {
       role: acc.role,
       phoneNumber: acc.phone,
       active: true,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
+      createdAt: FieldValue.serverTimestamp()
     }, { merge: true });
   }
 
@@ -121,7 +142,7 @@ async function seedAuthAccounts() {
 async function seedCollections(userIds) {
   console.log("\n📦 [2/3] تهيئة جميع المجموعات الـ 16 وإنشاء مستندات القوالب الأساسية...");
 
-  const now = admin.firestore.FieldValue.serverTimestamp();
+  const now = FieldValue.serverTimestamp();
   const adminUid = userIds.admin;
   const teacherUid = userIds.teacher;
 
