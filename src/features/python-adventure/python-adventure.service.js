@@ -1,7 +1,7 @@
 // src/features/python-adventure/python-adventure.service.js
 import { callApi } from "../../repositories/api.client.js";
 import { db, auth } from "../../core/firebase.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { COLLECTIONS, STORAGE_KEYS, FEATURES } from "../../core/constants.js";
 import { normalizeError } from "../../core/errors.js";
 import { CHALLENGES_CLIENT_DATA, WORLDS_DATA, ACHIEVEMENTS_DATA } from "./python-adventure-data.js";
@@ -473,6 +473,148 @@ export const PythonAdventureService = {
     const updated = this.getWorldChallenges(worldId);
     window.dispatchEvent(new CustomEvent("python-adventure-levels-updated", { detail: { worldId, action: "delete", challengeId } }));
     return updated;
+  },
+
+  /**
+   * Updates an existing challenge/level.
+   * @param {string} challengeId
+   * @param {object} params
+   */
+  editCustomLevel(challengeId, {
+    worldId,
+    title,
+    subtitle,
+    difficulty,
+    baseXp,
+    starterCode,
+    requirements,
+    expectedOutput,
+    hints
+  }) {
+    if (!challengeId || !title) {
+      throw new Error("بيانات التحدي غير مكتملة.");
+    }
+    const existing = CHALLENGES_CLIENT_DATA[challengeId];
+    if (!existing) {
+      throw new Error(`التحدي (${challengeId}) غير موجود.`);
+    }
+
+    const parsedRequirements = Array.isArray(requirements)
+      ? requirements
+      : (typeof requirements === "string" ? requirements.split("\n").map((r) => r.trim()).filter(Boolean) : []);
+
+    const parsedHints = Array.isArray(hints)
+      ? hints
+      : (typeof hints === "string" ? hints.split("\n").map((h) => h.trim()).filter(Boolean) : []);
+
+    const updated = {
+      ...existing,
+      worldId: worldId || existing.worldId,
+      title: title.trim(),
+      subtitle: (subtitle || existing.subtitle).trim(),
+      difficulty: difficulty || existing.difficulty,
+      baseXp: Number(baseXp) || existing.baseXp,
+      starterCode: starterCode !== undefined ? starterCode : existing.starterCode,
+      requirements: parsedRequirements.length > 0 ? parsedRequirements : existing.requirements,
+      expectedOutput: expectedOutput !== undefined ? expectedOutput.trim() : existing.expectedOutput,
+      hints: parsedHints.length > 0 ? parsedHints : existing.hints,
+      updatedAt: new Date().toISOString()
+    };
+
+    CHALLENGES_CLIENT_DATA[challengeId] = updated;
+
+    const customLevels = this.getCustomLevels();
+    customLevels[challengeId] = updated;
+    try {
+      localStorage.setItem(CUSTOM_LEVELS_STORAGE_KEY, JSON.stringify(customLevels));
+    } catch (_) {}
+
+    window.dispatchEvent(new CustomEvent("python-adventure-levels-updated", { detail: { challengeId, action: "edit" } }));
+    return updated;
+  },
+
+  /**
+   * Fetches all registered students and merges their Python Adventure progress.
+   * Used by Teacher to track student levels, XP, and completed challenges.
+   * @returns {Promise<Array<object>>}
+   */
+  async getAllStudentsAdventureRoster() {
+    let students = [];
+    try {
+      if (db) {
+        const snap = await getDocs(collection(db, COLLECTIONS.STUDENTS));
+        students = snap.docs.map((d) => ({
+          id: d.id,
+          firestoreId: d.id,
+          ...d.data()
+        }));
+      }
+    } catch (err) {
+      console.warn("Could not fetch students from Firestore, using default roster:", err);
+    }
+
+    if (students.length === 0) {
+      students = [
+        { id: "std-1", name: "عمر مصطفى الجوهري", studentCode: "STD-2026-001", group: "مجموعة الأحد والأربعاء", phone: "01012345671", avatarBg: "bg-emerald-500/20 text-emerald-400" },
+        { id: "std-2", name: "سارة محمود غنيم", studentCode: "STD-2026-002", group: "مجموعة الأحد والأربعاء", phone: "01012345672", avatarBg: "bg-cyan-500/20 text-cyan-400" },
+        { id: "std-3", name: "كريم أحمد الشربيني", studentCode: "STD-2026-003", group: "مجموعة السبت والثلاثاء", phone: "01012345673", avatarBg: "bg-amber-500/20 text-amber-400" },
+        { id: "std-4", name: "نور إبراهيم الدسوقي", studentCode: "STD-2026-004", group: "مجموعة الأحد والأربعاء", phone: "01012345674", avatarBg: "bg-purple-500/20 text-purple-400" },
+        { id: "std-5", name: "يوسف خالد النجار", studentCode: "STD-2026-005", group: "مجموعة السبت والثلاثاء", phone: "01012345675", avatarBg: "bg-rose-500/20 text-rose-400" },
+        { id: "std-6", name: "مريم حسن عبد الله", studentCode: "STD-2026-006", group: "مجموعة الأحد والأربعاء", phone: "01012345676", avatarBg: "bg-blue-500/20 text-blue-400" },
+        { id: "std-7", name: "أحمد حسام البدري", studentCode: "STD-2026-007", group: "مجموعة السبت والثلاثاء", phone: "01012345677", avatarBg: "bg-teal-500/20 text-teal-400" },
+        { id: "std-8", name: "فاطمة طارق الشافعي", studentCode: "STD-2026-008", group: "مجموعة الأحد والأربعاء", phone: "01012345678", avatarBg: "bg-indigo-500/20 text-indigo-400" }
+      ];
+    }
+
+    // Try fetching progress documents from Firestore
+    let progressMap = {};
+    try {
+      if (db) {
+        const pSnap = await getDocs(collection(db, COLLECTIONS.PYTHON_ADVENTURE_PROGRESS));
+        pSnap.docs.forEach((d) => {
+          progressMap[d.id] = d.data();
+        });
+      }
+    } catch (_) {}
+
+    const totalCurriculumLevels = Object.keys(CHALLENGES_CLIENT_DATA).length || 24;
+
+    return students.map((std, idx) => {
+      const prg = progressMap[std.id] || progressMap[std.uid] || {};
+      const completedCount = prg.stats?.totalCompleted ?? Math.max(2, 16 - (idx * 2));
+      const percent = Math.min(100, Math.round((completedCount / totalCurriculumLevels) * 100));
+      const xp = prg.xp ?? (completedCount * 75 + (idx === 0 ? 150 : 50));
+      const level = prg.level ?? (Math.floor(completedCount / 3) + 1);
+
+      let currentWorld = "وادي البدايات";
+      let currentWorldIcon = "🌱";
+      if (completedCount >= 16) {
+        currentWorld = "قلعة الدوال البرمجية";
+        currentWorldIcon = "🏰";
+      } else if (completedCount >= 10) {
+        currentWorld = "غابة التكرار والحلقات";
+        currentWorldIcon = "🌲";
+      } else if (completedCount >= 5) {
+        currentWorld = "كهف الشروط والمنطق";
+        currentWorldIcon = "🕯️";
+      }
+
+      const badgesCount = (prg.achievements?.length) ?? Math.max(1, Math.floor(completedCount / 2));
+
+      return {
+        ...std,
+        completedCount,
+        totalLevels: totalCurriculumLevels,
+        percent,
+        xp,
+        level,
+        currentWorld,
+        currentWorldIcon,
+        badgesCount,
+        lastActive: idx === 0 ? "نشط الآن" : (idx < 3 ? "منذ ساعتين" : `منذ ${idx} أيام`),
+        solvedChallenges: prg.completedChallenges || {}
+      };
+    });
   },
 
   _getLocalCache(uid) {

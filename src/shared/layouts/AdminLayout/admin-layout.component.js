@@ -90,15 +90,6 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
                 <span>الامتحانات والاختبارات</span>
               </div>
             </button>
-
-            <!-- Tab 4: Python Coding Challenges (Image 8) -->
-            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="coding-problems" id="tab-btn-coding-problems">
-              <div class="flex items-center gap-3">
-                <span class="text-base">🐍</span>
-                <span>تحديات بايثون البرمجية</span>
-              </div>
-              <span class="text-[9px] bg-emerald-400/20 text-emerald-300 border border-emerald-400/40 px-1.5 py-0.5 rounded font-mono uppercase">مباشر</span>
-            </button>
           </nav>
         </div>
 
@@ -203,22 +194,17 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
           <div id="adminStudentsContainer"></div>
         </section>
 
-        <!-- Tab 3: Python Coding Challenges (Image 8) -->
-        <section id="sec-coding-problems" class="tab-content hidden" aria-labelledby="tab-btn-coding-problems">
-          <div id="adminCodingProblemsContainer"></div>
-        </section>
-
-        <!-- Tab 4: Exams & Assessments -->
+        <!-- Tab 3: Exams & Assessments -->
         <section id="sec-exams" class="tab-content hidden" aria-labelledby="tab-btn-exams">
           <div id="adminExamsContainer"></div>
         </section>
 
-        <!-- Tab 5: Settings -->
+        <!-- Tab 4: Settings -->
         <section id="sec-settings" class="tab-content hidden" aria-labelledby="tab-btn-settings">
           <div id="adminSettingsContainer"></div>
         </section>
 
-        <!-- Tab 6: Algorithms & Records -->
+        <!-- Tab 5: Algorithms & Records -->
         <section id="sec-financial" class="tab-content hidden" aria-labelledby="tab-btn-financial">
           <div class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-8 text-center">
             <i class="fa-solid fa-boxes-stacked text-indigo-400 text-4xl mb-3"></i>
@@ -239,7 +225,6 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
     attendance: `<i class="fa-solid fa-chart-pie mr-1"></i> <span>إدارة الغياب والحضور العام</span>`,
     students: `<i class="fa-solid fa-users-gear mr-1"></i> <span>إدارة شؤون الطلاب</span>`,
     exams: `<i class="fa-solid fa-file-pen mr-1"></i> <span>الامتحانات والاختبارات</span>`,
-    "coding-problems": `<span>🐍 تحديات بايثون البرمجية</span> <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[10px] px-2 py-0.5 rounded-full font-mono">Python 3.12 Engine</span>`,
     settings: `<i class="fa-solid fa-sliders mr-1"></i> <span>إعدادات النظام والمظهر</span>`,
     financial: `<i class="fa-solid fa-boxes-stacked mr-1"></i> <span>بنك الأكواد والخوارزميات</span>`
   };

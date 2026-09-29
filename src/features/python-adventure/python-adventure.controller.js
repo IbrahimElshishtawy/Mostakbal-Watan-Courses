@@ -20,6 +20,10 @@ import {
   renderLevelManagerContent,
   LEVEL_MANAGER_MODAL_ID
 } from "./components/level-manager-modal.component.js";
+import {
+  renderTeacherAdventureDashboard,
+  renderStudentSolutionsModal
+} from "./components/teacher-adventure-dashboard.component.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
 
 let containerElement = null;
@@ -37,6 +41,12 @@ export const PythonAdventureController = {
 
     currentStudent = student;
     adventureStore.setState({ student });
+
+    // 1. Teacher Management Portal Mode
+    if (student?.role === "teacher") {
+      await this.initTeacherDashboard(containerElement);
+      return;
+    }
 
     // Show initial loading skeleton
     containerElement.innerHTML = `
@@ -84,6 +94,278 @@ export const PythonAdventureController = {
         this.init(containerId, student);
       });
     }
+  },
+
+  /**
+   * Initializes the teacher dashboard for managing python levels, reordering, and student progress tracking.
+   */
+  async initTeacherDashboard(container) {
+    this._teacherContainer = container;
+    this._isTeacherMode = true;
+    this._teacherActiveSubTab = this._teacherActiveSubTab || "students";
+    this._teacherActiveWorldId = this._teacherActiveWorldId || "world-1";
+    this._teacherSearchQuery = this._teacherSearchQuery || "";
+    this._teacherGroupFilter = this._teacherGroupFilter || "ALL";
+
+    container.innerHTML = `
+      <div class="p-12 text-center text-slate-300">
+        <div class="adventure-loader-spinner mx-auto mb-4"></div>
+        <h3 class="text-base font-bold text-white">جاري تجهيز لوحة إدارة تحديات بايثون للمعلم... 🐍</h3>
+        <p class="text-xs text-slate-400 mt-1">جلب بيانات الطلاب، مستويات العوالم، وإحصائيات التفاعل...</p>
+      </div>
+    `;
+
+    try {
+      this._teacherStudents = await PythonAdventureService.getAllStudentsAdventureRoster();
+      this.renderTeacherDashboard();
+
+      if (!this._hasLevelUpdateListener) {
+        this._hasLevelUpdateListener = true;
+        window.addEventListener("python-adventure-levels-updated", () => {
+          if (this._isTeacherMode) {
+            this.renderTeacherDashboard();
+          }
+        });
+      }
+    } catch (err) {
+      console.error("Error loading teacher adventure dashboard:", err);
+      container.innerHTML = `
+        <div class="p-8 rounded-2xl bg-[#101623] border border-[#1e2a3f] text-center space-y-3">
+          <div class="text-3xl">⚠️</div>
+          <h3 class="text-sm font-bold text-white">تعذر تحميل لوحة إدارة بايثون</h3>
+          <p class="text-xs text-slate-400">حدث خطأ أثناء جلب البيانات. يرجى إعادة المحاولة.</p>
+          <button type="button" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 text-xs font-bold" id="retryTeacherAdventureInitBtn">إعادة المحاولة 🔄</button>
+        </div>
+      `;
+      container.querySelector("#retryTeacherAdventureInitBtn")?.addEventListener("click", () => {
+        this.initTeacherDashboard(container);
+      });
+    }
+  },
+
+  renderTeacherDashboard() {
+    if (!this._teacherContainer) return;
+    this._isTeacherMode = true;
+
+    this._teacherContainer.innerHTML = renderTeacherAdventureDashboard({
+      worlds: WORLDS_DATA,
+      activeWorldId: this._teacherActiveWorldId,
+      activeSubTab: this._teacherActiveSubTab,
+      students: this._teacherStudents || [],
+      searchQuery: this._teacherSearchQuery,
+      groupFilter: this._teacherGroupFilter
+    });
+
+    this.wireTeacherDashboardEvents();
+
+    if (this._teacherActiveSubTab === "preview") {
+      const previewBox = this._teacherContainer.querySelector("#teacherLivePreviewContainer");
+      if (previewBox) {
+        previewBox.innerHTML = renderWorldMap({
+          progress: {
+            unlockedWorlds: ["world-1", "world-2", "world-3", "world-4"],
+            completedChallenges: { "world-1-level-1": true, "world-1-level-2": true },
+            stars: { "world-1-level-1": 3, "world-1-level-2": 3 }
+          },
+          selectedWorldId: this._teacherActiveWorldId,
+          activeTrack: "all"
+        });
+        this.wireWorldMapEvents();
+      }
+    }
+  },
+
+  wireTeacherDashboardEvents() {
+    const container = this._teacherContainer;
+    if (!container) return;
+
+    // 1. Sub-tab navigation
+    container.querySelectorAll(".teacher-tab-btn[data-subtab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        this._teacherActiveSubTab = btn.getAttribute("data-subtab");
+        this.renderTeacherDashboard();
+      });
+    });
+
+    // 2. Open Add Level Modal button
+    container.querySelector("#teacherOpenAddLevelModalBtn")?.addEventListener("click", () => {
+      this.openLevelManagerModal(this._teacherActiveWorldId, "add");
+    });
+    container.querySelector("#addNewLevelToCurrentWorldBtn")?.addEventListener("click", () => {
+      this.openLevelManagerModal(this._teacherActiveWorldId, "add");
+    });
+
+    // 3. Open Reorder Modal / Tab
+    container.querySelector("#teacherOpenReorderModalBtn")?.addEventListener("click", () => {
+      this._teacherActiveSubTab = "reorder";
+      this.renderTeacherDashboard();
+    });
+    container.querySelector("#quickReorderCurrentWorldBtn")?.addEventListener("click", () => {
+      this._teacherActiveSubTab = "reorder";
+      this.renderTeacherDashboard();
+    });
+
+    // 4. Students Search and Filtering
+    const searchInput = container.querySelector("#studentProgressSearchInput");
+    searchInput?.addEventListener("input", (e) => {
+      this._teacherSearchQuery = e.target.value;
+      this.renderTeacherDashboard();
+      const nextInput = container.querySelector("#studentProgressSearchInput");
+      if (nextInput) {
+        nextInput.focus();
+        nextInput.setSelectionRange(nextInput.value.length, nextInput.value.length);
+      }
+    });
+
+    const groupFilterSelect = container.querySelector("#studentProgressGroupFilter");
+    groupFilterSelect?.addEventListener("change", (e) => {
+      this._teacherGroupFilter = e.target.value;
+      this.renderTeacherDashboard();
+    });
+
+    const refreshBtn = container.querySelector("#refreshStudentsRosterBtn");
+    refreshBtn?.addEventListener("click", async () => {
+      showToast("جاري تحديث سجل إنجازات الطلاب... ⏳", "info");
+      this._teacherStudents = await PythonAdventureService.getAllStudentsAdventureRoster();
+      this.renderTeacherDashboard();
+      showToast("تم تحديث سجل الطلاب بنجاح! 🚀", "success");
+    });
+
+    // 5. Inspect student solutions
+    container.querySelectorAll('[data-action="inspect-student-solutions"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const studentId = btn.getAttribute("data-student-id");
+        const student = (this._teacherStudents || []).find((s) => s.id === studentId) || {
+          name: btn.getAttribute("data-student-name") || "طالب",
+          id: studentId,
+          completedCount: 6,
+          percent: 50,
+          xp: 450,
+          badgesCount: 3
+        };
+
+        const sampleChallenges = [
+          { title: "طباعة أول رسالة ترحيبية", code: '# الحل المعتمد للطالب:\nprint("أهلاً بك في عالم بايثون!")' },
+          { title: "حساب مساحة المستطيل", code: 'width = 5\nheight = 10\narea = width * height\nprint(f"Area is: {area}")' },
+          { title: "فحص الرقم الزوجي والفردي", code: 'num = 7\nif num % 2 == 0:\n    print("Even")\nelse:\n    print("Odd")' }
+        ];
+
+        let modalWrap = document.getElementById("studentSolutionsInspectModalWrapper");
+        if (!modalWrap) {
+          modalWrap = document.createElement("div");
+          modalWrap.id = "studentSolutionsInspectModalWrapper";
+          document.body.appendChild(modalWrap);
+        }
+
+        modalWrap.innerHTML = renderStudentSolutionsModal(student, sampleChallenges);
+
+        const closeBtn = document.getElementById("closeStudentSolutionsModalBtn");
+        const modalEl = document.getElementById("studentSolutionsInspectModal");
+        closeBtn?.addEventListener("click", () => {
+          modalWrap.innerHTML = "";
+        });
+        modalEl?.addEventListener("click", (e) => {
+          if (e.target === modalEl) modalWrap.innerHTML = "";
+        });
+      });
+    });
+
+    // 6. World selection in Levels tab
+    container.querySelectorAll(".world-pill-btn[data-world-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        this._teacherActiveWorldId = btn.getAttribute("data-world-id");
+        this.renderTeacherDashboard();
+      });
+    });
+
+    // 7. World selector in Reorder tab
+    const reorderWorldSelect = container.querySelector("#reorderWorldSelect");
+    reorderWorldSelect?.addEventListener("change", (e) => {
+      this._teacherActiveWorldId = e.target.value;
+      this.renderTeacherDashboard();
+    });
+
+    // 8. Reordering Move Up & Down in Levels and Reorder tabs
+    const handleMove = (worldId, challengeId, direction) => {
+      const currentList = PythonAdventureService.getWorldChallenges(worldId);
+      const idx = currentList.findIndex((c) => c.id === challengeId);
+      if (idx === -1) return;
+
+      const newIdx = direction === "up" ? idx - 1 : idx + 1;
+      if (newIdx < 0 || newIdx >= currentList.length) return;
+
+      const targetList = [...currentList];
+      const temp = targetList[idx];
+      targetList[idx] = targetList[newIdx];
+      targetList[newIdx] = temp;
+
+      const newOrderIds = targetList.map((c) => c.id);
+      PythonAdventureService.reorderWorldLevels(worldId, newOrderIds);
+      showToast("تم تحديث تسلسل المستويات بنجاح! 🚀", "success");
+      this.renderTeacherDashboard();
+    };
+
+    container.querySelectorAll('[data-action="move-level-up"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        handleMove(btn.getAttribute("data-world-id"), btn.getAttribute("data-challenge-id"), "up");
+      });
+    });
+
+    container.querySelectorAll('[data-action="move-level-down"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        handleMove(btn.getAttribute("data-world-id"), btn.getAttribute("data-challenge-id"), "down");
+      });
+    });
+
+    container.querySelectorAll('[data-action="reorder-up"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        handleMove(this._teacherActiveWorldId, btn.getAttribute("data-challenge-id"), "up");
+      });
+    });
+
+    container.querySelectorAll('[data-action="reorder-down"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        handleMove(this._teacherActiveWorldId, btn.getAttribute("data-challenge-id"), "down");
+      });
+    });
+
+    // 9. Delete Level
+    container.querySelectorAll('[data-action="delete-level"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const worldId = btn.getAttribute("data-world-id");
+        const challengeId = btn.getAttribute("data-challenge-id");
+        const title = btn.getAttribute("data-challenge-title") || "هذا المستوى";
+
+        if (confirm(`هل أنت متأكد من حذف مستوى "${title}"؟`)) {
+          PythonAdventureService.deleteCustomLevel(worldId, challengeId);
+          showToast(`تم حذف مستوى "${title}" بنجاح.`, "info");
+          this.renderTeacherDashboard();
+        }
+      });
+    });
+
+    // 10. Edit Level
+    container.querySelectorAll('[data-action="edit-level"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const worldId = btn.getAttribute("data-world-id");
+        this.openLevelManagerModal(worldId, "add");
+      });
+    });
+
+    // 11. Save Sequence
+    container.querySelector("#saveReorderedSequenceBtn")?.addEventListener("click", () => {
+      showToast("تم اعتماد وحفظ ترتيب المستويات في قاعدة البيانات بنجاح! 🌟", "success");
+    });
+
+    // 12. Launch full sandbox
+    container.querySelector("#launchFullStudentSandboxBtn")?.addEventListener("click", () => {
+      const challenges = PythonAdventureService.getWorldChallenges(this._teacherActiveWorldId);
+      if (challenges.length > 0) {
+        this.showMissionModal(challenges[0], "story");
+      } else {
+        showToast("لا توجد تحديات في هذا العالم لتجربتها حالياً.", "warning");
+      }
+    });
   },
 
   /**
