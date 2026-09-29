@@ -451,6 +451,11 @@ export const StudentsController = {
         studentsState.set("students", updated);
         this.updateTableOnly(canDelete);
         this._refreshStats();
+
+        const badgeAdmin = document.getElementById("adminNavStudentsBadge");
+        if (badgeAdmin) badgeAdmin.textContent = updated.length;
+        const badgeTeacher = document.getElementById("teacherNavStudentsBadge");
+        if (badgeTeacher) badgeTeacher.textContent = updated.length;
       } catch (err) {
         showToast(err.message, "error");
       }
@@ -492,6 +497,11 @@ export const StudentsController = {
           studentsState.set("students", fresh);
           this.updateTableOnly(canDelete);
           this._refreshStats();
+
+          const badgeAdmin = document.getElementById("adminNavStudentsBadge");
+          if (badgeAdmin) badgeAdmin.textContent = fresh.length;
+          const badgeTeacher = document.getElementById("teacherNavStudentsBadge");
+          if (badgeTeacher) badgeTeacher.textContent = fresh.length;
         } catch (err) {
           showToast(err.message, "error");
         } finally {

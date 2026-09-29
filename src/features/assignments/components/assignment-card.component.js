@@ -243,10 +243,10 @@ export function formatDescriptionCodeSpans(rawDesc = "") {
  * @param {object} options
  * @param {object} options.assignment
  * @param {number} [options.submissionsCount]
- * @param {number} [options.totalStudents=20]
+ * @param {number} [options.totalStudents=0]
  * @returns {string}
  */
-export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, totalStudents = 20 }) {
+export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, totalStudents = 0 }) {
   const { title: displayTitle, desc: displayDesc } = formatAssignmentContent(
     assignment.title,
     assignment.description
@@ -272,8 +272,8 @@ export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, 
 
   // Calculate dynamic submission ratio
   const subsCount = typeof assignment.submissionsCount === "number" ? assignment.submissionsCount : submissionsCount;
-  const targetRoster = totalStudents || 20;
-  const submissionPercent = Math.min(100, Math.round((subsCount / targetRoster) * 100));
+  const targetRoster = totalStudents > 0 ? totalStudents : subsCount;
+  const submissionPercent = targetRoster > 0 ? Math.min(100, Math.round((subsCount / targetRoster) * 100)) : 0;
 
   // Deadline display string
   const deadlineDateStr = assignment.deadline ? formatDate(assignment.deadline) : "بدون موعد محدد";
@@ -282,7 +282,7 @@ export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, 
     deadlineRemainingText = "انتهت فترة التسليم ⚠️";
   }
 
-  const maxPoints = assignment.maxPoints || (subsCount > 0 ? 150 : 100);
+  const maxPoints = assignment.maxPoints || 100;
 
   return `
     <article class="rounded-2xl bg-surface-container-low/90 backdrop-blur-xl p-6 sm:p-7 shadow-xl flex flex-col gap-6 relative overflow-hidden transition-all duration-300 hover:shadow-2xl border border-surface-container-high/60 group" dir="rtl" data-assignment-card-id="${escapeHtml(assignment.id)}">
@@ -364,7 +364,7 @@ export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, 
             <span class="text-xs font-bold text-primary font-mono">${subsCount} / ${targetRoster} (${submissionPercent}%)</span>
           </div>
           <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
-            <div class="bg-gradient-to-l from-primary to-primary-container h-full rounded-full transition-all duration-500" style="width: ${submissionPercent > 0 ? submissionPercent : 15}%;"></div>
+            <div class="bg-gradient-to-l from-primary to-primary-container h-full rounded-full transition-all duration-500" style="width: ${submissionPercent}%;"></div>
           </div>
         </div>
 

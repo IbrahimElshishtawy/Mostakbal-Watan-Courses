@@ -25,11 +25,11 @@ export function renderTeacherAdventureDashboard({
   // Compute metrics
   const totalWorldsCount = ALL_WORLDS_DATA.length;
   const totalLevelsCount = Object.keys(CHALLENGES_CLIENT_DATA).length;
-  const totalStudentsCount = students.length || 40;
-  const totalXpAwarded = students.reduce((acc, s) => acc + (s.xp || 0), 0) || 18450;
+  const totalStudentsCount = students.length;
+  const totalXpAwarded = students.reduce((acc, s) => acc + (s.xp || 0), 0);
   const averageCompletion = students.length > 0
     ? Math.round(students.reduce((acc, s) => acc + (s.percent || 0), 0) / students.length)
-    : 78;
+    : 0;
 
   // Filter students
   const filteredStudents = students.filter((s) => {
