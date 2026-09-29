@@ -8,7 +8,7 @@ import { validateInput } from "../../middleware/validator";
 const CreateStudentSchema = z.object({
   name: z.string().min(2, "الاسم يجب ألا يقل عن حرفين"),
   phone: z.string().regex(/^[0-9]{10,15}$/, "رقم الهاتف غير صالح"),
-  nationalId: z.string().min(6, "الرقم القومي أو كلمة المرور يجب ألا تقل عن 6 أحرف"),
+  nationalId: z.string().optional().default(""),
   password: z.string().min(6, "كلمة المرور يجب ألا تقل عن 6 أحرف").optional(),
   address: z.string().optional().default(""),
   group: z.string().min(1, "يجب تحديد المجموعة")
@@ -20,7 +20,7 @@ export async function createStudentHandler(request: CallableRequest) {
 
   const normalizedPhone = data.phone.trim();
   const studentEmail = `${normalizedPhone}@student.local`;
-  const initialPassword = (data.password || data.nationalId || "123456").trim();
+  const initialPassword = (data.password || normalizedPhone || data.nationalId || "123456").trim();
 
   try {
     // 1. Check if user already exists in Firebase Auth
@@ -31,19 +31,26 @@ export async function createStudentHandler(request: CallableRequest) {
       if (e.code !== "auth/user-not-found") throw e;
     }
 
+    let studentUid: string;
     if (userRecord) {
-      throw new HttpsError("already-exists", `الطالب صاحب رقم الهاتف (${normalizedPhone}) مسجل بالفعل.`);
+      // Update password so student can log in with their phone number immediately
+      await auth.updateUser(userRecord.uid, {
+        password: initialPassword,
+        displayName: data.name
+      });
+      studentUid = userRecord.uid;
+    } else {
+      // 2. Create Auth User
+      const newUser = await auth.createUser({
+        email: studentEmail,
+        password: initialPassword,
+        displayName: data.name
+      });
+      studentUid = newUser.uid;
     }
 
-    // 2. Create Auth User
-    const newUser = await auth.createUser({
-      email: studentEmail,
-      password: initialPassword,
-      displayName: data.name
-    });
-
     // 3. Assign Custom Claims
-    await auth.setCustomUserClaims(newUser.uid, {
+    await auth.setCustomUserClaims(studentUid, {
       role: "student",
       group: data.group,
       phone: normalizedPhone
@@ -54,20 +61,20 @@ export async function createStudentHandler(request: CallableRequest) {
       name: data.name,
       studentPhone: normalizedPhone,
       phone: normalizedPhone,
-      nationalId: data.nationalId,
+      nationalId: data.nationalId || "",
       pass: initialPassword,
       password: initialPassword,
-      address: data.address,
+      address: data.address || "",
       group: data.group,
       active: true,
-      authUid: newUser.uid,
+      authUid: studentUid,
       createdAt: new Date()
     };
 
-    await db.collection("students").doc(newUser.uid).set(studentData);
+    await db.collection("students").doc(studentUid).set(studentData, { merge: true });
 
     // Also sync to users collection
-    await db.collection("users").doc(newUser.uid).set({
+    await db.collection("users").doc(studentUid).set({
       name: data.name,
       phone: normalizedPhone,
       role: "student",
@@ -77,7 +84,7 @@ export async function createStudentHandler(request: CallableRequest) {
 
     return {
       success: true,
-      studentUid: newUser.uid,
+      studentUid,
       message: "تم إنشاء حساب الطالب بنجاح"
     };
   } catch (error: any) {

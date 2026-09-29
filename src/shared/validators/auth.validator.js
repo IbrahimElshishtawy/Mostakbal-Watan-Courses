@@ -3,14 +3,28 @@ import { ValidationError } from "../../core/errors.js";
 
 export function validateLogin(username, password) {
   const cleanUser = (username || "").trim();
-  const cleanPass = (password || "").trim();
+  let cleanPass = (password || "").trim();
   const fieldErrors = {};
 
   if (!cleanUser) {
     fieldErrors.username = "يرجى إدخال اسم المستخدم أو رقم الهاتف.";
   }
+
+  // If password was omitted, check if username is a phone number and default password to the phone number!
+  let normalizedUser = cleanUser
+    .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+    .replace(/[\s\-_]/g, "");
+  if (normalizedUser.startsWith("+20")) normalizedUser = "0" + normalizedUser.slice(3);
+  else if (normalizedUser.startsWith("0020")) normalizedUser = "0" + normalizedUser.slice(4);
+  else if (normalizedUser.startsWith("201") && normalizedUser.length === 12) normalizedUser = "0" + normalizedUser.slice(2);
+
+  const isPhone = /^01[0125][0-9]{8}$/.test(normalizedUser) || /^[0-9]{8,15}$/.test(normalizedUser);
+  if (!cleanPass && isPhone) {
+    cleanPass = normalizedUser;
+  }
+
   if (!cleanPass) {
-    fieldErrors.password = "يرجى إدخال كلمة المرور.";
+    fieldErrors.password = "يرجى إدخال كلمة المرور أو رقم الهاتف.";
   }
 
   if (Object.keys(fieldErrors).length > 0) {

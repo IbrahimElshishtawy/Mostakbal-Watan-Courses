@@ -7,7 +7,10 @@ export function validateStudentData({ name, phone, nationalId, address, group, p
   const cleanNatId = (nationalId || "").trim();
   const cleanAddress = (address || "").trim();
   const cleanGroup = (group || "").trim();
-  const cleanPassword = (password || "").trim();
+  let cleanPassword = (password || "").trim();
+  if (!cleanPassword && cleanPhone) {
+    cleanPassword = cleanPhone;
+  }
 
   const fieldErrors = {};
 

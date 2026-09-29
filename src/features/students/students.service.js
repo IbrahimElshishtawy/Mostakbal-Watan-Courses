@@ -19,7 +19,7 @@ import {
 import { COLLECTIONS, FEATURES } from "../../core/constants.js";
 import { normalizeError, isCloudFunctionUnavailable } from "../../core/errors.js";
 
-function getSecondaryAuth() {
+export function getSecondaryAuth() {
   const secondaryAppName = "StudentCreationSecondaryApp";
   const existingApp = getApps().find((a) => a.name === secondaryAppName);
   const secApp = existingApp || initializeApp(app.options, secondaryAppName);
@@ -134,7 +134,7 @@ export const StudentsService = {
     try {
       const normalizedPhone = String(phone || "").trim().replace(/\s+/g, "");
       const studentEmail = `${normalizedPhone}@student.local`;
-      const initialPassword = String(password || nationalId || "123456").trim();
+      const initialPassword = String(password || normalizedPhone || nationalId || "123456").trim();
 
       const secAuth = getSecondaryAuth();
       let newUser = null;
@@ -144,9 +144,10 @@ export const StudentsService = {
         newUser = cred.user;
       } catch (authErr) {
         if (authErr.code === "auth/email-already-in-use") {
-          throw new Error(`الطالب صاحب رقم الهاتف (${normalizedPhone}) مسجل بالفعل.`);
+          console.warn(`User ${studentEmail} already in Firebase Auth, updating Firestore records.`);
+        } else {
+          throw authErr;
         }
-        throw authErr;
       } finally {
         try {
           await signOut(secAuth);
