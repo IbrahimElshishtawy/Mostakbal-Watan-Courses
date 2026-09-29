@@ -12,6 +12,7 @@ export const AuthController = {
   async submitLogin(username, password) {
     const errorEl = document.getElementById("loginErrorMsg");
     if (errorEl) {
+      errorEl.classList.add("hidden");
       errorEl.classList.add("d-none");
       errorEl.textContent = "";
     }
@@ -45,6 +46,7 @@ export const AuthController = {
 
       if (errorEl) {
         errorEl.textContent = err.message;
+        errorEl.classList.remove("hidden");
         errorEl.classList.remove("d-none");
       }
       showToast(err.message, "error");

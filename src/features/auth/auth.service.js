@@ -61,6 +61,8 @@ export const AuthService = {
               { email: `${normalized}@student.local`, pass: cleanPass },
               // If password differs from phone, try phone number as password too
               ...(cleanPass !== normalized ? [{ email: `${normalized}@student.local`, pass: normalized }] : []),
+              // Try legacy default password for accounts created before this update
+              { email: `${normalized}@student.local`, pass: "123456" },
               { email: `${normalized}@admin.local`, pass: cleanPass },
               { email: `${normalized}@system.local`, pass: cleanPass }
             ]
@@ -75,39 +77,18 @@ export const AuthService = {
           try {
             userCredential = await signInWithEmailAndPassword(auth, item.email, item.pass);
             targetEmail = item.email;
+            // If logged in using legacy password, silently update Auth password to phone number!
+            if (isPhone && item.pass === "123456" && userCredential?.user) {
+              import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js").then(({ updatePassword }) => {
+                updatePassword(userCredential.user, normalized).catch(() => {});
+              });
+            }
             break;
           } catch (err) {
             lastError = err;
             if (err.code === "auth/too-many-requests") {
               break;
             }
-          }
-        }
-
-        // If not authenticated yet and it's a phone number, check Firestore for on-the-fly Auth sync!
-        if (!userCredential && isPhone) {
-          try {
-            const studentDoc = await StudentsService.getStudentByPhone(normalized);
-            if (studentDoc) {
-              const expectedPass = String(studentDoc.password || studentDoc.pass || normalized).trim();
-              if (cleanPass === normalized || cleanPass === expectedPass || !password) {
-                // Ensure Auth account exists
-                try {
-                  const secAuth = getSecondaryAuth();
-                  await createUserWithEmailAndPassword(secAuth, `${normalized}@student.local`, expectedPass);
-                  await signOut(secAuth);
-                } catch (_) {}
-
-                try {
-                  userCredential = await signInWithEmailAndPassword(auth, `${normalized}@student.local`, expectedPass);
-                  targetEmail = `${normalized}@student.local`;
-                } catch (retryErr) {
-                  lastError = retryErr;
-                }
-              }
-            }
-          } catch (lookupErr) {
-            console.warn("Firestore student auto-provisioning check:", lookupErr);
           }
         }
 

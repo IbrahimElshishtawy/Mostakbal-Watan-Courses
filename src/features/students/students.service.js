@@ -144,7 +144,22 @@ export const StudentsService = {
         newUser = cred.user;
       } catch (authErr) {
         if (authErr.code === "auth/email-already-in-use") {
-          console.warn(`User ${studentEmail} already in Firebase Auth, updating Firestore records.`);
+          console.warn(`User ${studentEmail} already in Firebase Auth, synchronizing credentials.`);
+          try {
+            for (const tryPass of [initialPassword, normalizedPhone, "123456"]) {
+              try {
+                const cred = await signInWithEmailAndPassword(secAuth, studentEmail, tryPass);
+                newUser = cred.user;
+                if (initialPassword && tryPass !== initialPassword) {
+                  const { updatePassword } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+                  await updatePassword(cred.user, initialPassword);
+                }
+                break;
+              } catch (_) {}
+            }
+          } catch (syncErr) {
+            console.warn("Secondary auth re-auth sync warning:", syncErr);
+          }
         } else {
           throw authErr;
         }
