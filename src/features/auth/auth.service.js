@@ -1,9 +1,9 @@
-// src/features/auth/auth.service.js
 import { auth } from "../../core/firebase.js";
-import { signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { appStore } from "../../core/store.js";
 import { ROLES } from "../../core/constants.js";
 import { normalizeError, AuthError } from "../../core/errors.js";
+import { StudentsService, getSecondaryAuth } from "../students/students.service.js";
 
 export const AuthService = {
   /**
@@ -11,10 +11,40 @@ export const AuthService = {
    */
   async login(username, password) {
     const cleanUser = (username || "").trim();
-    const cleanPass = (password || "").trim();
+    let cleanPass = (password || "").trim();
 
-    if (!cleanUser || !cleanPass) {
-      throw new AuthError("يرجى إدخال اسم المستخدم وكلمة المرور.");
+    if (!cleanUser) {
+      throw new AuthError("يرجى إدخال اسم المستخدم أو رقم الهاتف.");
+    }
+
+    // Convert Arabic-Indic digits to standard Latin digits and remove spaces/dashes
+    let normalized = cleanUser
+      .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+      .replace(/[\s\-_]/g, "");
+
+    // Normalize Egyptian phone prefixes (+20, 0020, 201...) to 01...
+    if (normalized.startsWith("+20")) {
+      normalized = "0" + normalized.slice(3);
+    } else if (normalized.startsWith("0020")) {
+      normalized = "0" + normalized.slice(4);
+    } else if (normalized.startsWith("201") && normalized.length === 12) {
+      normalized = "0" + normalized.slice(2);
+    }
+
+    const isPhone = /^01[0125][0-9]{8}$/.test(normalized) || /^[0-9]{8,15}$/.test(normalized);
+
+    // If password was not entered and username is a phone number, default password to phone number!
+    if (!cleanPass && isPhone) {
+      cleanPass = normalized;
+    }
+
+    // Also normalize Arabic-Indic digits in password if present
+    if (cleanPass) {
+      cleanPass = cleanPass.replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).trim();
+    }
+
+    if (!cleanPass) {
+      throw new AuthError("يرجى إدخال كلمة المرور أو رقم الهاتف.");
     }
 
     let userCredential = null;
@@ -26,46 +56,58 @@ export const AuthService = {
         targetEmail = cleanUser.replace(/\s+/g, "");
         userCredential = await signInWithEmailAndPassword(auth, targetEmail, cleanPass);
       } else {
-        // Convert Arabic-Indic digits to standard Latin digits and remove spaces/dashes
-        let normalized = cleanUser
-          .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
-          .replace(/[\s\-_]/g, "");
-
-        // Normalize Egyptian phone prefixes (+20, 0020, 201...) to 01...
-        if (normalized.startsWith("+20")) {
-          normalized = "0" + normalized.slice(3);
-        } else if (normalized.startsWith("0020")) {
-          normalized = "0" + normalized.slice(4);
-        } else if (normalized.startsWith("201") && normalized.length === 12) {
-          normalized = "0" + normalized.slice(2);
-        }
-
-        const isPhone = /^01[0125][0-9]{8}$/.test(normalized) || /^[0-9]{8,15}$/.test(normalized);
-
-        // Prioritize @student.local if input is a phone number to minimize latency and prevent rate-limits
         const attempts = isPhone
           ? [
-              `${normalized}@student.local`,
-              `${normalized}@admin.local`,
-              `${normalized}@system.local`
+              { email: `${normalized}@student.local`, pass: cleanPass },
+              // If password differs from phone, try phone number as password too
+              ...(cleanPass !== normalized ? [{ email: `${normalized}@student.local`, pass: normalized }] : []),
+              { email: `${normalized}@admin.local`, pass: cleanPass },
+              { email: `${normalized}@system.local`, pass: cleanPass }
             ]
           : [
-              `${normalized}@admin.local`,
-              `${normalized}@system.local`,
-              `${normalized}@student.local`
+              { email: `${normalized}@admin.local`, pass: cleanPass },
+              { email: `${normalized}@system.local`, pass: cleanPass },
+              { email: `${normalized}@student.local`, pass: cleanPass }
             ];
 
         let lastError = null;
-        for (const email of attempts) {
+        for (const item of attempts) {
           try {
-            userCredential = await signInWithEmailAndPassword(auth, email, cleanPass);
-            targetEmail = email;
+            userCredential = await signInWithEmailAndPassword(auth, item.email, item.pass);
+            targetEmail = item.email;
             break;
           } catch (err) {
             lastError = err;
             if (err.code === "auth/too-many-requests") {
               break;
             }
+          }
+        }
+
+        // If not authenticated yet and it's a phone number, check Firestore for on-the-fly Auth sync!
+        if (!userCredential && isPhone) {
+          try {
+            const studentDoc = await StudentsService.getStudentByPhone(normalized);
+            if (studentDoc) {
+              const expectedPass = String(studentDoc.password || studentDoc.pass || normalized).trim();
+              if (cleanPass === normalized || cleanPass === expectedPass || !password) {
+                // Ensure Auth account exists
+                try {
+                  const secAuth = getSecondaryAuth();
+                  await createUserWithEmailAndPassword(secAuth, `${normalized}@student.local`, expectedPass);
+                  await signOut(secAuth);
+                } catch (_) {}
+
+                try {
+                  userCredential = await signInWithEmailAndPassword(auth, `${normalized}@student.local`, expectedPass);
+                  targetEmail = `${normalized}@student.local`;
+                } catch (retryErr) {
+                  lastError = retryErr;
+                }
+              }
+            }
+          } catch (lookupErr) {
+            console.warn("Firestore student auto-provisioning check:", lookupErr);
           }
         }
 
