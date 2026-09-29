@@ -1,12 +1,13 @@
 // src/shared/validators/student.validator.js
 import { ValidationError } from "../../core/errors.js";
 
-export function validateStudentData({ name, phone, nationalId, address, group }) {
+export function validateStudentData({ name, phone, nationalId, address, group, password }) {
   const cleanName = (name || "").trim();
   const cleanPhone = (phone || "").trim().replace(/\s+/g, "");
   const cleanNatId = (nationalId || "").trim();
   const cleanAddress = (address || "").trim();
   const cleanGroup = (group || "").trim();
+  const cleanPassword = (password || "").trim();
 
   const fieldErrors = {};
 
@@ -22,6 +23,10 @@ export function validateStudentData({ name, phone, nationalId, address, group })
     fieldErrors.group = "يرجى اختيار المجموعة الدراسية للطالب.";
   }
 
+  if (cleanPassword && cleanPassword.length < 6) {
+    fieldErrors.password = "كلمة المرور يجب ألا تقل عن 6 أحرف أو أرقام.";
+  }
+
   if (Object.keys(fieldErrors).length > 0) {
     throw new ValidationError("يرجى مراجعة بيانات الطالب والتأكد من الحقول المطلوبة.", fieldErrors);
   }
@@ -31,7 +36,8 @@ export function validateStudentData({ name, phone, nationalId, address, group })
     phone: cleanPhone,
     nationalId: cleanNatId,
     address: cleanAddress,
-    group: cleanGroup
+    group: cleanGroup,
+    password: cleanPassword
   };
 }
 

@@ -762,18 +762,18 @@
 
       <form id="loginForm" class="flex flex-col gap-3.5 sm:gap-4" novalidate>
         <div class="flex flex-col gap-1.5">
-          <label for="loginUsername" class="text-xs sm:text-sm font-bold text-slate-300">اسم المستخدم أو كود الطالب</label>
-          <input id="loginUsername" name="username" class="w-full px-3.5 py-2.5 sm:py-3 min-h-[44px] rounded-xl bg-slate-950 border border-slate-800 text-white placeholder:text-slate-600 focus:outline-none focus:border-sky-500 text-xs sm:text-sm font-mono transition-colors"
-                 placeholder="مثال: MW-2026-042 أو رقم الهاتف" required type="text" autocomplete="username" />
+          <label for="loginUsername" class="text-xs sm:text-sm font-bold text-slate-200">اسم المستخدم أو كود الطالب / رقم الهاتف *</label>
+          <input id="loginUsername" name="username" class="w-full px-4 py-3 min-h-[46px] rounded-xl bg-slate-900 border-2 border-slate-600 text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 text-xs sm:text-sm font-mono transition-colors shadow-inner"
+                 placeholder="مثال: 010xxxxxxxx أو كود الطالب" required type="text" autocomplete="username" />
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label for="loginPassword" class="text-xs sm:text-sm font-bold text-slate-300">كلمة المرور</label>
+          <label for="loginPassword" class="text-xs sm:text-sm font-bold text-slate-200">كلمة المرور *</label>
           <div class="relative">
-            <input id="loginPassword" name="password" class="w-full px-3.5 py-2.5 sm:py-3 min-h-[44px] rounded-xl bg-slate-950 border border-slate-800 text-white placeholder:text-slate-600 focus:outline-none focus:border-sky-500 text-xs sm:text-sm font-mono transition-colors pr-3 pl-10"
+            <input id="loginPassword" name="password" class="w-full px-4 py-3 min-h-[46px] rounded-xl bg-slate-900 border-2 border-slate-600 text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 text-xs sm:text-sm font-mono transition-colors pr-4 pl-12 shadow-inner"
                    placeholder="••••••••" required type="password" autocomplete="current-password" />
-            <button id="passwordToggle" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1 min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer" onclick="togglePassword()" type="button" aria-label="إظهار كلمة المرور">
-              <span id="passwordToggleIcon" class="material-symbols-outlined text-[19px]">visibility</span>
+            <button id="passwordToggle" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-sky-400 p-1.5 min-h-[36px] min-w-[36px] rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center cursor-pointer transition-colors" onclick="togglePassword()" type="button" aria-label="إظهار كلمة المرور">
+              <span id="passwordToggleIcon" class="material-symbols-outlined text-[20px]">visibility</span>
             </button>
           </div>
         </div>

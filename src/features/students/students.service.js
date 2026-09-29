@@ -115,7 +115,7 @@ export const StudentsService = {
    * Creates a new student via Cloud Function with auto Auth user generation,
    * and provides a resilient direct secondary Auth + Firestore fallback.
    */
-  async createStudent({ name, phone, nationalId, address, group }) {
+  async createStudent({ name, phone, nationalId, address, group, password }) {
     if (FEATURES.USE_CLOUD_FUNCTIONS) {
       try {
         return await callApi("createStudent", {
@@ -123,7 +123,8 @@ export const StudentsService = {
           phone,
           nationalId,
           address,
-          group
+          group,
+          password
         });
       } catch (err) {
         console.warn("Cloud function createStudent unavailable, executing direct secondary Auth fallback:", err?.message || err);
@@ -133,7 +134,7 @@ export const StudentsService = {
     try {
       const normalizedPhone = String(phone || "").trim().replace(/\s+/g, "");
       const studentEmail = `${normalizedPhone}@student.local`;
-      const initialPassword = String(nationalId || "123456").trim();
+      const initialPassword = String(password || nationalId || "123456").trim();
 
       const secAuth = getSecondaryAuth();
       let newUser = null;
@@ -160,6 +161,8 @@ export const StudentsService = {
         nationalId: (nationalId || "").trim(),
         address: (address || "").trim(),
         group: group || "ALL",
+        pass: initialPassword,
+        password: initialPassword,
         active: true,
         authUid: studentUid,
         role: "student",
@@ -215,13 +218,29 @@ export const StudentsService = {
     try {
       const studentRef = doc(db, COLLECTIONS.STUDENTS, studentUid);
       const studentSnap = await getDoc(studentRef);
-      const passToSet = newPassword || studentSnap.data()?.nationalId || "123456";
+      const passToSet = String(newPassword || studentSnap.data()?.nationalId || "123456").trim();
 
-      await updateDoc(studentRef, {
+      const updateData = {
         pass: passToSet,
+        password: passToSet,
         nationalId: passToSet,
         updatedAt: serverTimestamp()
-      });
+      };
+
+      if (studentSnap.exists()) {
+        await updateDoc(studentRef, updateData);
+      } else {
+        await setDoc(studentRef, updateData, { merge: true });
+      }
+
+      // If phone is available and different, also sync to phone-keyed document
+      const sData = studentSnap.exists() ? (studentSnap.data() || {}) : {};
+      const phone = sData.phone || sData.studentPhone;
+      if (phone && phone !== studentUid) {
+        try {
+          await setDoc(doc(db, COLLECTIONS.STUDENTS, phone), updateData, { merge: true });
+        } catch (_) {}
+      }
 
       return {
         success: true,

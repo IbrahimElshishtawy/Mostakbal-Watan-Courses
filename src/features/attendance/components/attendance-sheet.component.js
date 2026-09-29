@@ -26,69 +26,8 @@ export function renderAttendanceManagementView({
   const currentDate = !isNewSession ? (selectedSession?.date || selectedSession?.sessionDate || today) : today;
   const currentGroup = !isNewSession ? (selectedSession?.group || "group_sun_wed") : "group_sun_wed";
 
-  // Authoritative student roster list fallback matching Image 2.html exactly
-  const displayStudents = students.length > 0 ? students : [
-    {
-      id: "STU-2026-001",
-      studentCode: "STU-2026-001",
-      name: "طالب تجريبي (مستقبل وطن)",
-      track: "مسار: بايثون الأساسي",
-      attendanceRate: "100%",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      phone: "01012345678",
-      avatarLetter: "ط",
-      avatarBg: "bg-brand-500/10 border-brand-500/20 text-brand-400",
-      defaultStatus: "present"
-    },
-    {
-      id: "STU-2026-002",
-      studentCode: "STU-2026-002",
-      name: "محمد علي حسن الشناوي",
-      track: "مسار: بايثون الأساسي",
-      attendanceRate: "95%",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      phone: "01098765432",
-      avatarLetter: "م",
-      avatarBg: "bg-purple-500/10 border-purple-500/20 text-purple-400",
-      defaultStatus: "present"
-    },
-    {
-      id: "STU-2026-003",
-      studentCode: "STU-2026-003",
-      name: "أحمد إبراهيم السيد مرسي",
-      track: "مسار: بايثون الأساسي",
-      attendanceRate: "82%",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      phone: "01155443322",
-      avatarLetter: "أ",
-      avatarBg: "bg-rose-500/10 border-rose-500/20 text-rose-400",
-      defaultStatus: "absent"
-    },
-    {
-      id: "STU-2026-004",
-      studentCode: "STU-2026-004",
-      name: "ياسمين خالد عبد الله",
-      track: "مسار: بايثون الأساسي",
-      attendanceRate: "100%",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      phone: "01234567890",
-      avatarLetter: "ي",
-      avatarBg: "bg-pink-500/10 border-pink-500/20 text-pink-400",
-      defaultStatus: "present"
-    },
-    {
-      id: "STU-2026-005",
-      studentCode: "STU-2026-005",
-      name: "مصطفى محمود سالم بدر",
-      track: "مسار: بايثون الأساسي",
-      attendanceRate: "88%",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      phone: "01066778899",
-      avatarLetter: "م",
-      avatarBg: "bg-teal-500/10 border-teal-500/20 text-teal-400",
-      defaultStatus: "excused"
-    }
-  ];
+  // Authoritative student roster list from Firestore
+  const displayStudents = Array.isArray(students) ? students : [];
 
   // Calculate live initial counts
   let presentCount = 0;
@@ -96,11 +35,15 @@ export function renderAttendanceManagementView({
   let excusedCount = 0;
 
   displayStudents.forEach((s) => {
-    const status = sessionRecords.get(s.id) || s.defaultStatus || "present";
+    const sId = s.id || s.firestoreId || s.uid;
+    const status = sessionRecords.get(sId) || (isNewSession ? "absent" : "present");
     if (status === "present") presentCount++;
     else if (status === "absent") absentCount++;
     else if (status === "excused") excusedCount++;
   });
+
+  const totalStudents = displayStudents.length;
+  const sessionRate = totalStudents > 0 ? Math.round((presentCount / totalStudents) * 100) : 0;
 
   return `
     <div class="space-y-6" data-purpose="primary-workspace" dir="rtl">
@@ -129,7 +72,7 @@ export function renderAttendanceManagementView({
         </div>
       </div>
 
-      <!-- BEGIN: StatCardsGrid matching Image 2.html -->
+      <!-- BEGIN: StatCardsGrid with Live Firebase Metrics -->
       <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-purpose="kpi-metrics-overview">
         <!-- Metric 1: Total Enrolled -->
         <div class="glass-panel p-5 rounded-2xl border border-surface-border relative overflow-hidden group hover:border-brand-500/40 transition-all">
@@ -140,29 +83,29 @@ export function renderAttendanceManagementView({
             </div>
           </div>
           <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-extrabold text-white font-mono">342</span>
+            <span class="text-3xl font-extrabold text-white font-mono" id="stat-total-students">${totalStudents}</span>
             <span class="text-xs text-slate-400 font-medium">طالباً مسجلاً</span>
           </div>
           <div class="mt-3 flex items-center gap-2 text-xs text-emerald-400">
-            <i class="fa-solid fa-arrow-trend-up"></i>
-            <span>+12 طالب هذا الأسبوع</span>
+            <i class="fa-solid fa-signal"></i>
+            <span>مزامنة مباشرة مع فايربيز</span>
           </div>
         </div>
 
         <!-- Metric 2: Attendance Rate -->
         <div class="glass-panel p-5 rounded-2xl border border-surface-border relative overflow-hidden group hover:border-emerald-500/40 transition-all">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-slate-400">معدل الحضور التراكمي</span>
+            <span class="text-xs font-semibold text-slate-400">نسبة حضور الجلسة</span>
             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base">
               <i class="fa-solid fa-circle-check"></i>
             </div>
           </div>
           <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-extrabold text-white font-mono">94.8%</span>
-            <span class="text-xs text-emerald-400 font-medium font-mono">ممتاز</span>
+            <span class="text-3xl font-extrabold text-white font-mono" id="stat-attendance-rate">${sessionRate}%</span>
+            <span class="text-xs text-emerald-400 font-medium font-mono">${sessionRate >= 80 ? "ممتاز" : (sessionRate >= 50 ? "متوسط" : "قيد الرصد")}</span>
           </div>
           <div class="mt-3 w-full bg-surface-lowest rounded-full h-1.5 overflow-hidden">
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full" style="width: 94.8%"></div>
+            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full" style="width: ${sessionRate}%"></div>
           </div>
         </div>
 
@@ -175,12 +118,12 @@ export function renderAttendanceManagementView({
             </div>
           </div>
           <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-extrabold text-accent-cyan font-mono" id="stat-present-count">${presentCount || 22}</span>
-            <span class="text-xs text-slate-400 font-medium">من أصل ${displayStudents.length} طالب</span>
+            <span class="text-3xl font-extrabold text-accent-cyan font-mono" id="stat-present-count">${presentCount}</span>
+            <span class="text-xs text-slate-400 font-medium">من أصل ${totalStudents} طالب</span>
           </div>
           <div class="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
             <span class="inline-block w-2 h-2 rounded-full bg-accent-cyan"></span>
-            <span>نسبة حضور الجلسة: 91.6%</span>
+            <span>نسبة الحضور: <strong class="text-accent-cyan">${sessionRate}%</strong></span>
           </div>
         </div>
 
@@ -193,12 +136,12 @@ export function renderAttendanceManagementView({
             </div>
           </div>
           <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-extrabold text-rose-400 font-mono" id="stat-absent-count">${absentCount || 2}</span>
+            <span class="text-3xl font-extrabold text-rose-400 font-mono" id="stat-absent-count">${absentCount}</span>
             <span class="text-xs text-slate-400 font-medium">طلاب متغيبين</span>
           </div>
           <div class="mt-3 flex items-center gap-1.5 text-xs text-rose-400">
-            <i class="fa-solid fa-triangle-exclamation text-[11px]"></i>
-            <span>يتطلب إرسال تنبيه واتساب</span>
+            <i class="fa-solid fa-circle-check text-[11px]"></i>
+            <span>تحديث فوري للسجلات</span>
           </div>
         </div>
       </section>

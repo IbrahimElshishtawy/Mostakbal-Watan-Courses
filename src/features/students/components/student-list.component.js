@@ -18,105 +18,36 @@ export function renderStudentListView({
   totalCount = 0,
   absencesMap = new Map()
 }) {
-  // Rich fallback demo students to guarantee stunning pixel-perfect display matching Image 2
-  const fallbackStudents = [
-    {
-      id: "STU-2026-001",
-      code: "STU-2026-001",
-      name: "طالب تجريبي (مستقبل وطن)",
-      email: "student.demo@watan.gov.eg",
-      track: "مسار بايثون",
-      trackType: "python",
-      phone: "01012345678",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      status: "active",
-      statusLabel: "نشط ومفعل",
-      progress: 100,
-      avatarColor: "#0284c7"
-    },
-    {
-      id: "STU-2026-002",
-      code: "STU-2026-002",
-      name: "محمد علي حسن الشناوي",
-      email: "m.shennawy@gmail.com",
-      track: "تطوير الويب",
-      trackType: "web",
-      phone: "01229876543",
-      group: "مجموعة السبت والثلاثاء | 5:00 - 6:30",
-      status: "active",
-      statusLabel: "نشط ومفعل",
-      progress: 92,
-      avatarColor: "#0d9488"
-    },
-    {
-      id: "STU-2026-003",
-      code: "STU-2026-003",
-      name: "ياسمين خالد عبد الله",
-      email: "yasmine.khaled@outlook.com",
-      track: "علم البيانات",
-      trackType: "data",
-      phone: "01154321987",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      status: "active",
-      statusLabel: "نشط ومفعل",
-      progress: 98,
-      avatarColor: "#7c3aed"
-    },
-    {
-      id: "STU-2026-004",
-      code: "STU-2026-004",
-      name: "أحمد إبراهيم السيد مرسي",
-      email: "ahmed.morsi@gmail.com",
-      track: "مسار بايثون",
-      trackType: "python",
-      phone: "01099887766",
-      group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-      status: "pending",
-      statusLabel: "في انتظار التأكيد",
-      progress: 78,
-      avatarColor: "#d97706"
-    },
-    {
-      id: "STU-2026-005",
-      code: "STU-2026-005",
-      name: "مصطفى محمود سالم بدر",
-      email: "mostafa.badr@gmail.com",
-      track: "تطوير الويب",
-      trackType: "web",
-      phone: "01552233441",
-      group: "مجموعة السبت والثلاثاء | 5:00 - 6:30",
-      status: "active",
-      statusLabel: "نشط ومفعل",
-      progress: 86,
-      avatarColor: "#0891b2"
-    }
-  ];
-
-  const displayList = students.length > 0 ? students.map((s, idx) => {
-    const rawTrack = s.track || (idx % 3 === 0 ? "مسار بايثون" : idx % 3 === 1 ? "تطوير الويب" : "علم البيانات");
+  const realStudents = Array.isArray(students) ? students : [];
+  const displayList = realStudents.map((s, idx) => {
+    const rawTrack = s.track || (s.group?.includes("بايثون") ? "مسار بايثون" : s.group?.includes("ويب") ? "تطوير الويب" : "علم البيانات والذكاء الاصطناعي");
     const trackType = rawTrack.includes("ويب") ? "web" : rawTrack.includes("بيانات") ? "data" : "python";
-    const status = s.status || (idx === 3 ? "pending" : "active");
+    const status = s.active !== false && s.status !== "inactive" ? "active" : "pending";
     const statusLabel = status === "pending" ? "في انتظار التأكيد" : "نشط ومفعل";
-    const progress = s.progress || (idx === 0 ? 100 : idx === 1 ? 92 : idx === 2 ? 98 : idx === 3 ? 78 : 86);
+    const progress = typeof s.progress === "number" ? s.progress : 100;
     const colors = ["#0284c7", "#0d9488", "#7c3aed", "#d97706", "#0891b2"];
 
     return {
-      id: s.id || s.firestoreId || `STU-${idx + 1}`,
+      id: s.id || s.firestoreId || s.uid || `STU-${idx + 1}`,
       code: s.studentCode || s.code || `STU-2026-00${idx + 1}`,
-      name: s.studentName || s.name || "طالب تجريبي",
-      email: s.studentEmail || s.email || `${(s.studentName || 'student').replace(/\s+/g, '.').toLowerCase()}@watan.gov.eg`,
+      name: s.studentName || s.name || "طالب بدون اسم",
+      email: s.studentEmail || s.email || `${(s.studentPhone || s.phone || "student")}@student.local`,
       track: rawTrack,
       trackType,
-      phone: s.studentPhone || s.phone || "01012345678",
-      group: s.studentGroup || s.group || "مجموعة الأحد والأربعاء | 7:00 - 8:30",
+      phone: s.studentPhone || s.phone || "غير محدد",
+      group: s.studentGroup || s.group || "مجموعة عامة",
       status,
       statusLabel,
       progress,
       avatarColor: colors[idx % colors.length]
     };
-  }) : fallbackStudents;
+  });
 
-  const totalDisplayCount = totalCount > 0 ? totalCount : 342;
+  const totalDisplayCount = realStudents.length;
+  const group1Count = realStudents.filter((s) => (s.group || s.studentGroup || "").includes("الأحد")).length;
+  const group2Count = realStudents.filter((s) => (s.group || s.studentGroup || "").includes("السبت")).length;
+  const activeCount = realStudents.filter((s) => s.active !== false && s.status !== "inactive").length;
+  const activePercent = totalDisplayCount > 0 ? Math.round((activeCount / totalDisplayCount) * 100) : 0;
 
   return `
     <div class="students-dashboard-view" dir="rtl">
@@ -126,7 +57,7 @@ export function renderStudentListView({
           <div>
             <div class="d-inline-flex items-center gap-2 mb-1">
               <span class="admin-nav-badge live" style="font-size: 0.72rem; padding: 0.2rem 0.65rem;">
-                قاعدة بيانات شؤون الطلبة
+                قاعدة بيانات شؤون الطلبة • فايربيز مباشر
               </span>
             </div>
             <h2 class="admin-page-hero-title d-flex items-center gap-2">
@@ -134,7 +65,7 @@ export function renderStudentListView({
               <span style="font-size: 1.3rem;">👥</span>
             </h2>
             <p class="admin-page-hero-subtitle">
-              إضافة وتعديل وحذف الطلاب، البحث والفلترة وتوليد بيانات الدخول ومتابعة مسارات التدريب البرمجي والشهادات التقنية المعتمدة.
+              إضافة وتعديل وحذف الطلاب، تعيين كلمات المرور وتوليد الحسابات ومتابعة مسارات التدريب البرمجي والشهادات التقنية المعتمدة.
             </p>
           </div>
         </div>
@@ -155,18 +86,18 @@ export function renderStudentListView({
         </div>
       </div>
 
-      <!-- 2. 4 Stat Cards Row (Exact Match to Image 2) -->
-      <div class="admin-stats-grid-4">
+      <!-- 2. 4 Stat Cards Row (Live Firebase Counts) -->
+      <div class="admin-stats-grid-4" id="studentStatsBar">
         <!-- Card 1: إجمالي الطلاب المسجلين -->
         <div class="admin-stat-card">
           <div class="admin-stat-card-header">
             <span class="admin-stat-card-label">إجمالي الطلاب المسجلين</span>
             <div class="admin-stat-card-icon cyan">👥</div>
           </div>
-          <div class="admin-stat-card-value">${totalDisplayCount}</div>
+          <div class="admin-stat-card-value font-mono">${totalDisplayCount}</div>
           <div class="admin-stat-card-subtext trend-up">
-            <span aria-hidden="true">↗ +12 أسبوعياً</span>
-            <span style="color: var(--admin-text-muted); margin-inline-start: 4px;">• جميع المجموعات والمسارات</span>
+            <span aria-hidden="true">🟢 قاعدة البيانات الحية</span>
+            <span style="color: var(--admin-text-muted); margin-inline-start: 4px;">• جميع المسارات</span>
           </div>
         </div>
 
@@ -177,11 +108,11 @@ export function renderStudentListView({
             <div class="admin-stat-card-icon blue">📖</div>
           </div>
           <div class="d-flex items-baseline gap-2">
-            <div class="admin-stat-card-value">18</div>
-            <span style="color: var(--admin-text-muted); font-size: 0.9rem;">/ 25 مقعداً</span>
+            <div class="admin-stat-card-value font-mono">${group1Count}</div>
+            <span style="color: var(--admin-text-muted); font-size: 0.9rem;">طالباً مسجلاً</span>
           </div>
           <div class="admin-stat-card-subtext" style="color: #60a5fa;">
-            <span>مسار بايثون والذكاء الاصطناعي • 7:00 - 8:30 م</span>
+            <span>مسار بايثون والذكاء الاصطناعي</span>
           </div>
         </div>
 
@@ -192,26 +123,26 @@ export function renderStudentListView({
             <div class="admin-stat-card-icon green">💻</div>
           </div>
           <div class="d-flex items-baseline gap-2">
-            <div class="admin-stat-card-value">16</div>
-            <span style="color: var(--admin-text-muted); font-size: 0.9rem;">/ 20 مقعداً</span>
+            <div class="admin-stat-card-value font-mono">${group2Count}</div>
+            <span style="color: var(--admin-text-muted); font-size: 0.9rem;">طالباً مسجلاً</span>
           </div>
           <div class="admin-stat-card-subtext" style="color: #34d399;">
-            <span>مسار الويب والتطوير الشامل • 5:00 - 6:30 م</span>
+            <span>مسار الويب والتطوير الشامل</span>
           </div>
         </div>
 
-        <!-- Card 4: نسبة الحضور والإنجاز العام -->
+        <!-- Card 4: الحسابات المفعلة -->
         <div class="admin-stat-card">
           <div class="admin-stat-card-header">
-            <span class="admin-stat-card-label">نسبة الحضور والإنجاز العام</span>
+            <span class="admin-stat-card-label">الحسابات النشطة والمفعلة</span>
             <div class="admin-stat-card-icon purple">✔</div>
           </div>
           <div class="d-flex items-baseline gap-2">
-            <div class="admin-stat-card-value" style="color: #c084fc;">96.4%</div>
-            <span style="color: #34d399; font-weight: 800; font-size: 0.85rem;">ممتاز</span>
+            <div class="admin-stat-card-value font-mono" style="color: #c084fc;">${activeCount}</div>
+            <span style="color: #34d399; font-weight: 800; font-size: 0.85rem;">${activePercent}%</span>
           </div>
           <div class="admin-progress-bar-container">
-            <div class="admin-progress-bar-fill purple-cyan" style="width: 96.4%;"></div>
+            <div class="admin-progress-bar-fill purple-cyan" style="width: ${activePercent}%;"></div>
           </div>
         </div>
       </div>
@@ -292,7 +223,17 @@ export function renderStudentListView({
               </tr>
             </thead>
             <tbody id="studentsTbody">
-              ${displayList.map((s, idx) => {
+              ${displayList.length === 0 ? `
+                <tr>
+                  <td colspan="9" class="py-12 text-center" style="padding: 3rem 1rem;">
+                    <div class="d-flex flex-col items-center justify-center gap-2">
+                      <span style="font-size: 2.5rem;">👥</span>
+                      <strong class="text-white" style="font-size: 1rem;">لا يوجد طلاب مسجلون حالياً في قاعدة البيانات</strong>
+                      <p style="color: var(--admin-text-muted); font-size: 0.82rem; margin: 0;">اضغط على زر "➕ إضافة طالب جديد" لتسجيل أول طالب وتعيين كلمة المرور الخاصة به فوراً.</p>
+                    </div>
+                  </td>
+                </tr>
+              ` : displayList.map((s, idx) => {
                 const firstChar = s.name.trim().charAt(0) || "ط";
                 const isPending = s.status === "pending";
 
@@ -353,15 +294,41 @@ export function renderStudentListView({
                       </div>
                     </td>
                     <td style="text-align: center;">
-                      <button
-                        type="button"
-                        class="admin-action-icon-btn"
-                        data-view-student="${escapeHtml(s.id)}"
-                        title="عرض الملف الكامل للطالب"
-                        aria-label="عرض تفاصيل ${escapeHtml(s.name)}"
-                      >
-                        👁️
-                      </button>
+                      <div class="d-flex items-center justify-center gap-1.5">
+                        <button
+                          type="button"
+                          class="admin-action-icon-btn"
+                          data-view-student="${escapeHtml(s.id)}"
+                          title="عرض الملف الكامل للطالب"
+                          aria-label="عرض تفاصيل ${escapeHtml(s.name)}"
+                        >
+                          👁️
+                        </button>
+                        <button
+                          type="button"
+                          class="admin-action-icon-btn"
+                          style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);"
+                          data-reset-pass="${escapeHtml(s.id)}"
+                          data-student-name="${escapeHtml(s.name)}"
+                          title="تعيين كلمة المرور للطالب"
+                          aria-label="تعيين كلمة مرور ${escapeHtml(s.name)}"
+                        >
+                          🔑
+                        </button>
+                        ${canDelete ? `
+                          <button
+                            type="button"
+                            class="admin-action-icon-btn"
+                            style="color: #f43f5e; border-color: rgba(244, 63, 94, 0.3);"
+                            data-delete-student="${escapeHtml(s.id)}"
+                            data-student-name="${escapeHtml(s.name)}"
+                            title="حذف الطالب نهائياً"
+                            aria-label="حذف ${escapeHtml(s.name)}"
+                          >
+                            🗑️
+                          </button>
+                        ` : ""}
+                      </div>
                     </td>
                   </tr>
                 `;
@@ -373,7 +340,7 @@ export function renderStudentListView({
         <!-- 5. Table Footer Summary & Pagination -->
         <div class="admin-pagination-bar">
           <div style="font-size: 0.78rem; color: #94a3b8;">
-            عرض <strong style="color: #fff;">1 إلى 5</strong> من إجمالي <strong style="color: #fff;">${totalDisplayCount}</strong> طالباً مسجلا
+            عرض <strong style="color: #fff;">1 إلى ${displayList.length}</strong> من إجمالي <strong style="color: #fff;">${totalDisplayCount}</strong> طالباً مسجلاً
           </div>
 
           <div class="admin-pagination-btns">

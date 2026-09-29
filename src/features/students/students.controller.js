@@ -469,20 +469,21 @@ export const StudentsController = {
         e.preventDefault();
         const name = document.getElementById("newStudentName")?.value;
         const phone = document.getElementById("newStudentPhone")?.value;
+        const password = document.getElementById("newStudentPassword")?.value;
         const nationalId = document.getElementById("newStudentNationalId")?.value;
         const address = document.getElementById("newStudentAddress")?.value;
         const group = document.getElementById("newStudentGroup")?.value;
 
         const submitBtn = document.getElementById("submitAddStudentBtn");
         try {
-          const validated = validateStudentData({ name, phone, nationalId, address, group });
+          const validated = validateStudentData({ name, phone, nationalId, address, group, password });
           if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.innerText = "جاري الحفظ والتسجيل... ⏳";
           }
 
           await StudentsService.createStudent(validated);
-          showToast("تم إنشاء حساب الطالب بنجاح ✅", "success");
+          showToast("تم إنشاء حساب الطالب وتعيين كلمة المرور بنجاح ✅", "success");
           closeModal("addStudentModal");
           addForm.reset();
 

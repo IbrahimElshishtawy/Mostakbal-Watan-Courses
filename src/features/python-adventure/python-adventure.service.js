@@ -579,11 +579,14 @@ export const PythonAdventureService = {
 
     const totalCurriculumLevels = Object.keys(CHALLENGES_CLIENT_DATA).length || 24;
 
-    return students.map((std, idx) => {
-      const prg = progressMap[std.id] || progressMap[std.uid] || {};
-      const completedCount = prg.stats?.totalCompleted ?? Math.max(2, 16 - (idx * 2));
-      const percent = Math.min(100, Math.round((completedCount / totalCurriculumLevels) * 100));
-      const xp = prg.xp ?? (completedCount * 75 + (idx === 0 ? 150 : 50));
+    return students.map((std) => {
+      const sId = std.id || std.uid || std.firestoreId;
+      const sPhone = std.phone || std.studentPhone;
+      const prg = progressMap[sId] || (sPhone ? progressMap[sPhone] : null) || {};
+
+      const completedCount = prg.stats?.totalCompleted ?? (prg.completedChallenges ? Object.keys(prg.completedChallenges).length : 0);
+      const percent = totalCurriculumLevels > 0 ? Math.min(100, Math.round((completedCount / totalCurriculumLevels) * 100)) : 0;
+      const xp = prg.xp ?? (completedCount * 100);
       const level = prg.level ?? (Math.floor(completedCount / 3) + 1);
 
       let currentWorld = "وادي البدايات";
@@ -599,7 +602,16 @@ export const PythonAdventureService = {
         currentWorldIcon = "🕯️";
       }
 
-      const badgesCount = (prg.achievements?.length) ?? Math.max(1, Math.floor(completedCount / 2));
+      const badgesCount = (prg.achievements?.length) ?? (prg.badges?.length) ?? (completedCount > 0 ? Math.floor(completedCount / 3) : 0);
+
+      let lastActive = "غير نشط";
+      if (prg.lastActiveAt) {
+        lastActive = typeof prg.lastActiveAt.toDate === "function"
+          ? prg.lastActiveAt.toDate().toLocaleDateString("ar-EG")
+          : new Date(prg.lastActiveAt).toLocaleDateString("ar-EG");
+      } else if (completedCount > 0) {
+        lastActive = "مكتمل مؤخراً";
+      }
 
       return {
         ...std,
@@ -611,7 +623,7 @@ export const PythonAdventureService = {
         currentWorld,
         currentWorldIcon,
         badgesCount,
-        lastActive: idx === 0 ? "نشط الآن" : (idx < 3 ? "منذ ساعتين" : `منذ ${idx} أيام`),
+        lastActive,
         solvedChallenges: prg.completedChallenges || {}
       };
     });

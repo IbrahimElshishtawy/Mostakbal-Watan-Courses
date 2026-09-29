@@ -431,7 +431,11 @@ export const AssignmentController = {
     setHtml(container, renderLoader({ text: "جاري تحميل التاسكات والواجبات... ⏳" }));
 
     try {
-      const assignments = await AssignmentService.getAllAssignments();
+      const [assignments, students] = await Promise.all([
+        AssignmentService.getAllAssignments(),
+        import("../students/students.service.js").then((m) => m.StudentsService.getAllStudents()).catch(() => [])
+      ]);
+      this._totalStudentsCount = students.length;
       assignmentState.set("teacherAssignments", assignments);
       this.renderTeacherDashboard(container);
     } catch (err) {
@@ -629,7 +633,7 @@ export const AssignmentController = {
             </div>
             <div class="mt-4 flex items-center gap-1.5 text-on-surface-variant text-xs">
               <span class="material-symbols-outlined text-[16px] text-secondary">lan</span>
-              <span>40 طالباً مسجلين بنظام المتابعة الآلي</span>
+              <span>${this._totalStudentsCount > 0 ? `${this._totalStudentsCount} طالباً مسجلين بنظام المتابعة الآلي` : "متابعة حية من قاعدة بيانات الطلاب"}</span>
             </div>
           </div>
         </div>
@@ -841,7 +845,7 @@ export const AssignmentController = {
 
       listHtml = `
         <div class="${containerClass}" dir="rtl">
-          ${filtered.map((a, idx) => renderTeacherAssignmentCard({ assignment: a, submissionsCount: idx === 0 ? 18 : (idx === 1 ? 14 : 6) })).join("")}
+          ${filtered.map((a) => renderTeacherAssignmentCard({ assignment: a, submissionsCount: a.submissionsCount || 0, totalStudents: this._totalStudentsCount || 0 })).join("")}
         </div>
       `;
     }

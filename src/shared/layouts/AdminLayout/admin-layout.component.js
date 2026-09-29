@@ -80,7 +80,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
                 <i class="fa-solid fa-users-gear w-4 text-center text-slate-400 group-hover:text-cyan-400"></i>
                 <span>إدارة شؤون الطلاب</span>
               </div>
-              <span class="text-[10px] bg-slate-800 text-slate-300 font-mono px-2 py-0.5 rounded-full border border-slate-700" id="adminNavStudentsBadge">342</span>
+              <span class="text-[10px] bg-slate-800 text-slate-300 font-mono px-2 py-0.5 rounded-full border border-slate-700" id="adminNavStudentsBadge">...</span>
             </button>
 
             <!-- Tab 3: Exams -->
@@ -300,11 +300,23 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
     }
   });
 
+  // Automatically sync live student count from Firestore
+  const updateStudentBadge = (count) => {
+    const badge = document.getElementById("adminNavStudentsBadge");
+    if (badge) badge.textContent = String(count);
+  };
+
+  import("../../../features/students/students.service.js")
+    .then((m) => m.StudentsService.getAllStudents())
+    .then((students) => updateStudentBadge(students.length))
+    .catch(() => {});
+
   // Set default active tab
   setActiveTab("attendance");
 
   return {
     switchTab: setActiveTab,
+    updateStudentCount: updateStudentBadge,
     updateProfile({ name, email }) {
       const nameEl = document.getElementById("adminSidebarName");
       const emailEl = document.getElementById("adminSidebarEmail");
