@@ -2,254 +2,335 @@
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 
 /**
- * Returns HTML string for student profile view strictly matching Image 8.png.
+ * Returns HTML string for the student profile view matching Image 8.png
+ * (Excluding the Hero Welcome Banner and Password Change Card per user request).
  */
 export function renderProfileCard({ student }) {
-  const name = (student?.name && student?.name !== "طالب مسجل")
-    ? student.name
-    : (student?.studentName && student?.studentName !== "طالب مسجل"
-        ? student.studentName
-        : "إبراهيم خالد محمد السيد");
+  const rawName = student?.studentName || student?.name || "إبراهيم خالد مصطفى";
+  const name = (rawName === "طالب مسجل" || !rawName.trim()) ? "إبراهيم خالد مصطفى" : rawName;
+  const safeName = escapeHtml(name);
 
-  const phone = student?.studentPhone || student?.phone || "01012345678";
-  const natId = student?.studentNationalId || student?.nationalId || "30209151600123";
+  const phone = student?.studentPhone || student?.phone || "01223070571";
+  const safePhone = escapeHtml(phone);
+
+  const natId = student?.studentNationalId || student?.nationalId || "30310291601654";
+  const safeNatId = escapeHtml(natId);
+
   const address = student?.studentAddress || student?.address || "المحلة الكبرى - محافظة الغربية";
-  const group = (student?.group && student?.group !== "ALL")
-    ? student.group
-    : (student?.studentGroup && student?.studentGroup !== "ALL"
-        ? student.studentGroup
-        : "المجموعة 01 (السبت والثلاثاء - 5:00 م)");
+  const safeAddress = escapeHtml(address);
 
-  const studentIdCode = student?.studentCode || student?.idCode || "MW-STU-2026-0842";
-  const initial = name.trim().charAt(0) || "إ";
+  const studentCode = student?.studentCode || student?.idCode || "STU-2026-8842";
+  const initial = safeName.trim().charAt(0) || "إ";
 
   return `
     <div class="student-profile-page-wrapper" dir="rtl">
-      <!-- 1. Header Greeting Banner (Image 8.png) -->
-      <div class="profile-greeting-banner mb-6">
-        <div>
-          <h1 class="profile-greeting-title">الملف التعريفي والبيانات الأكاديمية للطالب 👤</h1>
-          <p class="profile-greeting-subtitle">إدارة بياناتك المسجلة، المجموعة التدريبية، وبطاقة الهوية الذكية.</p>
+      <!-- 1. Top Header Bar -->
+      <header class="pf-topbar">
+        <nav aria-label="Breadcrumb" class="pf-breadcrumbs">
+          <span class="pf-crumb-root">منصة مستقبل وطن</span>
+          <span class="pf-crumb-sep">/</span>
+          <span class="pf-crumb-mid">بوابة الطالب</span>
+          <span class="pf-crumb-sep">/</span>
+          <span class="pf-crumb-active">الملف التعريفي الأكاديمي</span>
+        </nav>
+
+        <div class="pf-topbar-controls">
+          <div class="pf-season-pill font-mono">
+            <i class="fa-regular fa-calendar-check text-brand-cyan"></i>
+            <span>الموسم : 2026 / 2027</span>
+          </div>
+
+          <div class="pf-ssl-pill font-mono">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Bit SSL Encrypted-256</span>
+          </div>
+
+          <button type="button" class="pf-icon-btn" id="pfNotificationBtn" title="الإشعارات" aria-label="الإشعارات">
+            <i class="fa-regular fa-bell"></i>
+            <span class="pf-bell-dot"></span>
+          </button>
+
+          <button type="button" class="pf-btn-guide" id="pfGuideBtn">
+            <i class="fa-regular fa-circle-question text-cyan-400"></i>
+            <span>دليل الطالب</span>
+          </button>
         </div>
-      </div>
+      </header>
 
-      <!-- 2. Student Identity Header Card (Image 8.png) -->
-      <div class="card student-identity-header-card mb-6">
-        <div class="identity-header-content">
-          <div class="avatar-lvl-wrap">
-            <div class="student-profile-avatar">
-              <span>${escapeHtml(initial)}</span>
-            </div>
-            <span class="avatar-lvl-badge">LVL 3</span>
-          </div>
-
-          <div class="identity-info-box">
-            <div class="identity-name-row">
-              <h2 class="student-full-name">${escapeHtml(name)}</h2>
-              <span class="student-track-badge">طالب متميز • مسار بايثون وهندسة النظم 🚀</span>
-            </div>
-
-            <!-- Certified Badges Row -->
-            <div class="identity-verification-row">
-              <span class="verify-pill"><span class="check-icon">✓</span> حساب موثق</span>
-              <span class="verify-pill"><span class="check-icon">✓</span> هاتف مؤكد</span>
-              <span class="verify-pill"><span class="check-icon">✓</span> تم اجتياز المتطلبات الأساسية</span>
-            </div>
-
-            <!-- Quick Academic Metrics Badges -->
-            <div class="identity-stats-row">
-              <div class="id-stat-badge">
-                <span class="id-stat-label">حضور المحاضرات:</span>
-                <strong class="id-stat-val text-emerald-400">98%</strong>
-              </div>
-              <div class="id-stat-badge">
-                <span class="id-stat-label">التاسكات المعتمدة:</span>
-                <strong class="id-stat-val text-cyan-400">96.5%</strong>
-              </div>
-              <div class="id-stat-badge">
-                <span class="id-stat-label">الاختبارات:</span>
-                <strong class="id-stat-val text-amber-400">3 / 3 مكتملة</strong>
-              </div>
-              <div class="id-stat-badge">
-                <span class="id-stat-label">الأوسمة:</span>
-                <strong class="id-stat-val text-purple-400">4 شارات</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Two-Column Split Layout (Image 8.png) -->
-      <div class="profile-two-col-grid mb-6">
-        <!-- Left Column: Smart NFC Card & Active Sessions -->
-        <div class="profile-left-col">
-          <!-- NFC Smart Student Card (Image 8.png) -->
-          <div class="card smart-nfc-card p-5 mb-5">
-            <div class="smart-card-top">
-              <div class="smart-card-brand">
-                <span class="brand-sub">حزب مستقبل وطن</span>
-                <strong class="brand-title">بطاقة الطالب الذكية • المنصة الرقمية</strong>
-              </div>
-              <div class="smart-card-chip">
-                <span class="chip-graphic"></span>
-              </div>
-            </div>
-
-            <div class="smart-card-middle">
-              <!-- QR Code Container for NFC simulation -->
-              <div class="smart-card-qr-box">
-                <div class="qr-code-placeholder">
-                  <div class="qr-square top-left"></div>
-                  <div class="qr-square top-right"></div>
-                  <div class="qr-square bottom-left"></div>
-                  <div class="qr-pattern"></div>
-                </div>
-                <small class="qr-label">مسح الكود لتسجيل الحضور الذكي</small>
-              </div>
-
-              <div class="smart-card-details">
-                <span class="detail-label">كود الطالب الأكاديمي</span>
-                <strong class="detail-code font-mono text-cyan-400">${escapeHtml(studentIdCode)}</strong>
-                <span class="detail-group">المجموعة 01 • المحلة الكبرى</span>
-              </div>
-            </div>
-
-            <div class="smart-card-footer">
-              <span>Smart NFC Secured • Delta 2026/2027</span>
-              <span class="contactless-icon">📡</span>
-            </div>
-          </div>
-
-          <!-- Active Login Session Card (Image 8.png) -->
-          <div class="card active-session-card p-5">
-            <div class="d-flex items-center justify-between mb-3">
-              <div class="d-flex items-center gap-2">
-                <span class="session-icon text-cyan-400">💻</span>
-                <h4 class="session-title m-0">جلسة الدخول والأمان</h4>
-              </div>
-              <span class="badge badge-success">نشطة الآن</span>
-            </div>
-
-            <p class="session-desc text-xs text-slate-300 mb-2">
-              الجلسة النشطة: متصفح Chrome على Linux
-            </p>
-            <p class="session-ip text-xs text-slate-400 font-mono mb-4">
-              عنوان IP: 197.38.112.4 (المحلة الكبرى، مصر)
-            </p>
-
-            <div class="security-toggle-row p-3 bg-[#0d131f] border border-[#1e2a3f] rounded-xl mb-4">
-              <div class="toggle-text">
-                <strong class="text-xs text-slate-200">المصادقة الثنائية (2FA)</strong>
-                <small class="text-slate-400 d-block">تأمين الحساب برمز تحقق عبر SMS</small>
-              </div>
-              <span class="badge badge-primary">مفعلة ✓</span>
-            </div>
-
-            <button type="button" class="btn btn-secondary btn-sm w-full" id="logoutOtherDevicesBtn">
-              <span>تسجيل الخروج من كافة الأجهزة الأخرى 🔒</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Right Column: Academic & Personal Data (Image 8.png) -->
-        <div class="profile-right-col">
-          <div class="card academic-details-card p-6">
-            <div class="d-flex items-center justify-between mb-5 border-b border-[#1e2a3f] pb-4">
-              <div>
-                <h3 class="card-title text-base font-bold text-slate-100">البيانات الأكاديمية والشخصية المعتمدة</h3>
-                <p class="card-subtitle text-xs text-slate-400">سجل الطالب الرسمي لدى أمانة التدريب والتثقيف</p>
-              </div>
-              <button type="button" class="btn btn-secondary btn-sm" id="requestProfileEditBtn">
-                <span>طلب تعديل البيانات ✏️</span>
-              </button>
-            </div>
-
-            <!-- Details Rows -->
-            <div class="academic-details-list space-y-4 text-xs">
-              <div class="detail-row">
-                <span class="row-label">المجموعة الدراسية:</span>
-                <strong class="row-val text-amber-400">${escapeHtml(group)}</strong>
-              </div>
-
-              <div class="detail-row">
-                <span class="row-label">رقم الهاتف المسجل:</span>
-                <strong class="row-val font-mono text-cyan-400" dir="ltr">${escapeHtml(phone)} (موثق)</strong>
-              </div>
-
-              <div class="detail-row">
-                <span class="row-label">الرقم القومي:</span>
-                <strong class="row-val font-mono text-slate-200" dir="ltr">${escapeHtml(natId)} (محمي ومطابق)</strong>
-              </div>
-
-              <div class="detail-row">
-                <span class="row-label">العنوان ومحل الإقامة:</span>
-                <strong class="row-val text-slate-300">${escapeHtml(address)}</strong>
-              </div>
-
-              <div class="detail-row">
-                <span class="row-label">المشرف الأكاديمي:</span>
-                <strong class="row-val text-emerald-400">المهندس إبراهيم الششتواي (مدرب ومطور رئيسي)</strong>
-              </div>
-
-              <div class="detail-row">
-                <span class="row-label">رابط GitHub:</span>
-                <strong class="row-val font-mono text-cyan-300" dir="ltr">github.com/ibrahim-student</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. Password Management Card (Image 8.png) -->
-      <div class="card password-mgmt-card p-6 mb-6">
-        <div class="d-flex items-center gap-2 mb-4 border-b border-[#1e2a3f] pb-3">
-          <span class="text-xl">🔐</span>
+      <!-- 2. Section Header Title -->
+      <section class="pf-section-header-row">
+        <div class="pf-section-title-wrap">
+          <i class="fa-solid fa-user-circle text-brand-cyan text-2xl"></i>
           <div>
-            <h3 class="card-title text-base font-bold text-slate-100">إدارة كلمة المرور وحماية الحساب</h3>
-            <p class="card-subtitle text-xs text-slate-400">قم بتحديث كلمة المرور بشكل دوري لضمان أمان حسابك الأكاديمي.</p>
+            <h1 class="pf-section-title">الملف التعريفي للطالب</h1>
+            <p class="pf-section-subtitle">
+              بيانات الحساب الشخصي، المجموعة الدراسية، وإدارة كلمة المرور والاعتماد الأكاديمي
+            </p>
           </div>
         </div>
 
-        <form id="profileInlinePasswordForm" onsubmit="return false;">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div class="form-group">
-              <label class="form-label text-xs font-bold text-slate-300 mb-1">كلمة المرور الحالية</label>
-              <input type="password" id="currentPassInput" class="form-input text-xs" placeholder="••••••••" />
+        <div class="pf-system-connected-pill">
+          <span class="pf-pulse-dot"></span>
+          <span>متصل بالنظام</span>
+        </div>
+      </section>
+
+      <!-- 3. Main Identity Card (إبراهيم خالد مصطفى) -->
+      <section class="pf-identity-card">
+        <div class="pf-identity-top-row">
+          <!-- Right: Avatar & Personal Info -->
+          <div class="pf-identity-right">
+            <div class="pf-avatar-frame-wrap">
+              <div class="pf-avatar-frame">
+                <span>${escapeHtml(initial)}</span>
+              </div>
+              <span class="pf-lvl-badge font-mono">LVL 3</span>
             </div>
 
-            <div class="form-group">
-              <label class="form-label text-xs font-bold text-slate-300 mb-1">كلمة المرور الجديدة</label>
-              <input type="password" id="newPassInput" class="form-input text-xs" placeholder="8 أحرف ورموز على الأقل" />
-            </div>
+            <div class="pf-identity-details">
+              <div class="pf-name-verified-row">
+                <h2 class="pf-student-name">${safeName}</h2>
+                <i class="fa-solid fa-circle-check pf-verified-icon" title="حساب معتمد وموثق"></i>
+              </div>
 
-            <div class="form-group">
-              <label class="form-label text-xs font-bold text-slate-300 mb-1">تأكيد كلمة المرور الجديدة</label>
-              <input type="password" id="confirmPassInput" class="form-input text-xs" placeholder="أعد إدخال كلمة المرور" />
+              <div class="pf-phone-code-row font-mono">
+                <span>${safePhone}</span>
+                <i class="fa-solid fa-phone text-xs text-slate-400"></i>
+                <span class="text-slate-600">•</span>
+                <span class="pf-code-tag">كود : ${escapeHtml(studentCode)}</span>
+              </div>
+
+              <div class="pf-identity-tags-row">
+                <span class="pf-status-pill green">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span>حساب طالب نشط</span>
+                </span>
+                <span class="pf-status-pill blue">
+                  <span>مسار بايثون وهندسة النظم</span>
+                </span>
+                <span class="pf-status-pill purple">
+                  <span>أمانة أول المحلة الكبرى</span>
+                </span>
+              </div>
             </div>
           </div>
 
-          <!-- Password Checklist -->
-          <div class="password-criteria-checklist mb-5 p-3 bg-[#0d131f] border border-[#1e2a3f] rounded-xl text-xs space-y-1">
-            <div class="criteria-item text-emerald-400">
-              <span class="check-icon">✓</span>
-              <span>لا تقل عن 8 أحرف وأرقام</span>
-            </div>
-            <div class="criteria-item text-emerald-400">
-              <span class="check-icon">✓</span>
-              <span>تحتوي على حرف كبير وحرف صغير</span>
-            </div>
-            <div class="criteria-item text-emerald-400">
-              <span class="check-icon">✓</span>
-              <span>تحتوي على رمز خاص (@, #, $, ...)</span>
-            </div>
-          </div>
-
-          <div class="d-flex justify-end">
-            <button type="submit" class="btn btn-primary" id="saveNewPasswordInlineBtn">
-              <span>حفظ كلمة المرور الجديدة 🔒</span>
+          <!-- Left: Action Buttons -->
+          <div class="pf-identity-actions">
+            <button type="button" class="pf-btn-id-action" id="pfBtnViewNfc">
+              <i class="fa-solid fa-id-card text-brand-cyan"></i>
+              <span>عرض بطاقة الهوية الذكية</span>
+            </button>
+            <button type="button" class="pf-btn-id-action" id="pfBtnViewCert">
+              <i class="fa-solid fa-certificate text-amber-400"></i>
+              <span>شهادة القيد الرقمية</span>
             </button>
           </div>
-        </form>
+        </div>
+
+        <!-- 4 Academic KPI Stats Grid -->
+        <div class="pf-academic-kpi-grid">
+          <div class="pf-kpi-card">
+            <span class="pf-kpi-title">معدل الحضور والالتزام</span>
+            <strong class="pf-kpi-val text-emerald-400 font-mono">98% <small class="text-xs font-normal text-emerald-400/80">(ممتاز)</small></strong>
+          </div>
+
+          <div class="pf-kpi-card">
+            <span class="pf-kpi-title">التقييم التراكمي للتاسكات</span>
+            <strong class="pf-kpi-val text-cyan-400 font-mono">96.5% <small class="text-xs font-normal text-cyan-400/80">+A</small></strong>
+          </div>
+
+          <div class="pf-kpi-card">
+            <span class="pf-kpi-title">الاختبارات المجتازة</span>
+            <strong class="pf-kpi-val text-emerald-400 font-mono">3 / 3 <small class="text-xs font-normal text-emerald-400/80">(مكتمل)</small></strong>
+          </div>
+
+          <div class="pf-kpi-card">
+            <span class="pf-kpi-title">أوسمة التميز المكتسبة</span>
+            <strong class="pf-kpi-val text-amber-400 font-mono">4 <span class="text-sm">أوسمة</span> ⭐</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Split Grid: Academic Details (Right) & Smart NFC/Session Cards (Left) -->
+      <div class="pf-split-grid">
+        <!-- Right Column (~65%): البيانات الأساسية للحساب الأكاديمي -->
+        <section class="pf-academic-info-card">
+          <div class="pf-card-header">
+            <h3 class="pf-card-title">
+              <i class="fa-solid fa-folder-open text-amber-400"></i>
+              <span>البيانات الأساسية للحساب الأكاديمي</span>
+            </h3>
+            <span class="pf-card-updated-tag">محدثة حسب بيانات الإدارة</span>
+          </div>
+
+          <div class="pf-info-rows-list">
+            <!-- Row 1: المجموعة الدراسية -->
+            <div class="pf-info-row">
+              <div class="pf-info-row-right">
+                <div class="pf-info-icon-box">
+                  <i class="fa-solid fa-users"></i>
+                </div>
+                <span class="pf-info-label">المجموعة الدراسية</span>
+              </div>
+              <div class="pf-group-schedule-pill">
+                <i class="fa-regular fa-clock"></i>
+                <span>مجموعة الأحد والأربعاء | 7:00 - 8:30 م</span>
+                <span class="text-amber-200/80">(معمل 1)</span>
+              </div>
+            </div>
+
+            <!-- Row 2: اسم المستخدم / الهاتف -->
+            <div class="pf-info-row">
+              <div class="pf-info-row-right">
+                <div class="pf-info-icon-box">
+                  <i class="fa-solid fa-mobile-screen"></i>
+                </div>
+                <span class="pf-info-label">اسم المستخدم / الهاتف</span>
+              </div>
+              <div class="flex items-center gap-2 font-mono">
+                <span class="pf-info-val">${safePhone}</span>
+                <span class="pf-verified-badge-sm">
+                  <i class="fa-solid fa-check text-xs"></i> موثق
+                </span>
+              </div>
+            </div>
+
+            <!-- Row 3: الرقم القومي للطالب -->
+            <div class="pf-info-row">
+              <div class="pf-info-row-right">
+                <div class="pf-info-icon-box">
+                  <i class="fa-solid fa-address-card"></i>
+                </div>
+                <span class="pf-info-label">الرقم القومي للطالب</span>
+              </div>
+              <div class="flex items-center gap-2 font-mono">
+                <span class="pf-info-val">${safeNatId}</span>
+                <span class="pf-protected-tag">
+                  <i class="fa-solid fa-lock text-xs"></i> محمي
+                </span>
+              </div>
+            </div>
+
+            <!-- Row 4: العنوان ومحل الإقامة -->
+            <div class="pf-info-row">
+              <div class="pf-info-row-right">
+                <div class="pf-info-icon-box">
+                  <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <span class="pf-info-label">العنوان ومحل الإقامة</span>
+              </div>
+              <span class="pf-info-val">${safeAddress}</span>
+            </div>
+
+            <!-- Row 5: المشرف الأكاديمي والمدرب -->
+            <div class="pf-info-row">
+              <div class="pf-info-row-right">
+                <div class="pf-info-icon-box">
+                  <i class="fa-solid fa-chalkboard-user"></i>
+                </div>
+                <span class="pf-info-label">المشرف الأكاديمي والمدرب</span>
+              </div>
+              <div class="pf-info-val">
+                <span class="text-white font-bold">م/ إبراهيم الششتتاوي</span>
+                <span class="text-slate-600 mx-1.5">•</span>
+                <span class="text-cyan-400 font-semibold">خبير البرمجيات والذكاء الاصطناعي</span>
+              </div>
+            </div>
+
+            <!-- Row 6: البريد ومستودع المشاريع -->
+            <div class="pf-info-row">
+              <div class="pf-info-row-right">
+                <div class="pf-info-icon-box">
+                  <i class="fa-solid fa-envelope"></i>
+                </div>
+                <span class="pf-info-label">البريد ومستودع المشاريع</span>
+              </div>
+              <div class="flex flex-col items-end gap-0.5 font-mono text-xs">
+                <span class="text-cyan-400">ibrahim.khaled@mw-academy.tech</span>
+                <span class="text-slate-400">github.com/ibrahim-khaled-py</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Left Column (~35%): بطاقة الطالب الرقمية & جلسة الدخول -->
+        <aside class="pf-sidebar-col">
+          <!-- Card 1: بطاقة الطالب الرقمية NFC -->
+          <div class="pf-smart-nfc-card">
+            <div class="pf-nfc-header">
+              <div class="pf-nfc-title">
+                <i class="fa-solid fa-microchip text-brand-cyan"></i>
+                <span>بطاقة الطالب الرقمية NFC</span>
+              </div>
+              <span class="pf-nfc-valid-badge font-mono">VALID 2026</span>
+            </div>
+
+            <div class="pf-nfc-card-mockup">
+              <div class="pf-nfc-mockup-info">
+                <h4 class="pf-nfc-student-name">${safeName.split(' ').slice(0, 2).join(' ')}</h4>
+                <span class="pf-nfc-role">Python Software Engineer</span>
+                <span class="pf-nfc-id font-mono">ID: #MW-8842-GH</span>
+              </div>
+
+              <div class="pf-nfc-mockup-avatar font-mono">
+                ${escapeHtml(initial)}
+              </div>
+            </div>
+
+            <div class="pf-nfc-qr-section">
+              <div class="pf-qr-icon-box">
+                <i class="fa-solid fa-qrcode"></i>
+              </div>
+              <div class="pf-qr-details">
+                <h5>حضور المعامل الذكية</h5>
+                <span class="text-cyan-400 font-mono text-[11px] font-bold block mb-0.5">SCAN TO ATTEND</span>
+                <p>تُستخدم هذه الشفرة لتأكيد الحضور الإلكتروني عند دخول القاعة</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: جلسة تسجيل الدخول الحالية -->
+          <div class="pf-session-card">
+            <div class="pf-session-header">
+              <div class="pf-session-title">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                <span>جلسة تسجيل الدخول الحالية</span>
+              </div>
+            </div>
+
+            <div class="pf-session-specs-list">
+              <div class="pf-spec-item">
+                <span class="label">المتصفح والنظام:</span>
+                <span class="val font-mono">Brave (Linux x86_64)</span>
+              </div>
+
+              <div class="pf-spec-item">
+                <span class="label">عنوان الـ IP الداخلي:</span>
+                <span class="val font-mono text-cyan-400">127.0.0.1 (Local Verified)</span>
+              </div>
+
+              <div class="pf-spec-item">
+                <span class="label">حالة الجلسة:</span>
+                <span class="val text-emerald-400 flex items-center gap-1.5 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_8px_#10b981]"></span>
+                  نشطة الآن
+                </span>
+              </div>
+            </div>
+
+            <div class="pf-2fa-row">
+              <div class="pf-2fa-text">
+                <h5>التحقق بخطوتين (2FA)</h5>
+                <p>تأمين الدخول عبر رمز SMS</p>
+              </div>
+              <label class="pf-switch" title="تبديل تفعيل التحقق بخطوتين">
+                <input type="checkbox" id="pfTwoFactorToggle" checked />
+                <span class="pf-slider"></span>
+              </label>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   `;

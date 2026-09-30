@@ -247,14 +247,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
 
           <!-- Profile Section -->
           <section id="sec-profile" class="tab-content" aria-labelledby="heading-profile">
-            <div class="page-header">
-              <div>
-                <h2 id="heading-profile" class="page-title">👤 الملف التعريفي للطالب</h2>
-                <p class="page-subtitle">بيانات الحساب الشخصي، المجموعة الدراسية، وإدارة كلمة المرور.</p>
-              </div>
-            </div>
             <div id="profileContainer"></div>
-            <div id="profileAttendanceContainer" class="mt-6"></div>
           </section>
 
           <!-- Settings Section -->
