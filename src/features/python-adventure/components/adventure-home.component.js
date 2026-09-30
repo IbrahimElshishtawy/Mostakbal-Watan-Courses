@@ -78,55 +78,7 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
         </div>
       </header>
 
-      <!-- 2. Hero Banner: أهلاً إبراهيم خالد! تحدي وادي بايثون بانتظارك 🐍 -->
-      <section class="adv5-hero-card">
-        <div class="adv5-hero-main">
-          <!-- Tags Header -->
-          <div class="adv5-hero-tags">
-            <span class="adv5-hero-pulse-tag">
-              <span class="adv5-pulse-dot cyan"></span>
-              تحدي برمجي تفاعلي مباشر • الموسم النشط
-            </span>
-            <span class="adv5-engine-tag font-mono">Python 3.12 Engine</span>
-          </div>
-
-          <!-- Title -->
-          <h1 class="adv5-hero-title">
-            أهلاً <span class="text-brand-cyan">${safeName}</span>! تحدي وادي بايثون بانتظارك 🐍
-          </h1>
-
-          <!-- Description -->
-          <p class="adv5-hero-desc">
-            خُضْ مغامرة وادي المتغيرات والمنطق البرمجي، حُلّ التحديات الشيقة مباشرة داخل المتصفح، واجمع نقاط الخبرة XP والأوسمة لتتصدر لوحة الشرف بين زملائك بأمانة المحلة.
-          </p>
-
-          <!-- Status strip -->
-          <div class="adv5-hero-status-strip">
-            <div class="adv5-status-step">
-              <i class="fa-solid fa-circle-check text-emerald-400"></i>
-              <span>المرحلة الحالية: وادي المتغيرات (Variables Valley)</span>
-            </div>
-            <div class="adv5-status-xp-pill font-mono">
-              <i class="fa-solid fa-bolt text-amber-400"></i>
-              <span>+50 XP لكل مستوى تجتازه</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Left Actions in Hero -->
-        <div class="adv5-hero-actions-col">
-          <button type="button" class="adv5-btn-hero-primary" id="heroQuestStartBtn">
-            <span>خوض تحدي بايثون الآن</span>
-            <i class="fa-solid fa-rocket"></i>
-          </button>
-          <button type="button" class="adv5-btn-hero-glass" id="heroLeaderboardBtn">
-            <span>لوحة المتصدرين</span>
-            <i class="fa-solid fa-trophy text-amber-400"></i>
-          </button>
-        </div>
-      </section>
-
-      <!-- 3. Status & Progression Bar (5 Metric Cards Grid) -->
+      <!-- Status & Progression Bar (5 Metric Cards Grid) -->
       <section class="adv5-metrics-grid" data-purpose="progression-kpis">
         <!-- Card 1: الرتبة والمستوى (Level 1: Python Novice) -->
         <div class="adv5-metric-card cyan-tint">
