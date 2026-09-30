@@ -5738,6 +5738,7 @@ body.is-in-exam-mode .main-view {
   grid-template-columns: 1.15fr 0.85fr;
   gap: 1.25rem;
   min-height: 520px;
+  direction: ltr !important;
 }
 
 @media (max-width: 1024px) {
@@ -5756,6 +5757,7 @@ body.is-in-exam-mode .main-view {
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  direction: ltr !important;
 }
 
 .console-panel-topbar {
@@ -5767,6 +5769,7 @@ body.is-in-exam-mode .main-view {
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
+  direction: ltr !important;
 }
 
 .console-file-tab {
@@ -5845,21 +5848,25 @@ body.is-in-exam-mode .main-view {
 .console-editor-body {
   position: relative;
   display: flex;
+  flex-direction: row;
+  direction: ltr !important;
   flex: 1;
   min-height: 380px;
   background: #080d19;
 }
 
 .console-line-numbers {
-  width: 44px;
+  width: 48px;
   padding: 1rem 0.5rem;
   text-align: right;
+  direction: ltr !important;
   font-family: 'Fira Code', 'Consolas', monospace;
   font-size: 14px;
   line-height: 1.6;
   color: #475569;
   background: #070a14;
-  border-left: 1px solid rgba(51, 65, 85, 0.4);
+  border-right: 1px solid rgba(51, 65, 85, 0.4);
+  border-left: none;
   user-select: none;
   overflow: hidden;
   white-space: pre-wrap;
@@ -5877,8 +5884,9 @@ body.is-in-exam-mode .main-view {
   outline: none;
   resize: none;
   tab-size: 4;
-  direction: ltr;
-  text-align: left;
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate !important;
   white-space: pre;
   overflow-wrap: normal;
   overflow-x: auto;

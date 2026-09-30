@@ -20,7 +20,13 @@ export const CloudConsoleController = {
     }
 
     const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY) || "";
-    container.innerHTML = renderCloudConsoleView({ initialCode: savedDraft });
+    // If the saved draft has flipped bidirectional text from prior render, reset to clean template
+    const isCorrupted = savedDraft && (savedDraft.includes("status = \n") || savedDraft.includes("status = \""));
+    const initialCode = (!savedDraft || isCorrupted) ? CLOUD_CONSOLE_TEMPLATES.hello_world.code : savedDraft;
+    if (isCorrupted) {
+      localStorage.setItem(DRAFT_STORAGE_KEY, initialCode);
+    }
+    container.innerHTML = renderCloudConsoleView({ initialCode });
 
     this.bindEvents(container, student);
     this.updateLineNumbers(container);

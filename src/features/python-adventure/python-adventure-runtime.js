@@ -63,7 +63,7 @@ function loadScript(src) {
  * @param {function} [options.onOutput] - Real-time stdout stream
  * @returns {Promise<{ output: string, error: string | null, executionTimeMs: number }>}
  */
-export async function runPythonCode(pythonCode, { timeoutMs = 3500, onOutput = null } = {}) {
+export async function runPythonCode(pythonCode, { timeoutMs = 3500, onOutput = null, onInput = null } = {}) {
   await ensurePythonRuntime();
 
   let outputBuffer = "";
@@ -87,7 +87,7 @@ export async function runPythonCode(pythonCode, { timeoutMs = 3500, onOutput = n
     return window.Sk.builtinFiles["files"][file];
   };
 
-  const handleInput = options.onInput || ((promptText) => {
+  const handleInput = onInput || ((promptText) => {
     return window.prompt(promptText || "أدخل القيمة المطلوبة لبرنامج بايثون:") || "";
   });
 

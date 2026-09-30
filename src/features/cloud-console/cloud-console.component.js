@@ -14,9 +14,10 @@ name = "إبراهيم خالد"
 course = "دبلومة البرمجة وهندسة النظم"
 status = "طالب متميز"
 
-print(f"الطالب: {name}")
-print(f"الدورة: {course}")
-print(f"الحالة: {status}")
+print("الطالب:", name)
+print("الدورة:", course)
+print("الحالة:", status)
+print("=" * 45)
 print("جاهز لكتابة واختبار أروع الأكواد البرمجية!")
 `
   },
@@ -35,15 +36,15 @@ integer_div = a // b
 modulus = a % b
 power = a ** 2
 
-print(f"العدد أ: {a} ، العدد ب: {b}")
+print("العدد أ:", a, "، العدد ب:", b)
 print("-" * 30)
-print(f"الجمع (a + b) = {addition}")
-print(f"الطرح (a - b) = {subtraction}")
-print(f"الضرب (a * b) = {multiplication}")
-print(f"القسمة العادية (a / b) = {division:.2f}")
-print(f"القسمة الصحيحة (a // b) = {integer_div}")
-print(f"باقي القسمة (a % b) = {modulus}")
-print(f"التربيع ({a}²) = {power}")
+print("الجمع (a + b) =", addition)
+print("الطرح (a - b) =", subtraction)
+print("الضرب (a * b) =", multiplication)
+print("القسمة (a / b) =", division)
+print("القسمة الصحيحة (a // b) =", integer_div)
+print("باقي القسمة (a % b) =", modulus)
+print("التربيع =", power)
 `
   },
   conditions: {
@@ -218,9 +219,9 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
       </div>
 
       <!-- 2. Main IDE Grid (Left Editor + Right Terminal) -->
-      <div class="cloud-console-ide-grid">
+      <div class="cloud-console-ide-grid" dir="ltr">
         <!-- Editor Column -->
-        <div class="console-editor-panel">
+        <div class="console-editor-panel" dir="ltr">
           <div class="console-panel-topbar">
             <div class="console-file-tab">
               <span class="file-icon">🐍</span>
@@ -229,7 +230,7 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
             </div>
 
             <div class="console-editor-meta-actions">
-              <span class="console-editor-stats" id="consoleEditorStats">السطور: 1 | الحروف: 0</span>
+              <span class="console-editor-stats" id="consoleEditorStats">Lines: 1 | Chars: 0</span>
               
               <div class="console-font-controls" title="تغيير حجم خط المحرر">
                 <button type="button" class="btn-font-size" id="consoleFontDecreaseBtn" title="تصغير الخط">A-</button>
@@ -248,15 +249,16 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
           </div>
 
           <!-- Code Area with Line Numbers -->
-          <div class="console-editor-body">
-            <div class="console-line-numbers" id="consoleLineNumbers" aria-hidden="true">1</div>
+          <div class="console-editor-body" dir="ltr">
+            <div class="console-line-numbers" id="consoleLineNumbers" dir="ltr" aria-hidden="true">1</div>
             <textarea
               id="consoleCodeEditor"
               class="console-code-textarea"
+              dir="ltr"
               spellcheck="false"
               autocapitalize="off"
               autocomplete="off"
-              placeholder="# اكتب كود بايثون هنا..."
+              placeholder="# Write Python code here..."
               aria-label="محرر كود بايثون"
             >${defaultCode}</textarea>
           </div>
@@ -274,7 +276,7 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
         </div>
 
         <!-- Terminal / Output Column -->
-        <div class="console-terminal-panel">
+        <div class="console-terminal-panel" dir="ltr">
           <div class="console-panel-topbar terminal-bar">
             <div class="terminal-window-dots">
               <span class="term-dot dot-red"></span>
