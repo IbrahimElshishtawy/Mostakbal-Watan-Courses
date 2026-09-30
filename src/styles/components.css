@@ -6191,3 +6191,985 @@ body.is-in-exam-mode .main-view {
   border-color: #38bdf8;
   transform: translateY(-1px);
 }
+
+/* ==========================================================================
+   STUDENT EXAM & ASSESSMENT CENTER (IMAGE 7.PNG)
+   ========================================================================== */
+.student-exam-center-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* 1. Exam Center Top Header */
+.exam-center-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.exam-header-lead {
+  flex: 1;
+  min-width: 280px;
+}
+
+.exam-header-academic-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #38bdf8;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.tag-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.exam-header-main-title {
+  color: #ffffff;
+  font-size: 1.65rem;
+  font-weight: 900;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.exam-header-main-desc {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 750px;
+}
+
+.exam-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.btn-exam-header-tool {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #cbd5e1;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.btn-exam-header-tool:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 2. Top Stats Strip (4 Metric Cards) */
+.exam-stats-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .exam-stats-strip-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .exam-stats-strip-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exam-stat-card {
+  background: #0d1527;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+}
+
+.exam-stat-card:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  transform: translateY(-2px);
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.65rem;
+}
+
+.stat-card-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+}
+
+.stat-card-icon.cyan-tint { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.stat-card-icon.purple-tint { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.stat-card-icon.teal-tint { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; }
+.stat-card-icon.pink-tint { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+
+.stat-card-label {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.stat-card-body {
+  margin-bottom: 0.45rem;
+}
+
+.stat-card-value {
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1;
+  font-family: inherit;
+}
+
+.stat-card-footer {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.stat-pill-badge.emerald {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.stat-card-accent-bar.cyan-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
+}
+
+/* 3. Featured Active Exam Hero Card */
+.featured-active-exam-card {
+  background: linear-gradient(135deg, rgba(13, 23, 44, 0.98), rgba(11, 18, 36, 0.98));
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 18px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.featured-exam-top-strip {
+  margin-bottom: 0.75rem;
+}
+
+.featured-tags-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.featured-status-pill {
+  background: rgba(2, 132, 199, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.85rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.featured-status-pill .pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.featured-track-label {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.featured-code-chip {
+  background: #1e1b4b;
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  color: #a5b4fc;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+  font-family: monospace;
+}
+
+.featured-exam-headings {
+  margin-bottom: 1.5rem;
+}
+
+.featured-exam-title {
+  color: #ffffff;
+  font-size: 1.45rem;
+  font-weight: 900;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+.featured-exam-desc {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 850px;
+}
+
+.featured-exam-split-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .featured-exam-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Terminal Sandbox */
+.exam-sandbox-window {
+  background: #060913;
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-window-topbar {
+  background: #0f172a;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.7);
+  padding: 0.45rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.window-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.window-dots .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.window-dots .dot-red { background: #ef4444; }
+.window-dots .dot-yellow { background: #eab308; }
+.window-dots .dot-green { background: #22c55e; }
+
+.window-filename {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-family: monospace;
+}
+
+.sandbox-code-content {
+  background: transparent;
+  color: #cbd5e1;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  padding: 1rem 1.15rem;
+  margin: 0;
+  flex: 1;
+  overflow-x: auto;
+  direction: ltr;
+  text-align: left;
+}
+
+.c-comment { color: #64748b; }
+.c-keyword { color: #f43f5e; font-weight: 700; }
+.c-fn { color: #38bdf8; font-weight: 700; }
+.c-builtin { color: #a855f7; }
+.c-string { color: #10b981; }
+
+.sandbox-window-footer {
+  background: #090e1a;
+  border-top: 1px solid rgba(51, 65, 85, 0.6);
+  padding: 0.4rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  direction: ltr;
+}
+
+.footer-dot-green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.footer-latency {
+  margin-left: auto;
+  color: #38bdf8;
+  font-family: monospace;
+}
+
+/* Right Specs Column */
+.exam-specs-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.exam-specs-2x2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.exam-spec-item {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.spec-icon {
+  font-size: 1.1rem;
+}
+
+.spec-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.spec-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.spec-val {
+  font-size: 0.82rem;
+  color: #f1f5f9;
+  font-weight: 800;
+}
+
+.exam-integrity-rules-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+}
+
+.rules-box-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #f1f5f9;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.rules-shield-icon {
+  font-size: 0.95rem;
+  color: #38bdf8;
+}
+
+.rules-box-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Action Bar */
+.featured-exam-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.btn-enter-exam-hall {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.6rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-enter-exam-hall:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 22px rgba(14, 165, 233, 0.5);
+}
+
+.btn-enter-icon {
+  font-size: 0.9rem;
+}
+
+.btn-exam-guidelines {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #cbd5e1;
+  border-radius: 10px;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.btn-exam-guidelines:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+/* 4. Filter & Tabs Toolbar */
+.exam-toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.exam-toolbar-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.exam-tab-pill {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #cbd5e1;
+  border-radius: 10px;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exam-tab-pill:hover {
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.exam-tab-pill.is-active {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(14, 165, 233, 0.3);
+}
+
+.exam-toolbar-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.exam-custom-select-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.exam-filter-select {
+  appearance: none;
+  background: #0d1527;
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #cbd5e1;
+  border-radius: 10px;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.exam-filter-select:focus {
+  border-color: #38bdf8;
+}
+
+.select-arrow-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.btn-toolbar-filter-icon {
+  background: #0d1527;
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #94a3b8;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* 5. Scheduled & Upcoming Exams Section */
+.exam-section-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.exam-section-title {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.exam-section-subtitle {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.scheduled-exams-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 850px) {
+  .scheduled-exams-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scheduled-exam-card {
+  background: #0d1527;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 14px;
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+}
+
+.scheduled-exam-card:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  transform: translateY(-2px);
+}
+
+.scheduled-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.pill-days-left {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border-radius: 12px;
+}
+
+.pill-blue {
+  background: rgba(2, 132, 199, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.pill-indigo {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid rgba(129, 140, 248, 0.35);
+}
+
+.scheduled-code {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-family: monospace;
+}
+
+.scheduled-card-title {
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 800;
+  margin: 0 0 0.45rem 0;
+  line-height: 1.45;
+}
+
+.scheduled-card-desc {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  margin: 0 0 1rem 0;
+  flex: 1;
+}
+
+.scheduled-card-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  padding-top: 0.85rem;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+}
+
+.scheduled-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.meta-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0284c7;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.btn-add-calendar {
+  margin-right: auto;
+  background: transparent;
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #38bdf8;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+
+.btn-add-calendar:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* 6. Completed Exams & Reports Table */
+.exam-table-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.exam-gpa-stat {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.gpa-score {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.exam-table-container {
+  background: #0d1527;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 14px;
+  overflow-x: auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.exam-records-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+  font-size: 0.8rem;
+}
+
+.exam-records-table th {
+  background: #0a101f;
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.85rem 1.15rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.exam-records-table td {
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+  vertical-align: middle;
+}
+
+.exam-records-table tr:last-child td {
+  border-bottom: none;
+}
+
+.exam-records-table tr:hover {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.table-exam-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.table-exam-name {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.table-exam-subcode {
+  color: #64748b;
+  font-size: 0.72rem;
+}
+
+.table-score-box {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.score-val {
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.score-denom {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.table-badge-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+}
+
+.pill-emerald {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.pill-cyan {
+  background: rgba(2, 132, 199, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.pill-emerald-honor {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(2, 132, 199, 0.2));
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.btn-table-action {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.btn-table-action:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* 7. Bottom System Integrity Banner Card */
+.system-integrity-banner-card {
+  background: linear-gradient(135deg, rgba(13, 23, 44, 0.95), rgba(11, 18, 36, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 16px;
+  padding: 1.25rem 1.6rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.integrity-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.integrity-brand-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.integrity-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  display: grid;
+  place-items: center;
+  color: #34d399;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.integrity-heading {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem 0;
+}
+
+.integrity-desc {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.integrity-status-pill {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-family: monospace;
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.status-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.integrity-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .integrity-chips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .integrity-chips-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.integrity-chip {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+}
+
+.chip-icon {
+  font-size: 0.85rem;
+}
+
+.chip-status {
+  margin-right: auto;
+  font-weight: 700;
+  font-size: 0.72rem;
+}

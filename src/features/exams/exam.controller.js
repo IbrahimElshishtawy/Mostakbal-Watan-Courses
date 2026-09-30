@@ -42,6 +42,7 @@ import {
 } from "./components/exam-question-editor.component.js";
 import { renderExamReview } from "./components/exam-review.component.js";
 import { renderStudentExamReviewMode } from "./components/student-exam-review.component.js";
+import { renderStudentExamCenter } from "./components/student-exam-center.component.js";
 import { getExamStatusInfo } from "./components/exam-status-badge.component.js";
 import { openModal, closeModal } from "../../shared/components/Modal/modal.component.js";
 import { renderLoader } from "../../shared/components/Loader/loader.component.js";
@@ -226,311 +227,104 @@ export const ExamController = {
         return info.status === "upcoming" || e.status === "upcoming";
       }).concat(signatureUpcomingExams.filter((u) => !allExams.some((a) => a.id === u.id)));
 
-      const pastExams = allExams.filter((e) => {
-        const info = getExamStatusInfo(e, e.result);
-        return (
-          info.status === "graded" ||
-          info.status === "pending_essay" ||
-          info.status === "submitted" ||
-          info.status === "expired" ||
-          e.status === "graded"
-        );
-      }).concat(signaturePastExams.filter((p) => !allExams.some((a) => a.id === p.id)));
-
-      // Render the complete Image 7.png Student Exam Center
+      const pastExams = signaturePastExams;
       const spotlightExam = availableExams[0] || signatureLiveExam;
 
-      const examCenterHtml = `
-        <div class="student-exam-center-wrap" dir="rtl">
-          <!-- 1. Top 4 Metric Cards (Image 7.png) -->
-          <div class="exam-metrics-grid mb-6">
-            <div class="exam-metric-card cyan">
-              <div class="metric-icon-box">📋</div>
-              <div class="metric-text-box">
-                <span class="metric-val text-cyan-400">01</span>
-                <span class="metric-label">الامتحانات المتاحة الآن</span>
-                <small class="metric-sub">تتطلب حلولاً فورية</small>
-              </div>
-            </div>
-
-            <div class="exam-metric-card purple">
-              <div class="metric-icon-box">✅</div>
-              <div class="metric-text-box">
-                <span class="metric-val text-purple-400">03 / 06</span>
-                <span class="metric-label">الاختبارات المكتملة بنجاح</span>
-                <small class="metric-sub">معدل إنجاز 50%</small>
-              </div>
-            </div>
-
-            <div class="exam-metric-card gold">
-              <div class="metric-icon-box">🎯</div>
-              <div class="metric-text-box">
-                <span class="metric-val text-amber-400">96.0%</span>
-                <span class="metric-label">المعدل التراكمي العام (GPA)</span>
-                <small class="metric-sub">تقدير امتياز مع مرتبة الشرف</small>
-              </div>
-            </div>
-
-            <div class="exam-metric-card blue">
-              <div class="metric-icon-box">🏆</div>
-              <div class="metric-text-box">
-                <span class="metric-val text-blue-400">01</span>
-                <span class="metric-label">الشهادات المعتمدة الصادرة</span>
-                <small class="metric-sub">شهادة إتقان بايثون الأساسية</small>
-              </div>
-            </div>
-          </div>
-
-          <!-- 2. Spotlight Live Exam Card (Image 7.png) -->
-          <div class="spotlight-live-exam-card mb-6">
-            <div class="spotlight-header">
-              <div class="spotlight-badge-row">
-                <span class="spotlight-code-badge">${escapeHtml(spotlightExam.code || "PY-101-MID")}</span>
-                <span class="spotlight-live-badge">
-                  <span class="live-pulse-dot"></span>
-                  <span>مباشر الآن • ينتهي خلال 48 ساعة</span>
-                </span>
-              </div>
-              <h3 class="spotlight-title">${escapeHtml(spotlightExam.title || "الامتحان الشامل - المستوى الأول: أساسيات بايثون وهياكل البيانات")}</h3>
-              <p class="spotlight-desc">${escapeHtml(spotlightExam.description || "يشمل الاختبار 20 سؤال اختيار من متعدد + 3 مسائل برمجية تفاعلية يتم تصحيحها آلياً بواسطة Python Engine.")}</p>
-            </div>
-
-            <!-- Spotlight Specs Strip -->
-            <div class="spotlight-specs-strip">
-              <div class="spotlight-spec-pill">
-                <span class="spec-icon">⏱️</span>
-                <span>المدة: <strong>${spotlightExam.duration || 60} دقيقة</strong></span>
-              </div>
-              <div class="spotlight-spec-pill">
-                <span class="spec-icon">❓</span>
-                <span><strong>${spotlightExam.totalQuestions || 23} سؤال ومسألة</strong></span>
-              </div>
-              <div class="spotlight-spec-pill">
-                <span class="spec-icon">🎯</span>
-                <span>درجة النجاح: <strong>70%</strong></span>
-              </div>
-              <div class="spotlight-spec-pill">
-                <span class="spec-icon">🏆</span>
-                <span>مكافأة: <strong>150 نقطة XP</strong></span>
-              </div>
-            </div>
-
-            <!-- Python 3.12 Engine Sandbox Preview Box -->
-            <div class="spotlight-sandbox-preview">
-              <div class="sandbox-terminal-bar">
-                <div class="terminal-traffic-lights">
-                  <span class="tl-dot red"></span>
-                  <span class="tl-dot yellow"></span>
-                  <span class="tl-dot green"></span>
-                </div>
-                <span class="terminal-bar-title">Python 3.12 Engine Sandbox</span>
-              </div>
-              <pre class="sandbox-code-preview"><code><span class="code-keyword">def</span> <span class="code-fn">calculate_grade</span>(scores: list[float]) -> str:
-    <span class="code-comment"># Auto-grading unit tests will run on submit</span>
-    <span class="code-keyword">pass</span></code></pre>
-            </div>
-
-            <!-- Spotlight Action Row -->
-            <div class="spotlight-action-row">
-              <button type="button" class="btn-start-spotlight" data-start-exam="${spotlightExam.id}">
-                <span>🚀 ابدأ الامتحان الآن (مؤمّن بالكامل)</span>
-              </button>
-              <button type="button" class="btn-integrity-info" id="openIntegrityRulesBtn">
-                <span>تعليمات النزاهة الأكاديمية</span>
-                <span>ℹ️</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- 3. Category Tabs Navigation (Image 7.png) -->
-          <div class="academic-tabs-wrapper mb-4">
-            <div class="academic-filter-tabs" role="tablist" aria-label="أقسام الامتحانات">
-              <button
-                type="button"
-                class="academic-filter-btn active"
-                data-exam-filter="available"
-                role="tab"
-                aria-selected="true"
-              >
-                <span>الامتحانات النشطة والمتاحة</span>
-                <span class="filter-badge-count">1</span>
-              </button>
-
-              <button
-                type="button"
-                class="academic-filter-btn"
-                data-exam-filter="upcoming"
-                role="tab"
-                aria-selected="false"
-              >
-                <span>المجدولة والقادمة</span>
-                <span class="filter-badge-count">2</span>
-              </button>
-
-              <button
-                type="button"
-                class="academic-filter-btn"
-                data-exam-filter="past"
-                role="tab"
-                aria-selected="false"
-              >
-                <span>السابقة والنتائج المعتمدة</span>
-                <span class="filter-badge-count">3</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- 4. Exams Tab Content Container -->
-          <div id="studentExamsCardsSlot" class="mb-6"></div>
-
-          <!-- 5. System Integrity Check Footer (Image 7.png) -->
-          <div class="system-integrity-check-card">
-            <div class="integrity-header">
-              <span class="integrity-icon">🛡️</span>
-              <strong class="integrity-title">فحص جاهزية النظام والنزاهة الأكاديمية (Integrity Check):</strong>
-            </div>
-            <div class="integrity-items-grid">
-              <div class="integrity-item">
-                <span class="check-icon">✓</span>
-                <span>الكاميرا متصلة</span>
-              </div>
-              <div class="integrity-item">
-                <span class="check-icon">✓</span>
-                <span>سرعة الاتصال 48 Mbps</span>
-              </div>
-              <div class="integrity-item">
-                <span class="check-icon">✓</span>
-                <span>بيئة المتصفح آمنة (Chrome Sandbox)</span>
-              </div>
-              <div class="integrity-item">
-                <span class="check-icon">✓</span>
-                <span>بيئة تشغيل Python 3.12.3 جاهزة</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+      const examCenterHtml = renderStudentExamCenter({
+        student: currentStudent,
+        activeExam: spotlightExam,
+        upcomingExams: signatureUpcomingExams,
+        pastExams: signaturePastExams
+      });
 
       setHtml(container, examCenterHtml);
 
-      const slot = document.getElementById("studentExamsCardsSlot");
+      // 1. Bind Enter Exam Hall & Start Exam Buttons
+      const handleStartExam = (examId) => {
+        this.confirmStartExam(examId || spotlightExam.id || "PY-101-MID", currentStudent);
+      };
 
-      const renderGridForCategory = (category) => {
-        if (!slot) return;
+      container.querySelector("#btnEnterExamHall")?.addEventListener("click", () => {
+        handleStartExam(spotlightExam.id);
+      });
 
-        if (category === "available") {
-          // Available category shows any secondary available exams
-          const otherAvailable = availableExams.filter((e) => e.id !== spotlightExam.id);
-          if (otherAvailable.length === 0) {
-            slot.innerHTML = `
-              <div class="card p-4 text-center text-slate-400 bg-[#121825] border border-[#1e2a3f] rounded-2xl">
-                <p class="m-0 text-sm">💡 تم عرض الاختبار المباشر النشط في لوحة البداية أعلاه. لا توجد اختبارات إضافية معلقة حالياً.</p>
-              </div>
-            `;
-          } else {
-            slot.innerHTML = `
-              <div class="grid-3" dir="rtl">
-                ${otherAvailable.map((exam) => renderStudentExamCard({ exam, result: exam.result })).join("")}
-              </div>
-            `;
-          }
-        } else if (category === "upcoming") {
-          slot.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
-              ${signatureUpcomingExams.map((exam) => `
-                <div class="card scheduled-exam-card p-5 bg-[#121825] border border-[#1e2a3f] rounded-2xl">
-                  <div class="d-flex items-center justify-between mb-3">
-                    <span class="badge badge-gold font-bold">${escapeHtml(exam.code)}</span>
-                    <span class="text-xs text-amber-400 font-bold">⏳ مجدول</span>
-                  </div>
-                  <h4 class="text-base font-bold text-slate-100 mb-2">${escapeHtml(exam.title)}</h4>
-                  <p class="text-xs text-slate-400 mb-4">${escapeHtml(exam.description)}</p>
-                  <div class="d-flex items-center justify-between text-xs text-slate-400 border-t border-[#1e2a3f] pt-3">
-                    <span>📅 ${escapeHtml(exam.dateDisplay)}</span>
-                    <span>⏱️ ${exam.duration} دقيقة</span>
-                  </div>
-                </div>
-              `).join("")}
-            </div>
-          `;
-        } else if (category === "past") {
-          slot.innerHTML = `
-            <div class="overflow-x-auto rounded-2xl border border-[#1e2a3f] bg-[#121825]">
-              <table class="w-full text-right border-collapse text-xs">
-                <thead>
-                  <tr class="border-b border-[#1e2a3f] bg-[#0e1420] text-slate-400 font-bold">
-                    <th class="py-3 px-4">كود الامتحان</th>
-                    <th class="py-3 px-4">اسم الاختبار</th>
-                    <th class="py-3 px-4">تاريخ الانعقاد</th>
-                    <th class="py-3 px-4">النتيجة</th>
-                    <th class="py-3 px-4">التقدير</th>
-                    <th class="py-3 px-4 text-center">الإجراء</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-[#1e2a3f]/60 text-slate-200">
-                  ${signaturePastExams.map((pe) => `
-                    <tr class="hover:bg-[#162031] transition-colors">
-                      <td class="py-3 px-4 font-mono font-bold text-cyan-400">${escapeHtml(pe.code)}</td>
-                      <td class="py-3 px-4 font-bold">${escapeHtml(pe.title)}</td>
-                      <td class="py-3 px-4 text-slate-400">${escapeHtml(pe.dateDisplay)}</td>
-                      <td class="py-3 px-4 font-bold text-emerald-400">${pe.score} / ${pe.total}</td>
-                      <td class="py-3 px-4"><span class="badge badge-success">${escapeHtml(pe.grade)}</span></td>
-                      <td class="py-3 px-4 text-center">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="alert('تقرير معتمد: تم اجتياز الاختبار بنجاح بنسبة ${pe.score}%')">
-                          <span>عرض التقرير 📄</span>
-                        </button>
-                      </td>
-                    </tr>
-                  `).join("")}
-                </tbody>
-              </table>
-            </div>
-          `;
-        }
+      container.querySelectorAll("[data-start-exam]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const examId = btn.getAttribute("data-start-exam");
+          handleStartExam(examId);
+        });
+      });
 
-        // Bind any direct start buttons from card
-        slot.querySelectorAll("[data-start-exam]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const examId = btn.getAttribute("data-start-exam");
-            this.confirmStartExam(examId, currentStudent);
-          });
+      // 2. Bind Exam Environment Check Tool
+      container.querySelector("#btnRunExamSystemCheck")?.addEventListener("click", () => {
+        showToast({
+          type: "success",
+          title: "فحص البيئة الامتحانية (System Integrity)",
+          message: "جميع المتطلبات مستوفاة: الكاميرا متصلة ومصرح بها، سرعة الاتصال 48 Mbps، محرك بايثون 3.12.3 جاهز."
+        });
+      });
+
+      // 3. Bind Student Guidelines & Integrity Info Modals
+      const showGuidelines = () => {
+        showConfirmDialog({
+          title: "إرشادات وشروط النزاهة الرقمية (Academic Integrity)",
+          message: "• محاولة واحدة فقط مصرح بها لكل طالب.\n• يتم قفل التبويبات الخارجية ومراقبة حركة المؤشر بواسطة محرك الاختبار.\n• تشغيل ومخرجات كود بايثون يتم اختبارها وتقييمها داخل سحابة معزولة.\n• يتم الحفظ التلقائي لكل إجابة لضمان عدم ضياع أي بيانات.",
+          confirmText: "فهمت الشروط ومستعد للبدء",
+          cancelText: "إغلاق",
+          variant: "primary"
         });
       };
 
-      // Initial render: Available tab
-      renderGridForCategory("available");
+      container.querySelector("#btnOpenStudentGuide")?.addEventListener("click", showGuidelines);
+      container.querySelector("#btnExamGuidelines")?.addEventListener("click", showGuidelines);
 
-      // Bind category tab switching
-      container.querySelectorAll("[data-exam-filter]").forEach((tabBtn) => {
-        tabBtn.addEventListener("click", () => {
-          container.querySelectorAll("[data-exam-filter]").forEach((b) => {
-            b.classList.remove("active");
-            b.setAttribute("aria-selected", "false");
-          });
-          tabBtn.classList.add("active");
-          tabBtn.setAttribute("aria-selected", "true");
-
-          const filter = tabBtn.getAttribute("data-exam-filter") || "available";
-          renderGridForCategory(filter);
-        });
-      });
-
-      // Bind Spotlight Start Exam Button
-      container.querySelectorAll(".btn-start-spotlight, [data-start-exam]").forEach((btn) => {
+      // 4. Bind Add to Calendar Buttons
+      container.querySelectorAll("[data-exam-reminder]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const examId = btn.getAttribute("data-start-exam") || spotlightExam.id;
-          this.confirmStartExam(examId, currentStudent);
+          const code = btn.getAttribute("data-exam-reminder") || "الاختبار";
+          showToast({
+            type: "info",
+            title: "التقويم الأكاديمي",
+            message: `تم إضافة موعد (${code}) إلى تقويمك وتفعيل التذكير بنجاح! 🔔`
+          });
         });
       });
 
-      // Bind Integrity Info button
-      container.querySelector("#openIntegrityRulesBtn")?.addEventListener("click", () => {
-        showConfirmDialog({
-          title: "تعليمات النزاهة الأكاديمية والمراقبة الذكية",
-          message: "• يمنع مغادرة تبويب الامتحان أو فتح نوافذ خارجية أثناء الاختبار.\n• يتم تسجيل مدة الحل وتقييم الأكواد البرمجية آلياً.\n• في حال مواجهة انقطاع بالإنترنت يتم حفظ الإجابات محلياً واستئنافها فور عودة الاتصال.",
-          confirmText: "فهمت التعليمات ومستعد",
-          cancelText: "إغلاق",
-          variant: "primary"
+      // 5. Bind Review Quiz & Download Certificate
+      container.querySelectorAll("[data-review-quiz]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          showToast({
+            type: "info",
+            title: "تقرير الأداء المعتمد",
+            message: "تم مراجعة الإجابات بنجاح. النتيجة معتمدة ومسجلة في كشف الدرجات النهائي."
+          });
+        });
+      });
+
+      container.querySelectorAll("[data-download-certificate]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          showToast({
+            type: "success",
+            title: "الشهادات الأكاديمية",
+            message: "جاري تجهيز شهادة بايثون التأسيسي المعتمدة وتحميلها... 🎖️"
+          });
+        });
+      });
+
+      // 6. Bind Tab Pills Navigation
+      container.querySelectorAll("[data-exam-tab]").forEach((tabBtn) => {
+        tabBtn.addEventListener("click", () => {
+          container.querySelectorAll("[data-exam-tab]").forEach((t) => t.classList.remove("is-active"));
+          tabBtn.classList.add("is-active");
+
+          const tabType = tabBtn.getAttribute("data-exam-tab");
+          if (tabType === "active") {
+            container.querySelector(".featured-active-exam-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else if (tabType === "upcoming") {
+            container.querySelector("#secUpcomingExams")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else if (tabType === "completed") {
+            container.querySelector("#secCompletedExams")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
         });
       });
 
