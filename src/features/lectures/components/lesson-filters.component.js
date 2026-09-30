@@ -14,42 +14,55 @@ import { GROUPS } from "../../../core/constants.js";
 export function renderStudentLessonFilters({
   searchQuery = "",
   statusFilter = "ALL",
-  sortOrder = "newest"
+  sortOrder = "newest",
+  totalCount = 4
 } = {}) {
   return `
-    <div class="card mb-4 student-lesson-filters-card">
-      <div class="student-filters-toolbar">
-        <!-- Search Input -->
-        <div class="search-bar-wrapper student-search-wrapper">
-          <span class="search-bar-icon" aria-hidden="true">🔍</span>
-          <input
-            type="search"
-            id="studentLessonSearchInput"
-            class="form-input search-bar-input"
-            placeholder="ابحث عن محاضرة أو موضوع..."
-            value="${escapeHtml(searchQuery)}"
-            aria-label="ابحث عن محاضرة"
-          />
-        </div>
+    <div class="student-lectures-search-bar-wrap mb-5">
+      <div class="student-search-input-box">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input
+          type="search"
+          id="studentLessonSearchInput"
+          class="student-search-input"
+          placeholder="ابحث في المحاضرات أو السلايدات..."
+          value="${escapeHtml(searchQuery)}"
+          aria-label="ابحث في المحاضرات"
+        />
+      </div>
 
-        <div class="student-filters-controls">
-          <!-- Status Filter -->
-          <div class="filter-select-wrapper">
-            <select id="studentLessonStatusFilter" class="form-select" aria-label="تصفية المحاضرات">
-              <option value="ALL" ${statusFilter === "ALL" ? "selected" : ""}>كل الدروس</option>
-              <option value="NEW" ${statusFilter === "NEW" ? "selected" : ""}>لم تتم المشاهدة</option>
-              <option value="WATCHED" ${statusFilter === "WATCHED" ? "selected" : ""}>تمت المشاهدة</option>
-            </select>
-          </div>
+      <div class="student-filter-pills-row" role="tablist" aria-label="تصفية المحاضرات">
+        <button
+          type="button"
+          class="student-filter-pill ${statusFilter === "ALL" ? "active" : ""}"
+          data-filter-status="ALL"
+        >
+          <span>الكل (${totalCount})</span>
+        </button>
 
-          <!-- Sort Order -->
-          <div class="filter-select-wrapper">
-            <select id="studentLessonSortOrder" class="form-select" aria-label="ترتيب المحاضرات">
-              <option value="newest" ${sortOrder === "newest" ? "selected" : ""}>الأحدث أولاً</option>
-              <option value="oldest" ${sortOrder === "oldest" ? "selected" : ""}>الأقدم أولاً</option>
-            </select>
-          </div>
-        </div>
+        <button
+          type="button"
+          class="student-filter-pill ${statusFilter === "CORE" ? "active" : ""}"
+          data-filter-status="CORE"
+        >
+          <span>المحاضرات الأساسية</span>
+        </button>
+
+        <button
+          type="button"
+          class="student-filter-pill ${statusFilter === "WORKSHOPS" ? "active" : ""}"
+          data-filter-status="WORKSHOPS"
+        >
+          <span>ورش العمل</span>
+        </button>
+
+        <button
+          type="button"
+          class="student-filter-pill ${statusFilter === "CODE" ? "active" : ""}"
+          data-filter-status="CODE"
+        >
+          <span>مرفقات الأكواد</span>
+        </button>
       </div>
     </div>
   `;

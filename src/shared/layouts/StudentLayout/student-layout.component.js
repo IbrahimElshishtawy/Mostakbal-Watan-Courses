@@ -20,8 +20,8 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
           <img src="${logoSrc}" alt="شعار مستقبل وطن" />
         </div>
         <div>
-          <strong id="mobileStudentName" class="text-sm d-block font-extrabold">الطالب</strong>
-          <span class="text-xs text-muted">بوابة الطالب</span>
+          <strong id="mobileStudentName" class="text-sm d-block font-extrabold">إبراهيم خالد</strong>
+          <span class="text-xs text-muted">أمانة أول المحلة • بوابة الطالب</span>
         </div>
       </div>
       <button type="button" id="mobileMenuToggle" class="mobile-menu-btn" aria-label="فتح القائمة الجانبية">
@@ -39,68 +39,85 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
             <img src="${logoSrc}" alt="شعار مستقبل وطن" />
           </div>
           <div class="brand-info">
-            <h1>مستقبل وطن</h1>
-            <p>منصة التعليم الرقمية</p>
+            <h1>حزب مستقبل وطن</h1>
+            <p>أمانة أول المحلة الكبرى • المنصة الرقمية</p>
           </div>
         </div>
 
-        <!-- Student Profile Box -->
+        <!-- Student Profile Box Matching Image Design -->
         <div class="sidebar-user-box">
-          <div id="sidebarAvatarSlot">
-            ${renderAvatar({ name: "ط", size: "md" })}
+          <div class="sidebar-user-avatar-wrap">
+            <div id="sidebarAvatarSlot">
+              ${renderAvatar({ name: "إبراهيم خالد", size: "md" })}
+            </div>
+            <span class="online-status-dot" title="متصل"></span>
           </div>
           <div class="sidebar-user-info">
-            <strong id="sidebarName">الطالب</strong>
-            <small id="sidebarPhone">—</small>
+            <div class="d-flex items-center gap-1">
+              <strong id="sidebarName">إبراهيم خالد</strong>
+              <span class="sidebar-verified-badge" title="حساب نشط وموثق">✓</span>
+            </div>
+            <small id="sidebarPhone">01223070571</small>
+            <div class="sidebar-role-tag">
+              <span class="pulse-indicator"></span>
+              <span>طالب متميز • مسار بايثون وهندسة النظم</span>
+            </div>
           </div>
         </div>
 
         <div class="sidebar-menu-title">المحتوى الأكاديمي</div>
         <nav class="sidebar-menu" id="sidebarNav" role="navigation">
           <button type="button" class="sidebar-item active" data-section="videos">
-            <span class="side-icon" aria-hidden="true">📚</span>
-            <span>الداتا والدروس</span>
+            <span class="side-icon" aria-hidden="true">📖</span>
+            <span class="side-text">الداتا والدروس</span>
           </button>
 
           <button type="button" class="sidebar-item" data-section="exams">
             <span class="side-icon" aria-hidden="true">📝</span>
-            <span>الامتحانات</span>
+            <span class="side-text">الامتحانات والتقييمات</span>
           </button>
 
           <button type="button" class="sidebar-item" data-section="tasks">
             <span class="side-icon" aria-hidden="true">📋</span>
-            <span>التاسكات والواجبات</span>
+            <span class="side-text">التاسكات والواجبات</span>
           </button>
 
           <button type="button" class="sidebar-item" data-section="attendance">
             <span class="side-icon" aria-hidden="true">📊</span>
-            <span>الغياب والحضور</span>
+            <span class="side-text">الغياب والحضور</span>
           </button>
+
+          <div class="sidebar-menu-title">ألعاب وبرمجة تفاعلية</div>
 
           <button type="button" class="sidebar-item" data-section="python-adventure">
             <span class="side-icon" aria-hidden="true">🐍</span>
-            <span>مغامرة بايثون</span>
+            <span class="side-text">مغامرة بايثون</span>
+            <span class="side-badge-pill">جديد</span>
           </button>
 
           <button type="button" class="sidebar-item" data-section="leaderboard">
             <span class="side-icon" aria-hidden="true">🏆</span>
-            <span>لوحة المتصدرين</span>
+            <span class="side-text">لوحة المتصدرين</span>
           </button>
 
           <div class="sidebar-menu-title">الحساب والتفضيلات</div>
 
           <button type="button" class="sidebar-item" data-section="profile">
             <span class="side-icon" aria-hidden="true">👤</span>
-            <span>حسابي الشخصي</span>
+            <span class="side-text">حسابي الشخصي</span>
           </button>
 
           <button type="button" class="sidebar-item" data-section="settings">
             <span class="side-icon" aria-hidden="true">⚙️</span>
-            <span>الإعدادات والمظهر</span>
+            <span class="side-text">الإعدادات والمظهر</span>
           </button>
         </nav>
 
         <div class="sidebar-footer">
+          <div class="sidebar-security-badge mb-2">
+            <span class="sec-dot"></span>
+            <span>جلسة مشفرة 256-Bit</span>
+          </div>
           <button type="button" class="sidebar-item text-danger" id="sidebarLogoutBtn">
             <span class="side-icon" aria-hidden="true">🚪</span>
             <span>تسجيل الخروج</span>
@@ -110,17 +127,40 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
 
       <!-- Main Content Area -->
       <div class="main-wrapper">
-        <!-- Desktop Topbar -->
+        <!-- Desktop Topbar Matching Screenshots -->
         <header class="topbar">
-          <div class="topbar-breadcrumb">
-            <span>منصة مستقبل وطن</span>
-            <span>/</span>
-            <strong id="topbarCurrentTab">📚 الداتا والدروس</strong>
+          <div class="topbar-right-group">
+            <div class="topbar-breadcrumb">
+              <span>منصة مستقبل وطن</span>
+              <span class="breadcrumb-sep">/</span>
+              <span>بوابة الطالب</span>
+              <span class="breadcrumb-sep">/</span>
+              <strong id="topbarCurrentTab">الداتا والدروس</strong>
+            </div>
+            <div class="topbar-pills-row">
+              <span class="topbar-pill">
+                <span class="pill-icon">📅</span>
+                <span>الموسم 2026 / 2027</span>
+              </span>
+              <span class="topbar-pill server-active">
+                <span class="pill-dot"></span>
+                <span>الخادم النشط: 01-Delta المحلة</span>
+              </span>
+            </div>
           </div>
+
           <div class="topbar-actions">
             <div id="studentNotificationBellSlot"></div>
-            <span id="topbarStudentBadge">${renderBadge({ text: "طالب مسجل", variant: "primary", icon: "🎓" })}</span>
-            <div id="topbarUserInitial" class="avatar avatar-sm">ط</div>
+            <button type="button" class="topbar-icon-btn" id="topbarHelpBtn" title="دليل الطالب">
+              <span>❓</span>
+            </button>
+            <div class="topbar-student-pill" id="topbarStudentPill">
+              <div class="topbar-student-meta">
+                <strong id="topbarStudentName">إبراهيم خالد</strong>
+                <span class="topbar-student-track">مسار بايثون وهندسة النظم</span>
+              </div>
+              <div id="topbarUserInitial" class="avatar avatar-sm">إ</div>
+            </div>
           </div>
         </header>
 
@@ -128,25 +168,47 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
           <!-- Interactive Alert Banner Slot (Notifications for Python Challenge, Lectures, Tasks) -->
           <div id="studentInteractiveAlertSlot" class="student-interactive-alert-slot mb-4"></div>
 
-          <!-- Lectures Section -->
+          <!-- Lectures Section (Image 10.jpeg) -->
           <section id="sec-videos" class="tab-content active" aria-labelledby="heading-videos">
-            <div class="page-header student-lessons-header">
+            <!-- Top Navigation Shortcuts Row -->
+            <div class="student-top-shortcuts-bar mb-4">
+              <button type="button" class="shortcut-pill-btn" id="dashNavAdventureBtn" data-target="python-adventure">
+                <span class="pill-icon">🎮</span>
+                <span>تحدي وادي بايثون</span>
+              </button>
+              <button type="button" class="shortcut-pill-btn" id="dashNavScheduleBtn" data-target="schedule">
+                <span class="pill-icon">📅</span>
+                <span>مواعيد المحاضرات</span>
+              </button>
+              <button type="button" class="shortcut-pill-btn" id="dashNavTasksBtn" data-target="tasks">
+                <span class="pill-icon">📝</span>
+                <span>التاسكات والواجبات</span>
+              </button>
+            </div>
+
+            <!-- Two-column Top Split: Left = Attendance, Right = Python Performance & Daily Quest -->
+            <div class="student-dash-top-grid mb-6">
+              <div id="competitiveDashboardWidgetContainer"></div>
+              <div id="attendanceDashboardWidgetContainer"></div>
+            </div>
+
+            <!-- Main Lectures Header -->
+            <div class="page-header student-lessons-header mb-4">
               <div>
-                <h2 id="heading-videos" class="page-title">الدروس والمحاضرات</h2>
-                <p class="page-subtitle">استكشف المحاضرات والمواد التعليمية الخاصة بمجموعتك.</p>
+                <h2 id="heading-videos" class="page-title">الداتا والمحاضرات التدريبية</h2>
+                <p class="page-subtitle">شاهد تسجيلات المحاضرات وحمّل السلايدات والأكواد التطبيقية الخاصة بمسارك الأكاديمي.</p>
               </div>
             </div>
-            <div id="competitiveDashboardWidgetContainer"></div>
-            <div id="attendanceDashboardWidgetContainer"></div>
+
             <div id="videoListContainer"></div>
           </section>
 
-          <!-- Exams Section -->
+          <!-- Exams Section (Image 7.png) -->
           <section id="sec-exams" class="tab-content" aria-labelledby="heading-exams">
             <div class="page-header" id="studentExamsPageHeader">
               <div>
-                <h2 id="heading-exams" class="page-title">📝 الامتحانات</h2>
-                <p class="page-subtitle">الامتحانات المتاحة لك</p>
+                <h2 id="heading-exams" class="page-title">مركز الاختبارات والتقييم الذكي</h2>
+                <p class="page-subtitle">الامتحانات المعتمدة، التقييم الآلي للأكواد، والشهادات التخصصية.</p>
               </div>
             </div>
             <div id="examListContainer"></div>
@@ -292,6 +354,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
       const nameEl = document.getElementById("sidebarName");
       const phoneEl = document.getElementById("sidebarPhone");
       const mobileNameEl = document.getElementById("mobileStudentName");
+      const topbarStudentName = document.getElementById("topbarStudentName");
       const avatarSlot = document.getElementById("sidebarAvatarSlot");
       const topbarAvatar = document.getElementById("topbarUserInitial");
       const topbarBadge = document.getElementById("topbarStudentBadge");
@@ -299,6 +362,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
       if (name) {
         if (nameEl) nameEl.textContent = name;
         if (mobileNameEl) mobileNameEl.textContent = name;
+        if (topbarStudentName) topbarStudentName.textContent = name;
         if (avatarSlot) avatarSlot.innerHTML = renderAvatar({ name, size: "md" });
         if (topbarAvatar) topbarAvatar.textContent = name.trim().charAt(0);
         if (topbarBadge && name !== "طالب مسجل") {

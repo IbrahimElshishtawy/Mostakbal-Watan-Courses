@@ -467,6 +467,25 @@ export const PythonAdventureController = {
       this.handleContinue();
     });
 
+    document.getElementById("adventureStartMissionBtn")?.addEventListener("click", () => {
+      this.handleContinue();
+    });
+
+    document.getElementById("adventureShowHintBtn")?.addEventListener("click", () => {
+      showConfirmDialog({
+        title: "تلميح لغز السلاسل النصية والدوال 💡",
+        message: "استخدم دالة split() لتقسيم الجملة إلى كلمات، ثم قم بتعريف قاموس counts = {} وتحديث تكرار كل كلمة، أو استخدم Counter من مكتبة collections.",
+        confirmText: "فهمت الفكرة، سأبرمجها الآن",
+        cancelText: "إغلاق",
+        variant: "primary"
+      });
+    });
+
+    document.getElementById("advOpenFullLeaderboardBtn")?.addEventListener("click", () => {
+      const lbBtn = document.querySelector('.sidebar-item[data-section="leaderboard"]');
+      if (lbBtn) lbBtn.click();
+    });
+
     document.getElementById("adventureQuickMapBtn")?.addEventListener("click", () => {
       this.openWorldMapTrack("all", "world-1");
     });
@@ -475,17 +494,33 @@ export const PythonAdventureController = {
       this.openWorldMapTrack("problem-solving", "ps-level-1");
     });
 
+    containerElement.querySelectorAll("[data-adv-action]").forEach((card) => {
+      card.addEventListener("click", () => {
+        const action = card.getAttribute("data-adv-action");
+        if (action === "world-map") this.navigateTo("world-map");
+        else if (action === "duels") {
+          showConfirmDialog({
+            title: "حلبة مبارزة الأكواد ⚔️",
+            message: "ميزة التحدي المباشر بين الطلاب ستنطلق مع نهاية الأسبوع الجاري! استعد بمراجعة هياكل البيانات وحل التحديات الفردية.",
+            confirmText: "رائع، أنا جاهز",
+            cancelText: "إغلاق",
+            variant: "primary"
+          });
+        } else if (action === "bank") {
+          this.navigateTo("daily");
+        } else if (action === "projects") {
+          const taskBtn = document.querySelector('.sidebar-item[data-section="tasks"]');
+          if (taskBtn) taskBtn.click();
+        } else if (action === "badges") {
+          this.navigateTo("achievements");
+        }
+      });
+    });
+
     containerElement.querySelectorAll(".adventure-hub-card[data-nav]").forEach((card) => {
       card.addEventListener("click", () => {
         const nav = card.getAttribute("data-nav");
         if (nav) this.navigateTo(nav);
-      });
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          const nav = card.getAttribute("data-nav");
-          if (nav) this.navigateTo(nav);
-        }
       });
     });
   },

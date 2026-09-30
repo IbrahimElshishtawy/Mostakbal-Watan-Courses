@@ -76,14 +76,22 @@ export const LeaderboardController = {
       })
     );
 
-    // Bind Scope Tabs
-    this._container.querySelectorAll(".lb-scope-tab").forEach((tab) => {
+    // Bind Scope Tabs & Filter Buttons
+    this._container.querySelectorAll(".lb-filter-btn, .lb-scope-tab").forEach((tab) => {
       tab.addEventListener("click", (e) => {
         const newScope = e.currentTarget.getAttribute("data-scope");
-        if (newScope && newScope !== this._currentScope) {
+        if (newScope) {
+          this._container.querySelectorAll(".lb-filter-btn").forEach((b) => b.classList.remove("active"));
+          e.currentTarget.classList.add("active");
           this.loadLeaderboard(newScope);
         }
       });
+    });
+
+    // Bind Weekend Challenge button
+    this._container.querySelector("#joinWeekendChallengeBtn")?.addEventListener("click", () => {
+      const advBtn = document.querySelector('.sidebar-item[data-section="python-adventure"]');
+      if (advBtn) advBtn.click();
     });
   }
 };

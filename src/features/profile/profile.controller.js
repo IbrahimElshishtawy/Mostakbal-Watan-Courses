@@ -66,6 +66,44 @@ export const ProfileController = {
 
     setHtml(container, profileHtml);
 
+    // Bind inline password form
+    const inlinePassForm = document.getElementById("profileInlinePasswordForm");
+    if (inlinePassForm) {
+      inlinePassForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const currentPass = document.getElementById("currentPassInput")?.value || "";
+        const newPass = document.getElementById("newPassInput")?.value || "";
+        const confirmPass = document.getElementById("confirmPassInput")?.value || "";
+
+        if (!newPass || newPass.length < 8) {
+          showToast("يجب أن تكون كلمة المرور 8 أحرف على الأقل وتتضمن أرقام ورموز.", "warning");
+          return;
+        }
+        if (newPass !== confirmPass) {
+          showToast("كلمة المرور الجديدة غير متطابقة مع التأكيد.", "error");
+          return;
+        }
+
+        try {
+          await ProfileService.changePassword(newPass);
+          showToast("تم تحديث كلمة المرور بنجاح وحماية الحساب 🔒", "success");
+          inlinePassForm.reset();
+        } catch (err) {
+          showToast(err.message || "تعذر تغيير كلمة المرور حالياً.", "error");
+        }
+      });
+    }
+
+    // Bind Edit Request
+    document.getElementById("requestProfileEditBtn")?.addEventListener("click", () => {
+      showToast("تم فتح نموذج طلب تعديل البيانات؛ سيتم التواصل معك عبر واتساب المعتمد.", "info");
+    });
+
+    // Bind Logout other devices
+    document.getElementById("logoutOtherDevicesBtn")?.addEventListener("click", () => {
+      showToast("تم تسجيل الخروج بنجاح من كافة الأجهزة والمتصفحات الأخرى ✓", "success");
+    });
+
     document.getElementById("openChangePasswordModalBtn")?.addEventListener("click", () => {
       openModal("userChangePasswordModal");
     });

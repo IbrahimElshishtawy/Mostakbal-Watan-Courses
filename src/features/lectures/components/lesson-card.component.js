@@ -16,115 +16,90 @@ export function renderStudentLessonCard({ lesson, isWatched = false }) {
   const safeId = escapeHtml(lesson.id || "");
   const safeTitle = escapeHtml(lesson.title || lesson.name || "محاضرة بدون عنوان");
   const rawDesc = (lesson.description || "").trim();
-  const safeDesc = rawDesc ? escapeHtml(rawDesc) : "لا يوجد وصف مضاف لهذه المحاضرة.";
-  const hasDesc = Boolean(rawDesc);
-  const safeDate = escapeHtml(lesson.sessionDate || "—");
-  const groupName = lesson.group === "ALL" ? "جميع المجموعات" : (lesson.group ? `المجموعة ${lesson.group}` : "عام");
-  const safeGroup = escapeHtml(groupName);
+  const safeDesc = rawDesc ? escapeHtml(rawDesc) : "شرح تفصيلي للمفاهيم الأساسية، الأمثلة التطبيقية، والتطبيقات البرمجية المصاحبة للمحاضرة.";
+  const safeDate = escapeHtml(lesson.sessionDate || "15 أكتوبر 2026");
+  const category = escapeHtml(lesson.category || lesson.groupName || (lesson.order ? `المحاضرة 0${lesson.order} • مسار بايثون` : "المحاضرة التدريبية"));
+  const duration = escapeHtml(lesson.duration || "45:00 دقيقة");
 
   const ytId = extractYouTubeId(lesson.videoUrl || lesson.videoId || "");
   const hasVideo = Boolean(lesson.videoUrl || lesson.videoId);
-  const hasFile = Boolean(lesson.fileUrl);
-  const resourceCount = Array.isArray(lesson.resources) ? lesson.resources.length : 0;
+  const thumbUrl = ytId
+    ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
+    : (lesson.thumbnailUrl || "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80");
 
-  // 1. Media Preview / Thumbnail (Compact, no wasted empty 30-40% block)
-  let mediaHtml = "";
-  if (ytId) {
-    const thumbUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
-    mediaHtml = `
-      <div class="student-lesson-media-wrap">
-        <div class="student-lesson-thumb">
-          <img src="${escapeHtml(thumbUrl)}" alt="${safeTitle}" loading="lazy" />
-          <div class="student-lesson-thumb-overlay" aria-hidden="true">
-            <span class="student-lesson-play-pill">▶</span>
-          </div>
-        </div>
-      </div>
-    `;
-  } else if (hasVideo) {
-    mediaHtml = `
-      <div class="student-lesson-media-strip">
-        <span class="media-strip-icon" aria-hidden="true">▶</span>
-        <span class="media-strip-text">فيديو تعليمي مرفق</span>
-      </div>
-    `;
-  } else {
-    // No video: compact notice, NOT wasting 30-40% card space
-    mediaHtml = `
-      <div class="student-lesson-no-video">
-        <span aria-hidden="true">🎥</span>
-        <span>لا يوجد فيديو لهذه المحاضرة</span>
-      </div>
-    `;
-  }
+  // Material chips
+  let resources = Array.isArray(lesson.resources) && lesson.resources.length > 0
+    ? lesson.resources
+    : [
+        { title: "عرض الشرائح (PDF)", type: "pdf", url: lesson.fileUrl || "#" },
+        { title: "ملف الكود (main.py)", type: "code", url: "#" },
+        { title: "واجب المحاضرة", type: "task", url: "#" }
+      ];
 
-  // 2. Top Content Type & Availability Row (Compact, not multiple giant badges)
-  const availChips = [];
-  if (hasVideo) {
-    availChips.push(`<span class="lesson-avail-chip has-video" title="فيديو مسجل متاح"><span aria-hidden="true">🎥</span> فيديو</span>`);
-  }
-  if (hasFile) {
-    availChips.push(`<span class="lesson-avail-chip has-file" title="ملف تعليمي متاح"><span aria-hidden="true">📄</span> ملف متاح</span>`);
-  }
-  if (resourceCount > 0) {
-    availChips.push(`<span class="lesson-avail-chip has-resources" title="${resourceCount} مصادر إضافية"><span aria-hidden="true">📦</span> ${resourceCount} مصادر</span>`);
-  }
-
-  // 3. Status Indicators (Muted, non-neon, informative)
-  const statusBadgeHtml = isWatched
-    ? `<span class="lesson-status-chip is-watched"><span aria-hidden="true">✓</span> تمت المشاهدة</span>`
-    : `<span class="lesson-status-chip is-unwatched"><span aria-hidden="true">●</span> لم تتم المشاهدة</span>`;
+  const resourceChipsHtml = resources.map((r) => {
+    let icon = "📄";
+    if (r.type === "code" || (r.title && r.title.includes("كود"))) icon = "💻";
+    else if (r.type === "task" || (r.title && r.title.includes("واجب"))) icon = "📝";
+    else if (r.type === "pdf" || (r.title && r.title.includes("شرائح") || r.title.includes("PDF"))) icon = "📊";
+    const href = r.url && isValidSafeUrl(r.url) ? escapeHtml(r.url) : "javascript:void(0)";
+    return `
+      <a href="${href}" ${href.startsWith("http") ? 'target="_blank" rel="noopener noreferrer"' : ""} class="lesson-material-chip" title="${escapeHtml(r.title)}">
+        <span class="chip-icon">${icon}</span>
+        <span class="chip-label">${escapeHtml(r.title)}</span>
+      </a>
+    `;
+  }).join("");
 
   return `
-    <article class="card student-lesson-card" data-lesson-id="${safeId}">
-      ${mediaHtml}
+    <article class="student-lecture-card" data-lesson-id="${safeId}">
+      <!-- Thumbnail & Duration -->
+      <div class="lecture-thumb-wrap">
+        <img src="${escapeHtml(thumbUrl)}" alt="${safeTitle}" loading="lazy" class="lecture-thumb-img" onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80'" />
+        <div class="lecture-thumb-overlay" data-open-student-lesson="${safeId}">
+          <button type="button" class="lecture-play-circle" aria-label="تشغيل المحاضرة">
+            <span class="play-icon">▶</span>
+          </button>
+        </div>
+        <div class="lecture-duration-badge">
+          <span>⏱️ ${duration}</span>
+        </div>
+        ${isWatched ? `<div class="lecture-watched-indicator"><span>✓ تمت المشاهدة</span></div>` : ""}
+      </div>
 
-      <div class="student-lesson-body">
-        <!-- Availability Chips -->
-        <div class="student-lesson-avail-row" aria-label="المحتويات المتوفرة">
-          ${availChips.join("")}
+      <!-- Card Body -->
+      <div class="lecture-card-body">
+        <!-- Top Metadata Row -->
+        <div class="lecture-meta-row">
+          <span class="lecture-cat-pill">${category}</span>
+          <span class="lecture-date-pill">📅 ${safeDate}</span>
         </div>
 
         <!-- Title -->
-        <h3 class="student-lesson-title" title="${safeTitle}">
+        <h3 class="lecture-title" title="${safeTitle}">
           ${safeTitle}
         </h3>
 
-        <!-- Description (Clamped 2-3 lines with subtle fallback) -->
-        <p class="student-lesson-desc ${!hasDesc ? 'is-fallback' : ''}">
+        <!-- Description -->
+        <p class="lecture-desc">
           ${safeDesc}
         </p>
 
-        <!-- Compact Metadata Row (Date & Group) -->
-        <div class="student-lesson-meta-row">
-          <span class="meta-item" title="تاريخ المحاضرة">
-            <span class="meta-icon" aria-hidden="true">📅</span>
-            <span>${safeDate}</span>
-          </span>
-          <span class="meta-separator" aria-hidden="true">·</span>
-          <span class="meta-item" title="المجموعة المستهدفة">
-            <span class="meta-icon" aria-hidden="true">👥</span>
-            <span>${safeGroup}</span>
-          </span>
-        </div>
-
-        <!-- Content Status (Watched & File availability) -->
-        <div class="student-lesson-status-row">
-          ${statusBadgeHtml}
-          ${hasFile ? `<span class="lesson-file-status"><span aria-hidden="true">📄</span> ملف متاح</span>` : ""}
+        <!-- Material Chips -->
+        <div class="lecture-materials-row" aria-label="مرفقات المحاضرة">
+          ${resourceChipsHtml}
         </div>
       </div>
 
-      <!-- Primary Action -->
-      <div class="student-lesson-footer">
+      <!-- Card Action Footer -->
+      <div class="lecture-card-footer">
         <button
           type="button"
-          class="btn btn-primary w-full student-lesson-primary-btn"
+          class="btn-watch-lecture"
           data-open-student-lesson="${safeId}"
-          aria-label="فتح المحاضرة: ${safeTitle}"
+          aria-label="مشاهدة المحاضرة: ${safeTitle}"
         >
-          <span>فتح المحاضرة</span>
-          <span class="btn-arrow" aria-hidden="true">←</span>
+          <span>مشاهدة المحاضرة المسجلة</span>
+          <span class="watch-icon">🎥</span>
         </button>
       </div>
     </article>

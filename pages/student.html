@@ -231,6 +231,11 @@
         console.warn("Interactive banner mount warning:", e);
       }
 
+      // Wire Dashboard Top Quick Shortcuts (Image 10.jpeg)
+      document.getElementById("dashNavAdventureBtn")?.addEventListener("click", () => layout.switchTab("python-adventure"));
+      document.getElementById("dashNavTasksBtn")?.addEventListener("click", () => layout.switchTab("tasks"));
+      document.getElementById("dashNavScheduleBtn")?.addEventListener("click", () => layout.switchTab("attendance"));
+
       // 3. Mount Video Player Modal into DOM
       if (!document.getElementById("videoPlayerModal")) {
         document.body.insertAdjacentHTML("beforeend", renderVideoPlayerModal());
