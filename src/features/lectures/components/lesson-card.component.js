@@ -17,61 +17,98 @@ export function renderStudentLessonCard({ lesson, isWatched = false }) {
   const safeTitle = escapeHtml(lesson.title || lesson.name || "محاضرة بدون عنوان");
   const rawDesc = (lesson.description || "").trim();
   const safeDesc = rawDesc ? escapeHtml(rawDesc) : "شرح تفصيلي للمفاهيم الأساسية، الأمثلة التطبيقية، والتطبيقات البرمجية المصاحبة للمحاضرة.";
-  const safeDate = escapeHtml(lesson.sessionDate || "15 أكتوبر 2026");
-  const category = escapeHtml(lesson.category || lesson.groupName || (lesson.order ? `المحاضرة 0${lesson.order} • مسار بايثون` : "المحاضرة التدريبية"));
-  const duration = escapeHtml(lesson.duration || "45:00 دقيقة");
+  const safeDate = escapeHtml(lesson.sessionDate || "22 سبتمبر 2026");
+  const category = escapeHtml(lesson.category || "بايثون التأسيسي");
+  const duration = escapeHtml(lesson.duration || "1 ساعة و 45 دقيقة");
+  const orderNum = lesson.order ? (lesson.order < 10 ? `0${lesson.order}` : `${lesson.order}`) : "01";
+  const numBadge = escapeHtml(lesson.lectureNumberBadge || `المحاضرة ${orderNum}`);
+  const isLive = Boolean(lesson.isLive || (lesson.statusType === "live") || safeTitle.includes("الجمل الشرطية"));
+  const statusBadge = escapeHtml(lesson.statusBadge || (isLive ? "جلسة حية" : (orderNum === "02" ? "تسجيل بدقة 4K" : "متاحة للمشاهدة")));
+  const statusType = lesson.statusType || (isLive ? "live" : (orderNum === "02" ? "4k" : "available"));
 
   const ytId = extractYouTubeId(lesson.videoUrl || lesson.videoId || "");
-  const hasVideo = Boolean(lesson.videoUrl || lesson.videoId);
   const thumbUrl = ytId
     ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
-    : (lesson.thumbnailUrl || "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80");
+    : (lesson.thumbnailUrl || (orderNum === "02" ? "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" : (isLive ? "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" : "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80")));
 
-  // Material chips
+  // Resources formatting
+  const resourcesLabel = escapeHtml(lesson.resourcesLabel || (isLive ? "المواد التحضيرية المسبقة:" : "المواد الملحقة بالدرس:"));
   let resources = Array.isArray(lesson.resources) && lesson.resources.length > 0
     ? lesson.resources
     : [
-        { title: "عرض الشرائح (PDF)", type: "pdf", url: lesson.fileUrl || "#" },
-        { title: "ملف الكود (main.py)", type: "code", url: "#" },
-        { title: "واجب المحاضرة", type: "task", url: "#" }
+        { title: "سلايدات", type: "pdf", color: "red" },
+        { title: "الكود .py", type: "code", color: "cyan" },
+        { title: "الواجب", type: "task", color: "green" }
       ];
 
   const resourceChipsHtml = resources.map((r) => {
     let icon = "📄";
-    if (r.type === "code" || (r.title && r.title.includes("كود"))) icon = "💻";
-    else if (r.type === "task" || (r.title && r.title.includes("واجب"))) icon = "📝";
-    else if (r.type === "pdf" || (r.title && r.title.includes("شرائح") || r.title.includes("PDF"))) icon = "📊";
+    let colorClass = "chip-cyan";
+    const t = (r.title || "").toLowerCase();
+    if (r.color === "red" || t.includes("سلايد") || t.includes("pdf")) {
+      icon = "📑";
+      colorClass = "chip-red";
+    } else if (r.color === "cyan" || t.includes("كود") || r.type === "code") {
+      icon = "</>";
+      colorClass = "chip-cyan";
+    } else if (r.color === "green" || r.color === "emerald" || t.includes("واجب") || t.includes("تمرين")) {
+      icon = "✓";
+      colorClass = "chip-green";
+    } else if (r.color === "amber" || t.includes("jupyter") || r.type === "jupyter") {
+      icon = "📓";
+      colorClass = "chip-amber";
+    } else if (r.color === "slate" || t.includes("تذكير") || r.type === "reminder") {
+      icon = "🔔";
+      colorClass = "chip-slate";
+    }
+
     const href = r.url && isValidSafeUrl(r.url) ? escapeHtml(r.url) : "javascript:void(0)";
     return `
-      <a href="${href}" ${href.startsWith("http") ? 'target="_blank" rel="noopener noreferrer"' : ""} class="lesson-material-chip" title="${escapeHtml(r.title)}">
-        <span class="chip-icon">${icon}</span>
-        <span class="chip-label">${escapeHtml(r.title)}</span>
+      <a href="${href}" ${href.startsWith("http") ? 'target="_blank" rel="noopener noreferrer"' : ""} class="lesson-material-chip ${colorClass}" title="${escapeHtml(r.title)}">
+        <span class="chip-symbol">${icon}</span>
+        <span class="chip-text">${escapeHtml(r.title)}</span>
       </a>
     `;
   }).join("");
 
   return `
     <article class="student-lecture-card" data-lesson-id="${safeId}">
-      <!-- Thumbnail & Duration -->
+      <!-- Thumbnail & Top Badges Overlay -->
       <div class="lecture-thumb-wrap">
         <img src="${escapeHtml(thumbUrl)}" alt="${safeTitle}" loading="lazy" class="lecture-thumb-img" onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80'" />
+        
         <div class="lecture-thumb-overlay" data-open-student-lesson="${safeId}">
           <button type="button" class="lecture-play-circle" aria-label="تشغيل المحاضرة">
             <span class="play-icon">▶</span>
           </button>
         </div>
-        <div class="lecture-duration-badge">
+
+        <!-- Top Right Badge: Lecture Number -->
+        <div class="lecture-num-badge">
+          <span>${numBadge}</span>
+        </div>
+
+        <!-- Top Left Badge: Duration or Next Time -->
+        <div class="lecture-time-badge">
           <span>⏱️ ${duration}</span>
         </div>
-        ${isWatched ? `<div class="lecture-watched-indicator"><span>✓ تمت المشاهدة</span></div>` : ""}
+
+        <!-- Bottom Status Overlay Badge -->
+        <div class="lecture-status-overlay-badge status-${statusType}">
+          ${statusType === 'live' ? '<span class="live-dot-pulse"></span>' : ''}
+          ${statusType === 'available' ? '<span class="avail-dot"></span>' : ''}
+          ${statusType === '4k' ? '<span class="hd-icon">📹</span>' : ''}
+          <span>${statusBadge}</span>
+        </div>
       </div>
 
       <!-- Card Body -->
       <div class="lecture-card-body">
-        <!-- Top Metadata Row -->
-        <div class="lecture-meta-row">
-          <span class="lecture-cat-pill">${category}</span>
-          <span class="lecture-date-pill">📅 ${safeDate}</span>
+        <!-- Track & Date Meta -->
+        <div class="lecture-track-date">
+          <span class="track-tag">${category}</span>
+          <span class="meta-separator">•</span>
+          <span class="date-text">${safeDate}</span>
         </div>
 
         <!-- Title -->
@@ -84,23 +121,38 @@ export function renderStudentLessonCard({ lesson, isWatched = false }) {
           ${safeDesc}
         </p>
 
-        <!-- Material Chips -->
-        <div class="lecture-materials-row" aria-label="مرفقات المحاضرة">
-          ${resourceChipsHtml}
+        <!-- Material Chips Section -->
+        <div class="lecture-materials-section">
+          <span class="materials-label">${resourcesLabel}</span>
+          <div class="materials-chips-list" aria-label="مرفقات المحاضرة">
+            ${resourceChipsHtml}
+          </div>
         </div>
       </div>
 
       <!-- Card Action Footer -->
       <div class="lecture-card-footer">
-        <button
-          type="button"
-          class="btn-watch-lecture"
-          data-open-student-lesson="${safeId}"
-          aria-label="مشاهدة المحاضرة: ${safeTitle}"
-        >
-          <span>مشاهدة المحاضرة المسجلة</span>
-          <span class="watch-icon">🎥</span>
-        </button>
+        ${isLive ? `
+          <button
+            type="button"
+            class="btn-zoom-live"
+            data-open-student-lesson="${safeId}"
+            aria-label="رابط قاعة البث المباشر: ${safeTitle}"
+          >
+            <span>رابط قاعة البث المباشر (Zoom)</span>
+            <span class="btn-icon">🔗</span>
+          </button>
+        ` : `
+          <button
+            type="button"
+            class="btn-watch-lecture-gradient"
+            data-open-student-lesson="${safeId}"
+            aria-label="مشاهدة المحاضرة: ${safeTitle}"
+          >
+            <span>مشاهدة المحاضرة المسجلة</span>
+            <span class="btn-icon">▷</span>
+          </button>
+        `}
       </div>
     </article>
   `;

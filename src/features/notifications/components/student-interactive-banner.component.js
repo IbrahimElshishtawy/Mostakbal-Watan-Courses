@@ -18,165 +18,43 @@ export function renderStudentInteractiveBanner({
   activeTopic = "python-challenge",
   isCollapsed = false
 } = {}) {
-  const safeName = escapeHtml(student.name || student.studentName || "يا بطل");
-  const rawGroup = student.group || student.studentGroup || "جميع المجموعات";
-  const safeGroup = escapeHtml(rawGroup === "ALL" ? "جميع المجموعات" : rawGroup);
+  const safeName = escapeHtml(student.name || student.studentName || "إبراهيم خالد");
 
   if (isCollapsed) {
     return `
-      <aside class="student-interactive-banner is-collapsed" aria-label="شريط الإشعارات والتنبيهات التفاعلية">
-        <div class="banner-collapsed-inner">
-          <div class="collapsed-lead">
-            <span class="collapsed-pulse-icon" aria-hidden="true">🔔</span>
-            <strong class="collapsed-title">تنبيهات تفاعلية هامة:</strong>
-            <span class="collapsed-summary">تحدي وادي بايثون 🐍 | مواعيد المحاضرات 📅 | تسليم التاسكات 📋</span>
-          </div>
-          <button type="button" id="expandInteractiveBannerBtn" class="btn btn-primary btn-xs expand-banner-btn">
-            <span>عرض التفاصيل</span>
-            <span aria-hidden="true">▾</span>
-          </button>
+      <aside class="student-challenge-banner-row is-collapsed" aria-label="شريط التحديات التفاعلية">
+        <div class="banner-challenge-lead">
+          <span class="banner-challenge-icon">🐍</span>
+          <span class="banner-challenge-text">أهلاً ${safeName}! تحدي وادي بايثون بانتظارك</span>
         </div>
+        <button type="button" id="expandInteractiveBannerBtn" class="btn-banner-challenge" style="padding:0.35rem 0.85rem; font-size:0.75rem;">
+          <span>إظهار التحدي ⚡</span>
+        </button>
       </aside>
     `;
   }
 
-  // Topics Configuration
-  const topics = [
-    {
-      id: "python-challenge",
-      title: "🐍 تحدي وادي بايثون",
-      badge: "🔥 تحدي برمجي تفاعلي",
-      badgeClass: "badge-success",
-      heading: `أهلاً ${safeName}! تحدي وادي بايثون بانتظارك 🐍`,
-      body: "خض مغامرة وادي المتغيرات والمنطق البرمجي! حل التحديات الشيقة مباشرة داخل المتصفح، واجمع نقاط الخبرة XP والأوسمة لتتصدر لوحة الشرف بين زملائك.",
-      stat1: { icon: "⚡", label: "المكافأة:", value: "+50 XP لكل مستوى تجتازه" },
-      stat2: { icon: "🏆", label: "التحدي:", value: "وادي المتغيرات (Variables Valley)" },
-      primaryAction: { label: "خوض تحدي وادي بايثون الآن 🚀", targetTab: "python-adventure" },
-      secondaryAction: { label: "عرض قائمة المتصدرين 🏅", targetTab: "python-adventure" }
-    },
-    {
-      id: "lecture-reminder",
-      title: "📅 مواعيد المحاضرات",
-      badge: "📚 الجلسات الأسبوعية",
-      badgeClass: "badge-gold",
-      heading: "مواعيد المحاضرات والدروس المرفوعة 📖",
-      body: `تابع شروحات دروس بايثون المسجلة الخاصة بمجموعتك (${safeGroup})، وحمل ملفات الأكواد والمصادر التعليمية لتكون دائماً في الصدارة.`,
-      stat1: { icon: "👥", label: "المجموعة الدراسية:", value: safeGroup },
-      stat2: { icon: "🎥", label: "المحتوى المتاح:", value: "شروحات فيديو + ملفات PDF" },
-      primaryAction: { label: "استعراض الدروس والمحاضرات 📚", targetTab: "videos" },
-      secondaryAction: { label: "سجل الحضور والغياب 📊", targetTab: "attendance" }
-    },
-    {
-      id: "task-reminder",
-      title: "📋 التاسكات والواجبات",
-      badge: "✍️ مهام التطبيق العملي",
-      badgeClass: "badge-primary",
-      heading: "تاسكات بايثون العملية بانتظار تسليمك 💻",
-      body: "التطبيق العملي هو مفتاح احتراف البرمجة. اكتب كود الحل وارفعه مباشرة لتلقي تقييم المعلم من 10 درجات مع ملاحظات فورية على كودك.",
-      stat1: { icon: "⭐", label: "التقييم الأكاديمي:", value: "درجات محسوبة من 10" },
-      stat2: { icon: "💡", label: "الملاحظات:", value: "تصحيح مباشر وتوجيهات للمعلم" },
-      primaryAction: { label: "تسليم التاسك ومتابعة الدرجات 📋", targetTab: "tasks" },
-      secondaryAction: { label: "مراجعة المهام السابقة 📝", targetTab: "tasks" }
-    }
-  ];
-
-  const currentTopic = topics.find((t) => t.id === activeTopic) || topics[0];
-
   return `
-    <aside class="student-interactive-banner" aria-label="لوحة التنبيهات والتحديات التفاعلية">
-      <!-- Top Controls: Tabs + Dismiss Button -->
-      <div class="banner-top-bar">
-        <div class="banner-topic-tabs" role="tablist" aria-label="أقسام الإشعار التفاعلي">
-          ${topics
-            .map(
-              (t) => `
-            <button
-              type="button"
-              role="tab"
-              class="banner-tab-pill ${t.id === currentTopic.id ? 'is-active' : ''}"
-              data-banner-topic="${t.id}"
-              aria-selected="${t.id === currentTopic.id}"
-            >
-              <span>${t.title}</span>
-              ${t.id === 'python-challenge' ? '<span class="pulse-indicator" aria-hidden="true"></span>' : ''}
-            </button>
-          `
-            )
-            .join("")}
-        </div>
-
-        <button
-          type="button"
-          id="collapseInteractiveBannerBtn"
-          class="banner-dismiss-btn"
-          aria-label="طي الإشعار التفاعلي"
-          title="طي الإشعار"
-        >
-          <span>إخفاء مؤقت</span>
-          <span aria-hidden="true">✕</span>
-        </button>
+    <aside class="student-challenge-banner-row" aria-label="تحدي وادي بايثون">
+      <div class="banner-challenge-lead">
+        <span class="banner-challenge-icon">🐍</span>
+        <span class="banner-challenge-text">أهلاً ${safeName}! تحدي وادي بايثون بانتظارك 🐍</span>
       </div>
-
-      <!-- Main Banner Body -->
-      <div class="banner-body-card">
-        <div class="banner-content-lead">
-          <div class="banner-badge-strip">
-            <span class="badge ${currentTopic.badgeClass} banner-theme-badge">${currentTopic.badge}</span>
-            <span class="banner-interactive-hint">⚡ إشعار تفاعلي مباشر</span>
-          </div>
-
-          <h3 class="banner-headline">
-            ${currentTopic.heading}
-          </h3>
-
-          <p class="banner-description">
-            ${currentTopic.body}
-          </p>
-
-          <!-- Highlights / Stats Strip -->
-          <div class="banner-stats-strip">
-            <div class="banner-stat-chip">
-              <span class="stat-icon" aria-hidden="true">${currentTopic.stat1.icon}</span>
-              <span class="stat-label">${currentTopic.stat1.label}</span>
-              <strong class="stat-value">${currentTopic.stat1.value}</strong>
-            </div>
-
-            <div class="banner-stat-chip">
-              <span class="stat-icon" aria-hidden="true">${currentTopic.stat2.icon}</span>
-              <span class="stat-label">${currentTopic.stat2.label}</span>
-              <strong class="stat-value">${currentTopic.stat2.value}</strong>
-            </div>
-          </div>
-        </div>
-
-        <!-- Interactive Action Buttons -->
-        <div class="banner-action-buttons">
-          <button
-            type="button"
-            class="btn btn-primary banner-primary-action-btn"
-            data-interactive-navigate="${currentTopic.primaryAction.targetTab}"
-          >
-            <span>${currentTopic.primaryAction.label}</span>
-          </button>
-
-          ${
-            currentTopic.secondaryAction
-              ? `
-            <button
-              type="button"
-              class="btn btn-secondary banner-secondary-action-btn"
-              data-interactive-navigate="${currentTopic.secondaryAction.targetTab}"
-            >
-              <span>${currentTopic.secondaryAction.label}</span>
-            </button>
-          `
-              : ""
-          }
-        </div>
+      <div class="banner-challenge-actions">
+        <button type="button" class="btn-banner-challenge" data-interactive-navigate="python-adventure" title="بدء خوض التحدي البرمجي">
+          <span>خوض التحدي</span>
+          <span>⚡</span>
+        </button>
+        <button type="button" class="btn-banner-leaderboard" data-interactive-navigate="leaderboard" title="عرض لوحة الشرف">
+          <span>المتصدرين</span>
+          <span>🏆</span>
+        </button>
       </div>
     </aside>
   `;
 }
+
+
 
 /**
  * Mounts and wires up the interactive notification banner in the target container.

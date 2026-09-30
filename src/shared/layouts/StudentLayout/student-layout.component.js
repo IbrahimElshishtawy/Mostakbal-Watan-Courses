@@ -172,7 +172,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
           <section id="sec-videos" class="tab-content active" aria-labelledby="heading-videos">
             <!-- Top Navigation Shortcuts Row -->
             <div class="student-top-shortcuts-bar mb-4">
-              <button type="button" class="shortcut-pill-btn" id="dashNavAdventureBtn" data-target="python-adventure">
+              <button type="button" class="shortcut-pill-btn active-shortcut" id="dashNavAdventureBtn" data-target="python-adventure">
                 <span class="pill-icon">🎮</span>
                 <span>تحدي وادي بايثون</span>
               </button>
@@ -181,23 +181,19 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
                 <span>مواعيد المحاضرات</span>
               </button>
               <button type="button" class="shortcut-pill-btn" id="dashNavTasksBtn" data-target="tasks">
-                <span class="pill-icon">📝</span>
+                <span class="pill-icon">📋</span>
                 <span>التاسكات والواجبات</span>
               </button>
             </div>
 
-            <!-- Two-column Top Split: Left = Attendance, Right = Python Performance & Daily Quest -->
-            <div class="student-dash-top-grid mb-6">
-              <div id="competitiveDashboardWidgetContainer"></div>
-              <div id="attendanceDashboardWidgetContainer"></div>
-            </div>
-
-            <!-- Main Lectures Header -->
-            <div class="page-header student-lessons-header mb-4">
-              <div>
-                <h2 id="heading-videos" class="page-title">الداتا والمحاضرات التدريبية</h2>
-                <p class="page-subtitle">شاهد تسجيلات المحاضرات وحمّل السلايدات والأكواد التطبيقية الخاصة بمسارك الأكاديمي.</p>
+            <!-- Main Lectures Header (Matching Image 10.jpeg) -->
+            <div class="student-lessons-header-box mb-4">
+              <div class="student-lessons-header-tag">
+                <span class="header-tag-icon">🎓</span>
+                <span>المحتوى الأكاديمي والمحاضرات المسجلة</span>
               </div>
+              <h2 id="heading-videos" class="student-lessons-main-title">الداتا والمحاضرات التدريبية</h2>
+              <p class="student-lessons-subtitle">استكشف السلايدات، الشروحات، الكود المصدري، والتكليفات المصاحبة لكل جلسة</p>
             </div>
 
             <div id="videoListContainer"></div>

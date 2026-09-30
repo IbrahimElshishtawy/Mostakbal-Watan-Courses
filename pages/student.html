@@ -182,8 +182,6 @@
         onTabChange: (tabId) => {
           if (tabId === "videos") {
             LecturesController.loadStudentLectures("videoListContainer", student);
-            AttendanceController.loadDashboardWidget("attendanceDashboardWidgetContainer", student, (tab) => layout.switchTab(tab));
-            loadCompetitiveWidget(student);
           } else if (tabId === "exams") {
             lazyLoaders.exams().then((ctrl) => ctrl.loadStudentExams("examListContainer", student));
           } else if (tabId === "tasks") {
@@ -258,8 +256,6 @@
         layout.switchTab("tasks");
       } else {
         LecturesController.loadStudentLectures("videoListContainer", student);
-        AttendanceController.loadDashboardWidget("attendanceDashboardWidgetContainer", student, (tab) => layout.switchTab(tab));
-        loadCompetitiveWidget(student);
       }
 
       // 5. In Background: Fetch Enriched Student Profile & Update UI without blocking

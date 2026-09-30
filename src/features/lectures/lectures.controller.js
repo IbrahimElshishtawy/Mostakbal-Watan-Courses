@@ -678,73 +678,69 @@ export const LecturesController = {
     return [
       {
         id: "lec-py-01",
-        title: "مدخل إلى لغة بايثون وبيئة العمل والتثبيت",
-        description: "شرح شامل لتنصيب بيئة العمل VS Code و Anaconda، والتعامل مع المتغيرات وأنواع البيانات الأولية.",
-        category: "المحاضرة 01 • بايثون التأسيسية",
-        sessionDate: "15 أكتوبر 2026",
-        duration: "45:00 دقيقة",
+        title: "مقدمة في عالم البرمجة، تثبيت لغة Python، وإعداد بيئة التطوير VS Code",
+        description: "شرح مبسط لكيفية عمل المترجم، ضبط المتغيرات البيئية PATH، تشغيل أول سكريبت تطبيقي، وفهم بنية أوامر بايثون.",
+        category: "بايثون التأسيسي",
+        sessionDate: "22 سبتمبر 2026",
+        duration: "1 ساعة و 45 دقيقة",
         order: 1,
+        lectureNumberBadge: "المحاضرة 01",
+        statusBadge: "متاحة للمشاهدة",
+        statusType: "available",
         type: "CORE",
         videoUrl: "https://www.youtube.com/watch?v=kqtD5dpn9C8",
         thumbnailUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
+        resourcesLabel: "المواد الملحقة بالدرس:",
         resources: [
-          { title: "عرض الشرائح (PDF)", type: "pdf", url: "#" },
-          { title: "ملف الكود (main.py)", type: "code", url: "#" },
-          { title: "واجب المحاضرة", type: "task", url: "#" }
+          { title: "سلايدات", type: "pdf", color: "red", url: "#" },
+          { title: "الكود .py", type: "code", color: "cyan", url: "#" },
+          { title: "الواجب", type: "task", color: "green", url: "#" }
         ],
         group: "ALL",
         active: true
       },
       {
         id: "lec-py-02",
-        title: "جمل التحكم الشرطية if-elif-else والعمليات المنطقية",
-        description: "التحكم في مسار الكود، والشروط المتداخلة، وتطبيق عملي على حساب تقديرات الطلاب.",
-        category: "المحاضرة 02 • التحكم والشروط",
-        sessionDate: "18 أكتوبر 2026",
-        duration: "55:20 دقيقة",
+        title: "المتغيرات وأنواع البيانات والعمليات الحسابية (& Data Types)",
+        description: "التعامل مع النصوص Strings، الأرقام Integers/Floats، المعاملات المنطقية، والتحويل بين الأنواع المختلفة.",
+        category: "بايثون التأسيسي",
+        sessionDate: "26 سبتمبر 2026",
+        duration: "2 ساعة و 10 دقائق",
         order: 2,
+        lectureNumberBadge: "المحاضرة 02",
+        statusBadge: "تسجيل بدقة 4K",
+        statusType: "4k",
         type: "CORE",
         videoUrl: "https://www.youtube.com/watch?v=DZwmZ8Usvnk",
         thumbnailUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80",
+        resourcesLabel: "المواد الملحقة بالدرس:",
         resources: [
-          { title: "ملخص الدرس (PDF)", type: "pdf", url: "#" },
-          { title: "أكواد التطبيق (code.zip)", type: "code", url: "#" }
+          { title: "سلايدات", type: "pdf", color: "red", url: "#" },
+          { title: "دفتر Jupyter", type: "jupyter", color: "amber", url: "#" },
+          { title: "تمرين عملي", type: "exercise", color: "emerald", url: "#" }
         ],
         group: "ALL",
         active: true
       },
       {
         id: "lec-py-03",
-        title: "حلقات التكرار For & While Loops والتحكم فيها",
-        description: "التعامل مع التكرار، ودوال range، وكلمات break و continue مع خوارزميات البحث البسيطة.",
-        category: "المحاضرة 03 • الحلقات التكرارية",
-        sessionDate: "22 أكتوبر 2026",
-        duration: "01:10:00 ساعة",
+        title: "الجمل الشرطية والتحكم في التدفق (If / Elif / Else & Logical Operators)",
+        description: "بناء الخوارزميات المنطقية وصنع القرارات البرمجية، جداول الصواب والخطأ، وحل مسائل تدريبية وتطبيقية.",
+        category: "المنطق البرمجي",
+        sessionDate: "30 سبتمبر 2026",
+        duration: "البث القادم: غداً 7:00 م",
         order: 3,
+        lectureNumberBadge: "المحاضرة 03",
+        statusBadge: "جلسة حية",
+        statusType: "live",
+        isLive: true,
         type: "CORE",
         videoUrl: "https://www.youtube.com/watch?v=6iF8Xb7Z3wQ",
-        thumbnailUrl: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80",
-        resources: [
-          { title: "السلايدات الكاملة", type: "pdf", url: "#" },
-          { title: "ملف تمارين مكثفة", type: "code", url: "#" }
-        ],
-        group: "ALL",
-        active: true
-      },
-      {
-        id: "lec-py-04",
-        title: "الدوال والوحدات البرمجية Functions & Modules",
-        description: "بناء الدوال القابلة لإعادة الاستخدام، وتمرير المعاملات والقيم المرجعية، واستيراد المكتبات.",
-        category: "المحاضرة 04 • الدوال والوحدات",
-        sessionDate: "26 أكتوبر 2026",
-        duration: "50:00 دقيقة",
-        order: 4,
-        type: "WORKSHOPS",
-        videoUrl: "https://www.youtube.com/watch?v=9Os0o3wzS_I",
         thumbnailUrl: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80",
+        resourcesLabel: "المواد التحضيرية المسبقة:",
         resources: [
-          { title: "دليل الدوال (PDF)", type: "pdf", url: "#" },
-          { title: "كود المشاريع الصغيرة", type: "code", url: "#" }
+          { title: "كتيب التحضير PDF", type: "pdf", color: "cyan", url: "#" },
+          { title: "تذكير بالموعد", type: "reminder", color: "slate", url: "#" }
         ],
         group: "ALL",
         active: true
@@ -880,17 +876,23 @@ export const LecturesController = {
 
     // Bottom Interactive Code Sandbox Banner (Image 10.jpeg)
     const bottomBannerHtml = `
-      <div class="interactive-test-banner mt-8">
-        <div class="test-banner-content">
-          <div class="test-banner-icon">⚡</div>
+      <div class="interactive-cloud-console-banner mt-8">
+        <div class="cloud-console-info">
+          <div class="cloud-console-icon-wrap">
+            <span class="cloud-console-icon">💻</span>
+          </div>
           <div>
-            <h4 class="test-banner-title">منظومة الاختبار التفاعلي الذاتي</h4>
-            <p class="test-banner-desc">هل تود اختبار كودك قبل تسليم الواجبات؟ استخدم بيئة المحاكاة لتشغيل الكود والتحقق من حالات الاختبار القياسية.</p>
+            <div class="cloud-console-tag">
+              <span class="pulse-indicator-emerald"></span>
+              <span>منظومة الاختبار التفاعلي الذاتي</span>
+            </div>
+            <h4 class="cloud-console-title">هل تود اختبار كودك قبل تسليم الواجبات؟</h4>
+            <p class="cloud-console-desc">استخدم المحرر السحابي لتشغيل سكريبتات بايثون ومطابقة المخرجات آلياً مع نماذج الإجابة.</p>
           </div>
         </div>
-        <button type="button" class="btn-open-code-editor" id="openInteractiveEditorBtn">
-          <span>فتح محرر الأكواد التفاعلي</span>
-          <span>⚡</span>
+        <button type="button" class="btn-open-cloud-console" id="openInteractiveEditorBtn">
+          <span>فتح الكونسول السحابي</span>
+          <span class="btn-arrow">▷</span>
         </button>
       </div>
     `;
@@ -917,7 +919,19 @@ export const LecturesController = {
       );
     }
 
-    // Filter Pills
+    // Category Select Dropdown (Image 10.jpeg)
+    container.querySelector("#studentLessonCategorySelect")?.addEventListener("change", (e) => {
+      lecturesState.set("statusFilter", e.target.value);
+      this.renderStudentView(container, currentStudent);
+    });
+
+    // Sort Select Dropdown (Image 10.jpeg)
+    container.querySelector("#studentLessonSortSelect")?.addEventListener("change", (e) => {
+      lecturesState.set("sortOrder", e.target.value);
+      this.renderStudentView(container, currentStudent);
+    });
+
+    // Filter Pills fallback
     container.querySelectorAll(".student-filter-pill").forEach((pill) => {
       pill.addEventListener("click", () => {
         const status = pill.getAttribute("data-filter-status") || "ALL";

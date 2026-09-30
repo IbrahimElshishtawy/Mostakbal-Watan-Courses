@@ -15,54 +15,42 @@ export function renderStudentLessonFilters({
   searchQuery = "",
   statusFilter = "ALL",
   sortOrder = "newest",
-  totalCount = 4
+  totalCount = 3
 } = {}) {
   return `
-    <div class="student-lectures-search-bar-wrap mb-5">
-      <div class="student-search-input-box">
-        <span class="search-icon" aria-hidden="true">🔍</span>
+    <div class="student-lectures-search-row mb-6">
+      <!-- Search Input Wrap -->
+      <div class="student-search-box-wrap">
+        <span class="search-icon-symbol">🔍</span>
         <input
           type="search"
           id="studentLessonSearchInput"
-          class="student-search-input"
-          placeholder="ابحث في المحاضرات أو السلايدات..."
+          class="student-search-input-field"
+          placeholder="ابحث عن محاضرة أو موضوع..."
           value="${escapeHtml(searchQuery)}"
-          aria-label="ابحث في المحاضرات"
+          aria-label="ابحث عن محاضرة"
         />
       </div>
 
-      <div class="student-filter-pills-row" role="tablist" aria-label="تصفية المحاضرات">
-        <button
-          type="button"
-          class="student-filter-pill ${statusFilter === "ALL" ? "active" : ""}"
-          data-filter-status="ALL"
-        >
-          <span>الكل (${totalCount})</span>
-        </button>
+      <!-- Select Dropdowns Filter Group -->
+      <div class="student-select-filters-group">
+        <div class="custom-select-container">
+          <select id="studentLessonCategorySelect" class="student-custom-select" aria-label="تصفية المحاضرات">
+            <option value="ALL" ${statusFilter === "ALL" ? "selected" : ""}>جميع المحاضرات (${totalCount})</option>
+            <option value="CORE" ${statusFilter === "CORE" ? "selected" : ""}>بايثون التأسيسي</option>
+            <option value="LOGIC" ${statusFilter === "LOGIC" ? "selected" : ""}>المنطق البرمجي</option>
+            <option value="CODE" ${statusFilter === "CODE" ? "selected" : ""}>مرفقات الأكواد</option>
+          </select>
+          <span class="select-chevron">▾</span>
+        </div>
 
-        <button
-          type="button"
-          class="student-filter-pill ${statusFilter === "CORE" ? "active" : ""}"
-          data-filter-status="CORE"
-        >
-          <span>المحاضرات الأساسية</span>
-        </button>
-
-        <button
-          type="button"
-          class="student-filter-pill ${statusFilter === "WORKSHOPS" ? "active" : ""}"
-          data-filter-status="WORKSHOPS"
-        >
-          <span>ورش العمل</span>
-        </button>
-
-        <button
-          type="button"
-          class="student-filter-pill ${statusFilter === "CODE" ? "active" : ""}"
-          data-filter-status="CODE"
-        >
-          <span>مرفقات الأكواد</span>
-        </button>
+        <div class="custom-select-container">
+          <select id="studentLessonSortSelect" class="student-custom-select" aria-label="ترتيب المحاضرات">
+            <option value="newest" ${sortOrder === "newest" ? "selected" : ""}>الأحدث أولاً</option>
+            <option value="oldest" ${sortOrder === "oldest" ? "selected" : ""}>الأقدم أولاً</option>
+          </select>
+          <span class="select-chevron">▾</span>
+        </div>
       </div>
     </div>
   `;

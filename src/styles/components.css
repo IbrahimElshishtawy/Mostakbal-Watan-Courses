@@ -4959,5 +4959,657 @@ body.is-in-exam-mode .main-view {
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
 
+/* ========================================================
+   STUDENT LECTURES & WORKSPACE VIEW (MATCHING IMAGE 10.JPEG)
+   ======================================================== */
 
+/* 1. Slim Challenge Notification Banner */
+.student-challenge-banner-row {
+  background: linear-gradient(90deg, rgba(13, 21, 38, 0.95), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 14px;
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  flex-wrap: wrap;
+}
 
+.banner-challenge-lead {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.banner-challenge-icon {
+  font-size: 1.25rem;
+}
+
+.banner-challenge-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.banner-challenge-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-banner-challenge {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(14, 165, 233, 0.3);
+}
+
+.btn-banner-challenge:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+.btn-banner-leaderboard {
+  background: rgba(15, 23, 42, 0.85);
+  color: #cbd5e1;
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 8px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.btn-banner-leaderboard:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+/* 2. Top Navigation Shortcuts Bar */
+.student-top-shortcuts-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.shortcut-pill-btn {
+  background: rgba(13, 21, 38, 0.85);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 10px;
+  padding: 0.45rem 1rem;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.shortcut-pill-btn:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #ffffff;
+}
+
+.shortcut-pill-btn.active-shortcut {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 2px 12px rgba(14, 165, 233, 0.3);
+}
+
+/* 3. Lectures Section Header Box */
+.student-lessons-header-box {
+  margin-top: 0.5rem;
+}
+
+.student-lessons-header-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 0.35rem;
+}
+
+.student-lessons-main-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
+}
+
+.student-lessons-subtitle {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* 4. Search and Filters Toolbar (Matching Image 10.jpeg) */
+.student-lectures-search-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.student-search-box-wrap {
+  flex: 1;
+  min-width: 260px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.student-search-box-wrap .search-icon-symbol {
+  position: absolute;
+  right: 0.85rem;
+  font-size: 0.95rem;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.student-search-input-field {
+  width: 100%;
+  background: rgba(13, 21, 38, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 10px;
+  padding: 0.65rem 2.5rem 0.65rem 1rem;
+  color: #f1f5f9;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+
+.student-search-input-field:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.student-select-filters-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.custom-select-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.student-custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(13, 21, 38, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 10px;
+  padding: 0.65rem 2rem 0.65rem 1rem;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.student-custom-select:hover,
+.student-custom-select:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #ffffff;
+}
+
+.custom-select-container .select-chevron {
+  position: absolute;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* 5. Student Lecture Cards Grid (3 Columns) */
+.student-lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+@media (max-width: 1100px) {
+  .student-lessons-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .student-lessons-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 6. Individual Lecture Card */
+.student-lecture-card {
+  background: #0d1527;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.student-lecture-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.lecture-thumb-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #080d1a;
+}
+
+.lecture-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.student-lecture-card:hover .lecture-thumb-img {
+  transform: scale(1.05);
+}
+
+.lecture-thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.student-lecture-card:hover .lecture-thumb-overlay {
+  opacity: 1;
+}
+
+.lecture-play-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #ffffff;
+  border: none;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.lecture-num-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(13, 21, 39, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+.lecture-time-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: rgba(13, 21, 39, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+.lecture-status-overlay-badge {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.lecture-status-overlay-badge.status-available {
+  background: rgba(6, 78, 59, 0.85);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.lecture-status-overlay-badge.status-4k {
+  background: rgba(12, 74, 110, 0.85);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  color: #38bdf8;
+}
+
+.lecture-status-overlay-badge.status-live {
+  background: rgba(88, 28, 135, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #c084fc;
+}
+
+.live-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 8px #a855f7;
+  animation: pulse-ring 1.4s infinite ease-in-out;
+}
+
+.avail-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+/* Card Body Content */
+.lecture-card-body {
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1;
+  text-align: right;
+}
+
+.lecture-track-date {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lecture-track-date .track-tag {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.lecture-track-date .meta-separator {
+  color: #475569;
+}
+
+.lecture-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.45;
+  margin: 0;
+  min-height: 2.8rem;
+}
+
+.lecture-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lecture-materials-section {
+  margin-top: 0.4rem;
+  border-top: 1px solid rgba(30, 41, 59, 0.8);
+  padding-top: 0.65rem;
+}
+
+.materials-label {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.materials-chips-list {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.lesson-material-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.lesson-material-chip.chip-red {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: #f87171;
+}
+
+.lesson-material-chip.chip-cyan {
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.28);
+  color: #22d3ee;
+}
+
+.lesson-material-chip.chip-green {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: #34d399;
+}
+
+.lesson-material-chip.chip-amber {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  color: #fbbf24;
+}
+
+.lesson-material-chip.chip-slate {
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  color: #cbd5e1;
+}
+
+.lesson-material-chip:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+/* Card Action Footer */
+.lecture-card-footer {
+  padding: 0 1.15rem 1.15rem;
+}
+
+.btn-watch-lecture-gradient {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
+}
+
+.btn-watch-lecture-gradient:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.btn-zoom-live {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  background: #0b1324;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-zoom-live:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* 7. Bottom Cloud Console Banner */
+.interactive-cloud-console-banner {
+  background: linear-gradient(135deg, #0d1527 0%, #090e1b 100%);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.cloud-console-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 280px;
+}
+
+.cloud-console-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.cloud-console-tag {
+  color: #34d399;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.pulse-indicator-emerald {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.cloud-console-title {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem 0;
+}
+
+.cloud-console-desc {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.btn-open-cloud-console {
+  background: #0f1c33;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #f1f5f9;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-open-cloud-console:hover {
+  background: #152747;
+  border-color: #38bdf8;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
