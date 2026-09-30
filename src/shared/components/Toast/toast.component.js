@@ -23,19 +23,28 @@ function ensureContainer() {
 export function showToast(message, type = "info", duration = 3400) {
   ensureContainer();
 
+  let text = message;
+  let statusType = type;
+
+  if (message && typeof message === "object") {
+    text = message.message || message.title || JSON.stringify(message);
+    if (message.type) statusType = message.type;
+    if (message.duration) duration = message.duration;
+  }
+
   const item = document.createElement("div");
-  item.className = `toast-item toast-${type}`;
+  item.className = `toast-item toast-${statusType}`;
   item.setAttribute("role", "status");
   item.setAttribute("aria-live", "polite");
 
   let icon = "ℹ️";
-  if (type === "success") icon = "✅";
-  if (type === "error") icon = "❌";
-  if (type === "warning") icon = "⚠️";
+  if (statusType === "success") icon = "✅";
+  if (statusType === "error") icon = "❌";
+  if (statusType === "warning") icon = "⚠️";
 
   item.innerHTML = `
     <span class="toast-icon" aria-hidden="true">${icon}</span>
-    <span class="toast-text">${escapeHtml(message)}</span>
+    <span class="toast-text">${escapeHtml(text)}</span>
   `;
 
   toastContainer.appendChild(item);

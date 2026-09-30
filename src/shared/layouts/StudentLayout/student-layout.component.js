@@ -182,6 +182,10 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
                 <span class="pill-icon">🎮</span>
                 <span>تحدي وادي بايثون</span>
               </button>
+              <button type="button" class="shortcut-pill-btn" id="dashNavExamsBtn" data-target="exams">
+                <span class="pill-icon">📝</span>
+                <span>الامتحانات والتقييمات</span>
+              </button>
               <button type="button" class="shortcut-pill-btn" id="dashNavScheduleBtn" data-target="schedule">
                 <span class="pill-icon">📅</span>
                 <span>مواعيد المحاضرات</span>
@@ -207,12 +211,6 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
 
           <!-- Exams Section (Image 7.png) -->
           <section id="sec-exams" class="tab-content" aria-labelledby="heading-exams">
-            <div class="page-header" id="studentExamsPageHeader">
-              <div>
-                <h2 id="heading-exams" class="page-title">مركز الاختبارات والتقييم الذكي</h2>
-                <p class="page-subtitle">الامتحانات المعتمدة، التقييم الآلي للأكواد، والشهادات التخصصية.</p>
-              </div>
-            </div>
             <div id="examListContainer"></div>
             <div id="activeExamContainer" class="d-none"></div>
           </section>

@@ -122,8 +122,16 @@ export const ExamController = {
             ? currentStudent.studentGroup
             : (currentStudent?.group || currentStudent?.studentGroup || "ALL"));
 
-      // Fetch complete academic exams history (all, available, upcoming, completed, expired)
-      let allExams = await ExamService.getStudentExams(studentGroup, studentUid).catch(() => []);
+      // Fetch complete academic exams history with fast timeout fallback
+      let allExams = [];
+      try {
+        const fetchPromise = ExamService.getStudentExams(studentGroup, studentUid);
+        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve([]), 2200));
+        allExams = await Promise.race([fetchPromise, timeoutPromise]);
+        if (!Array.isArray(allExams)) allExams = [];
+      } catch (_) {
+        allExams = [];
+      }
 
       // Signature exams from Image 7.png to ensure guaranteed rich fidelity
       const signatureLiveExam = {

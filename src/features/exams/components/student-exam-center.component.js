@@ -1,6 +1,4 @@
-// src/features/exams/components/student-exam-center.component.js
-
-import { escapeHtml } from "../../../shared/utils/security.js";
+import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 
 /**
  * Renders the Student Exam & Assessment Center UI matching Image 7.png.
