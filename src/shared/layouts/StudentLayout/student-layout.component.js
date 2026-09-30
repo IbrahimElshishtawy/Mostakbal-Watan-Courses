@@ -252,12 +252,6 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
 
           <!-- Settings Section -->
           <section id="sec-settings" class="tab-content" aria-labelledby="heading-settings">
-            <div class="page-header">
-              <div>
-                <h2 id="heading-settings" class="page-title">⚙️ تخصيص المنصة والمظهر</h2>
-                <p class="page-subtitle">اختيار لون الواجهة المميز، تكبير أو تصغير الخط، وتغيير اللغة.</p>
-              </div>
-            </div>
             <div id="settingsContainer"></div>
           </section>
         </main>
