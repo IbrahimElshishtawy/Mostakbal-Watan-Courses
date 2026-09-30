@@ -139,6 +139,7 @@
         adventure: () => import("../src/features/python-adventure/python-adventure.controller.js").then((m) => m.PythonAdventureController),
         problemSolving: () => import("../src/features/problem-solving/problem-solving.controller.js").then((m) => m.ProblemSolvingController),
         leaderboard: () => import("../src/features/leaderboard/leaderboard.controller.js").then((m) => m.LeaderboardController),
+        cloudConsole: () => import("../src/features/cloud-console/cloud-console.controller.js").then((m) => m.CloudConsoleController),
         profile: () => Promise.all([
           import("../src/features/profile/profile.controller.js"),
           import("../src/features/attendance/attendance.service.js"),
@@ -194,6 +195,8 @@
             lazyLoaders.problemSolving().then((ctrl) => ctrl.init("problemSolvingContainer", student));
           } else if (tabId === "leaderboard") {
             lazyLoaders.leaderboard().then((ctrl) => ctrl.init("leaderboardContainer", student));
+          } else if (tabId === "cloud-console") {
+            lazyLoaders.cloudConsole().then((ctrl) => ctrl.init("cloudConsoleContainer", student));
           } else if (tabId === "profile") {
             lazyLoaders.profile().then(({ ProfileController, AttendanceService, renderProfileAttendanceCard }) => {
               ProfileController.loadProfileView("profileContainer", student);
@@ -250,6 +253,8 @@
         layout.switchTab("problem-solving");
       } else if (targetTab === "leaderboard") {
         layout.switchTab("leaderboard");
+      } else if (targetTab === "cloud-console") {
+        layout.switchTab("cloud-console");
       } else if (targetTab === "exams") {
         layout.switchTab("exams");
       } else if (targetTab === "tasks") {

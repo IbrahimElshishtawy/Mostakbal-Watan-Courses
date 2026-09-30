@@ -87,9 +87,15 @@ export async function runPythonCode(pythonCode, { timeoutMs = 3500, onOutput = n
     return window.Sk.builtinFiles["files"][file];
   };
 
+  const handleInput = options.onInput || ((promptText) => {
+    return window.prompt(promptText || "أدخل القيمة المطلوبة لبرنامج بايثون:") || "";
+  });
+
   window.Sk.configure({
     output: handleOut,
     read: builtinRead,
+    inputfun: handleInput,
+    inputfunTakesPrompt: true,
     execLimit: timeoutMs,
     killableWhile: true,
     __future__: window.Sk.python3

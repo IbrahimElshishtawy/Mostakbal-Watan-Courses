@@ -5613,3 +5613,573 @@ body.is-in-exam-mode .main-view {
   color: #ffffff;
   transform: translateY(-1px);
 }
+
+/* ==========================================================================
+   INTERACTIVE CLOUD CONSOLE IDE WORKSPACE
+   ========================================================================== */
+.cloud-console-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.cloud-console-header-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(13, 21, 38, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 16px;
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.console-header-info {
+  flex: 1;
+  min-width: 280px;
+}
+
+.console-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin-bottom: 0.5rem;
+}
+
+.console-pulse-emerald {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulseEmerald 2s infinite ease-in-out;
+}
+
+@keyframes pulseEmerald {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.console-header-title {
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 900;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: -0.02em;
+}
+
+.console-header-desc {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 650px;
+}
+
+.console-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.console-select-input {
+  background: #0b1329;
+  color: #f1f5f9;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.console-select-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.btn-console-pill {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #cbd5e1;
+  border-radius: 10px;
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.btn-console-pill:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* 2. Main IDE Grid */
+.cloud-console-ide-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.25rem;
+  min-height: 520px;
+}
+
+@media (max-width: 1024px) {
+  .cloud-console-ide-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Panels */
+.console-editor-panel,
+.console-terminal-panel {
+  background: #090e1a;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.console-panel-topbar {
+  background: #0f172a;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.7);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.console-file-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(2, 132, 199, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+}
+
+.file-icon { font-size: 1rem; }
+.file-name { color: #f1f5f9; font-weight: 800; font-size: 0.82rem; font-family: monospace; }
+.file-badge { font-size: 0.7rem; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 700; }
+
+.console-editor-meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.console-editor-stats {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.console-font-controls {
+  display: flex;
+  gap: 0.2rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.15rem;
+  border-radius: 6px;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.btn-font-size {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.btn-font-size:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.btn-editor-tool {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  color: #cbd5e1;
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.btn-editor-tool:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+
+/* Editor Body */
+.console-editor-body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 380px;
+  background: #080d19;
+}
+
+.console-line-numbers {
+  width: 44px;
+  padding: 1rem 0.5rem;
+  text-align: right;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #475569;
+  background: #070a14;
+  border-left: 1px solid rgba(51, 65, 85, 0.4);
+  user-select: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
+.console-code-textarea {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  color: #e2e8f0;
+  font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  border: none;
+  outline: none;
+  resize: none;
+  tab-size: 4;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+
+.console-editor-footer {
+  background: #0b1120;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  padding: 0.45rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.console-shortcut-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.console-kbd {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.68rem;
+}
+
+.console-auto-save-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #10b981;
+}
+
+.save-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+/* Terminal Side */
+.terminal-window-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.term-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #eab308; }
+.dot-green { background: #22c55e; }
+
+.term-title {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-family: monospace;
+  margin-right: 0.5rem;
+}
+
+.terminal-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+}
+
+.terminal-status-chip .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.terminal-status-chip.is-idle {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+}
+.terminal-status-chip.is-idle .status-dot { background: #94a3b8; }
+
+.terminal-status-chip.is-running {
+  background: rgba(2, 132, 199, 0.2);
+  color: #38bdf8;
+}
+.terminal-status-chip.is-running .status-dot { background: #38bdf8; animation: pulseEmerald 1s infinite; }
+
+.terminal-status-chip.is-success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+.terminal-status-chip.is-success .status-dot { background: #10b981; }
+
+.terminal-status-chip.is-error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+.terminal-status-chip.is-error .status-dot { background: #ef4444; }
+
+.btn-terminal-clear {
+  background: transparent;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  color: #94a3b8;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-terminal-clear:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Run CTA Bar */
+.console-run-cta-bar {
+  background: #0d1527;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.btn-console-run {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-console-run:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.45);
+}
+
+.btn-console-run:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.console-runtime-badge {
+  font-size: 0.75rem;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: monospace;
+}
+
+/* Terminal Screen */
+.console-terminal-body {
+  flex: 1;
+  min-height: 320px;
+  background: #050811;
+  padding: 1rem 1.25rem;
+  overflow-y: auto;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13.5px;
+  line-height: 1.6;
+  direction: ltr;
+  text-align: left;
+}
+
+.terminal-welcome-msg {
+  color: #475569;
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+  user-select: none;
+}
+
+.term-divider {
+  color: #1e293b;
+  margin: 0.4rem 0;
+}
+
+.terminal-stdout {
+  color: #38bdf8;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+}
+
+.terminal-stderr {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.5;
+}
+
+/* Terminal Input Bar */
+.console-terminal-input-bar {
+  background: #0b1120;
+  border-top: 1px solid rgba(51, 65, 85, 0.6);
+  padding: 0.5rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.term-prompt-sign {
+  color: #10b981;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.terminal-inline-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f1f5f9;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.btn-send-input {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 3. Cheatsheet Card */
+.cloud-console-cheatsheet-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cheatsheet-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cheatsheet-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cheat-chip {
+  background: rgba(2, 132, 199, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-family: monospace;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cheat-chip:hover {
+  background: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}

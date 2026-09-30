@@ -944,8 +944,12 @@ export const LecturesController = {
     const openEditorBtn = container.querySelector("#openInteractiveEditorBtn");
     if (openEditorBtn) {
       openEditorBtn.addEventListener("click", () => {
-        const adventureBtn = document.querySelector('.sidebar-item[data-section="python-adventure"]');
-        if (adventureBtn) adventureBtn.click();
+        const consoleBtn = document.querySelector('.sidebar-item[data-section="cloud-console"]');
+        if (consoleBtn) {
+          consoleBtn.click();
+        } else {
+          window.location.href = "cloud-console.html";
+        }
       });
     }
 

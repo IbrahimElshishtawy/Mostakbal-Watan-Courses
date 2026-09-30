@@ -100,6 +100,12 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
             <span class="side-text">لوحة المتصدرين</span>
           </button>
 
+          <button type="button" class="sidebar-item" data-section="cloud-console">
+            <span class="side-icon" aria-hidden="true">💻</span>
+            <span class="side-text">الكونسول السحابي</span>
+            <span class="side-badge-pill" style="background: rgba(14, 165, 233, 0.2); color: #38bdf8;">IDE</span>
+          </button>
+
           <div class="sidebar-menu-title">الحساب والتفضيلات</div>
 
           <button type="button" class="sidebar-item" data-section="profile">
@@ -242,6 +248,11 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
             <div id="leaderboardContainer"></div>
           </section>
 
+          <!-- Interactive Cloud Console IDE Section -->
+          <section id="sec-cloud-console" class="tab-content" aria-labelledby="heading-cloud-console">
+            <div id="cloudConsoleContainer"></div>
+          </section>
+
           <!-- Profile Section -->
           <section id="sec-profile" class="tab-content" aria-labelledby="heading-profile">
             <div class="page-header">
@@ -284,6 +295,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
     "python-adventure": "🐍 مغامرة بايثون",
     "problem-solving": "⚡ تحديات البرمجة (5 مستويات)",
     leaderboard: "🏆 لوحة المتصدرين والأبطال",
+    "cloud-console": "💻 الكونسول السحابي (Python 3 IDE)",
     profile: "👤 حسابي الشخصي",
     settings: "⚙️ الإعدادات والمظهر"
   };
