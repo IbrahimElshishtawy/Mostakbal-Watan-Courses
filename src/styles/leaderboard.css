@@ -1,0 +1,1085 @@
+/* src/styles/leaderboard.css - Ultra-Premium Leaderboard Design System (Matching Image 6.jpeg) */
+
+.lb-page-container {
+  min-height: 100vh;
+  background: radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
+              #070b14;
+  color: #f1f5f9;
+  font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  animation: lbFadeIn 0.25s ease-out;
+}
+
+@keyframes lbFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Top Header Bar */
+.lb-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 0.85rem 1.4rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.lb-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.lb-crumb-root { color: #94a3b8; }
+.lb-crumb-sep { color: #475569; }
+.lb-crumb-mid { color: #cbd5e1; }
+.lb-crumb-active { color: #38bdf8; font-weight: 700; }
+
+.lb-topbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lb-live-sync-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.lb-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: lbPulse 2s infinite;
+  display: inline-block;
+}
+
+@keyframes lbPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.lb-season-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: #94a3b8;
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.lb-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.18s ease;
+}
+
+.lb-icon-btn:hover {
+  background: rgba(51, 65, 85, 0.8);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.lb-bell-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.lb-avatar-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+/* 2. Secondary Header: Filter Tabs & Live Telemetry KPIs */
+.lb-filter-telemetry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.lb-filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 4px;
+}
+
+.lb-filter-tab {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.lb-filter-tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.lb-filter-tab.active {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.35) 0%, rgba(14, 165, 233, 0.2) 100%);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 2px 12px rgba(2, 132, 199, 0.25);
+}
+
+.tab-active-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.lb-telemetry-cards {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lb-telemetry-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+}
+
+.lb-telemetry-card.live-card {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+
+.lb-telemetry-label {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.lb-telemetry-val {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.live-badge-glow {
+  color: #34d399;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 3. Podium Section: قاعة الشرف الأكاديمية • TOP 3 */
+.lb-podium-wrapper {
+  background: radial-gradient(circle at 50% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
+              linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(8, 13, 24, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2.2rem 2rem 1.8rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.lb-podium-header {
+  text-align: center;
+  margin-bottom: 2.2rem;
+}
+
+.lb-podium-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.5px;
+}
+
+.lb-podium-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Podium 3 Cards Grid */
+.lb-podium-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  align-items: flex-end;
+  gap: 1.5rem;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+/* Base Podium Card */
+.lb-podium-card {
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 20px;
+  padding: 1.6rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.lb-podium-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Center Rank 1 (Gold) */
+.lb-podium-card.rank-gold {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 2px solid #f59e0b;
+  box-shadow: 0 10px 40px rgba(245, 158, 11, 0.22), 0 0 30px rgba(245, 158, 11, 0.12);
+  padding: 2rem 1.5rem 1.5rem;
+  z-index: 2;
+}
+
+/* Rank 2 (Silver) */
+.lb-podium-card.rank-silver {
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Rank 3 (Bronze) */
+.lb-podium-card.rank-bronze {
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Medal Badges on top of cards */
+.podium-crown-badge {
+  position: absolute;
+  top: -24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  font-size: 1.2rem;
+}
+
+.podium-crown-badge.gold {
+  width: 62px;
+  height: 62px;
+  top: -30px;
+  background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%);
+  color: #ffffff;
+  border: 3px solid #fef08a;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+}
+
+.podium-crown-badge.silver {
+  background: linear-gradient(135deg, #cbd5e1 0%, #475569 100%);
+  color: #ffffff;
+  border: 2px solid #f1f5f9;
+}
+
+.podium-crown-badge.bronze {
+  background: linear-gradient(135deg, #f59e0b 0%, #78350f 100%);
+  color: #ffffff;
+  border: 2px solid #fcd34d;
+}
+
+.crown-inner-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.65rem;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.podium-avatar-box {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #090d16;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: #94a3b8;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.rank-gold .podium-avatar-box {
+  width: 82px;
+  height: 82px;
+  border-color: #fbbf24;
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.45);
+  color: #fbbf24;
+}
+
+.rank-silver .podium-avatar-box {
+  border-color: #cbd5e1;
+  color: #cbd5e1;
+}
+
+.rank-bronze .podium-avatar-box {
+  border-color: #d97706;
+  color: #f59e0b;
+}
+
+.podium-user-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+}
+
+.rank-gold .podium-user-name {
+  font-size: 1.35rem;
+}
+
+.podium-user-role {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 0 0 1rem 0;
+}
+
+.rank-gold .podium-user-role {
+  color: #fde68a;
+}
+
+/* XP Score Pill */
+.podium-xp-score-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 1.15rem;
+}
+
+.podium-xp-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.podium-xp-number {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.rank-gold .podium-xp-number {
+  font-size: 1.75rem;
+  color: #fbbf24;
+}
+
+/* Stat Grid Inside Podium Cards */
+.podium-mini-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.podium-stat-pill {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 6px 4px;
+  font-size: 0.72rem;
+  color: #cbd5e1;
+}
+
+.podium-stat-pill strong {
+  color: #ffffff;
+}
+
+.rank-gold .podium-stat-pill.success {
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.rank-gold .podium-stat-pill.streak {
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.podium-card-footer-badge {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.25rem;
+}
+
+/* 4. Personal Student Standing Strip (إبراهيم خالد - أنت) */
+.lb-standing-strip {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 18px;
+  padding: 1.15rem 1.6rem;
+  margin-bottom: 1.75rem;
+  box-shadow: 0 8px 30px rgba(14, 165, 233, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.lb-standing-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lb-rank-box-badge {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border: 2px solid #38bdf8;
+  color: #ffffff;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+  flex-shrink: 0;
+}
+
+.lb-standing-identity {
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-standing-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-standing-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.lb-you-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.lb-standing-motivation {
+  font-size: 0.78rem;
+  color: #fbbf24;
+  margin: 2px 0 0 0;
+  font-weight: 600;
+}
+
+.lb-standing-metrics {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.lb-standing-metric-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lb-standing-metric-item .m-title {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.lb-standing-metric-item .m-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.lb-btn-analyze {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.lb-btn-analyze:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+/* 5. Main Split Grid (Table on Right, Sidebar Cards on Left) */
+.lb-main-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Right Table Card */
+.lb-table-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lb-table-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lb-table-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-table-count {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+/* The Table */
+.lb-custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  text-align: right;
+}
+
+.lb-custom-table th {
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #94a3b8;
+  border: none;
+}
+
+.lb-custom-row {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.lb-custom-row td {
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.lb-custom-row td:first-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.lb-custom-row td:last-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.lb-custom-row:hover {
+  background: rgba(30, 41, 59, 0.6);
+  transform: translateX(-2px);
+}
+
+/* Highlighted Current User Row */
+.lb-custom-row.row-is-me {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 18px rgba(14, 165, 233, 0.15);
+}
+
+.lb-custom-row.row-is-me td {
+  border-top-color: rgba(56, 189, 248, 0.3);
+  border-bottom-color: rgba(56, 189, 248, 0.3);
+}
+
+.lb-custom-row.row-is-me td:first-child {
+  border-right-color: rgba(56, 189, 248, 0.4);
+}
+
+.lb-custom-row.row-is-me td:last-child {
+  border-left-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Rank Number Pills */
+.rank-table-badge {
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rank-table-badge.gold { color: #fbbf24; }
+.rank-table-badge.silver { color: #cbd5e1; }
+.rank-table-badge.bronze { color: #f59e0b; }
+.rank-table-badge.cyan { color: #38bdf8; }
+
+/* Student Identity Cell */
+.student-table-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-table-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-table-cohort {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin: 1px 0 0 0;
+}
+
+/* Badges & Tags */
+.badge-tag-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+.badge-tag-pill.streak {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.badge-tag-pill.cyan {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
+
+/* Action Eye Icon Button */
+.btn-view-profile-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-view-profile-icon:hover {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Table Footer Pagination & Expand */
+.lb-table-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn-expand-list {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-expand-list:hover {
+  background: rgba(51, 65, 85, 0.8);
+}
+
+.pagination-info-text {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* 6. Sidebar Cards (Left Column) */
+.lb-sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.lb-side-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.4rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lb-side-card-header {
+  margin-bottom: 1rem;
+}
+
+.lb-side-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-side-card-subtitle {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Rewards List */
+.lb-rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.lb-reward-item {
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.lb-reward-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.lb-reward-content h5 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 2px 0;
+}
+
+.lb-reward-content p {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.lb-rewards-timer-box {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px dashed rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  color: #fde68a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+/* Documentation Card */
+.lb-doc-preview-box {
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px;
+  margin: 0.85rem 0;
+}
+
+.lb-doc-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.lb-doc-preview-mockup {
+  height: 60px;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.lb-doc-link {
+  font-size: 0.75rem;
+  color: #38bdf8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+}
+
+.lb-doc-link:hover {
+  text-decoration: underline;
+}
+
+/* Weekend Challenge Card */
+.lb-challenge-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.1);
+}
+
+.lb-challenge-tag {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 0.65rem;
+}
+
+.lb-challenge-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.lb-challenge-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0 0 1rem 0;
+}
+
+.lb-btn-challenge-action {
+  width: 100%;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lb-btn-challenge-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1100px) {
+  .lb-podium-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .lb-podium-card.rank-gold {
+    order: -1;
+  }
+  .lb-main-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .lb-page-container {
+    padding: 1rem;
+  }
+  .lb-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lb-filter-telemetry-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .lb-standing-strip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lb-standing-metrics {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .lb-table-card {
+    overflow-x: auto;
+  }
+}
