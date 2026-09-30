@@ -25,6 +25,7 @@ import {
   renderStudentSolutionsModal
 } from "./components/teacher-adventure-dashboard.component.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
+import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm-dialog.component.js";
 
 let containerElement = null;
 let currentStudent = null;
@@ -460,9 +461,18 @@ export const PythonAdventureController = {
   },
 
   // ========================================================
-  // HOME ACTIONS
+  // HOME ACTIONS (Image 5.png)
   // ========================================================
   wireHomeEvents() {
+    // 1. Primary Quest Starters
+    document.getElementById("heroQuestStartBtn")?.addEventListener("click", () => {
+      this.handleContinue();
+    });
+
+    document.getElementById("btnContinuePlayQuest")?.addEventListener("click", () => {
+      this.handleContinue();
+    });
+
     document.getElementById("adventureContinueBtn")?.addEventListener("click", () => {
       this.handleContinue();
     });
@@ -471,56 +481,108 @@ export const PythonAdventureController = {
       this.handleContinue();
     });
 
-    document.getElementById("adventureShowHintBtn")?.addEventListener("click", () => {
+    // 2. Leaderboard Navigation
+    const openLeaderboard = () => {
+      const lbBtn = document.querySelector('.sidebar-item[data-section="leaderboard"]');
+      if (lbBtn) {
+        lbBtn.click();
+      } else {
+        this.navigateTo("leaderboard");
+      }
+    };
+
+    document.getElementById("heroLeaderboardBtn")?.addEventListener("click", openLeaderboard);
+    document.getElementById("advOpenFullLeaderboardBtn")?.addEventListener("click", openLeaderboard);
+
+    // 3. XP Booster Button
+    document.getElementById("btnGoXpBoost")?.addEventListener("click", () => {
+      this.navigateTo("daily");
+    });
+
+    // 4. Copy Code Snippet Button
+    document.getElementById("btnCopyQuestCode")?.addEventListener("click", () => {
+      const codeSnippet = `def decode_telemetry(stream_payload: str) -> dict:
+    tokens = stream_payload.split(":")
+    valid_checksum = sum([int(x) for x in tokens[1] if int(x) % 2 == 0])
+    return {"status": True, "code": valid_checksum}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(codeSnippet).then(() => {
+          showToast("تم نسخ الكود الأولي إلى الحافظة! 📋", "success");
+        }).catch(() => {
+          showToast("تم نسخ الكود بنجاح.", "info");
+        });
+      } else {
+        showToast("تم نسخ الكود بنجاح.", "info");
+      }
+    });
+
+    // 5. Open World Map
+    document.getElementById("btnOpenWorldMap8")?.addEventListener("click", () => {
+      this.navigateTo("world-map");
+    });
+
+    // 6. Cloud Lab / Console IDE
+    document.getElementById("btnOpenCloudLab")?.addEventListener("click", () => {
+      const consoleBtn = document.querySelector('.sidebar-item[data-section="cloud-console"]');
+      if (consoleBtn) {
+        consoleBtn.click();
+      } else {
+        showToast("جاري فتح الكونسول السحابي التفاعلي... 💻", "info");
+      }
+    });
+
+    // 7. Top Header Controls
+    document.getElementById("adv5NotificationBtn")?.addEventListener("click", () => {
+      showToast("لديك تحدٍ رئيسي بانتظارك في قرية بايثون: تحدي 05 Boss ⚔️", "info");
+    });
+
+    document.getElementById("adv5HelpBtn")?.addEventListener("click", () => {
       showConfirmDialog({
-        title: "تلميح لغز السلاسل النصية والدوال 💡",
-        message: "استخدم دالة split() لتقسيم الجملة إلى كلمات، ثم قم بتعريف قاموس counts = {} وتحديث تكرار كل كلمة، أو استخدم Counter من مكتبة collections.",
-        confirmText: "فهمت الفكرة، سأبرمجها الآن",
+        title: "دليل مغامرة بايثون التفاعلية 🧭",
+        message: "حل الألغاز البرمجية واكتب كود بايثون حقيقي في كل مستوى. اجتياز التحديات يمنحك نقاط خبرة XP وأوسمة تساعدك في تصدر لوحة أبطال المحلة وفتح العوالم المتقدمة!",
+        confirmText: "فهمت، جاهز للمغامرة",
         cancelText: "إغلاق",
         variant: "primary"
       });
     });
 
-    document.getElementById("advOpenFullLeaderboardBtn")?.addEventListener("click", () => {
-      const lbBtn = document.querySelector('.sidebar-item[data-section="leaderboard"]');
-      if (lbBtn) lbBtn.click();
+    document.getElementById("adv5ProfileBtn")?.addEventListener("click", () => {
+      this.navigateTo("profile");
     });
 
-    document.getElementById("adventureQuickMapBtn")?.addEventListener("click", () => {
-      this.openWorldMapTrack("all", "world-1");
-    });
-
-    document.getElementById("adventureQuickProblemsBtn")?.addEventListener("click", () => {
-      this.openWorldMapTrack("problem-solving", "ps-level-1");
-    });
-
-    containerElement.querySelectorAll("[data-adv-action]").forEach((card) => {
-      card.addEventListener("click", () => {
-        const action = card.getAttribute("data-adv-action");
-        if (action === "world-map") this.navigateTo("world-map");
-        else if (action === "duels") {
-          showConfirmDialog({
-            title: "حلبة مبارزة الأكواد ⚔️",
-            message: "ميزة التحدي المباشر بين الطلاب ستنطلق مع نهاية الأسبوع الجاري! استعد بمراجعة هياكل البيانات وحل التحديات الفردية.",
-            confirmText: "رائع، أنا جاهز",
-            cancelText: "إغلاق",
-            variant: "primary"
-          });
-        } else if (action === "bank") {
-          this.navigateTo("daily");
-        } else if (action === "projects") {
-          const taskBtn = document.querySelector('.sidebar-item[data-section="tasks"]');
-          if (taskBtn) taskBtn.click();
-        } else if (action === "badges") {
-          this.navigateTo("achievements");
+    // 8. Exploration Portals Grid (5 Portals)
+    containerElement.querySelectorAll("[data-adv-portal]").forEach((portalCard) => {
+      portalCard.addEventListener("click", () => {
+        const portal = portalCard.getAttribute("data-adv-portal");
+        if (portal) {
+          this.navigateTo(portal);
         }
       });
     });
 
-    containerElement.querySelectorAll(".adventure-hub-card[data-nav]").forEach((card) => {
+    // 9. World Progress Road Nodes (8 World Nodes)
+    containerElement.querySelectorAll("[data-world-node]").forEach((node) => {
+      node.addEventListener("click", () => {
+        const worldId = node.getAttribute("data-world-node");
+        if (worldId === "world-1" || worldId === "world-2") {
+          this.openWorldMapTrack("all", worldId);
+        } else {
+          showToast(`هذا العالم مقفل حالياً. أكمل مستويات العوالم السابقة لفتحه 🔒`, "info");
+        }
+      });
+    });
+
+    // 10. Legacy Card Support
+    containerElement.querySelectorAll("[data-adv-action]").forEach((card) => {
       card.addEventListener("click", () => {
-        const nav = card.getAttribute("data-nav");
-        if (nav) this.navigateTo(nav);
+        const action = card.getAttribute("data-adv-action");
+        if (action === "world-map") this.navigateTo("world-map");
+        else if (action === "duels") this.navigateTo("daily");
+        else if (action === "bank") this.navigateTo("daily");
+        else if (action === "projects") {
+          const taskBtn = document.querySelector('.sidebar-item[data-section="tasks"]');
+          if (taskBtn) taskBtn.click();
+        } else if (action === "badges") this.navigateTo("achievements");
       });
     });
   },

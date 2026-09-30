@@ -3092,3 +3092,1318 @@
   line-height: 1.4;
 }
 
+/* ========================================================
+   SECTION 18: PYTHON ADVENTURE EXPERIENCE (IMAGE 5.PNG)
+   ======================================================== */
+.adventure-image5-container {
+  min-height: 100vh;
+  background: radial-gradient(circle at 85% 15%, rgba(14, 165, 233, 0.08) 0%, transparent 45%),
+              radial-gradient(circle at 15% 75%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
+              #070b14;
+  color: #f1f5f9;
+  font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+  padding: 1.5rem;
+  border-radius: 20px;
+  animation: pyFadeIn 0.3s ease-out;
+  box-sizing: border-box;
+}
+
+/* 1. Top Header Bar */
+.adv5-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 0.85rem 1.4rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.adv5-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.adv5-crumb-root {
+  color: #94a3b8;
+}
+
+.adv5-crumb-sep {
+  color: #475569;
+}
+
+.adv5-crumb-mid {
+  color: #cbd5e1;
+}
+
+.adv5-crumb-active {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.adv5-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adv5-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.adv5-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: adv5Pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  display: inline-block;
+}
+
+.adv5-pulse-dot.cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+@keyframes adv5Pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.adv5-season-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: #94a3b8;
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.adv5-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.18s ease;
+}
+
+.adv5-icon-btn:hover {
+  background: rgba(51, 65, 85, 0.8);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.adv5-bell-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.adv5-avatar-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.adv5-avatar-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+/* 2. Hero Banner */
+.adv5-hero-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(13, 31, 60, 0.9) 55%, rgba(10, 18, 36, 0.96) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 20px;
+  padding: 2.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 0 40px rgba(56, 189, 248, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.adv5-hero-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.adv5-hero-main {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.adv5-hero-tags {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+
+.adv5-hero-pulse-tag {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.adv5-engine-tag {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 9999px;
+}
+
+.adv5-hero-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.35;
+  margin-bottom: 0.65rem;
+}
+
+.adv5-hero-desc {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  line-height: 1.65;
+  max-width: 740px;
+  margin-bottom: 1.4rem;
+}
+
+.adv5-hero-status-strip {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.adv5-status-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.adv5-status-xp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.1);
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  font-weight: 700;
+}
+
+.adv5-hero-actions-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 230px;
+  position: relative;
+  z-index: 1;
+}
+
+.adv5-btn-hero-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.45);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adv5-btn-hero-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(2, 132, 199, 0.6);
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+.adv5-btn-hero-glass {
+  background: rgba(30, 41, 59, 0.65);
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adv5-btn-hero-glass:hover {
+  background: rgba(51, 65, 85, 0.85);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 3. Status & Progression Bar (5 Metric Cards Grid) */
+.adv5-metrics-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.adv5-metric-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.adv5-metric-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.adv5-metric-card.cyan-tint {
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border-color: rgba(56, 189, 248, 0.28);
+}
+
+.adv5-metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.adv5-level-pill {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.adv5-card-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.adv5-metric-xp-ratio {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.adv5-metric-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.adv5-metric-body-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.adv5-metric-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.adv5-metric-icon-box.small {
+  width: 30px;
+  height: 30px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+}
+
+.adv5-metric-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+}
+
+.adv5-metric-subtitle {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.adv5-metric-huge {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  margin: 0.2rem 0;
+}
+
+.adv5-metric-subtext {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.adv5-metric-note {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.adv5-dot-sep {
+  color: #475569;
+}
+
+.adv5-metric-bar {
+  background: rgba(255, 255, 255, 0.08);
+  height: 7px;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 0.7rem;
+}
+
+.adv5-metric-fill {
+  background: linear-gradient(90deg, #38bdf8 0%, #0284c7 100%);
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.adv5-metric-progress-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 0.4rem;
+}
+
+/* 4. Middle Split Section: Active Quest Spotlight & Leaderboard */
+.adv5-middle-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.adv5-quest-spotlight-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.75rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.adv5-quest-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.adv5-quest-tag-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adv5-quest-badge {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.adv5-difficulty-badge {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+
+.adv5-countdown-badge {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adv5-quest-world-tag {
+  font-size: 0.75rem;
+  color: #38bdf8;
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.adv5-quest-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.4;
+  margin: 0 0 0.6rem 0;
+}
+
+.adv5-quest-desc {
+  font-size: 0.885rem;
+  color: #94a3b8;
+  line-height: 1.65;
+  margin: 0 0 1.25rem 0;
+}
+
+/* IDE Code Terminal Window */
+.adv5-code-terminal {
+  background: #070d18;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.adv5-terminal-header {
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.adv5-terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.t-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #f59e0b; }
+.dot-green { background: #10b981; }
+
+.adv5-terminal-filename {
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.adv5-btn-copy-code {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.adv5-btn-copy-code:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+}
+
+.adv5-code-body {
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: #e2e8f0;
+  overflow-x: auto;
+}
+
+.adv5-code-body pre {
+  margin: 0;
+}
+
+.py-kw { color: #f43f5e; font-weight: 700; }
+.py-fn { color: #38bdf8; font-weight: 600; }
+.py-type { color: #a78bfa; }
+.py-str { color: #34d399; }
+.py-num { color: #fbbf24; }
+.py-bool { color: #f59e0b; font-weight: 700; }
+.py-cmt { color: #64748b; font-style: italic; }
+
+/* Rewards Strip */
+.adv5-rewards-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.adv5-rewards-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adv5-reward-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.adv5-reward-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.adv5-reward-pill.cyan {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.adv5-reward-pill.purple {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.adv5-reward-pill.rose {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+.adv5-peers-stat {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Actions Row */
+.adv5-quest-actions-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.adv5-btn-play-now {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adv5-btn-play-now:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(2, 132, 199, 0.6);
+}
+
+.adv5-btn-open-map {
+  background: rgba(30, 41, 59, 0.65);
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.85rem 1.3rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adv5-btn-open-map:hover {
+  background: rgba(51, 65, 85, 0.85);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.adv5-btn-sandbox {
+  background: rgba(15, 23, 42, 0.6);
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.85rem 1.3rem;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adv5-btn-sandbox:hover {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Leaderboard Card */
+.adv5-leaderboard-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.adv5-lb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.adv5-lb-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adv5-lb-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.adv5-live-tag {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.adv5-lb-subtitle {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+}
+
+.adv5-lb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.adv5-lb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.adv5-lb-item:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateX(-2px);
+}
+
+.adv5-lb-item.rank-me {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
+}
+
+.adv5-lb-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.adv5-lb-badge.purple-circle {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.adv5-lb-badge.slate-circle {
+  background: rgba(148, 163, 184, 0.2);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.adv5-lb-badge.amber-circle {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.adv5-lb-badge.cyan-circle {
+  background: rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+}
+
+.adv5-lb-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.adv5-lb-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.adv5-you-tag {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.adv5-lb-tier {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.adv5-lb-score {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.adv5-lb-xp {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #f1f5f9;
+}
+
+.adv5-lb-medals {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.adv5-lb-footer-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
+  border: 1px dashed rgba(245, 158, 11, 0.35);
+  border-radius: 12px;
+  padding: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.adv5-booster-text {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fde68a;
+}
+
+.adv5-btn-booster {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.adv5-btn-booster:hover {
+  background: rgba(245, 158, 11, 0.35);
+}
+
+/* 5. Exploration & Coding Activities Center (5 Portals) */
+.adv5-portals-section {
+  margin-bottom: 1.5rem;
+}
+
+.adv5-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.adv5-section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adv5-section-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.adv5-section-subtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.adv5-portals-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.adv5-portal-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.adv5-portal-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+.adv5-portal-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.65rem;
+}
+
+.adv5-portal-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.adv5-portal-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.adv5-badge-quick {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+.adv5-portal-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0 0 1rem 0;
+  flex: 1;
+}
+
+.adv5-portal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.65rem;
+  font-size: 0.72rem;
+}
+
+.adv5-portal-tag {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.adv5-portal-action {
+  color: #38bdf8;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.15s ease;
+}
+
+.adv5-portal-card:hover .adv5-portal-action {
+  transform: translateX(-3px);
+}
+
+/* 6. World Progress Road (مسار العوالم الثمانية) */
+.adv5-world-road-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.adv5-world-road-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.adv5-road-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+}
+
+.adv5-road-subtitle {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.adv5-road-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.adv5-road-slider-bar {
+  width: 120px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.adv5-road-slider-fill {
+  height: 100%;
+  background: #38bdf8;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.adv5-road-nodes-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.75rem;
+  position: relative;
+}
+
+.adv5-road-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.85rem 0.5rem;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adv5-road-node:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.adv5-road-node.active {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: linear-gradient(180deg, rgba(14, 165, 233, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%);
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
+}
+
+.adv5-node-bubble {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.adv5-road-node:hover .adv5-node-bubble {
+  transform: scale(1.08);
+}
+
+.adv5-node-bubble.cyan {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+}
+
+.adv5-node-bubble.dark {
+  background: rgba(30, 41, 59, 0.8);
+  color: #cbd5e1;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.adv5-node-bubble.lock {
+  background: rgba(15, 23, 42, 0.6);
+  color: #475569;
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.85rem;
+}
+
+.adv5-node-bubble.trophy {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 2px solid rgba(245, 158, 11, 0.4);
+}
+
+.adv5-node-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 3px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.adv5-node-sub {
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.adv5-node-sub.status-open {
+  color: #38bdf8;
+}
+
+/* Responsive Breakpoints for Image 5 Layout */
+@media (max-width: 1200px) {
+  .adv5-metrics-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .adv5-portals-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .adv5-road-nodes-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .adv5-hero-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem;
+  }
+  .adv5-middle-split-grid {
+    grid-template-columns: 1fr;
+  }
+  .adv5-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .adv5-portals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .adventure-image5-container {
+    padding: 1rem;
+  }
+  .adv5-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .adv5-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  .adv5-portals-grid {
+    grid-template-columns: 1fr;
+  }
+  .adv5-road-nodes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .adv5-quest-actions-row {
+    flex-direction: column;
+  }
+  .adv5-btn-play-now,
+  .adv5-btn-open-map,
+  .adv5-btn-sandbox {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
