@@ -23,6 +23,15 @@ import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm
 import { renderLoader } from "../../shared/components/Loader/loader.component.js";
 import { renderEmptyState } from "../../shared/components/EmptyState/empty-state.component.js";
 import { renderErrorState } from "../../shared/components/ErrorState/error-state.component.js";
+import { renderStudentTasksCenter } from "./components/student-tasks-center.component.js";
+import {
+  renderStudentTasksModals,
+  TASKS_MANUAL_MODAL_ID,
+  TASK_SPECS_MODAL_ID,
+  SUBMITTED_CODE_MODAL_ID,
+  TASK_EVALUATION_REPORT_MODAL_ID,
+  UPCOMING_TASK_MODAL_ID
+} from "./components/student-tasks-modals.component.js";
 import { renderTable } from "../../shared/components/Table/table.component.js";
 import { renderBadge } from "../../shared/components/Badge/badge.component.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";

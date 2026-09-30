@@ -215,14 +215,8 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
             <div id="activeExamContainer" class="d-none"></div>
           </section>
 
-          <!-- Tasks Section -->
+          <!-- Tasks Section (Image 2.html Design System) -->
           <section id="sec-tasks" class="tab-content" aria-labelledby="heading-tasks">
-            <div class="page-header">
-              <div>
-                <h2 id="heading-tasks" class="page-title">📋 التاسكات والواجبات العملية</h2>
-                <p class="page-subtitle">قم برفع وتسليم حلول المهام البرمجية لمتابعة تقييم المعلم.</p>
-              </div>
-            </div>
             <div id="taskListContainer"></div>
           </section>
 
