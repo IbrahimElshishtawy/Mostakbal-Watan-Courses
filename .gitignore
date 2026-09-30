@@ -118,3 +118,42 @@ Thumbs.db
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+# ==========================================
+# 7. Private Student Data, Exports & Spreadsheets (بيانات الطلاب والتصديرات)
+# ==========================================
+*.csv
+*.xlsx
+*.xls
+*student_export*
+*students_backup*
+exports/
+reports/private/
+
+# ==========================================
+# 8. Python Runtimes & Bytecode (مخلفات تشغيل بايثون والبيئات الافتراضية)
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+venv/
+.venv/
+env/
+ENV/
+
+# ==========================================
+# 9. Private Archives, Bundles & Keys (المضغوطات والمفاتيح المشفرة)
+# ==========================================
+*.tar.gz
+*.rar
+*.7z
+*.p12
+*.keystore
+*.jks
+*.secret
+*.token
+private/
+secrets/
+scratch/
+
