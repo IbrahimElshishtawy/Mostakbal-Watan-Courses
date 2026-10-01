@@ -33,7 +33,7 @@ export const ProfileController = {
     container.querySelector("#pfBtnViewNfc")?.addEventListener("click", () => {
       showConfirmDialog({
         title: "بطاقة الهوية الذكية الرقمية (NFC Smart ID) 🪪",
-        message: `اسم الطالب: ${name}\nالكود الأكاديمي: ${code}\nالمسار: بايثون وهندسة النظم\nالأمانة: أمانة أول المحلة الكبرى\n\nحالة البطاقة: صالحة للموسم 2026 / 2027 ومعتمدة لكافة المعامل والقاعات الذكية.`,
+        message: `اسم الطالب: ${name}\nالكود الأكاديمي: ${code}\nالمسار: بايثون وهندسة النظم\nالجهة: اتحاد بشبابها\n\nحالة البطاقة: صالحة للموسم 2026 / 2027 ومعتمدة لكافة المعامل والقاعات الذكية.`,
         confirmText: "إغلاق",
         cancelText: "تحميل البطاقة",
         variant: "primary"
@@ -71,7 +71,7 @@ export const ProfileController = {
 
     // 4. Notifications & Guide Buttons
     container.querySelector("#pfNotificationBtn")?.addEventListener("click", () => {
-      showToast("حسابك الأكاديمي موثق ومحدث بالكامل لدى أمانة المحلة الكبرى ✓", "info");
+      showToast("حسابك الأكاديمي موثق ومحدث بالكامل لدى اتحاد بشبابها ✓", "info");
     });
 
     container.querySelector("#pfGuideBtn")?.addEventListener("click", () => {

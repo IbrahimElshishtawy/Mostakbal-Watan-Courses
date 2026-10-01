@@ -36,7 +36,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
                 اتحاد بشبابها
                 <span class="text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono">EduTech</span>
               </h1>
-              <p class="text-xs text-slate-400 font-medium leading-none mt-1">أمانة أول المحلة الكبرى</p>
+              <p class="text-xs text-slate-400 font-medium leading-none mt-1">المنصة التعليمية الرقمية</p>
             </div>
           </div>
           <button id="adminMobileMenuToggle" type="button" class="text-slate-500 hover:text-slate-300 transition-colors p-1 cursor-pointer lg:hidden" title="تصغير القائمة">

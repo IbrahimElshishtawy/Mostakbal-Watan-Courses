@@ -109,7 +109,7 @@ export function renderProfileCard({ student }) {
                   <span>مسار بايثون وهندسة النظم</span>
                 </span>
                 <span class="pf-status-pill purple">
-                  <span>أمانة أول المحلة الكبرى</span>
+                  <span>اتحاد بشبابها</span>
                 </span>
               </div>
             </div>

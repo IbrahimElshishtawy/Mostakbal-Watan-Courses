@@ -21,7 +21,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
         </div>
         <div>
           <strong id="mobileStudentName" class="text-sm d-block font-extrabold">إبراهيم خالد</strong>
-          <span class="text-xs text-muted">أمانة أول المحلة • بوابة الطالب</span>
+          <span class="text-xs text-muted">اتحاد بشبابها • بوابة الطالب</span>
         </div>
       </div>
       <button type="button" id="mobileMenuToggle" class="mobile-menu-btn" aria-label="فتح القائمة الجانبية">
@@ -40,7 +40,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
           </div>
           <div class="brand-info">
             <h1>اتحاد بشبابها</h1>
-            <p>أمانة أول المحلة الكبرى • المنصة الرقمية</p>
+            <p>قطاع الشباب • المنصة الرقمية</p>
           </div>
         </div>
 

@@ -342,7 +342,7 @@ export function renderThemePickerView({
             <div class="st-toggle-row">
               <div class="st-toggle-info">
                 <span class="st-toggle-title">نشر فيديوهات ومحاضرات جديدة 🎥</span>
-                <span class="st-toggle-desc">إشعار فور رفع شرح جديد من محاضري أمانة أول المحلة الكبرى.</span>
+                <span class="st-toggle-desc">إشعار فور رفع شرح جديد من محاضري اتحاد بشبابها.</span>
               </div>
               <label class="st-switch">
                 <input type="checkbox" id="stLectureAlertsToggle" ${lectureAlerts ? "checked" : ""}>
