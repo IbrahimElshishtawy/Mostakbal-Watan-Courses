@@ -1,7 +1,7 @@
 {
   "name": "mostakbal-watan-courses",
   "version": "1.0.0",
-  "description": "منصة اتحاد بشبابها للتعليم التكنولوجي - أمانة أول المحلة الكبرى",
+  "description": "منصة اتحاد بشبابها للتعليم التكنولوجي",
   "main": "index.html",
   "scripts": {
     "start": "npx -y serve -l 3000 .",
