@@ -122,138 +122,65 @@ export const ExamController = {
             ? currentStudent.studentGroup
             : (currentStudent?.group || currentStudent?.studentGroup || "ALL"));
 
-      // Fetch complete academic exams history with fast timeout fallback
+      // Fetch complete academic exams history from Firestore
       let allExams = [];
       try {
-        const fetchPromise = ExamService.getStudentExams(studentGroup, studentUid);
-        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve([]), 2200));
-        allExams = await Promise.race([fetchPromise, timeoutPromise]);
+        allExams = await ExamService.getStudentExams(studentGroup, studentUid);
         if (!Array.isArray(allExams)) allExams = [];
-      } catch (_) {
+      } catch (err) {
+        console.warn("Could not fetch student exams from Firestore:", err);
         allExams = [];
-      }
-
-      // Signature exams from Image 7.png to ensure guaranteed rich fidelity
-      const signatureLiveExam = {
-        id: "PY-101-MID",
-        code: "PY-101-MID",
-        title: "الامتحان الشامل - المستوى الأول: أساسيات بايثون وهياكل البيانات",
-        description: "يشمل الاختبار 20 سؤال اختيار من متعدد + 3 مسائل برمجية تفاعلية يتم تصحيحها آلياً بواسطة Python Engine.",
-        duration: 60,
-        totalQuestions: 23,
-        passScore: 70,
-        rewardXp: 150,
-        status: "available",
-        active: true,
-        deadlineDisplay: "ينتهي خلال 48 ساعة",
-        group: "ALL"
-      };
-
-      const signatureUpcomingExams = [
-        {
-          id: "CS-202-OOP",
-          code: "CS-202-OOP",
-          title: "البرمجة كائنية التوجه OOP في بايثون",
-          description: "الفئات Classes، التوريث، وتعدد الأشكال (15 سؤال + مسألتين برمجيتين).",
-          duration: 45,
-          totalQuestions: 17,
-          dateDisplay: "يبدأ بعد 5 أيام • 25 أكتوبر 2026",
-          status: "upcoming",
-          active: true,
-          group: "ALL"
-        },
-        {
-          id: "PRJ-301-MID",
-          code: "PRJ-301-MID",
-          title: "الامتحان النصفي لمشروع التخرج وتطبيقات الويب",
-          description: "بناء REST APIs وربط قواعد البيانات SQLite (مشروع كود كامل).",
-          duration: 90,
-          totalQuestions: 1,
-          dateDisplay: "يبدأ 02 نوفمبر 2026",
-          status: "upcoming",
-          active: true,
-          group: "ALL"
-        }
-      ];
-
-      const signaturePastExams = [
-        {
-          id: "PY-QUIZ-01",
-          code: "PY-QUIZ-01",
-          title: "كويز المتغيرات والشروط البرمجية",
-          dateDisplay: "16 أكتوبر 2026",
-          score: 95,
-          total: 100,
-          grade: "امتياز (A+)",
-          status: "graded",
-          group: "ALL"
-        },
-        {
-          id: "PY-QUIZ-02",
-          code: "PY-QUIZ-02",
-          title: "كويز الحلقات التكرارية والقوائم",
-          dateDisplay: "20 أكتوبر 2026",
-          score: 98,
-          total: 100,
-          grade: "امتياز (A+)",
-          status: "graded",
-          group: "ALL"
-        },
-        {
-          id: "ALGO-SPEED",
-          code: "ALGO-SPEED",
-          title: "سباق الخوارزميات وتراكيب البيانات السريع",
-          dateDisplay: "24 أكتوبر 2026",
-          score: 95,
-          total: 100,
-          grade: "امتياز (A+)",
-          status: "graded",
-          group: "ALL"
-        }
-      ];
-
-      // Merge remote exams with signatures
-      if (allExams.length === 0) {
-        allExams = [signatureLiveExam, ...signatureUpcomingExams, ...signaturePastExams];
-      } else {
-        if (!allExams.some((e) => e.code === "PY-101-MID" || e.id === "PY-101-MID")) {
-          allExams.unshift(signatureLiveExam);
-        }
       }
 
       examState.set("allStudentExams", allExams);
       examState.set("availableExams", allExams);
 
-      // Compute categories
-      const availableExams = allExams.filter((e) => {
+      // Compute categories strictly based on real data
+      const availableExams = [];
+      const upcomingExams = [];
+      const pastExams = [];
+
+      allExams.forEach((e) => {
         const info = getExamStatusInfo(e, e.result);
-        return info.status === "available" || info.status === "in_progress" || e.status === "available";
+        if (e.result) {
+          pastExams.push(e);
+        } else if (info.status === "available" || info.status === "in_progress") {
+          availableExams.push(e);
+        } else if (info.status === "upcoming") {
+          upcomingExams.push(e);
+        } else if (info.status === "expired") {
+          pastExams.push(e);
+        } else if (e.active !== false) {
+          availableExams.push(e);
+        }
       });
 
-      const upcomingExams = allExams.filter((e) => {
-        const info = getExamStatusInfo(e, e.result);
-        return info.status === "upcoming" || e.status === "upcoming";
-      }).concat(signatureUpcomingExams.filter((u) => !allExams.some((a) => a.id === u.id)));
-
-      const pastExams = signaturePastExams;
-      const spotlightExam = availableExams[0] || signatureLiveExam;
+      const spotlightExam = availableExams[0] || null;
 
       const examCenterHtml = renderStudentExamCenter({
         student: currentStudent,
         activeExam: spotlightExam,
-        upcomingExams: signatureUpcomingExams,
-        pastExams: signaturePastExams
+        upcomingExams,
+        pastExams
       });
 
       setHtml(container, examCenterHtml);
 
       // 1. Bind Enter Exam Hall & Start Exam Buttons
       const handleStartExam = (examId) => {
-        this.confirmStartExam(examId || spotlightExam.id || "PY-101-MID", currentStudent);
+        if (!examId) {
+          showToast("يرجى اختيار الامتحان المراد بدؤه.", "info");
+          return;
+        }
+        this.confirmStartExam(examId, currentStudent);
       };
 
       container.querySelector("#btnEnterExamHall")?.addEventListener("click", () => {
-        handleStartExam(spotlightExam.id);
+        if (spotlightExam?.id) {
+          handleStartExam(spotlightExam.id);
+        } else {
+          showToast("لا يوجد امتحان نشط محدد حالياً للبدء.", "info");
+        }
       });
 
       container.querySelectorAll("[data-start-exam]").forEach((btn) => {
@@ -298,14 +225,15 @@ export const ExamController = {
         });
       });
 
-      // 5. Bind Review Quiz & Download Certificate
-      container.querySelectorAll("[data-review-quiz]").forEach((btn) => {
+      // 5. Bind Review Result / Exam Details Action
+      container.querySelectorAll("[data-review-result], [data-review-quiz]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          showToast({
-            type: "info",
-            title: "تقرير الأداء المعتمد",
-            message: "تم مراجعة الإجابات بنجاح. النتيجة معتمدة ومسجلة في كشف الدرجات النهائي."
-          });
+          const examId = btn.getAttribute("data-review-result") || btn.getAttribute("data-review-quiz") || btn.getAttribute("data-exam-id");
+          if (examId) {
+            this.openStudentExamDetails(examId, currentStudent);
+          } else {
+            showToast("تعذر تحديد كود الاختبار المطلوب.", "info");
+          }
         });
       });
 
@@ -314,7 +242,7 @@ export const ExamController = {
           showToast({
             type: "success",
             title: "الشهادات الأكاديمية",
-            message: "جاري تجهيز شهادة بايثون التأسيسي المعتمدة وتحميلها... 🎖️"
+            message: "الشهادة معتمدة ومسجلة في ملفك الأكاديمي. يمكنك طباعة تقرير النتيجة كشهادة اجتياز رسمية! 🎖️"
           });
         });
       });

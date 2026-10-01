@@ -182,8 +182,9 @@
           });
       }
 
-      // 2. Mount UI Layout Shell IMMEDIATELY (no waiting for slow network queries)
+      // 2. Mount UI Layout Shell IMMEDIATELY with initial student data
       const layout = mountStudentLayout(root, {
+        initialStudent: student,
         onLogout: () => AuthController.logout(),
         onTabChange: (tabId) => {
           if (tabId === "videos") {
@@ -223,7 +224,8 @@
       const initialDisplayName = student.name || student.studentName || "طالب مسجل";
       layout.updateProfile({
         name: initialDisplayName,
-        phone: student.studentPhone
+        phone: student.studentPhone,
+        group: student.group || student.studentGroup
       });
 
       // Mount Student Interactive Notification Banner (Python Valley Challenge, Lectures, Tasks)
@@ -328,7 +330,8 @@
             // Update UI shell & Interactive Banner
             layout.updateProfile({
               name: resolvedName,
-              phone: resolvedPhone
+              phone: resolvedPhone,
+              group: resolvedGroup
             });
             interactiveBannerHandle?.updateStudent(student);
 

@@ -17,6 +17,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { COLLECTIONS, FEATURES } from "../../core/constants.js";
 import { normalizeError, isCloudFunctionUnavailable } from "../../core/errors.js";
+import { isGroupMatch } from "../../shared/utils/group.utils.js";
 
 const _studentAttendanceCache = new Map();
 const ATTENDANCE_CACHE_TTL_MS = 60000;
@@ -79,8 +80,7 @@ export const AttendanceService = {
       // Filter eligible sessions for this student's group
       const eligibleSessions = allSessions.filter((s) => {
         const sGroup = s.group || "ALL";
-        if (sGroup === "ALL" || studentGroup === "ALL") return true;
-        return sGroup === studentGroup;
+        return isGroupMatch(sGroup, studentGroup);
       });
 
       const todayStr = new Date().toISOString().slice(0, 10);

@@ -6,11 +6,16 @@ import { renderBadge } from "../../components/Badge/badge.component.js";
 /**
  * Mounts the complete modern Student Application Shell Layout into a root container.
  */
-export function mountStudentLayout(container, { onLogout, onTabChange }) {
+export function mountStudentLayout(container, { onLogout, onTabChange, initialStudent = null }) {
   if (!container) return;
 
   const isSubdir = window.location.pathname.includes("/pages/");
   const logoSrc = isSubdir ? "../assets/images/logo_union.jpeg" : "assets/images/logo_union.jpeg";
+
+  const safeName = escapeHtml(initialStudent?.name || initialStudent?.studentName || "طالب مسجل");
+  const safePhone = escapeHtml(initialStudent?.phone || initialStudent?.studentPhone || "—");
+  const safeTrack = escapeHtml(initialStudent?.group || initialStudent?.studentGroup || "مسار بايثون وهندسة النظم");
+  const initialChar = safeName.trim().charAt(0) || "ط";
 
   container.innerHTML = `
     <!-- Mobile Top Header Bar -->
@@ -20,7 +25,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
           <img src="${logoSrc}" alt="شعار اتحاد بشبابها" />
         </div>
         <div>
-          <strong id="mobileStudentName" class="text-sm d-block font-extrabold">إبراهيم خالد</strong>
+          <strong id="mobileStudentName" class="text-sm d-block font-extrabold">${safeName}</strong>
           <span class="text-xs text-muted">اتحاد بشبابها • بوابة الطالب</span>
         </div>
       </div>
@@ -48,19 +53,19 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
         <div class="sidebar-user-box">
           <div class="sidebar-user-avatar-wrap">
             <div id="sidebarAvatarSlot">
-              ${renderAvatar({ name: "إبراهيم خالد", size: "md" })}
+              ${renderAvatar({ name: safeName, size: "md" })}
             </div>
             <span class="online-status-dot" title="متصل"></span>
           </div>
           <div class="sidebar-user-info">
             <div class="d-flex items-center gap-1">
-              <strong id="sidebarName">إبراهيم خالد</strong>
+              <strong id="sidebarName">${safeName}</strong>
               <span class="sidebar-verified-badge" title="حساب نشط وموثق">✓</span>
             </div>
-            <small id="sidebarPhone">01223070571</small>
+            <small id="sidebarPhone">${safePhone}</small>
             <div class="sidebar-role-tag">
               <span class="pulse-indicator"></span>
-              <span>طالب متميز • مسار بايثون وهندسة النظم</span>
+              <span id="sidebarTrackText">${safeTrack}</span>
             </div>
           </div>
         </div>
@@ -162,10 +167,10 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
             </button>
             <div class="topbar-student-pill" id="topbarStudentPill">
               <div class="topbar-student-meta">
-                <strong id="topbarStudentName">إبراهيم خالد</strong>
-                <span class="topbar-student-track">مسار بايثون وهندسة النظم</span>
+                <strong id="topbarStudentName">${safeName}</strong>
+                <span class="topbar-student-track" id="topbarStudentTrack">${safeTrack}</span>
               </div>
-              <div id="topbarUserInitial" class="avatar avatar-sm">إ</div>
+              <div id="topbarUserInitial" class="avatar avatar-sm">${initialChar}</div>
             </div>
           </div>
         </header>
@@ -337,7 +342,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
 
   return {
     switchTab: setActiveTab,
-    updateProfile({ name, phone }) {
+    updateProfile({ name, phone, group, track }) {
       const nameEl = document.getElementById("sidebarName");
       const phoneEl = document.getElementById("sidebarPhone");
       const mobileNameEl = document.getElementById("mobileStudentName");
@@ -345,6 +350,8 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
       const avatarSlot = document.getElementById("sidebarAvatarSlot");
       const topbarAvatar = document.getElementById("topbarUserInitial");
       const topbarBadge = document.getElementById("topbarStudentBadge");
+      const sidebarTrackEl = document.getElementById("sidebarTrackText");
+      const topbarTrackEl = document.getElementById("topbarStudentTrack");
 
       if (name) {
         if (nameEl) nameEl.textContent = name;
@@ -358,6 +365,11 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
       }
       if (phone && phoneEl) {
         phoneEl.textContent = phone;
+      }
+      const trackText = group || track;
+      if (trackText) {
+        if (sidebarTrackEl) sidebarTrackEl.textContent = trackText;
+        if (topbarTrackEl) topbarTrackEl.textContent = trackText;
       }
     }
   };

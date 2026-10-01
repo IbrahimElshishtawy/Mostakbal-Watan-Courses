@@ -60,7 +60,7 @@ service cloud.firestore {
     match /students/{studentId} {
       // A student can only get their own record; listing entire collection is restricted to staff
       allow get: if isStaff() || isOwner(studentId) || (isAuthenticated() && resource.data.studentPhone == getAuthPhone());
-      allow list: if isStaff();
+      allow list: if isStaff() || (isAuthenticated() && resource.data.studentPhone == getAuthPhone());
       allow write: if isStaff();
     }
 
@@ -85,14 +85,15 @@ service cloud.firestore {
     // 5. EXAMS (Secure questions & answer keys)
     // ========================================================
     match /exams/{examId} {
-      // Teachers and Admins have full access
-      allow read, write: if isStaff();
+      // Teachers and Admins have full access; students can read exams to take them
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
 
       // Student exam attempts subcollection
       match /attempts/{studentUid} {
         allow read: if isOwner(studentUid) || isStaff();
         allow create: if isOwner(studentUid);
-        allow update, delete: if isStaff();
+        allow update, delete: if isStaff() || isOwner(studentUid);
       }
     }
 
@@ -102,8 +103,9 @@ service cloud.firestore {
     match /results/{resultId} {
       // Student can only read their own result
       allow read: if isStaff() || (isAuthenticated() && (resource.data.studentId == request.auth.uid || resource.data.studentUid == request.auth.uid || resultId.matches('.*' + request.auth.uid + '.*')));
-      // Direct client score creation/update is blocked; Admin SDK in Cloud Functions bypasses rules
-      allow create, update: if isStaff();
+      // Students can record their own exam results in direct Firestore mode
+      allow create: if isStaff() || (isAuthenticated() && (request.resource.data.studentUid == request.auth.uid || request.resource.data.studentId == request.auth.uid));
+      allow update: if isStaff() || (isAuthenticated() && (resource.data.studentUid == request.auth.uid || resource.data.studentId == request.auth.uid));
       allow delete: if isAdmin();
     }
 
@@ -127,7 +129,7 @@ service cloud.firestore {
     match /submissions/{submissionId} {
       allow read: if isStaff() || (isAuthenticated() && (resource.data.studentId == request.auth.uid || submissionId.matches('^' + request.auth.uid + '_.*')));
       allow create: if isAuthenticated();
-      allow update: if isStaff();
+      allow update: if isStaff() || (isAuthenticated() && (resource.data.studentId == request.auth.uid || resource.data.studentUid == request.auth.uid || submissionId.matches('^' + request.auth.uid + '_.*')));
       allow delete: if isStaff();
     }
 

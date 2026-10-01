@@ -83,16 +83,13 @@ export const AssignmentController = {
             ? currentStudent.studentGroup
             : (currentStudent?.group || currentStudent?.studentGroup || "ALL"));
 
-      // 1. Fetch live assignments with quick timeout fallback
+      // 1. Fetch live assignments from Firestore
       let allAssignments = [];
-      let submissionsMap = new Map();
-
       try {
-        const fetchPromise = AssignmentService.getAllAssignments();
-        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve([]), 2500));
-        allAssignments = await Promise.race([fetchPromise, timeoutPromise]);
+        allAssignments = await AssignmentService.getAllAssignments();
         if (!Array.isArray(allAssignments)) allAssignments = [];
-      } catch (_) {
+      } catch (err) {
+        console.warn("Could not fetch assignments:", err);
         allAssignments = [];
       }
 
@@ -101,12 +98,12 @@ export const AssignmentController = {
       );
 
       // 2. Fetch submissions for relevant assignments
+      let submissionsMap = new Map();
       try {
         const relevantIds = relevant.map((a) => a.id);
-        const subPromise = AssignmentService.getStudentSubmissions(studentUid, relevantIds);
-        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(new Map()), 2000));
-        submissionsMap = await Promise.race([subPromise, timeoutPromise]);
-      } catch (_) {
+        submissionsMap = await AssignmentService.getStudentSubmissions(studentUid, relevantIds);
+      } catch (err) {
+        console.warn("Could not fetch submissions:", err);
         submissionsMap = new Map();
       }
 
@@ -114,33 +111,25 @@ export const AssignmentController = {
       assignmentState.set("submissions", submissionsMap);
       assignmentState.set("activeFilterTab", "all");
 
-      // 3. Render Student Tasks Center matching Image 2.html
-      const kpis = {
-        totalTasks: "04",
-        completedTasks: "02",
-        inProgressTasks: "01",
-        upcomingTasks: "01",
-        averageGrade: "96.5%"
-      };
-
+      // 3. Render Student Tasks Center purely from real Firestore data
       setHtml(
         container,
         renderStudentTasksCenter({
           student: currentStudent,
-          kpis,
-          directoryTasks: relevant
+          directoryTasks: relevant,
+          submissionsMap
         })
       );
 
       this.bindStudentTasksCenterEvents(container, currentStudent, relevant, submissionsMap);
     } catch (err) {
       console.error("Failed to load student assignments:", err);
-      // Fallback: render the clean student tasks center to guarantee student experience
       setHtml(
         container,
         renderStudentTasksCenter({
           student: currentStudent,
-          directoryTasks: []
+          directoryTasks: [],
+          submissionsMap: new Map()
         })
       );
       this.bindStudentTasksCenterEvents(container, currentStudent, [], new Map());
@@ -331,73 +320,57 @@ if __name__ == "__main__":
       showToast("تم إزالة الملف المرفق.", "info");
     });
 
-    // 6. Submit Hero Assignment Handler
+    // 6. Resubmit Toggle Button
+    const btnToggleResubmit = container.querySelector("#btnToggleHeroResubmit");
+    const heroFormWrap = container.querySelector("#heroSubmissionFormWrap");
+    btnToggleResubmit?.addEventListener("click", () => {
+      heroFormWrap?.classList.toggle("d-none");
+    });
+
+    // 7. Submit Hero Assignment Handler
     const btnSubmitHero = container.querySelector("#btnSubmitHeroAssignment");
     const githubInput = container.querySelector("#heroGithubRepoInput");
     const btnSubmitText = container.querySelector("#btnSubmitHeroAssignmentText");
 
     btnSubmitHero?.addEventListener("click", async () => {
       const githubUrl = (githubInput?.value || "").trim();
+      const assignmentId = btnSubmitHero.getAttribute("data-assignment-id") || container.querySelector("#heroActiveAssignmentSection")?.getAttribute("data-hero-task-id");
+
+      if (!assignmentId) {
+        showToast("تعذر تحديد الواجب المطلوب تسليمه.", "error");
+        return;
+      }
 
       if (!chosenFile && !githubUrl) {
-        showToast("يرجى إرفاق ملف كود الحل أو كتابة رابط مستودع GitHub أولاً ⚠️", "warning");
+        showToast("يرجى إرفاق ملف كود الحل أو كتابة رابط GitHub / إجابة نصية أولاً ⚠️", "warning");
         dropZone?.classList.add("animate-pulse");
         setTimeout(() => dropZone?.classList.remove("animate-pulse"), 1200);
         return;
       }
 
       try {
-        if (btnSubmitHero) btnSubmitHero.disabled = true;
-        if (btnSubmitText) btnSubmitText.innerHTML = `<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري الفحص والتسليم...`;
-
-        // Attempt cloud service submission with safety fallback
-        try {
-          const submissionPayload = {
-            assignmentId: "TASK-PY-03",
-            taskId: "TASK-PY-03",
-            studentName: currentStudent?.name || "إبراهيم خالد",
-            studentPhone: currentStudent?.phone || currentStudent?.studentPhone || "",
-            githubUrl: githubUrl,
-            fileName: chosenFile?.name || "github-repo-submission",
-            fileSize: chosenFile?.size || 0,
-            submittedAt: new Date().toISOString()
-          };
-          if (chosenFile) {
-            await AssignmentService.submitTask("TASK-PY-03", githubUrl || "Attached Solution File", chosenFile);
-          }
-        } catch (_) {
-          // Cloud function fallback - continues gracefully
+        btnSubmitHero.disabled = true;
+        if (btnSubmitText) {
+          btnSubmitText.innerHTML = `<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري الرفع والتسليم...`;
         }
 
-        setTimeout(() => {
-          if (btnSubmitHero) {
-            btnSubmitHero.disabled = true;
-            btnSubmitHero.style.background = "#10b981";
-            btnSubmitHero.style.color = "#050811";
-          }
-          if (btnSubmitText) {
-            btnSubmitText.innerHTML = `<i class="fa-solid fa-check ml-1"></i> تم تسليم الحل بنجاح`;
-          }
+        await AssignmentService.submitTask(assignmentId, githubUrl || "كود الحل المرفوع", chosenFile);
 
-          // Update header open badge to submitted
-          const statusBadge = container.querySelector(".badge-status-open");
-          if (statusBadge) {
-            statusBadge.className = "badge-status-open";
-            statusBadge.style.background = "rgba(16, 185, 129, 0.15)";
-            statusBadge.style.color = "#34d399";
-            statusBadge.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> تم التسليم والاعتماد للتقييم`;
-          }
+        showToast("تم تسليم واعتماد الحل بنجاح وحفظه في حسابك! 🎉", "success");
 
-          showToast("تم تسليم واعتماد حل TASK-PY-03 بنجاح! سيتم إخطار المحاضر بالتقييم. 🎉", "success");
-        }, 1200);
+        // Reload assignments to reflect real submitted state instantly
+        this.loadStudentAssignments(container, currentStudent);
       } catch (submitErr) {
-        if (btnSubmitHero) btnSubmitHero.disabled = false;
-        if (btnSubmitText) btnSubmitText.textContent = "تسليم واعتماد الحل للتقييم";
-        showToast("حدث خطأ أثناء رفع الحل. يرجى المحاولة مرة أخرى.", "error");
+        console.error("Submission failed:", submitErr);
+        btnSubmitHero.disabled = false;
+        if (btnSubmitText) {
+          btnSubmitText.textContent = "تسليم واعتماد الحل للتقييم";
+        }
+        showToast(submitErr.message || "حدث خطأ أثناء رفع الحل. يرجى المحاولة مرة أخرى.", "error");
       }
     });
 
-    // 7. Directory Filter Tabs
+    // 8. Directory Filter Tabs
     const dirTabs = container.querySelectorAll(".dir-tab-btn");
     const cards = container.querySelectorAll(".directory-task-card");
 
@@ -412,193 +385,113 @@ if __name__ == "__main__":
           if (filter === "all") {
             card.style.display = "flex";
           } else if (filter === "active") {
-            // Only active in progress
-            card.style.display = category === "active" ? "flex" : "none";
+            card.style.display = category === "active" || category === "submitted" ? "flex" : "none";
           } else if (filter === "graded") {
             card.style.display = category === "graded" ? "flex" : "none";
-          } else if (filter === "upcoming") {
-            card.style.display = category === "upcoming" ? "flex" : "none";
           }
         });
       });
     });
 
-    // 8. Card Action: View Submitted Code
+    // 9. Card Action: Select Task to be Hero
+    container.querySelectorAll('[data-action="select-task"]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const assignmentId = btn.getAttribute("data-assignment-id");
+        const selected = relevantAssignments.find((a) => a.id === assignmentId);
+        if (!selected) return;
+
+        setHtml(
+          container,
+          renderStudentTasksCenter({
+            student: currentStudent,
+            activeTask: selected,
+            directoryTasks: relevantAssignments,
+            submissionsMap
+          })
+        );
+        this.bindStudentTasksCenterEvents(container, currentStudent, relevantAssignments, submissionsMap);
+        container.querySelector("#heroActiveAssignmentSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    // 10. Card Action: View Assignment Specs/Details
+    container.querySelectorAll('[data-action="view-specs"], #btnViewTaskSpecsPdf').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const assignmentId = btn.getAttribute("data-assignment-id") || container.querySelector("#heroActiveAssignmentSection")?.getAttribute("data-hero-task-id");
+        if (assignmentId) {
+          this.openStudentAssignmentDetails(assignmentId, currentStudent);
+        } else {
+          openModal(TASK_SPECS_MODAL_ID);
+        }
+      });
+    });
+
+    // 11. Card Action: View Submitted Code
     container.querySelectorAll('[data-action="view-code"]').forEach((btn) => {
       btn.addEventListener("click", () => {
-        const codeId = btn.getAttribute("data-code-id");
-        const modal = document.getElementById(SUBMITTED_CODE_MODAL_ID);
+        const assignmentId = btn.getAttribute("data-assignment-id");
+        const sub = submissionsMap.get(assignmentId);
+        const task = relevantAssignments.find((a) => a.id === assignmentId);
+
         const fileNameEl = document.getElementById("submittedCodeFileName");
         const dateEl = document.getElementById("submittedCodeDate");
         const codeBlock = document.getElementById("submittedCodeBlock");
         const titleEl = document.getElementById("submittedCodeModalTitle");
 
-        if (codeId === "py01") {
-          if (titleEl) titleEl.textContent = "استعراض كود: خوارزميات البحث (Linear & Binary Search)";
-          if (fileNameEl) fileNameEl.textContent = "binary_search_benchmark.py";
-          if (dateEl) dateEl.textContent = "24 سبتمبر 2026 • معتمد (98%)";
-          if (codeBlock) {
-            codeBlock.textContent = `"""
-TASK-PY-01: تطبيق خوارزميات البحث الخطي والثنائي ومقارنة التعقيد الزمني
-الطالب: ${currentStudent?.name || "إبراهيم خالد"}
-الدرجة المستحقة: 98 / 100
-"""
-import time
+        if (titleEl) titleEl.textContent = `استعراض كود: ${task?.title || "الحل المسلم"}`;
+        if (fileNameEl) fileNameEl.textContent = sub?.fileName || (sub?.fileUrl ? "ملف حل مرفق" : "كود نصي / رابط");
+        if (dateEl) dateEl.textContent = sub?.submittedAt ? formatDateTime(sub.submittedAt) : "تم التسليم";
 
-def linear_search(arr: list, target: int) -> int:
-    """البحث الخطي بتعقيد زمني O(n)."""
-    for index, val in enumerate(arr):
-        if val == target:
-            return index
-    return -1
-
-def binary_search(arr: list, target: int) -> int:
-    """البحث الثنائي بتعقيد زمني O(log n)."""
-    low, high = 0, len(arr) - 1
-    while low <= high:
-        mid = (low + high) // 2
-        if arr[mid] == target:
-            return mid
-        elif arr[mid] < target:
-            low = mid + 1
-        else:
-            high = mid - 1
-    return -1
-
-def run_performance_test():
-    dataset = list(range(1, 1_000_001))
-    target_value = 999_990
-
-    # 1. قياس البحث الخطي
-    t0 = time.perf_counter()
-    lin_res = linear_search(dataset, target_value)
-    lin_time = time.perf_counter() - t0
-
-    # 2. قياس البحث الثنائي
-    t1 = time.perf_counter()
-    bin_res = binary_search(dataset, target_value)
-    bin_time = time.perf_counter() - t1
-
-    print(f"Linear Search Index: {lin_res}, Time: {lin_time:.6f}s")
-    print(f"Binary Search Index: {bin_res}, Time: {bin_time:.6f}s")
-    print(f"Binary Search is {lin_time / bin_time:.1f}x faster!")
-
-if __name__ == "__main__":
-    run_performance_test()`;
+        if (codeBlock) {
+          let content = "";
+          if (sub?.answerText) {
+            content += `# إجابة وملاحظات الطالب:\n${sub.answerText}\n\n`;
           }
-        } else if (codeId === "py02") {
-          if (titleEl) titleEl.textContent = "استعراض كود: دوال التشفير وفك التشفير (Caesar Cipher)";
-          if (fileNameEl) fileNameEl.textContent = "caesar_cipher_tools.py";
-          if (dateEl) dateEl.textContent = "17 سبتمبر 2026 • معتمد (95%)";
-          if (codeBlock) {
-            codeBlock.textContent = `"""
-TASK-PY-02: بناء دوال التشفير وفك التشفير الكلاسيكي (Caesar Cipher)
-الطالب: ${currentStudent?.name || "إبراهيم خالد"}
-الدرجة المستحقة: 95 / 100
-"""
-
-def encrypt_caesar(plain_text: str, shift: int = 3) -> str:
-    """تشفير النص بإزاحة الحروف الإنجليزية والعربية مع مراعاة الحالة."""
-    encrypted_chars = []
-    shift_val = shift % 26
-
-    for ch in plain_text:
-        if 'a' <= ch <= 'z':
-            encrypted_chars.append(chr((ord(ch) - ord('a') + shift_val) % 26 + ord('a')))
-        elif 'A' <= ch <= 'Z':
-            encrypted_chars.append(chr((ord(ch) - ord('A') + shift_val) % 26 + ord('A')))
-        else:
-            encrypted_chars.append(ch)
-    return "".join(encrypted_chars)
-
-def decrypt_caesar(cipher_text: str, shift: int = 3) -> str:
-    """فك التشفير بإزاحة عكسية سالبة."""
-    return encrypt_caesar(cipher_text, -shift)
-
-def test_pipeline():
-    sample_text = "Future of Homeland - Python Training 2026"
-    enc = encrypt_caesar(sample_text, shift=5)
-    dec = decrypt_caesar(enc, shift=5)
-    assert dec == sample_text
-    print("Caesar Cipher Unit Test PASSED successfully!")
-
-if __name__ == "__main__":
-    test_pipeline()`;
+          if (sub?.fileUrl) {
+            content += `# رابط الملف المرفوع في التخزين السحابي:\n# ${sub.fileUrl}\n`;
           }
+          if (!content) {
+            content = "# لم يتم تسجيل نص برمجي إضافي في هذا التسليم.";
+          }
+          codeBlock.textContent = content;
         }
+
         openModal(SUBMITTED_CODE_MODAL_ID);
       });
     });
 
-    // 9. Card Action: View Evaluation Report
+    // 12. Card Action: View Evaluation Report
     container.querySelectorAll('[data-action="view-report"]').forEach((btn) => {
       btn.addEventListener("click", () => {
-        const codeId = btn.getAttribute("data-code-id");
+        const assignmentId = btn.getAttribute("data-assignment-id");
+        const sub = submissionsMap.get(assignmentId);
+        const task = relevantAssignments.find((a) => a.id === assignmentId);
+
         const taskCodeEl = document.getElementById("evalReportTaskCode");
         const taskTitleEl = document.getElementById("evalReportTaskTitle");
         const scoreEl = document.getElementById("evalReportScore");
         const feedbackEl = document.getElementById("evalReportFeedbackText");
         const rubricList = document.getElementById("evalReportRubricList");
 
-        if (codeId === "py01") {
-          if (taskCodeEl) taskCodeEl.textContent = "TASK-PY-01 • المحاضرة 01";
-          if (taskTitleEl) taskTitleEl.textContent = "تطبيق خوارزميات البحث الخطي والثنائي (Linear & Binary Search)";
-          if (scoreEl) scoreEl.textContent = "98 / 100";
-          if (feedbackEl) feedbackEl.textContent = `"تنظيم الدوال والـ Docstrings مثالي جداً، وحساب الوقت الزمني دقيق. استمر بهذا المستوى الرائع!"`;
-          if (rubricList) {
-            rubricList.innerHTML = `
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>صحة خوارزمية البحث الخطي والثنائي (Correctness)</span>
-                <span class="font-mono text-emerald-400 font-bold">40 / 40</span>
-              </div>
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>قياس التعقيد الزمني والمقارنة الإحصائية (Benchmarking)</span>
-                <span class="font-mono text-emerald-400 font-bold">30 / 30</span>
-              </div>
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>الالتزام بمعايير PEP 8 ونظافة الكود</span>
-                <span class="font-mono text-emerald-400 font-bold">18 / 20</span>
-              </div>
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>توثيق الدوال (Docstrings) وسهولة القراءة</span>
-                <span class="font-mono text-emerald-400 font-bold">10 / 10</span>
-              </div>
-            `;
-          }
-        } else {
-          if (taskCodeEl) taskCodeEl.textContent = "TASK-PY-02 • المحاضرة 02";
-          if (taskTitleEl) taskTitleEl.textContent = "بناء دوال التشفير وفك التشفير الكلاسيكي (Caesar Cipher)";
-          if (scoreEl) scoreEl.textContent = "95 / 100";
-          if (feedbackEl) feedbackEl.textContent = `"كود نظيف مع دعم الحروف العربية والإنجليزية بشكل متميز وتمرير الاختبارات بنجاح."`;
-          if (rubricList) {
-            rubricList.innerHTML = `
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>صحة دوال التشفير وفك التشفير (Logic)</span>
-                <span class="font-mono text-emerald-400 font-bold">40 / 40</span>
-              </div>
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>التعامل مع جداول ASCII وحدود الحروف</span>
-                <span class="font-mono text-emerald-400 font-bold">30 / 30</span>
-              </div>
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>شروط وتكرارات نظيفة ومختصرة</span>
-                <span class="font-mono text-emerald-400 font-bold">15 / 20</span>
-              </div>
-              <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-                <span>اجتياز حالات الاختبار المتقدمة</span>
-                <span class="font-mono text-emerald-400 font-bold">10 / 10</span>
-              </div>
-            `;
-          }
-        }
-        openModal(TASK_EVALUATION_REPORT_MODAL_ID);
-      });
-    });
+        if (taskCodeEl) taskCodeEl.textContent = `${task?.code || task?.id || 'TASK'} • ${task?.group || 'مسار بايثون'}`;
+        if (taskTitleEl) taskTitleEl.textContent = task?.title || "واجب تطبيقي";
+        if (scoreEl) scoreEl.textContent = `${sub?.grade ?? sub?.score ?? '—'} / ${task?.maxScore || 100}`;
+        if (feedbackEl) feedbackEl.textContent = sub?.feedback ? `"${sub.feedback}"` : "تم اعتماد ومراجعة الحل بنجاح.";
 
-    // 10. Card Action: Preview Upcoming Task
-    container.querySelectorAll('[data-action="preview-upcoming"]').forEach((btn) => {
-      btn.addEventListener("click", () => {
-        openModal(UPCOMING_TASK_MODAL_ID);
+        if (rubricList) {
+          rubricList.innerHTML = `
+            <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
+              <span>صحة المنطق والحل البرمجي</span>
+              <span class="font-mono text-emerald-400 font-bold">معتمد</span>
+            </div>
+            <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
+              <span>الالتزام بمعايير التسليم</span>
+              <span class="font-mono text-emerald-400 font-bold">مستوفى</span>
+            </div>
+          `;
+        }
+
+        openModal(TASK_EVALUATION_REPORT_MODAL_ID);
       });
     });
 
