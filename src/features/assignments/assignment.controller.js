@@ -157,7 +157,7 @@ export const AssignmentController = {
       const templateCode = `"""
 مشروع 1: آلة حاسبة تفاعلية متقدمة مع معالجة الاستثناءات بلغة بايثون
 Interactive Python CLI Calculator with Exception Handling (try-except-finally)
-منصة مستقبل وطن للتعليم الرقمي - مسار بايثون وهندسة النظم
+منصة اتحاد بشبابها للتعليم الرقمي - مسار بايثون وهندسة النظم
 المحاضرة 03: معالجة الاستثناءات والمنطق الحسابي
 المطور / الطالب: ${currentStudent?.name || "إبراهيم خالد"}
 """

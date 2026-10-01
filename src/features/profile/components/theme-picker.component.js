@@ -26,7 +26,7 @@ export function renderThemePickerView({
       glowColor: "rgba(16, 185, 129, 0.35)",
       badgeBg: "rgba(16, 185, 129, 0.15)",
       badgeColor: "#34d399",
-      description: "السمة الرسمية المعتمدة لحزب مستقبل وطن، تمنح الواجهة وقاراً وأناقة مؤسسية."
+      description: "السمة الرسمية المعتمدة لاتحاد بشبابها، تمنح الواجهة وقاراً وأناقة مؤسسية."
     },
     {
       id: "cyan",
@@ -70,7 +70,7 @@ export function renderThemePickerView({
       <!-- 1. Top Header Bar -->
       <header class="st-topbar">
         <nav aria-label="Breadcrumb" class="st-breadcrumbs">
-          <span class="st-crumb-root">منصة مستقبل وطن</span>
+          <span class="st-crumb-root">منصة اتحاد بشبابها</span>
           <span class="st-crumb-sep">/</span>
           <span class="st-crumb-mid">بوابة الطالب</span>
           <span class="st-crumb-sep">/</span>
@@ -214,7 +214,7 @@ export function renderThemePickerView({
                 <span>معاينة حية للمحتوى والكود (Live Render)</span>
               </div>
               <p class="st-preview-text">
-                منصة مستقبل وطن توفر للطلاب بيئة تعلم ذكية ومتطورة متصلة بمختبرات بايثون والسحابة.
+                منصة اتحاد بشبابها توفر للطلاب بيئة تعلم ذكية ومتطورة متصلة بمختبرات بايثون والسحابة.
               </p>
               <div class="st-preview-code font-mono">
                 <span class="st-code-kw">def</span> <span class="st-code-fn">welcome_student</span>():<br>
@@ -360,7 +360,7 @@ export function renderThemePickerView({
             </div>
             <div>
               <h3 class="st-card-title">إدارة التخزين المؤقت والمزامنة السحابية (Cloud & Storage)</h3>
-              <p class="st-card-subtitle">تشخيص حالة الاتصال مع خوادم مستقبل وطن وإدارة ملفات التخزين المؤقتة.</p>
+              <p class="st-card-subtitle">تشخيص حالة الاتصال مع خوادم اتحاد بشبابها وإدارة ملفات التخزين المؤقتة.</p>
             </div>
           </div>
 

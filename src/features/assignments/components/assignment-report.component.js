@@ -41,7 +41,7 @@ export function renderAssignmentPrintableReport({
           </div>
         </div>
         <div style="text-align:left;">
-          <div class="print-report-meta">حزب مستقبل وطن - المنصة التعليمية</div>
+          <div class="print-report-meta">اتحاد بشبابها - المنصة التعليمية</div>
           <div class="print-report-meta">تاريخ استخراج التقرير: ${nowFormatted}</div>
         </div>
       </div>
@@ -117,7 +117,7 @@ export function renderAssignmentPrintableReport({
       </table>
 
       <div style="margin-top:20px;border-top:1px solid #cbd5e1;padding-top:10px;display:flex;justify-content:space-between;font-size:9pt;color:#64748b;">
-        <span>المنصة التعليمية - حزب مستقبل وطن © تقرير تسليمات الواجبات</span>
+        <span>المنصة التعليمية - اتحاد بشبابها © تقرير تسليمات الواجبات</span>
         <span>صفحة 1 من 1</span>
       </div>
     </div>

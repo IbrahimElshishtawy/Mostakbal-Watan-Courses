@@ -149,7 +149,7 @@ async function seedCollections(userIds) {
   // 1. Group info & sample student
   const sampleStudentUid = "sample_student_01";
   await db.collection("students").doc(sampleStudentUid).set({
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     studentPhone: "01012345678",
     parentPhone: "01098765432",
     group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
@@ -181,7 +181,7 @@ async function seedCollections(userIds) {
   await db.collection("video_logs").doc("sample_log_01").set({
     studentId: sampleStudentUid,
     studentPhone: "01012345678",
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     videoId: "lecture_01",
     videoTitle: "المحاضرة 1: مقدمة إلى لغة بايثون والبيئة البرمجية",
     watchedDuration: 1800,
@@ -232,7 +232,7 @@ async function seedCollections(userIds) {
 
   await sampleExamRef.collection("attempts").doc(sampleStudentUid).set({
     studentUid: sampleStudentUid,
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     startedAt: now,
     status: "submitted",
     answers: { "1": 2, "2": 1 }
@@ -244,7 +244,7 @@ async function seedCollections(userIds) {
     examId: "exam_01",
     examTitle: "اختبار بايثون الشامل - المستوى الأول",
     studentUid: sampleStudentUid,
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     studentPhone: "01012345678",
     group: "مجموعة الأحد والأربعاء | 7:00 - 8:30",
     score: 20,
@@ -270,7 +270,7 @@ async function seedCollections(userIds) {
 
   await sampleAsgRef.collection("submissions").doc(sampleStudentUid).set({
     studentUid: sampleStudentUid,
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     studentPhone: "01012345678",
     fileUrl: "",
     notes: "كود بايثون للآلة الحاسبة مع معالجة القسمة على صفر",
@@ -286,7 +286,7 @@ async function seedCollections(userIds) {
   await db.collection("submissions").doc(`${sampleStudentUid}_asg_01`).set({
     assignmentId: "asg_01",
     studentUid: sampleStudentUid,
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     studentPhone: "01012345678",
     fileUrl: "",
     notes: "كود الآلة الحاسبة (سجل موحد)",
@@ -311,7 +311,7 @@ async function seedCollections(userIds) {
 
   await sampleAttRef.collection("records").doc(sampleStudentUid).set({
     studentUid: sampleStudentUid,
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     studentPhone: "01012345678",
     status: "present",
     notes: "حاضر في الموعد",
@@ -357,7 +357,7 @@ async function seedCollections(userIds) {
 
   await sampleCompRef.collection("participants").doc(sampleStudentUid).set({
     studentUid: sampleStudentUid,
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     score: 150,
     rank: 1,
     solvedCount: 2
@@ -367,7 +367,7 @@ async function seedCollections(userIds) {
   // 13. Student Gamification
   await db.collection("student_gamification").doc(sampleStudentUid).set({
     studentUid: sampleStudentUid,
-    studentName: "طالب تجريبي (مستقبل وطن)",
+    studentName: "طالب تجريبي (اتحاد بشبابها)",
     competitionPoints: 400,
     challengesCompleted: 5,
     currentStreak: 3,
@@ -382,7 +382,7 @@ async function seedCollections(userIds) {
   // 14. Notifications
   await db.collection("notifications").doc("notif_01").set({
     recipientUid: sampleStudentUid,
-    title: "مرحباً بك في منصة مستقبل وطن التعليمية! 🚀",
+    title: "مرحباً بك في منصة اتحاد بشبابها التعليمية! 🚀",
     message: "تم تسجيلك بنجاح في كورس بايثون. نتمنى لك تجربة ممتعة ومفيدة.",
     type: "general",
     link: "#",
@@ -423,7 +423,7 @@ async function seedCollections(userIds) {
 
 async function run() {
   console.log("================================================================================");
-  console.log("🚀 بدء تهيئة مشروع فايربيز الجديد لمنصة مستقبل وطن للتعليم التكنولوجي");
+  console.log("🚀 بدء تهيئة مشروع فايربيز الجديد لمنصة اتحاد بشبابها للتعليم التكنولوجي");
   console.log("================================================================================");
 
   const userIds = await seedAuthAccounts();

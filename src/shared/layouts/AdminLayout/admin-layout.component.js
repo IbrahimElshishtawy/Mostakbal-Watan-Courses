@@ -33,7 +33,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
             </div>
             <div>
               <h1 class="text-base font-extrabold tracking-wide text-white flex items-center gap-1.5">
-                مستقبل وطن
+                اتحاد بشبابها
                 <span class="text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-mono">EduTech</span>
               </h1>
               <p class="text-xs text-slate-400 font-medium leading-none mt-1">أمانة أول المحلة الكبرى</p>
@@ -209,7 +209,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
           <div class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-8 text-center">
             <i class="fa-solid fa-boxes-stacked text-indigo-400 text-4xl mb-3"></i>
             <h3 class="text-white text-base font-bold">بنك الأكواد والخوارزميات البرمجية</h3>
-            <p class="text-slate-400 text-xs mt-1 max-w-md mx-auto">مكتبة الخوارزميات وحلول التحديات البرمجية المعتمدة لطلاب منصة مستقبل وطن التعليمية.</p>
+            <p class="text-slate-400 text-xs mt-1 max-w-md mx-auto">مكتبة الخوارزميات وحلول التحديات البرمجية المعتمدة لطلاب منصة اتحاد بشبابها التعليمية.</p>
           </div>
         </section>
       </main>

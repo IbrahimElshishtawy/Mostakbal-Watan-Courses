@@ -95,7 +95,7 @@ export function renderSingleExamPrintableReport({ exam, results = [] }) {
           </div>
         </div>
         <div style="text-align:left;">
-          <div class="print-report-meta">حزب مستقبل وطن - المنصة التعليمية</div>
+          <div class="print-report-meta">اتحاد بشبابها - المنصة التعليمية</div>
           <div class="print-report-meta">تاريخ استخراج التقرير: ${nowFormatted}</div>
         </div>
       </div>
@@ -165,7 +165,7 @@ export function renderSingleExamPrintableReport({ exam, results = [] }) {
       </table>
 
       <div style="margin-top:20px;border-top:1px solid #cbd5e1;padding-top:10px;display:flex;justify-content:space-between;font-size:9pt;color:#64748b;">
-        <span>المنصة التعليمية - حزب مستقبل وطن © جميع الحقوق محفوظة</span>
+        <span>المنصة التعليمية - اتحاد بشبابها © جميع الحقوق محفوظة</span>
         <span>صفحة 1 من 1</span>
       </div>
     </div>
@@ -193,7 +193,7 @@ export function renderAllExamsSummaryPrintableReport({ exams = [], matrix = [] }
           </div>
         </div>
         <div style="text-align:left;">
-          <div class="print-report-meta">حزب مستقبل وطن - المنصة التعليمية</div>
+          <div class="print-report-meta">اتحاد بشبابها - المنصة التعليمية</div>
           <div class="print-report-meta">تاريخ الاستخراج: ${nowFormatted}</div>
         </div>
       </div>
@@ -239,7 +239,7 @@ export function renderAllExamsSummaryPrintableReport({ exams = [], matrix = [] }
       </table>
 
       <div style="margin-top:20px;border-top:1px solid #cbd5e1;padding-top:10px;display:flex;justify-content:space-between;font-size:9pt;color:#64748b;">
-        <span>المنصة التعليمية - حزب مستقبل وطن © جميع الحقوق محفوظة</span>
+        <span>المنصة التعليمية - اتحاد بشبابها © جميع الحقوق محفوظة</span>
         <span>تقرير الامتحانات التراكمي الشامل</span>
       </div>
     </div>

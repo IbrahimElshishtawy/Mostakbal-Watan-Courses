@@ -27,7 +27,7 @@ export function renderProfileCard({ student }) {
       <!-- 1. Top Header Bar -->
       <header class="pf-topbar">
         <nav aria-label="Breadcrumb" class="pf-breadcrumbs">
-          <span class="pf-crumb-root">منصة مستقبل وطن</span>
+          <span class="pf-crumb-root">منصة اتحاد بشبابها</span>
           <span class="pf-crumb-sep">/</span>
           <span class="pf-crumb-mid">بوابة الطالب</span>
           <span class="pf-crumb-sep">/</span>

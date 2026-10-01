@@ -522,7 +522,7 @@ export function renderAdminProblemManager({
       <!-- BEGIN: Pagination & Page Footer matching Image 8.html -->
       <footer class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 pb-6 border-t border-[#192437] text-xs text-slate-400" data-purpose="table-pagination">
         <div>
-          <span>منصة التدريب والتأهيل الرقمي • حزب مستقبل وطن بأول المحلة الكبرى</span>
+          <span>منصة التدريب والتأهيل الرقمي • اتحاد بشبابها بأول المحلة الكبرى</span>
         </div>
         <div class="flex items-center gap-1 font-mono">
           <button type="button" class="w-8 h-8 rounded-lg bg-[#141b29] border border-[#222f46] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">

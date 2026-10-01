@@ -32,7 +32,7 @@ export function renderStudentTasksCenter({
         <!-- Right Breadcrumbs & Title -->
         <div class="tasks-header-breadcrumbs">
           <nav aria-label="Breadcrumb" class="tasks-breadcrumb-nav">
-            <span class="breadcrumb-root">منصة مستقبل وطن</span>
+            <span class="breadcrumb-root">منصة اتحاد بشبابها</span>
             <i class="fa-solid fa-chevron-left breadcrumb-separator"></i>
             <span class="breadcrumb-sub">بوابة الطالب</span>
             <i class="fa-solid fa-chevron-left breadcrumb-separator"></i>

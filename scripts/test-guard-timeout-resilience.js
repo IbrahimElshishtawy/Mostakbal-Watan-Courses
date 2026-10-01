@@ -100,7 +100,7 @@ console.log("🧪 Starting Guard Timeout & Portal Resilience Tests...\n");
           <div class="portal-loader-emblem-wrap">
             <span style="font-size: 3rem; line-height: 1;">🔐</span>
           </div>
-          <h3 class="portal-loader-title">مستقبل وطن - تسجيل الدخول</h3>
+          <h3 class="portal-loader-title">اتحاد بشبابها - تسجيل الدخول</h3>
           <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
             ${message}
           </p>

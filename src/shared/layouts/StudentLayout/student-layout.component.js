@@ -17,7 +17,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
     <header class="mobile-header">
       <div class="d-flex items-center gap-3">
         <div class="brand-mark" style="width:36px;height:36px;">
-          <img src="${logoSrc}" alt="شعار مستقبل وطن" />
+          <img src="${logoSrc}" alt="شعار اتحاد بشبابها" />
         </div>
         <div>
           <strong id="mobileStudentName" class="text-sm d-block font-extrabold">إبراهيم خالد</strong>
@@ -36,10 +36,10 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
       <aside id="appSidebar" class="sidebar" aria-label="القائمة الجانبية">
         <div class="brand">
           <div class="brand-mark">
-            <img src="${logoSrc}" alt="شعار مستقبل وطن" />
+            <img src="${logoSrc}" alt="شعار اتحاد بشبابها" />
           </div>
           <div class="brand-info">
-            <h1>حزب مستقبل وطن</h1>
+            <h1>اتحاد بشبابها</h1>
             <p>أمانة أول المحلة الكبرى • المنصة الرقمية</p>
           </div>
         </div>
@@ -137,7 +137,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange }) {
         <header class="topbar">
           <div class="topbar-right-group">
             <div class="topbar-breadcrumb">
-              <span>منصة مستقبل وطن</span>
+              <span>منصة اتحاد بشبابها</span>
               <span class="breadcrumb-sep">/</span>
               <span>بوابة الطالب</span>
               <span class="breadcrumb-sep">/</span>

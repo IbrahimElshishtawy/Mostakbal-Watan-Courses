@@ -175,7 +175,7 @@ export function renderLeaderboardView({
       <!-- 1. Top Header Bar -->
       <header class="lb-topbar">
         <nav aria-label="Breadcrumb" class="lb-breadcrumbs">
-          <span class="lb-crumb-root">منصة مستقبل وطن</span>
+          <span class="lb-crumb-root">منصة اتحاد بشبابها</span>
           <span class="lb-crumb-sep">/</span>
           <span class="lb-crumb-mid">بوابة الطالب</span>
           <span class="lb-crumb-sep">/</span>
@@ -564,7 +564,7 @@ export function renderLeaderboardView({
                 <span class="lb-reward-icon text-cyan-400">💻</span>
                 <div class="lb-reward-content">
                   <h5>أولوية الترشيح للمشاريع البرمجية</h5>
-                  <p>الانضمام لفريق تطوير منصات مستقبل وطن الكبرى للمحترفين.</p>
+                  <p>الانضمام لفريق تطوير منصات اتحاد بشبابها الكبرى للمحترفين.</p>
                 </div>
               </div>
 

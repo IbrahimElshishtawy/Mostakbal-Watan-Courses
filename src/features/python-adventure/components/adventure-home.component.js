@@ -37,7 +37,7 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
       <header class="adv5-topbar">
         <!-- Breadcrumb (Right to left) -->
         <nav aria-label="Breadcrumb" class="adv5-breadcrumbs">
-          <span class="adv5-crumb-root">منصة مستقبل وطن</span>
+          <span class="adv5-crumb-root">منصة اتحاد بشبابها</span>
           <span class="adv5-crumb-sep">/</span>
           <span class="adv5-crumb-mid">بوابة الطالب</span>
           <span class="adv5-crumb-sep">/</span>

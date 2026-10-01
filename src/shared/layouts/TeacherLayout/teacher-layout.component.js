@@ -33,7 +33,7 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
             </div>
             <div>
               <h1 class="text-base font-extrabold tracking-wide text-white flex items-center gap-1.5">
-                مستقبل وطن
+                اتحاد بشبابها
                 <span class="text-[10px] bg-brand-500/15 text-accent-cyan border border-brand-500/30 px-1.5 py-0.5 rounded font-mono">Teacher</span>
               </h1>
               <p class="text-xs text-slate-400 font-medium leading-none mt-1">البوابة الأكاديمية للمعلم</p>
@@ -57,7 +57,7 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
               <h4 id="teacherSidebarNameDisplay" class="text-sm font-bold text-white truncate">المعلم الأكاديمي</h4>
               <span class="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded font-semibold">معلم معتمد</span>
             </div>
-            <p id="teacherSidebarEmailDisplay" class="text-[11px] text-slate-400 font-mono truncate">teacher@watan.edu.eg</p>
+            <p id="teacherSidebarEmailDisplay" class="text-[11px] text-slate-400 font-mono truncate">teacher@shababha.edu.eg</p>
           </div>
         </div>
 
@@ -194,7 +194,7 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
             </div>
             <div class="hidden md:flex flex-col text-right">
               <span id="teacherTopbarUserName" class="text-xs font-semibold text-slate-200">المعلم الأكاديمي</span>
-              <span id="teacherTopbarUserEmail" class="text-[10px] text-slate-500 font-mono">teacher@watan.edu.eg</span>
+              <span id="teacherTopbarUserEmail" class="text-[10px] text-slate-500 font-mono">teacher@shababha.edu.eg</span>
             </div>
           </div>
         </div>
