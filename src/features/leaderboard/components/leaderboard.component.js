@@ -2,173 +2,45 @@
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 
 /**
- * Signature students matching Image 6.jpeg exact specifications.
- */
-export const SIGNATURE_LEADERBOARD_STUDENTS = [
-  {
-    rank: 1,
-    studentName: "عمر أحمد الشناوي",
-    role: "خبير بايثون الأسطوري (Python Wizard) ✨",
-    cohort: "دفعة 2026",
-    badge: "بطل التحديات 🏅",
-    badgeType: "gold",
-    streak: 28,
-    accuracy: "100%",
-    tasksDone: 25,
-    tasksTotal: 25,
-    xp: 2840,
-    examRate: "100% كامل",
-    medalsCount: "24 وسام",
-    bugFree: "خالٍ من الأخطاء ⚡",
-    isCurrentUser: false
-  },
-  {
-    rank: 2,
-    studentName: "مريم محمود السيد",
-    role: "مهندسة الخوارزميات (Algorithm Master)",
-    cohort: "دفعة 2026",
-    badge: "الدقة التامة ⚡",
-    badgeType: "silver",
-    streak: 21,
-    accuracy: "98.9%",
-    tasksDone: 24,
-    tasksTotal: 25,
-    xp: 2610,
-    techBadges: "18 شارة إنجاز تقنية 🛡️",
-    isCurrentUser: false
-  },
-  {
-    rank: 3,
-    studentName: "زياد طارق البدوي",
-    role: "صائد الاستثناءات (Bug Hunter)",
-    cohort: "دفعة 2026",
-    badge: "كود خالٍ من الثغرات 🛡️",
-    badgeType: "bronze",
-    streak: null,
-    accuracy: "96.5%",
-    tasksDone: 23,
-    tasksTotal: 25,
-    xp: 2450,
-    techBadges: "15 شارة إنجاز تقنية 🛡️",
-    isCurrentUser: false
-  },
-  {
-    rank: 4,
-    studentName: "إبراهيم خالد",
-    role: "مسار بايثون الاحترافي",
-    cohort: "أنت (حسابك الشخصي)",
-    badge: "نجم السرعة ⚡",
-    badgeType: "cyan",
-    streak: 14,
-    accuracy: "97.4%",
-    tasksDone: 22,
-    tasksTotal: 25,
-    xp: 2330,
-    isCurrentUser: true,
-    pointsToThird: 120
-  },
-  {
-    rank: 5,
-    studentName: "كريم سامي رضوان",
-    role: "مطور برمجيات واعد",
-    cohort: "دفعة 2026",
-    badge: "12 مهمة سريعة 🚀",
-    badgeType: "default",
-    streak: null,
-    accuracy: "94.2%",
-    tasksDone: 21,
-    tasksTotal: 25,
-    xp: 2210,
-    isCurrentUser: false
-  },
-  {
-    rank: 6,
-    studentName: "نورهان مصطفى جاد",
-    role: "مطورة بايثون وهندسة بيانات",
-    cohort: "دفعة 2026",
-    badge: "حلول مبتكرة ⭐",
-    badgeType: "gold-subtle",
-    streak: null,
-    accuracy: "93.8%",
-    tasksDone: 20,
-    tasksTotal: 25,
-    xp: 2140,
-    isCurrentUser: false
-  },
-  {
-    rank: 7,
-    studentName: "أحمد شريف النجار",
-    role: "عاشق الهياكل البرمجية",
-    cohort: "دفعة 2026",
-    badge: null,
-    streak: 9,
-    accuracy: "92.0%",
-    tasksDone: 19,
-    tasksTotal: 25,
-    xp: 2020,
-    isCurrentUser: false
-  },
-  {
-    rank: 8,
-    studentName: "يوسف حسام الدين",
-    role: "طالب نشط بالواجبات",
-    cohort: "دفعة 2026",
-    badge: "التفكير المنطقي 🧠",
-    badgeType: "default",
-    streak: null,
-    accuracy: "90.5%",
-    tasksDone: 18,
-    tasksTotal: 25,
-    xp: 1940,
-    isCurrentUser: false
-  },
-  {
-    rank: 9,
-    studentName: "سارة عبد العزيز",
-    role: "مواظبة متميزة",
-    cohort: "دفعة 2026",
-    badge: "الالتزام التام ✨",
-    badgeType: "default",
-    streak: null,
-    accuracy: "89.4%",
-    tasksDone: 17,
-    tasksTotal: 25,
-    xp: 1860,
-    isCurrentUser: false
-  },
-  {
-    rank: 10,
-    studentName: "خالد وليد الشافعي",
-    role: "صعود متواصل",
-    cohort: "دفعة 2026",
-    badge: "أسرع تقدم 📈",
-    badgeType: "default",
-    streak: null,
-    accuracy: "88.1%",
-    tasksDone: 16,
-    tasksTotal: 25,
-    xp: 1790,
-    isCurrentUser: false
-  }
-];
-
-/**
- * Renders the Leaderboard View matching Image 6.jpeg exact design and layout.
+ * Renders the Leaderboard View dynamically bound to live Firestore data.
  */
 export function renderLeaderboardView({
   scope = "group",
   student = null,
-  totalStudents = 42,
-  averageXp = "1,850 XP"
+  totalStudents = 0,
+  averageXp = "0 XP",
+  leaderboardData = null
 } = {}) {
-  const currentStudentName = student?.studentName || student?.name || "إبراهيم خالد";
-  const safeStudentName = escapeHtml(currentStudentName);
+  const topStudents = leaderboardData?.topStudents || [];
+  const groupName = leaderboardData?.groupName || student?.group || student?.studentGroup || "مجموعتي الدراسية";
+  const currentUser = leaderboardData?.currentUserEntry || {
+    rank: 1,
+    studentName: student?.studentName || student?.name || "حسابي الشخصي",
+    role: "مسار بايثون الاحترافي",
+    badge: "⚡ مبرمج نشط",
+    badgeType: "cyan",
+    streak: 1,
+    accuracy: "100%",
+    tasksDone: 0,
+    tasksTotal: 10,
+    xp: 0
+  };
 
-  // Top 3 for Podium
-  const top1 = SIGNATURE_LEADERBOARD_STUDENTS[0];
-  const top2 = SIGNATURE_LEADERBOARD_STUDENTS[1];
-  const top3 = SIGNATURE_LEADERBOARD_STUDENTS[2];
-  const currentUser = SIGNATURE_LEADERBOARD_STUDENTS.find(s => s.isCurrentUser) || SIGNATURE_LEADERBOARD_STUDENTS[3];
+  const safeStudentName = escapeHtml(currentUser.studentName);
+
+  // Top 3 Podium Students
+  const top1 = topStudents[0] || null;
+  const top2 = topStudents[1] || null;
+  const top3 = topStudents[2] || null;
+
+  // Motivation Calculation
+  let motivationText = "أنت في صدارة الترتيب الأكاديمي! حافظ على هذا المستوى المتميز 🏆";
+  if (currentUser.rank > 3 && top3) {
+    const diff = Math.max(10, (top3.xp || 0) - (currentUser.xp || 0) + 10);
+    motivationText = `متبقي ${diff.toLocaleString()} XP للوصول إلى منصة التتويج وتخطي المركز الثالث 🏅`;
+  } else if (currentUser.rank === 2 || currentUser.rank === 3) {
+    motivationText = "أنت ضمن ثلاثي الصدارة لقاعة الشرف الأكاديمية! خطوة واحدة تفصلك عن المركز الأول 🌟";
+  }
 
   return `
     <div class="lb-page-container" dir="rtl">
@@ -185,7 +57,7 @@ export function renderLeaderboardView({
         <div class="lb-topbar-controls">
           <div class="lb-live-sync-pill">
             <span class="lb-pulse-dot"></span>
-            <span>خادم النتائج الحية: متزامن (22ms)</span>
+            <span>بيانات حية متزامنة من Firebase</span>
           </div>
 
           <div class="lb-season-pill">
@@ -214,7 +86,7 @@ export function renderLeaderboardView({
         <div class="lb-filter-tabs" role="tablist">
           <button type="button" class="lb-filter-tab ${scope === 'group' ? 'active' : ''}" data-scope="group">
             <span class="tab-active-dot"></span>
-            <span>مجموعتي الدراسية (الأحد والأربعاء | 7:00 - 8:30)</span>
+            <span>مجموعتي (${escapeHtml(groupName)})</span>
           </button>
 
           <button type="button" class="lb-filter-tab ${scope === 'global' ? 'active' : ''}" data-scope="global">
@@ -244,18 +116,18 @@ export function renderLeaderboardView({
             <span class="lb-telemetry-label">تحديث النتائج</span>
             <span class="lb-telemetry-val live-badge-glow font-mono">
               <span class="lb-pulse-dot"></span>
-              لحظي (Live)
+              لحظي (Firestore)
             </span>
           </div>
         </div>
       </section>
 
-      <!-- 3. Hall of Fame 3D Podium (ثلاثي الصدارة لمسار هندسة بايثون) -->
+      <!-- 3. Hall of Fame 3D Podium -->
       <section class="lb-podium-wrapper">
         <div class="lb-podium-header">
           <span class="lb-podium-tag">قاعة الشرف الأكاديمية • TOP 3</span>
           <h2 class="lb-podium-title">
-            <span>ثلاثي الصدارة لمسار هندسة بايثون</span>
+            <span>ثلاثي الصدارة لمسار هندسة البرمجيات وبايثون</span>
             <i class="fa-solid fa-star text-amber-400"></i>
           </h2>
         </div>
@@ -274,28 +146,28 @@ export function renderLeaderboardView({
               <i class="fa-solid fa-user"></i>
             </div>
 
-            <h3 class="podium-user-name">${escapeHtml(top2.studentName)}</h3>
-            <p class="podium-user-role">${escapeHtml(top2.role)}</p>
+            <h3 class="podium-user-name">${top2 ? escapeHtml(top2.studentName) : "في انتظار المنافس"}</h3>
+            <p class="podium-user-role">${top2 ? escapeHtml(top2.levelTitle || top2.role || "مبرمج واعد") : "المقعد متاح للتنافس"}</p>
 
             <div class="podium-xp-score-wrap">
               <span class="podium-xp-label">إجمالي النقاط:</span>
-              <span class="podium-xp-number font-mono">XP ${top2.xp.toLocaleString()}</span>
+              <span class="podium-xp-number font-mono">XP ${top2 ? (top2.xp || 0).toLocaleString() : 0}</span>
             </div>
 
             <div class="podium-mini-stats-grid font-mono">
               <div class="podium-stat-pill">
                 <span>المهام: </span>
-                <strong>${top2.tasksDone} / ${top2.tasksTotal}</strong>
+                <strong>${top2 ? `${top2.tasksDone} منجز` : "0"}</strong>
               </div>
               <div class="podium-stat-pill">
                 <span>الدقة: </span>
-                <strong>${top2.accuracy}</strong>
+                <strong>${top2 ? top2.accuracy : "—"}</strong>
               </div>
             </div>
 
             <div class="podium-card-footer-badge">
               <i class="fa-solid fa-shield-halved text-cyan-400"></i>
-              <span>${top2.techBadges}</span>
+              <span>${top2 ? top2.techBadges : "وسام التنافس 🛡️"}</span>
             </div>
           </div>
 
@@ -312,35 +184,35 @@ export function renderLeaderboardView({
               <i class="fa-solid fa-user-ninja"></i>
             </div>
 
-            <h3 class="podium-user-name">${escapeHtml(top1.studentName)}</h3>
-            <p class="podium-user-role">${escapeHtml(top1.role)}</p>
+            <h3 class="podium-user-name">${top1 ? escapeHtml(top1.studentName) : "في انتظار بطل الصدارة"}</h3>
+            <p class="podium-user-role">${top1 ? escapeHtml(top1.levelTitle || top1.role || "خبير بايثون الأسطوري") : "كن أول من يحصد المركز الأول"}</p>
 
             <div class="podium-xp-score-wrap">
               <span class="podium-xp-label text-amber-400 font-bold">النقاط الكلية: ✪</span>
-              <span class="podium-xp-number font-mono">XP ${top1.xp.toLocaleString()}</span>
+              <span class="podium-xp-number font-mono">XP ${top1 ? (top1.xp || 0).toLocaleString() : 0}</span>
             </div>
 
             <div class="podium-mini-stats-grid font-mono">
               <div class="podium-stat-pill success">
                 <span>إنجاز المهام: </span>
-                <strong>${top1.tasksDone} / ${top1.tasksTotal} مكتمل</strong>
+                <strong>${top1 ? `${top1.tasksDone} مكتمل` : "0"}</strong>
               </div>
               <div class="podium-stat-pill success">
-                <span>معدل الاختبارات: </span>
-                <strong>${top1.examRate}</strong>
+                <span>المستوى: </span>
+                <strong>${top1 ? `مستوى ${top1.level}` : "1"}</strong>
               </div>
               <div class="podium-stat-pill streak">
                 <span>تتابع </span>
-                <strong>${top1.streak} يوم 🔥</strong>
+                <strong>${top1 ? `${top1.streak} يوم 🔥` : "1 يوم"}</strong>
               </div>
               <div class="podium-stat-pill">
-                <strong>${top1.bugFree}</strong>
+                <strong>كود معتمد ⚡</strong>
               </div>
             </div>
 
             <div class="podium-card-footer-badge text-amber-400 font-bold">
               <i class="fa-solid fa-award"></i>
-              <span>${top1.medalsCount}</span>
+              <span>${top1 ? (top1.badge || "بطل الدورة 🥇") : "شارة الصدارة 🥇"}</span>
             </div>
           </div>
 
@@ -357,38 +229,38 @@ export function renderLeaderboardView({
               <i class="fa-solid fa-user"></i>
             </div>
 
-            <h3 class="podium-user-name">${escapeHtml(top3.studentName)}</h3>
-            <p class="podium-user-role">${escapeHtml(top3.role)}</p>
+            <h3 class="podium-user-name">${top3 ? escapeHtml(top3.studentName) : "في انتظار المنافس"}</h3>
+            <p class="podium-user-role">${top3 ? escapeHtml(top3.levelTitle || top3.role || "مبرمج واعد") : "المقعد متاح للتنافس"}</p>
 
             <div class="podium-xp-score-wrap">
               <span class="podium-xp-label">إجمالي النقاط:</span>
-              <span class="podium-xp-number font-mono">XP ${top3.xp.toLocaleString()}</span>
+              <span class="podium-xp-number font-mono">XP ${top3 ? (top3.xp || 0).toLocaleString() : 0}</span>
             </div>
 
             <div class="podium-mini-stats-grid font-mono">
               <div class="podium-stat-pill">
                 <span>المهام: </span>
-                <strong>${top3.tasksDone} / ${top3.tasksTotal}</strong>
+                <strong>${top3 ? `${top3.tasksDone} منجز` : "0"}</strong>
               </div>
               <div class="podium-stat-pill">
                 <span>الدقة: </span>
-                <strong>${top3.accuracy}</strong>
+                <strong>${top3 ? top3.accuracy : "—"}</strong>
               </div>
             </div>
 
             <div class="podium-card-footer-badge">
               <i class="fa-solid fa-shield-halved text-amber-500"></i>
-              <span>${top3.techBadges}</span>
+              <span>${top3 ? top3.techBadges : "وسام التنافس 🛡️"}</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 4. Personal Student Standing Strip (إبراهيم خالد - أنت) -->
+      <!-- 4. Personal Student Standing Strip -->
       <section class="lb-standing-strip">
         <div class="lb-standing-right">
           <div class="lb-rank-box-badge font-mono">
-            #${currentUser.rank}
+            #${currentUser.rank || 1}
           </div>
 
           <div class="lb-standing-identity">
@@ -397,7 +269,7 @@ export function renderLeaderboardView({
               <span class="lb-you-badge">أنت (حسابك الشخصي)</span>
             </div>
             <p class="lb-standing-motivation">
-              متبقي ${currentUser.pointsToThird} XP لتخطي المركز الثالث والوصول لمنصة التتويج 🏅
+              ${motivationText}
             </p>
           </div>
         </div>
@@ -405,22 +277,22 @@ export function renderLeaderboardView({
         <div class="lb-standing-metrics font-mono">
           <div class="lb-standing-metric-item">
             <span class="m-title">مجموع النقاط</span>
-            <span class="m-value text-cyan-400">XP ${currentUser.xp.toLocaleString()}</span>
+            <span class="m-value text-cyan-400">XP ${(currentUser.xp || 0).toLocaleString()}</span>
           </div>
 
           <div class="lb-standing-metric-item">
-            <span class="m-title">المهام المنجزة</span>
-            <span class="m-value">${currentUser.tasksDone} مهمة</span>
+            <span class="m-title">المهام والتحديات</span>
+            <span class="m-value">${currentUser.tasksDone || 0} منجز</span>
           </div>
 
           <div class="lb-standing-metric-item">
             <span class="m-title">سلسلة التتابع</span>
-            <span class="m-value text-amber-400">🔥 ${currentUser.streak} يوم</span>
+            <span class="m-value text-amber-400">🔥 ${currentUser.streak || 1} يوم</span>
           </div>
 
           <div class="lb-standing-metric-item">
-            <span class="m-title">دقة الأكواد</span>
-            <span class="m-value text-emerald-400">${currentUser.accuracy}</span>
+            <span class="m-title">المستوى الحالي</span>
+            <span class="m-value text-emerald-400">مستوى ${currentUser.level || 1}</span>
           </div>
         </div>
 
@@ -437,9 +309,9 @@ export function renderLeaderboardView({
           <div class="lb-table-card-header">
             <h3 class="lb-table-title">
               <i class="fa-solid fa-table-list text-cyan-400"></i>
-              <span>جدول الترتيب الكامل لمجموعة الأحد والأربعاء</span>
+              <span>جدول الترتيب الفعلي (${escapeHtml(groupName)})</span>
             </h3>
-            <span class="lb-table-count font-mono">المعروض: 10 من أصل ${totalStudents} طالباً</span>
+            <span class="lb-table-count font-mono">المعروض: ${topStudents.length} من أصل ${totalStudents} طالباً</span>
           </div>
 
           <div class="table-responsive">
@@ -456,7 +328,7 @@ export function renderLeaderboardView({
                 </tr>
               </thead>
               <tbody>
-                ${SIGNATURE_LEADERBOARD_STUDENTS.map((st) => {
+                ${topStudents.length > 0 ? topStudents.map((st) => {
                   const isGold = st.rank === 1;
                   const isSilver = st.rank === 2;
                   const isBronze = st.rank === 3;
@@ -478,10 +350,10 @@ export function renderLeaderboardView({
                       <td>
                         <div class="student-table-cell">
                           <h4 class="student-table-name">
-                            ${isMe ? safeStudentName : escapeHtml(st.studentName)}
+                            ${escapeHtml(st.studentName)}
                             ${isMe ? '<span class="lb-you-badge">أنت</span>' : ''}
                           </h4>
-                          <span class="student-table-cohort">${escapeHtml(st.role)}</span>
+                          <span class="student-table-cohort">${escapeHtml(st.levelTitle || `مستوى ${st.level}`)}</span>
                         </div>
                       </td>
 
@@ -489,7 +361,7 @@ export function renderLeaderboardView({
                       <td>
                         <div class="flex items-center gap-1.5 flex-wrap">
                           ${st.badge ? `
-                            <span class="badge-tag-pill ${st.badgeType === 'cyan' ? 'cyan' : ''}">
+                            <span class="badge-tag-pill ${st.badgeType === 'cyan' ? 'cyan' : st.badgeType === 'gold' ? 'gold' : ''}">
                               ${escapeHtml(st.badge)}
                             </span>
                           ` : ''}
@@ -503,7 +375,7 @@ export function renderLeaderboardView({
 
                       <!-- 4. Accuracy -->
                       <td class="font-mono font-bold text-slate-200">
-                        ${st.accuracy}
+                        ${st.accuracy || "100%"}
                       </td>
 
                       <!-- 5. Tasks -->
@@ -514,28 +386,34 @@ export function renderLeaderboardView({
 
                       <!-- 6. Total XP -->
                       <td class="font-mono font-bold ${isGold ? 'text-amber-400' : isMe ? 'text-cyan-400' : 'text-white'}">
-                        ${st.xp.toLocaleString()} <span class="text-xs text-slate-400">XP</span>
+                        ${(st.xp || 0).toLocaleString()} <span class="text-xs text-slate-400">XP</span>
                       </td>
 
                       <!-- 7. View Action -->
                       <td>
-                        <button type="button" class="btn-view-profile-icon" data-view-student="${st.rank}" title="عرض ملف الطالب" aria-label="عرض ملف الطالب">
+                        <button type="button" class="btn-view-profile-icon" data-view-student="${st.rank}" title="عرض معلومات الطالب" aria-label="عرض معلومات الطالب">
                           <i class="fa-regular fa-eye"></i>
                         </button>
                       </td>
                     </tr>
                   `;
-                }).join("")}
+                }).join("") : `
+                  <tr>
+                    <td colspan="7" class="text-center text-muted p-8">
+                      لا يوجد طلاب مسجلون في هذا التصنيف حالياً. خض أول تحدي واعتلِ الصدارة! 🚀
+                    </td>
+                  </tr>
+                `}
               </tbody>
             </table>
           </div>
 
           <div class="lb-table-footer-row">
             <button type="button" class="btn-expand-list" id="lbBtnExpandList">
-              <span>عرض بقية القائمة</span>
-              <i class="fa-solid fa-chevron-down text-xs"></i>
+              <span>عرض الترتيب المحدث</span>
+              <i class="fa-solid fa-rotate-right text-xs"></i>
             </button>
-            <span class="pagination-info-text font-mono">الصفحة 1 من 5 (إجمالي الطلاب: ${totalStudents})</span>
+            <span class="pagination-info-text font-mono">إجمالي الطلاب المحدث: ${totalStudents} طالباً</span>
           </div>
         </section>
 
@@ -546,7 +424,7 @@ export function renderLeaderboardView({
             <div class="lb-side-card-header">
               <h4 class="lb-side-card-title">
                 <i class="fa-solid fa-gift text-amber-400"></i>
-                <span>مكافآت لوحة الشرف الشهرية</span>
+                <span>مكافآت لوحة الشرف</span>
               </h4>
               <p class="lb-side-card-subtitle">حوائز المتصدرين الثلاثة الأوائل</p>
             </div>
@@ -556,7 +434,7 @@ export function renderLeaderboardView({
                 <span class="lb-reward-icon text-amber-400">📜</span>
                 <div class="lb-reward-content">
                   <h5>شهادة تميز معتمدة رسمياً</h5>
-                  <p>موقعة من أمانة العمل الجماهيري والمشرف الأكاديمي م/ إبراهيم الششتتاوي.</p>
+                  <p>موقعة من أمانة العمل والمشرف الأكاديمي م/ إبراهيم الششتتاوي.</p>
                 </div>
               </div>
 
@@ -564,7 +442,7 @@ export function renderLeaderboardView({
                 <span class="lb-reward-icon text-cyan-400">💻</span>
                 <div class="lb-reward-content">
                   <h5>أولوية الترشيح للمشاريع البرمجية</h5>
-                  <p>الانضمام لفريق تطوير منصات اتحاد بشبابها الكبرى للمحترفين.</p>
+                  <p>الانضمام لفريق تطوير منصات اتحاد بشبابها للمحترفين.</p>
                 </div>
               </div>
 
@@ -579,7 +457,7 @@ export function renderLeaderboardView({
 
             <div class="lb-rewards-timer-box font-mono">
               <i class="fa-regular fa-clock"></i>
-              <span>إغلاق تصنيف دورة مايو: خلال 6 أيام و 14 ساعة</span>
+              <span>نظام التنافس المستمر - النقاط تتحدث تلقائياً</span>
             </div>
           </div>
 
@@ -594,16 +472,16 @@ export function renderLeaderboardView({
             </div>
 
             <p class="text-xs text-slate-300 leading-relaxed mb-2">
-              تمت ترقية لوحة المتصدرين من الشاشة الثابتة السابقة في بوابة الطالب إلى منظومة الرصد الحي المتزامن لحظياً.
+              منظومة الرصد الحي المتزامن لحظياً مع قاعدة بيانات الدورة لضمان الشفافية والأداء الأكاديمي الفعلي.
             </p>
 
             <div class="lb-doc-preview-box">
               <div class="lb-doc-preview-header font-mono">
                 <span>سجل المنظومة الأكاديمية</span>
-                <span class="text-emerald-400">v2.6.4 Live</span>
+                <span class="text-emerald-400">Firestore Live</span>
               </div>
               <div class="lb-doc-preview-mockup">
-                <span>[Academic Leaderboard Engine :: Sync Active]</span>
+                <span>[Academic Leaderboard Engine :: Firestore Sync]</span>
               </div>
             </div>
 
@@ -617,12 +495,12 @@ export function renderLeaderboardView({
           <div class="lb-side-card lb-challenge-card">
             <span class="lb-challenge-tag font-mono">
               <i class="fa-solid fa-bolt"></i>
-              <span>تحدي عطلة نهاية الأسبوع +250 XP إضافي</span>
+              <span>تحديات بايثون المباشرة</span>
             </span>
 
-            <h4 class="lb-challenge-title">خوارزمية الترتيب العكسي للسلاسل النصية</h4>
+            <h4 class="lb-challenge-title">مغامرة ومستويات بايثون البرمجية</h4>
             <p class="lb-challenge-desc">
-              حل المسألة بأقل من 4 أسطر كود لربح وسام "المبرمج المقتصد" ورفع ترتيبك للمركز الثالث فوراً!
+              حل المهام التفاعلية واجتز الاختبارات لرفع رصيدك من الـ XP والصعود إلى منصة التتويج!
             </p>
 
             <button type="button" class="lb-btn-challenge-action" id="lbJoinWeekendBtn">

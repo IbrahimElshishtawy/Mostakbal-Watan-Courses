@@ -1,6 +1,6 @@
 // src/features/leaderboard/leaderboard.controller.js
 import { LeaderboardService } from "./leaderboard.service.js";
-import { renderLeaderboardView, SIGNATURE_LEADERBOARD_STUDENTS } from "./components/leaderboard.component.js";
+import { renderLeaderboardView } from "./components/leaderboard.component.js";
 import { setHtml } from "../../shared/utils/dom.utils.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm-dialog.component.js";
@@ -34,7 +34,7 @@ export const LeaderboardController = {
       `
       <div class="d-flex justify-center items-center p-12">
         <div class="spinner-border text-primary" role="status">
-          <span class="sr-only">جاري تحميل لوحة المتصدرين...</span>
+          <span class="sr-only">جاري تحميل لوحة المتصدرين من قاعدة البيانات...</span>
         </div>
       </div>
     `
@@ -45,14 +45,31 @@ export const LeaderboardController = {
       this.render();
     } catch (err) {
       console.error("Failed to load leaderboard:", err);
-      // Fallback to render signature view
       this._data = {
-        groupName: this._student?.group || "مجموعة الأحد والأربعاء",
-        totalStudents: 42,
-        topStudents: SIGNATURE_LEADERBOARD_STUDENTS,
-        currentUserEntry: SIGNATURE_LEADERBOARD_STUDENTS[3],
-        currentUserRank: 4,
-        percentile: 92
+        groupName: this._student?.group || "مجموعتي الدراسية",
+        totalStudents: 1,
+        topStudents: [
+          {
+            rank: 1,
+            studentUid: this._student?.uid || "current",
+            studentName: this._student?.name || "حسابي الشخصي",
+            group: this._student?.group || "ALL",
+            xp: 0,
+            level: 1,
+            tasksDone: 0,
+            tasksTotal: 10,
+            accuracy: "100%",
+            streak: 1,
+            isCurrentUser: true,
+            badge: "⚡ مبرمج نشط",
+            badgeType: "cyan",
+            levelTitle: "مبرمج صاعد 🥉"
+          }
+        ],
+        currentUserEntry: null,
+        currentUserRank: 1,
+        percentile: 100,
+        averageXp: "0 XP"
       };
       this.render();
     }
@@ -69,8 +86,9 @@ export const LeaderboardController = {
       renderLeaderboardView({
         scope: this._currentScope,
         student: this._student,
-        totalStudents: this._data?.totalStudents || 42,
-        averageXp: "1,850 XP"
+        totalStudents: this._data?.totalStudents || 0,
+        averageXp: this._data?.averageXp || "0 XP",
+        leaderboardData: this._data
       })
     );
 
@@ -78,7 +96,7 @@ export const LeaderboardController = {
   },
 
   /**
-   * Wire all interactive buttons and tabs matching Image 6.jpeg
+   * Wire all interactive buttons and tabs.
    */
   wireEvents() {
     // 1. Filter Scope Tabs
@@ -97,10 +115,28 @@ export const LeaderboardController = {
 
     // 2. Personal Performance Analysis Dialog
     this._container.querySelector("#lbBtnAnalyze")?.addEventListener("click", () => {
+      const cur = this._data?.currentUserEntry;
+      const top = this._data?.topStudents || [];
+      const rank = cur?.rank || 1;
+      const xp = cur?.xp || 0;
+
+      let msg = `أنت تحتل المركز #${rank} برصيد ${xp.toLocaleString()} XP!\n\n`;
+      if (rank === 1) {
+        msg += "أنت حالياً في المركز الأول وتتصدر الترتيب العام! استمر في إتمام التحديات للحفاظ على الصدارة 🏆";
+      } else {
+        const ahead = top[rank - 2];
+        if (ahead) {
+          const diff = Math.max(10, (ahead.xp || 0) - xp + 10);
+          msg += `متبقي ${diff.toLocaleString()} XP لتخطي '${ahead.studentName}' (${(ahead.xp || 0).toLocaleString()} XP) والصعود إلى المركز #${ahead.rank} بالمنصة. حل تحديات بايثون يمنحك نقاطاً إضافية ترفع ترتيبك مباشرة! 🚀`;
+        } else {
+          msg += "استمر في خوض تحديات بايثون وحل الواجبات لرفع رصيدك من الـ XP!";
+        }
+      }
+
       showConfirmDialog({
         title: "تحليل أدائي ومقارنة النقاط 📊",
-        message: "أنت تحتل المركز #4 برصيد 2,330 XP ونسبة دقة 97.4%!\n\nمتبقي 120 XP فقط لتخطي 'زياد طارق' (2,450 XP) والصعود إلى المركز الثالث بالمنصة. حل تحدي عطلة نهاية الأسبوع يمنحك +250 XP مما يضعك فوراً في الترتيب الثالث!",
-        confirmText: "خوض التحدي الآن (+250 XP)",
+        message: msg,
+        confirmText: "خوض التحديات الآن",
         cancelText: "إغلاق",
         variant: "primary"
       }).then((confirmed) => {
@@ -111,7 +147,7 @@ export const LeaderboardController = {
       });
     });
 
-    // 3. Weekend Challenge Action Button
+    // 3. Challenge Action Button
     this._container.querySelector("#lbJoinWeekendBtn")?.addEventListener("click", () => {
       const advBtn = document.querySelector('.sidebar-item[data-section="python-adventure"]');
       if (advBtn) {
@@ -125,27 +161,28 @@ export const LeaderboardController = {
     this._container.querySelectorAll("[data-view-student]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const rank = parseInt(btn.getAttribute("data-view-student"), 10);
-        const studentObj = SIGNATURE_LEADERBOARD_STUDENTS.find((s) => s.rank === rank);
+        const studentObj = (this._data?.topStudents || []).find((s) => s.rank === rank);
         if (studentObj) {
-          showToast(`طالب: ${studentObj.studentName} | ${studentObj.role} (${studentObj.xp} XP)`, "info");
+          showToast(`طالب: ${studentObj.studentName} | ${studentObj.levelTitle || `مستوى ${studentObj.level}`} (${(studentObj.xp || 0).toLocaleString()} XP)`, "info");
         }
       });
     });
 
-    // 5. Expand List Button
+    // 5. Expand / Refresh List Button
     this._container.querySelector("#lbBtnExpandList")?.addEventListener("click", () => {
-      showToast("يتم حالياً عرض أفضل 10 متصدرين. الترتيب الكامل متزامن لحظياً مع قاعدة البيانات 📋", "info");
+      this.loadLeaderboard(this._currentScope);
+      showToast("تم تحديث لوحة المتصدرين لحظياً من Firebase 🔄", "success");
     });
 
     // 6. Header Action Buttons
     this._container.querySelector("#lbNotificationBtn")?.addEventListener("click", () => {
-      showToast("تحديث مباشر: إغلاق تصنيف دورة مايو خلال 6 أيام و 14 ساعة ⏳", "info");
+      showToast("تحديث مباشر: لوحة المتصدرين متزامنة لحظياً مع أداء الطلاب في الدورة 📊", "info");
     });
 
     this._container.querySelector("#lbHelpBtn")?.addEventListener("click", () => {
       showConfirmDialog({
         title: "دليل لوحة المتصدرين والأبطال 🏆",
-        message: "تعتمد اللوحة على خوارزمية Fair-XP لحساب مجموع النقاط استناداً إلى: دقة الكود، إتمام الواجبات، التتابع اليومي، واجتياز التحديات المباشرة. يتم التحديث فورياً بمعدل مزامنة 22ms.",
+        message: "تعتمد اللوحة على خوارزمية Fair-XP لحساب مجموع النقاط استناداً إلى: دقة الكود، إتمام الواجبات، التتابع اليومي، واجتياز التحديات المباشرة. يتم التحديث فورياً بمعدل مزامنة من Firestore.",
         confirmText: "فهمت",
         cancelText: "إلغاء",
         variant: "primary"

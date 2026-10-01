@@ -234,6 +234,14 @@ export const PythonAdventureService = {
     try {
       if (uid && db) {
         await setDoc(doc(db, COLLECTIONS.PYTHON_ADVENTURE_PROGRESS, uid), updated, { merge: true });
+        await setDoc(doc(db, "student_gamification", uid), {
+          studentUid: uid,
+          competitionPoints: newTotalXp,
+          xp: newTotalXp,
+          level: newLevel,
+          challengesCompleted: Object.keys(completedMap).length,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
       }
     } catch (_) {}
 
