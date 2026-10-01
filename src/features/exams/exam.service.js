@@ -16,6 +16,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { COLLECTIONS, FEATURES } from "../../core/constants.js";
 import { normalizeError, isCloudFunctionUnavailable } from "../../core/errors.js";
+import { isGroupMatch } from "../../shared/utils/group.utils.js";
 
 function _normalizeExamData(id, data = {}) {
   const resolvedTitle = (
@@ -115,7 +116,7 @@ export const ExamService = {
           const hasAccess =
             !exam.group ||
             exam.group === "ALL" ||
-            exam.group === studentGroup ||
+            isGroupMatch(exam.group, studentGroup) ||
             res !== null ||
             attempt !== null;
 
@@ -164,7 +165,7 @@ export const ExamService = {
       const snap = await getDocs(collection(db, COLLECTIONS.EXAMS));
       const all = snap.docs.map((d) => _normalizeExamData(d.id, d.data()));
       const filtered = all.filter(
-        (e) => e.active !== false && (!e.group || e.group === "ALL" || e.group === studentGroup)
+        (e) => e.active !== false && (!e.group || e.group === "ALL" || isGroupMatch(e.group, studentGroup))
       );
       return await Promise.all(
         filtered.map(async (exam) => {

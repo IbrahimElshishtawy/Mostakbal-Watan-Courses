@@ -15,6 +15,7 @@ import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm-dialog.component.js";
 import { setHtml, escapeHtml, qs, qsa } from "../../shared/utils/dom.utils.js";
 import { validateLessonInput, resolveMediaEmbed } from "../../shared/validators/url.validator.js";
+import { isGroupMatch } from "../../shared/utils/group.utils.js";
 
 // Internal debounce helper
 function debounce(fn, delay = 300) {
@@ -819,7 +820,7 @@ export const LecturesController = {
     // Audience filtering: Only active lessons & matching student's group
     const relevantLectures = allLectures.filter((l) => {
       if (l.active === false) return false;
-      const matchesGroup = !l.group || l.group === "ALL" || l.group === studentGroup || (Array.isArray(l.groups) && l.groups.includes(studentGroup));
+      const matchesGroup = !l.group || l.group === "ALL" || isGroupMatch(l.group, studentGroup) || (Array.isArray(l.groups) && l.groups.some((g) => isGroupMatch(g, studentGroup)));
       return matchesGroup;
     });
 

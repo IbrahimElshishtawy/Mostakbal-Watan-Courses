@@ -17,6 +17,7 @@ import { COLLECTIONS } from "../../core/constants.js";
 import { normalizeError, NotFoundError } from "../../core/errors.js";
 import { formatDate, formatDateTime } from "../../shared/utils/date.utils.js";
 import { extractYouTubeId } from "../../shared/validators/url.validator.js";
+import { isGroupMatch } from "../../shared/utils/group.utils.js";
 
 /**
  * Normalizes Firestore video document into a standardized Lesson/Session entity
@@ -331,8 +332,7 @@ export const LecturesService = {
 
       const eligibleStudents = allStudents.filter((s) => {
         const sGroup = s.studentGroup || s.group || "ALL";
-        if (group === "ALL" || sGroup === "ALL") return true;
-        return sGroup === group;
+        return isGroupMatch(sGroup, group);
       });
 
       // 2. Fetch watch logs for this lecture/video
