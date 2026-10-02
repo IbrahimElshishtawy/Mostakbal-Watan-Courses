@@ -43,6 +43,7 @@ import { GROUPS } from "../../core/constants.js";
 import { triggerPrintReport } from "../exams/components/exam-report.component.js";
 import { renderAssignmentPrintableReport } from "./components/assignment-report.component.js";
 import { normalizeAssignmentGrade, formatAssignmentGradeDisplay } from "./assignment.service.js";
+import { runPythonCode, ensurePythonRuntime } from "../python-adventure/python-adventure-runtime.js";
 
 // Internal debounce helper
 function debounce(fn, delay = 250) {
@@ -270,104 +271,400 @@ if __name__ == "__main__":
       showToast("تنبيه أكاديمي: متبقي يومان على موعد تسليم مشروع TASK-PY-03 (الآلة الحاسبة) ⏰", "info");
     });
 
-    // 5. File Drag & Drop Zone Wiring
-    const dropZone = container.querySelector("#heroTaskDropZone");
-    const fileInput = container.querySelector("#heroTaskFileInput");
-    const selectedFilePill = container.querySelector("#heroSelectedFilePill");
-    const selectedFileName = container.querySelector("#heroSelectedFileName");
-    const btnRemoveFile = container.querySelector("#btnRemoveHeroSelectedFile");
-    let chosenFile = null;
-
-    dropZone?.addEventListener("click", (e) => {
-      if (e.target.closest("#btnRemoveHeroSelectedFile")) return;
-      fileInput?.click();
-    });
-
-    dropZone?.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropZone.classList.add("drag-over");
-    });
-
-    dropZone?.addEventListener("dragleave", () => {
-      dropZone.classList.remove("drag-over");
-    });
-
-    dropZone?.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropZone.classList.remove("drag-over");
-      if (e.dataTransfer?.files?.length > 0) {
-        handleFileSelection(e.dataTransfer.files[0]);
-      }
-    });
-
-    fileInput?.addEventListener("change", (e) => {
-      if (e.target.files?.length > 0) {
-        handleFileSelection(e.target.files[0]);
-      }
-    });
-
-    function handleFileSelection(file) {
-      chosenFile = file;
-      if (selectedFileName) selectedFileName.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-      selectedFilePill?.classList.remove("d-none");
-      showToast(`تم إرفاق الملف: ${file.name} 📎`, "info");
-    }
-
-    btnRemoveFile?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      chosenFile = null;
-      if (fileInput) fileInput.value = "";
-      selectedFilePill?.classList.add("d-none");
-      showToast("تم إزالة الملف المرفق.", "info");
-    });
-
-    // 6. Resubmit Toggle Button
+    // 5. Interactive Python Code Editor & Live Console Workspace
+    const codeEditor = container.querySelector("#heroTaskCodeEditor");
+    const lineNumbers = container.querySelector("#heroCodeLineNumbers");
+    const codeStats = container.querySelector("#heroCodeStats");
+    const draftStatusText = container.querySelector("#heroDraftStatusText");
+    const btnRunCode = container.querySelector("#btnRunHeroCode");
+    const btnRunText = container.querySelector("#btnRunHeroCodeText");
+    const btnClearConsole = container.querySelector("#btnClearHeroConsole");
+    const btnInsertStarter = container.querySelector("#btnInsertStarterCode");
+    const btnCopyCode = container.querySelector("#btnCopyHeroCode");
+    const btnClearCode = container.querySelector("#btnClearHeroCode");
+    const stdoutEl = container.querySelector("#heroConsoleStdout");
+    const stderrEl = container.querySelector("#heroConsoleStderr");
+    const statusChip = container.querySelector("#heroTerminalStatus");
+    const statusText = container.querySelector("#heroTerminalStatusText");
+    const execTimeText = container.querySelector("#heroExecutionTimeText");
+    const consoleWelcome = container.querySelector("#heroConsoleWelcome");
+    const btnToggleExpand = container.querySelector("#btnToggleWorkspaceExpand");
+    const heroSection = container.querySelector("#heroActiveAssignmentSection");
+    const btnSubmitHero = container.querySelector("#btnSubmitHeroAssignment");
+    const btnSubmitText = container.querySelector("#btnSubmitHeroAssignmentText");
+    const tabShowEditor = container.querySelector("#tabShowEditor");
+    const tabShowConsole = container.querySelector("#tabShowConsole");
+    const tabShowSplit = container.querySelector("#tabShowSplit");
+    const panelsGrid = container.querySelector("#workspacePanelsGrid");
+    const consoleLiveBadge = container.querySelector("#consoleLiveBadge");
     const btnToggleResubmit = container.querySelector("#btnToggleHeroResubmit");
     const heroFormWrap = container.querySelector("#heroSubmissionFormWrap");
-    btnToggleResubmit?.addEventListener("click", () => {
-      heroFormWrap?.classList.toggle("d-none");
+    const btnCopySubmitted = container.querySelector("#btnCopySubmittedCode");
+    const previewCodePre = container.querySelector("#previewSubmittedCodePre");
+
+    const currentAssignmentId = btnSubmitHero?.getAttribute("data-assignment-id") || heroSection?.getAttribute("data-hero-task-id");
+
+    // Preload Skulpt in background
+    ensurePythonRuntime().catch((err) => {
+      console.warn("[Assignments] Skulpt preload warning:", err);
     });
 
-    // 7. Submit Hero Assignment Handler
-    const btnSubmitHero = container.querySelector("#btnSubmitHeroAssignment");
-    const githubInput = container.querySelector("#heroGithubRepoInput");
-    const btnSubmitText = container.querySelector("#btnSubmitHeroAssignmentText");
+    // Check if there is an autosaved draft in localStorage
+    if (codeEditor && currentAssignmentId) {
+      const savedDraft = localStorage.getItem(`task_draft_${currentAssignmentId}`);
+      if (savedDraft && savedDraft.trim() && savedDraft !== codeEditor.value) {
+        codeEditor.value = savedDraft;
+        if (draftStatusText) draftStatusText.textContent = "تم استعادة مسودتك السابقة 💾";
+      }
+    }
 
+    // Line Numbers & Stats Updater
+    const updateLineNumbers = () => {
+      if (!codeEditor || !lineNumbers) return;
+      const lines = codeEditor.value.split("\n").length || 1;
+      let lineNumsStr = "";
+      for (let i = 1; i <= lines; i++) {
+        lineNumsStr += i + "\n";
+      }
+      lineNumbers.textContent = lineNumsStr;
+      if (codeStats) {
+        codeStats.textContent = `Lines: ${lines} | Chars: ${codeEditor.value.length}`;
+      }
+    };
+    updateLineNumbers();
+
+    // Editor Input & Auto-Save
+    codeEditor?.addEventListener("input", () => {
+      updateLineNumbers();
+      if (currentAssignmentId) {
+        localStorage.setItem(`task_draft_${currentAssignmentId}`, codeEditor.value);
+      }
+      if (draftStatusText) draftStatusText.textContent = "تم حفظ المسودة تلقائياً 💾";
+    });
+
+    // Editor Scroll Synchronization with Line Numbers
+    codeEditor?.addEventListener("scroll", () => {
+      if (lineNumbers) lineNumbers.scrollTop = codeEditor.scrollTop;
+    });
+
+    // Tab Indentation & Keyboard Shortcuts
+    codeEditor?.addEventListener("keydown", (e) => {
+      // Ctrl+Enter or Cmd+Enter to Run Code
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        btnRunCode?.click();
+        return;
+      }
+
+      // Tab Key: Insert 4 spaces
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const start = codeEditor.selectionStart;
+        const end = codeEditor.selectionEnd;
+        codeEditor.value = codeEditor.value.substring(0, start) + "    " + codeEditor.value.substring(end);
+        codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
+        updateLineNumbers();
+        if (currentAssignmentId) {
+          localStorage.setItem(`task_draft_${currentAssignmentId}`, codeEditor.value);
+        }
+      }
+    });
+
+    // Workspace View Mode Tabs (Editor / Console / Split)
+    const setWorkspaceViewMode = (mode) => {
+      if (!panelsGrid) return;
+      panelsGrid.setAttribute("data-view-mode", mode);
+      [tabShowEditor, tabShowConsole, tabShowSplit].forEach((b) => b?.classList.remove("active"));
+      if (mode === "editor") tabShowEditor?.classList.add("active");
+      if (mode === "console") {
+        tabShowConsole?.classList.add("active");
+        consoleLiveBadge?.classList.add("d-none");
+      }
+      if (mode === "split") tabShowSplit?.classList.add("active");
+    };
+
+    tabShowEditor?.addEventListener("click", () => setWorkspaceViewMode("editor"));
+    tabShowConsole?.addEventListener("click", () => setWorkspaceViewMode("console"));
+    tabShowSplit?.addEventListener("click", () => setWorkspaceViewMode("split"));
+
+    // Expand Workspace Toggle
+    btnToggleExpand?.addEventListener("click", () => {
+      heroSection?.classList.toggle("is-expanded-workspace");
+      const isExpanded = heroSection?.classList.contains("is-expanded-workspace");
+      btnToggleExpand.innerHTML = isExpanded
+        ? '<i class="fa-solid fa-compress text-brand-cyan"></i>'
+        : '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>';
+      btnToggleExpand.title = isExpanded ? "تصغير مساحة العمل" : "توسيع مساحة العمل";
+      if (isExpanded) {
+        showToast("تم توسيع بيئة كتابة الكود والكونسول للعرض الكامل! 🖥️", "info");
+      }
+    });
+
+    // Insert Starter Code Tool
+    btnInsertStarter?.addEventListener("click", async () => {
+      const activeTask = relevantAssignments.find((a) => a.id === currentAssignmentId);
+      const starterCode = activeTask?.starterCode || `"""
+مشروع: ${activeTask?.title || "مشروع تطبيقي"} - لغة بايثون
+المطلوب: بناء الدوال واختبار مخرجاتها في الكونسول أدناه قبل التسليم
+المطور / الطالب: ${currentStudent?.name || "طالب مسجل"}
+"""
+
+def add(a: float, b: float) -> float:
+    """دالة الجمع"""
+    return a + b
+
+def subtract(a: float, b: float) -> float:
+    """دالة الطرح"""
+    return a - b
+
+def multiply(a: float, b: float) -> float:
+    """دالة الضرب"""
+    return a * b
+
+def divide(a: float, b: float) -> float:
+    """دالة القسمة مع معالجة القسمة على الصفر"""
+    if b == 0:
+        raise ZeroDivisionError("لا يمكن القسمة على الصفر!")
+    return a / b
+
+# تجربة واختبار الدوال:
+print("=" * 45)
+print("  بدء تشغيل البرنامج التفاعلي 🐍")
+print("=" * 45)
+
+num1 = 20
+num2 = 5
+
+print(f"{num1} + {num2} = {add(num1, num2)}")
+print(f"{num1} - {num2} = {subtract(num1, num2)}")
+print(f"{num1} * {num2} = {multiply(num1, num2)}")
+print(f"{num1} / {num2} = {divide(num1, num2)}")
+
+print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتسليم الأكاديمي!")
+`;
+
+      const hasContent = (codeEditor?.value || "").trim().length > 0;
+      if (hasContent) {
+        const confirmed = await showConfirmDialog({
+          title: "استرجاع قالب الكود الأولي",
+          message: "هل أنت متأكد من رغبتك في استرجاع قالب الكود الأولي؟ سيتم استبدال النص الحالي في المحرر.",
+          confirmText: "نعم، استرجع القالب",
+          cancelText: "إلغاء",
+          icon: "📋"
+        });
+        if (!confirmed) return;
+      }
+
+      if (codeEditor) {
+        codeEditor.value = starterCode;
+        updateLineNumbers();
+        if (currentAssignmentId) {
+          localStorage.setItem(`task_draft_${currentAssignmentId}`, starterCode);
+        }
+        showToast("تم إدراج قالب الكود الأولي في المحرر بنجاح! 📥", "info");
+      }
+    });
+
+    // Copy Code Tool
+    btnCopyCode?.addEventListener("click", async () => {
+      const code = codeEditor?.value || "";
+      if (!code) {
+        showToast("المحرر فارغ، لا يوجد كود لنسخه.", "warning");
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(code);
+        showToast("تم نسخ الكود إلى الحافظة بنجاح! 📋", "success");
+      } catch (_) {
+        showToast("تعذر النسخ التلقائي.", "error");
+      }
+    });
+
+    // Clear Code Tool
+    btnClearCode?.addEventListener("click", async () => {
+      const confirmed = await showConfirmDialog({
+        title: "مسح محرر الكود",
+        message: "هل تريد إفراغ محرر الكود بالكامل؟",
+        confirmText: "مسح الكود",
+        cancelText: "تراجع",
+        variant: "danger",
+        icon: "🗑️"
+      });
+      if (!confirmed) return;
+      if (codeEditor) {
+        codeEditor.value = "";
+        updateLineNumbers();
+        if (currentAssignmentId) {
+          localStorage.removeItem(`task_draft_${currentAssignmentId}`);
+        }
+        showToast("تم مسح محرر الكود.", "info");
+      }
+    });
+
+    // Copy Submitted Code (if already submitted)
+    btnCopySubmitted?.addEventListener("click", async () => {
+      const code = previewCodePre?.textContent || "";
+      if (!code) return;
+      try {
+        await navigator.clipboard.writeText(code);
+        showToast("تم نسخ الكود المسلم إلى الحافظة! 📋", "success");
+      } catch (_) {
+        showToast("تعذر النسخ التلقائي.", "error");
+      }
+    });
+
+    // Run Code in Console
+    btnRunCode?.addEventListener("click", async () => {
+      const code = (codeEditor?.value || "").trim();
+      if (!code) {
+        showToast("يرجى كتابة كود بايثون في المحرر أولاً قبل التشغيل ⚠️", "warning");
+        codeEditor?.focus();
+        return;
+      }
+
+      // If user is in editor-only mode on mobile, switch to console
+      if (panelsGrid?.getAttribute("data-view-mode") === "editor" && window.innerWidth < 768) {
+        setWorkspaceViewMode("console");
+      }
+
+      btnRunCode.disabled = true;
+      if (btnRunText) {
+        btnRunText.innerHTML = `<span class="spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري التشغيل...`;
+      }
+      if (statusChip) statusChip.className = "terminal-status-chip is-running";
+      if (statusText) statusText.textContent = "جاري التنفيذ...";
+      if (consoleWelcome) consoleWelcome.classList.add("d-none");
+      if (stderrEl) {
+        stderrEl.classList.add("d-none");
+        stderrEl.textContent = "";
+      }
+      if (stdoutEl) stdoutEl.textContent = "";
+      if (execTimeText) execTimeText.textContent = "جاري تشغيل كود بايثون في البيئة السحابية...";
+
+      try {
+        let outputBuffer = "";
+        const res = await runPythonCode(code, {
+          timeoutMs: 4000,
+          onOutput: (stream) => {
+            outputBuffer = stream;
+            if (stdoutEl) stdoutEl.textContent = stream;
+            const screen = container.querySelector("#heroConsoleScreen");
+            if (screen) screen.scrollTop = screen.scrollHeight;
+          }
+        });
+
+        if (res.error) {
+          if (stderrEl) {
+            stderrEl.classList.remove("d-none");
+            stderrEl.textContent = `[خطأ أثناء التشغيل]\n${res.error}`;
+          }
+          if (statusChip) statusChip.className = "terminal-status-chip is-error";
+          if (statusText) statusText.textContent = "خطأ في الكود ⚠️";
+          if (execTimeText) execTimeText.textContent = `توقف بعد ${Math.round(res.executionTimeMs)}ms`;
+          consoleLiveBadge?.classList.remove("d-none");
+          showToast("اكتشف الكونسول خطأ في كودك. راجع رسالة الخطأ لتصحيحه ⚠️", "warning");
+        } else {
+          if (statusChip) statusChip.className = "terminal-status-chip is-success";
+          if (statusText) statusText.textContent = "اكتمل بنجاح ✔️";
+          if (execTimeText) execTimeText.textContent = `⚡ زمن التنفيذ: ${Math.round(res.executionTimeMs)}ms`;
+          if (!outputBuffer.trim() && stdoutEl) {
+            stdoutEl.textContent = "(تم تشغيل البرنامج بنجاح بدون استدعاءات طباعة print)";
+          }
+          consoleLiveBadge?.classList.remove("d-none");
+          showToast("تم تشغيل كودك بنجاح في الكونسول! 🐍✨", "success");
+        }
+      } catch (err) {
+        if (stderrEl) {
+          stderrEl.classList.remove("d-none");
+          stderrEl.textContent = `[خطأ في النظام]\n${err.message || err}`;
+        }
+        if (statusChip) statusChip.className = "terminal-status-chip is-error";
+        if (statusText) statusText.textContent = "تعذر التشغيل ❌";
+        showToast(err.message || "تعذر تشغيل محرك بايثون.", "error");
+      } finally {
+        btnRunCode.disabled = false;
+        if (btnRunText) btnRunText.textContent = "تشغيل واختبار الكود";
+      }
+    });
+
+    // Clear Console
+    btnClearConsole?.addEventListener("click", () => {
+      if (stdoutEl) stdoutEl.textContent = "";
+      if (stderrEl) {
+        stderrEl.classList.add("d-none");
+        stderrEl.textContent = "";
+      }
+      if (consoleWelcome) consoleWelcome.classList.remove("d-none");
+      if (statusChip) statusChip.className = "terminal-status-chip is-idle";
+      if (statusText) statusText.textContent = "جاهز للتشغيل";
+      if (execTimeText) execTimeText.textContent = "محرك بايثون 3 السحابي (Skulpt Sandbox)";
+      consoleLiveBadge?.classList.add("d-none");
+    });
+
+    // Resubmit Toggle
+    btnToggleResubmit?.addEventListener("click", () => {
+      heroFormWrap?.classList.toggle("d-none");
+      if (!heroFormWrap?.classList.contains("d-none")) {
+        updateLineNumbers();
+        codeEditor?.focus();
+      }
+    });
+
+    // Submit Hero Assignment (Direct Code Submission)
     btnSubmitHero?.addEventListener("click", async () => {
-      const githubUrl = (githubInput?.value || "").trim();
-      const assignmentId = btnSubmitHero.getAttribute("data-assignment-id") || container.querySelector("#heroActiveAssignmentSection")?.getAttribute("data-hero-task-id");
+      const code = (codeEditor?.value || "").trim();
+      const assignmentId = btnSubmitHero.getAttribute("data-assignment-id") || currentAssignmentId;
 
       if (!assignmentId) {
         showToast("تعذر تحديد الواجب المطلوب تسليمه.", "error");
         return;
       }
 
-      if (!chosenFile && !githubUrl) {
-        showToast("يرجى إرفاق ملف كود الحل أو كتابة رابط GitHub / إجابة نصية أولاً ⚠️", "warning");
-        dropZone?.classList.add("animate-pulse");
-        setTimeout(() => dropZone?.classList.remove("animate-pulse"), 1200);
+      if (!code) {
+        showToast("يرجى كتابة كود الحل في المحرر وتجربته قبل التسليم ⚠️", "warning");
+        codeEditor?.focus();
         return;
       }
+
+      const stripped = code.replace(/#.*$/gm, "").replace(/"""[\s\S]*?"""/g, "").replace(/'''[\s\S]*?'''/g, "").trim();
+      if (!stripped) {
+        showToast("الكود يحتوي فقط على تعليقات! يرجى كتابة كود بايثون الفعلي المطلوب للتكليف ⚠️", "warning");
+        return;
+      }
+
+      const confirmed = await showConfirmDialog({
+        title: "تأكيد تسليم الكود البرمجي",
+        message: "هل أنت متأكد من تسليم واعتماد هذا الكود للتقييم الأكاديمي؟ تم توثيق المخرجات وتجربتها في الكونسول.",
+        confirmText: "تسليم واعتماد الكود 🚀",
+        cancelText: "مراجعة الكود",
+        variant: "primary",
+        icon: "📤"
+      });
+
+      if (!confirmed) return;
 
       try {
         btnSubmitHero.disabled = true;
         if (btnSubmitText) {
-          btnSubmitText.innerHTML = `<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري الرفع والتسليم...`;
+          btnSubmitText.innerHTML = `<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري الاعتماد والتسليم...`;
         }
 
-        await AssignmentService.submitTask(assignmentId, githubUrl || "كود الحل المرفوع", chosenFile);
+        await AssignmentService.submitTask(assignmentId, code, null);
 
-        showToast("تم تسليم واعتماد الحل بنجاح وحفظه في حسابك! 🎉", "success");
+        // Clear draft from localStorage
+        localStorage.removeItem(`task_draft_${assignmentId}`);
 
-        // Reload assignments to reflect real submitted state instantly
+        showToast("تم تسليم واعتماد الكود البرمجي بنجاح وحفظه في حسابك الأكاديمي! 🎉", "success");
+
+        // Reload assignments to reflect submitted state
         this.loadStudentAssignments(container, currentStudent);
       } catch (submitErr) {
         console.error("Submission failed:", submitErr);
         btnSubmitHero.disabled = false;
         if (btnSubmitText) {
-          btnSubmitText.textContent = "تسليم واعتماد الحل للتقييم";
+          btnSubmitText.textContent = "تسليم واعتماد الكود للتقييم";
         }
-        showToast(submitErr.message || "حدث خطأ أثناء رفع الحل. يرجى المحاولة مرة أخرى.", "error");
+        showToast(submitErr.message || "حدث خطأ أثناء اعتماد الحل. يرجى المحاولة مرة أخرى.", "error");
       }
     });
 

@@ -136,6 +136,48 @@ export function renderStudentTasksCenter({
   const isHeroSubmitted = !!heroSubmission;
   const isHeroGraded = heroStatus?.type === "graded";
 
+  const defaultStarterCode = heroTask?.starterCode || `"""
+مشروع: ${heroTask?.title || "مشروع تطبيقي"} - لغة بايثون
+المطلوب: بناء الدوال واختبار مخرجاتها في الكونسول أدناه قبل التسليم
+المطور / الطالب: ${safeStudentName}
+"""
+
+def add(a: float, b: float) -> float:
+    """دالة الجمع"""
+    return a + b
+
+def subtract(a: float, b: float) -> float:
+    """دالة الطرح"""
+    return a - b
+
+def multiply(a: float, b: float) -> float:
+    """دالة الضرب"""
+    return a * b
+
+def divide(a: float, b: float) -> float:
+    """دالة القسمة مع معالجة القسمة على الصفر"""
+    if b == 0:
+        raise ZeroDivisionError("لا يمكن القسمة على الصفر!")
+    return a / b
+
+# تجربة واختبار الدوال:
+print("=" * 45)
+print("  بدء تشغيل البرنامج التفاعلي 🐍")
+print("=" * 45)
+
+num1 = 20
+num2 = 5
+
+print(f"{num1} + {num2} = {add(num1, num2)}")
+print(f"{num1} - {num2} = {subtract(num1, num2)}")
+print(f"{num1} * {num2} = {multiply(num1, num2)}")
+print(f"{num1} / {num2} = {divide(num1, num2)}")
+
+print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتسليم الأكاديمي!")
+`;
+
+  const initialEditorCode = (heroSubmission?.answerText || "").trim() || defaultStarterCode;
+
   return `
     <div class="student-tasks-center-page" dir="rtl">
       <!-- BEGIN: TopHeader -->
@@ -322,24 +364,34 @@ export function renderStudentTasksCenter({
               </div>
             </div>
 
-            <!-- Left side Submission Zone -->
+            <!-- Left side Submission Zone: Interactive Python Code Editor & Live Console -->
             <div class="assignment-submission-col" data-purpose="submission-box">
               <div class="submission-box-inner">
                 <div class="submission-box-header">
-                  <h3 class="submission-title">
-                    <i class="fa-solid fa-cloud-arrow-up text-brand-cyan"></i>
-                    تسليم الكود البرمجي
-                  </h3>
-                  <span class="badge-points font-mono">${heroTask.maxScore || 100} نقطة</span>
+                  <div class="submission-header-lead">
+                    <h3 class="submission-title">
+                      <i class="fa-solid fa-code text-brand-cyan"></i>
+                      <span>محرر وكود الحل البرمجي</span>
+                    </h3>
+                    <span class="submission-env-badge font-mono">
+                      <i class="fa-brands fa-python text-brand-cyan"></i> Python 3 Sandbox
+                    </span>
+                  </div>
+                  <div class="submission-header-badges">
+                    <span class="badge-points font-mono">${heroTask.maxScore || 100} نقطة</span>
+                    <button type="button" class="btn-toggle-workspace" id="btnToggleWorkspaceExpand" title="توسيع مساحة العمل">
+                      <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                    </button>
+                  </div>
                 </div>
 
                 ${isHeroSubmitted ? `
                   <!-- Already Submitted State Box -->
-                  <div class="submission-already-done p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/20 text-right space-y-3">
+                  <div class="submission-already-done p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/20 text-right space-y-3 mb-3">
                     <div class="flex items-center justify-between">
                       <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1.5">
                         <i class="fa-solid fa-circle-check"></i>
-                        ${isHeroGraded ? "تم الاعتماد والتقييم" : "تم استلام حلك بنجاح"}
+                        ${isHeroGraded ? "تم الاعتماد والتقييم" : "تم استلام واعتماد كودك بنجاح"}
                       </span>
                       <small class="text-slate-400 font-mono text-[11px]">
                         ${formatDateTime(heroSubmission.submittedAt || new Date())}
@@ -361,75 +413,171 @@ export function renderStudentTasksCenter({
                       </div>
                     ` : `
                       <p class="text-xs text-slate-300 leading-relaxed">
-                        حلك قيد المراجعة والتقييم من قبل المحاضر. يمكنك تعديل حلك أو إعادة رفع ملف جديد حتى موعد الديدلاين.
+                        كودك قيد المراجعة والتقييم من قبل المحاضر. يمكنك تعديل الكود وإعادة تشغيله في الكونسول وتسليمه مجدداً في أي وقت.
                       </p>
                     `}
 
-                    ${heroSubmission.fileUrl ? `
-                      <div class="text-xs text-slate-300 bg-black/40 p-2 rounded flex items-center justify-between">
-                        <span class="truncate font-mono"><i class="fa-solid fa-file-code text-brand-cyan ml-1"></i> ملف الحل المرفوع</span>
-                        <a href="${escapeHtml(heroSubmission.fileUrl)}" target="_blank" rel="noopener noreferrer" class="text-brand-cyan underline">معاينة</a>
+                    <!-- Submitted Code Preview Block -->
+                    <div class="submitted-code-preview-wrap">
+                      <div class="flex items-center justify-between text-xs text-slate-400 mb-1 font-mono">
+                        <span><i class="fa-brands fa-python text-brand-cyan ml-1"></i> الكود المسلم حالياً:</span>
+                        <button type="button" class="text-brand-cyan hover:underline text-[11px]" id="btnCopySubmittedCode">
+                          <i class="fa-regular fa-copy ml-0.5"></i> نسخ الكود
+                        </button>
                       </div>
-                    ` : ""}
+                      <pre class="submitted-code-preview-pre" dir="ltr" id="previewSubmittedCodePre">${escapeHtml(heroSubmission.answerText || "# لا يوجد كود مسجل")}</pre>
+                    </div>
 
-                    ${heroSubmission.answerText ? `
-                      <div class="text-xs text-slate-300 bg-black/40 p-2 rounded">
-                        <span class="text-slate-400 block mb-0.5">ملاحظات الحل / الرابط:</span>
-                        <span class="font-mono text-cyan-300 break-all">${escapeHtml(heroSubmission.answerText)}</span>
-                      </div>
-                    ` : ""}
-
-                    <button type="button" class="btn btn-secondary w-full text-xs py-1.5 mt-2" id="btnToggleHeroResubmit">
-                      <i class="fa-solid fa-rotate-right ml-1"></i>
-                      تعديل أو إعادة رفع الحل
+                    <button type="button" class="btn btn-secondary w-full text-xs py-2 mt-2" id="btnToggleHeroResubmit">
+                      <i class="fa-solid fa-code ml-1 text-brand-cyan"></i>
+                      تعديل الكود في المحرر وتجربته مجدداً
                     </button>
                   </div>
                 ` : ""}
 
-                <!-- Submission Form Area (Shown directly if not submitted, or hidden behind toggle if submitted) -->
-                <div class="submission-form-wrap ${isHeroSubmitted ? 'd-none' : ''}" id="heroSubmissionFormWrap">
-                  <!-- Drag & Drop File Zone -->
-                  <input type="file" id="heroTaskFileInput" class="d-none" accept=".py,.ipynb,.zip,.pdf,.txt" />
-                  <div class="drop-zone-box group" id="heroTaskDropZone">
-                    <i class="fa-brands fa-python drop-zone-icon"></i>
-                    <p class="drop-zone-text">
-                      اسحب كود الحل إلى هنا أو <span class="text-brand-cyan underline">تصفح ملفاتك</span>
-                    </p>
-                    <p class="drop-zone-hint font-mono">امتداد .py أو .ipynb أو .zip (بحد أقصى 20MB)</p>
-                    <!-- Selected File Display -->
-                    <div class="selected-file-pill d-none" id="heroSelectedFilePill">
-                      <i class="fa-solid fa-file-code text-brand-cyan"></i>
-                      <span id="heroSelectedFileName" class="truncate font-mono"></span>
-                      <button type="button" id="btnRemoveHeroSelectedFile" class="btn-remove-file" title="إزالة الملف">&times;</button>
+                <!-- Submission Code Workspace -->
+                <div class="submission-code-workspace ${isHeroSubmitted ? 'd-none' : ''}" id="heroSubmissionFormWrap">
+                  
+                  <!-- Workspace Navigation Tabs (Editor vs Console vs Split) -->
+                  <div class="workspace-tabs-bar">
+                    <div class="workspace-mode-tabs">
+                      <button type="button" class="ws-tab-btn active" data-ws-tab="split" id="tabShowSplit">
+                        <i class="fa-solid fa-table-columns"></i>
+                        <span>عرض مدمج (الكل)</span>
+                      </button>
+                      <button type="button" class="ws-tab-btn" data-ws-tab="editor" id="tabShowEditor">
+                        <i class="fa-solid fa-code"></i>
+                        <span>المحرر فقط</span>
+                      </button>
+                      <button type="button" class="ws-tab-btn" data-ws-tab="console" id="tabShowConsole">
+                        <i class="fa-solid fa-terminal"></i>
+                        <span>الكونسول فقط</span>
+                        <span class="console-live-badge d-none" id="consoleLiveBadge">مخرجات</span>
+                      </button>
+                    </div>
+
+                    <div class="workspace-tools-group">
+                      <button type="button" class="btn-ws-tool" id="btnInsertStarterCode" title="استرجاع قالب الكود الأولي">
+                        <i class="fa-solid fa-file-code text-cyan-400"></i>
+                        <span>القالب الأولي</span>
+                      </button>
+                      <button type="button" class="btn-ws-tool" id="btnCopyHeroCode" title="نسخ الكود">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>نسخ</span>
+                      </button>
+                      <button type="button" class="btn-ws-tool text-slate-400 hover:text-rose-400" id="btnClearHeroCode" title="مسح الكود">
+                        <i class="fa-solid fa-trash-can"></i>
+                      </button>
                     </div>
                   </div>
 
-                  <!-- GitHub Repo / Solution Link Option -->
-                  <div class="github-repo-field">
-                    <label class="github-label" for="heroGithubRepoInput">
-                      <span>أو رابط مستودع GitHub / إجابة نصية:</span>
-                      <i class="fa-brands fa-github"></i>
-                    </label>
-                    <div class="relative">
-                      <input
-                        type="text"
-                        id="heroGithubRepoInput"
-                        class="github-input font-mono"
-                        dir="ltr"
-                        placeholder="https://github.com/username/project أو نص الكود"
-                        value="${escapeHtml(heroSubmission?.answerText || '')}"
-                      />
+                  <!-- Workspace Panels Grid -->
+                  <div class="workspace-panels-grid" id="workspacePanelsGrid" data-view-mode="split">
+                    
+                    <!-- Panel 1: Code Editor -->
+                    <div class="workspace-panel-editor" id="workspacePanelEditor" dir="ltr">
+                      <div class="editor-header-bar">
+                        <div class="editor-file-tab">
+                          <i class="fa-brands fa-python text-brand-cyan"></i>
+                          <span class="font-mono">solution.py</span>
+                          <span class="file-edit-dot"></span>
+                        </div>
+                        <div class="editor-meta-stats font-mono text-[11px]" id="heroCodeStats">
+                          Lines: 1 | Chars: 0
+                        </div>
+                      </div>
+
+                      <div class="editor-body-wrap" dir="ltr">
+                        <div class="editor-line-numbers font-mono" id="heroCodeLineNumbers" aria-hidden="true">1</div>
+                        <textarea
+                          id="heroTaskCodeEditor"
+                          class="editor-textarea font-mono"
+                          dir="ltr"
+                          spellcheck="false"
+                          autocapitalize="off"
+                          autocomplete="off"
+                          placeholder="# اكتب كود الحل بلغة بايثون هنا..."
+                          aria-label="محرر كود بايثون"
+                        >${escapeHtml(initialEditorCode)}</textarea>
+                      </div>
+
+                      <div class="editor-footer-bar">
+                        <div class="editor-shortcut-hint">
+                          <kbd class="kbd-key">Ctrl</kbd> + <kbd class="kbd-key">Enter</kbd>
+                          <span>لتشغيل الكود في الكونسول ⚡</span>
+                        </div>
+                        <div class="editor-draft-status">
+                          <span class="draft-dot"></span>
+                          <span id="heroDraftStatusText">حفظ تلقائي للمسودة</span>
+                        </div>
+                      </div>
                     </div>
+
+                    <!-- Panel 2: Live Console Terminal -->
+                    <div class="workspace-panel-console" id="workspacePanelConsole" dir="ltr">
+                      <div class="console-header-bar">
+                        <div class="console-dots">
+                          <span class="c-dot dot-red"></span>
+                          <span class="c-dot dot-yellow"></span>
+                          <span class="c-dot dot-green"></span>
+                          <span class="c-title font-mono text-[11px]">terminal ~ python3 solution.py</span>
+                        </div>
+
+                        <div class="console-header-actions">
+                          <span class="terminal-status-chip is-idle" id="heroTerminalStatus">
+                            <span class="status-dot"></span>
+                            <span id="heroTerminalStatusText">جاهز للتشغيل</span>
+                          </span>
+                          <button type="button" class="btn-clear-term" id="btnClearHeroConsole" title="مسح المخرجات">
+                            <i class="fa-solid fa-broom"></i> مسح
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Run Code Action Toolbar -->
+                      <div class="console-run-cta-row">
+                        <button type="button" class="btn-run-hero-code" id="btnRunHeroCode">
+                          <i class="fa-solid fa-play"></i>
+                          <span id="btnRunHeroCodeText">تشغيل واختبار الكود</span>
+                        </button>
+                        <div class="console-engine-info">
+                          <i class="fa-solid fa-bolt text-amber-400"></i>
+                          <span id="heroExecutionTimeText">محرك بايثون 3 السحابي (Skulpt Sandbox)</span>
+                        </div>
+                      </div>
+
+                      <!-- Console Screen -->
+                      <div class="console-screen-body" id="heroConsoleScreen">
+                        <div class="console-welcome-text" id="heroConsoleWelcome">
+                          <p class="term-dim">Python 3.12.0 Sandbox Environment (In-Browser Execution)</p>
+                          <p class="term-dim">اضغط على <strong>"تشغيل واختبار الكود"</strong> لتجربة البرنامج ومشاهدة المخرجات هنا.</p>
+                          <p class="term-divider">---------------------------------------------------------</p>
+                        </div>
+                        <pre class="console-stdout-pre font-mono" id="heroConsoleStdout"></pre>
+                        <div class="console-stderr-box font-mono d-none" id="heroConsoleStderr"></div>
+                      </div>
+                    </div>
+
                   </div>
 
-                  <!-- Submit Action Button -->
+                  <!-- Submission Action Bar -->
                   <div class="submission-action-area">
+                    <div class="submission-verify-notice">
+                      <i class="fa-solid fa-circle-check text-brand-cyan"></i>
+                      <span>تأكد من تجربة وتشغيل الكود في الكونسول وظهور النتائج المطلوبة بنجاح قبل الاعتماد النهائي.</span>
+                    </div>
+
                     <button type="button" class="btn-submit-assignment" id="btnSubmitHeroAssignment" data-assignment-id="${escapeHtml(heroTask.id)}">
                       <i class="fa-solid fa-paper-plane"></i>
-                      <span id="btnSubmitHeroAssignmentText">${isHeroSubmitted ? "تحديث واعتماد الحل" : "تسليم واعتماد الحل للتقييم"}</span>
+                      <span id="btnSubmitHeroAssignmentText">${isHeroSubmitted ? "تحديث واعتماد الكود المسلم" : "تسليم واعتماد الكود للتقييم"}</span>
                     </button>
-                    <p class="submission-subtext">يتم توثيق وقت التسليم وحفظه مباشرة في ملفك الأكاديمي</p>
+
+                    <p class="submission-subtext">
+                      <i class="fa-solid fa-lock text-[11px] ml-1"></i>
+                      يتم توثيق الكود ووقت التسليم وحفظه مباشرة في حسابك الأكاديمي لدى المحاضر
+                    </p>
                   </div>
+
                 </div>
               </div>
             </div>

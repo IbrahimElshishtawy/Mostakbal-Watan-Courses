@@ -8041,15 +8041,24 @@ body.is-in-exam-mode .main-view {
 
 .assignment-main-grid {
   display: grid;
-  grid-template-columns: 8fr 4fr;
+  grid-template-columns: minmax(320px, 1fr) minmax(440px, 1.4fr);
   gap: 1.5rem;
   padding-top: 1.25rem;
+  align-items: start;
 }
 
 @media (max-width: 1024px) {
   .assignment-main-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.hero-active-assignment.is-expanded-workspace .assignment-main-grid {
+  grid-template-columns: 1fr;
+}
+
+.hero-active-assignment.is-expanded-workspace .assignment-submission-col {
+  order: -1;
 }
 
 .assignment-details-col {
@@ -8166,32 +8175,58 @@ body.is-in-exam-mode .main-view {
   color: #ffffff;
 }
 
-/* Submission Zone */
+/* Interactive Code Submission Workspace */
 .assignment-submission-col {
-  background: rgba(5, 8, 17, 0.85);
-  border-radius: 0.75rem;
+  background: rgba(8, 13, 26, 0.92);
+  backdrop-filter: blur(16px);
+  border-radius: 0.85rem;
   padding: 1.25rem;
-  border: 1px solid rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.85rem;
 }
 
 .submission-box-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.submission-header-lead {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
 }
 
 .submission-title {
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 800;
   color: #ffffff;
   display: flex;
   align-items: center;
   gap: 0.45rem;
   margin: 0;
+}
+
+.submission-env-badge {
+  font-size: 0.68rem;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.submission-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .badge-points {
@@ -8204,107 +8239,487 @@ body.is-in-exam-mode .main-view {
   border: 1px solid rgba(6, 182, 212, 0.35);
 }
 
-.drop-zone-box {
-  border: 2px dashed #334155;
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: rgba(8, 13, 26, 0.4);
-  position: relative;
-}
-
-.drop-zone-box:hover, .drop-zone-box.drag-over {
-  border-color: rgba(56, 189, 248, 0.7);
-  background: rgba(8, 13, 26, 0.8);
-}
-
-.drop-zone-icon {
-  font-size: 2rem;
-  color: #64748b;
-  margin-bottom: 0.5rem;
-  display: block;
-  transition: color 0.2s ease;
-}
-
-.drop-zone-box:hover .drop-zone-icon {
-  color: #38bdf8;
-}
-
-.drop-zone-text {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #e2e8f0;
-  margin: 0;
-}
-
-.drop-zone-hint {
-  font-size: 0.68rem;
-  color: #64748b;
-  margin-top: 0.25rem;
-}
-
-.selected-file-pill {
-  margin-top: 0.75rem;
+.btn-toggle-workspace {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #1e293b;
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  border-radius: 0.45rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  padding: 0.3rem 0.75rem;
-  border-radius: 0.5rem;
+  justify-content: center;
   font-size: 0.72rem;
-  color: #ffffff;
-  max-width: 90%;
-}
-
-.btn-remove-file {
-  background: none;
-  border: none;
-  color: #f43f5e;
-  font-size: 1.1rem;
   cursor: pointer;
-  padding: 0 0.25rem;
-  line-height: 1;
+  transition: all 0.2s ease;
 }
 
-.github-repo-field {
-  margin-top: 1rem;
+.btn-toggle-workspace:hover {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
-.github-label {
+/* Workspace Tabs Bar */
+.workspace-tabs-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #94a3b8;
-  margin-bottom: 0.35rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.25rem;
 }
 
-.github-input {
-  width: 100%;
-  background: #080d1a;
-  border: 1px solid #1e293b;
+.workspace-mode-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ws-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
   border-radius: 0.5rem;
-  padding: 0.55rem 0.75rem;
+  background: rgba(15, 23, 42, 0.7);
+  color: #94a3b8;
+  border: 1px solid #1e293b;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ws-tab-btn:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.85);
+  border-color: #334155;
+}
+
+.ws-tab-btn.active {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.console-live-badge {
+  font-size: 0.6rem;
+  background: #10b981;
+  color: #022c22;
+  font-weight: 800;
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  animation: pulse 1.5s infinite;
+}
+
+.workspace-tools-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn-ws-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 0.45rem;
+  background: rgba(15, 23, 42, 0.85);
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-ws-tool:hover {
+  background: #1e293b;
+  color: #ffffff;
+  border-color: #475569;
+}
+
+/* Panels Grid & Layouts */
+.workspace-panels-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.workspace-panels-grid[data-view-mode="editor"] .workspace-panel-console {
+  display: none !important;
+}
+.workspace-panels-grid[data-view-mode="editor"] .workspace-panel-editor {
+  display: flex !important;
+}
+.workspace-panels-grid[data-view-mode="editor"] .editor-textarea {
+  min-height: 380px;
+}
+
+.workspace-panels-grid[data-view-mode="console"] .workspace-panel-editor {
+  display: none !important;
+}
+.workspace-panels-grid[data-view-mode="console"] .workspace-panel-console {
+  display: flex !important;
+}
+.workspace-panels-grid[data-view-mode="console"] .console-screen-body {
+  min-height: 340px;
+}
+
+.workspace-panels-grid[data-view-mode="split"] .workspace-panel-editor,
+.workspace-panels-grid[data-view-mode="split"] .workspace-panel-console {
+  display: flex !important;
+}
+
+@media (min-width: 1400px) {
+  .hero-active-assignment.is-expanded-workspace .workspace-panels-grid[data-view-mode="split"] {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+
+/* Panel 1: Code Editor */
+.workspace-panel-editor {
+  display: flex;
+  flex-direction: column;
+  background: #040813;
+  border: 1px solid #1e293b;
+  border-radius: 0.65rem;
+  overflow: hidden;
+}
+
+.editor-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.85rem;
+  background: rgba(15, 23, 42, 0.7);
+  border-bottom: 1px solid #1e293b;
+}
+
+.editor-file-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   font-size: 0.75rem;
+  font-weight: 700;
   color: #e2e8f0;
+}
+
+.file-edit-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.editor-meta-stats {
+  color: #64748b;
+}
+
+.editor-body-wrap {
+  display: flex;
+  position: relative;
+  background: #050914;
+}
+
+.editor-line-numbers {
+  width: 38px;
+  padding: 0.75rem 0.35rem;
+  background: rgba(8, 13, 26, 0.8);
+  border-right: 1px solid rgba(30, 41, 59, 0.7);
+  color: #475569;
+  font-size: 12.5px;
+  line-height: 1.6;
+  text-align: right;
+  user-select: none;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.editor-textarea {
+  flex: 1;
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
   outline: none;
-  transition: border-color 0.2s;
-  text-align: left;
+  padding: 0.75rem 0.85rem;
+  font-size: 13px;
+  line-height: 1.6;
+  tab-size: 4;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  min-height: 250px;
+  resize: vertical;
 }
 
-.github-input:focus {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+.editor-textarea:focus {
+  outline: none;
 }
 
+.editor-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.85rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-top: 1px solid #1e293b;
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.editor-shortcut-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.kbd-key {
+  background: #1e293b;
+  color: #cbd5e1;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  border: 1px solid #334155;
+  font-size: 0.65rem;
+  font-family: inherit;
+}
+
+.editor-draft-status {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.draft-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+/* Panel 2: Live Console Terminal */
+.workspace-panel-console {
+  display: flex;
+  flex-direction: column;
+  background: #020611;
+  border: 1px solid #1e293b;
+  border-radius: 0.65rem;
+  overflow: hidden;
+}
+
+.console-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.85rem;
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid #1e293b;
+}
+
+.console-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.c-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #f59e0b; }
+.dot-green { background: #10b981; }
+
+.c-title {
+  color: #94a3b8;
+  margin-left: 0.5rem;
+}
+
+.console-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+}
+.terminal-status-chip.is-idle {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+.terminal-status-chip.is-running {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+.terminal-status-chip.is-success {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+.terminal-status-chip.is-error {
+  background: rgba(244, 63, 94, 0.18);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+.btn-clear-term {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.3rem;
+  transition: all 0.15s ease;
+}
+.btn-clear-term:hover {
+  color: #cbd5e1;
+  background: rgba(30, 41, 59, 0.6);
+}
+
+/* Run Code CTA Bar */
+.console-run-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.85rem;
+  background: rgba(8, 14, 30, 0.7);
+  border-bottom: 1px solid rgba(30, 41, 59, 0.7);
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-run-hero-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 0.45rem 1.15rem;
+  border-radius: 0.55rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-run-hero-code:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+  filter: brightness(1.1);
+}
+
+.btn-run-hero-code:active {
+  transform: translateY(0);
+}
+
+.console-engine-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* Console Screen Body */
+.console-screen-body {
+  padding: 0.85rem;
+  min-height: 140px;
+  max-height: 260px;
+  overflow-y: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  background: #020611;
+}
+
+.console-welcome-text {
+  color: #475569;
+  font-size: 0.72rem;
+  margin-bottom: 0.5rem;
+}
+.term-divider {
+  color: #1e293b;
+  margin: 0.35rem 0;
+}
+
+.console-stdout-pre {
+  color: #38bdf8;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.console-stderr-box {
+  margin-top: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: 0.45rem;
+  color: #fb7185;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Submitted Code Preview in already submitted card */
+.submitted-code-preview-wrap {
+  margin-top: 0.5rem;
+}
+
+.submitted-code-preview-pre {
+  background: #030712;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 12px;
+  color: #a7f3d0;
+  max-height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+/* Submission Action Bar */
 .submission-action-area {
-  padding-top: 1rem;
-  margin-top: 1rem;
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
   border-top: 1px solid rgba(30, 41, 59, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.submission-verify-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(30, 41, 59, 0.6);
 }
 
 .btn-submit-assignment {
@@ -8313,29 +8728,29 @@ body.is-in-exam-mode .main-view {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #38bdf8;
-  color: #050811;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
   font-weight: 800;
   font-size: 0.85rem;
-  padding: 0.65rem 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 0.75rem;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+  box-shadow: 0 4px 18px rgba(14, 165, 233, 0.35);
   transition: all 0.2s ease;
 }
 
 .btn-submit-assignment:hover {
-  background: #7dd3fc;
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
   transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(14, 165, 233, 0.5);
 }
 
 .submission-subtext {
   font-size: 0.68rem;
   text-align: center;
   color: #64748b;
-  margin-top: 0.5rem;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 /* 4. Assignments Directory & Filters */
