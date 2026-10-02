@@ -9191,5 +9191,157 @@ body.is-in-exam-mode .main-view {
 .btn-card-action:hover {
   color: #ffffff;
 }
+
+/* Active Directory Card Highlight */
+.directory-task-card {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.directory-task-card.is-active-task {
+  border-color: rgba(56, 189, 248, 0.65) !important;
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.22), inset 0 1px 0 rgba(56, 189, 248, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+.badge-active-in-editor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+/* Hero Card Pulse Highlight when switching tasks */
+.hero-task-pulse-highlight {
+  animation: heroTaskPulse 1s ease;
+}
+
+@keyframes heroTaskPulse {
+  0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.8); }
+  50% { box-shadow: 0 0 35px 8px rgba(56, 189, 248, 0.45); }
+  100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+}
+
+/* Submission Status Banner inside Editor Card */
+.submission-status-banner {
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
+}
+
+.submission-status-banner.is-graded {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: linear-gradient(135deg, rgba(120, 53, 15, 0.25) 0%, rgba(15, 23, 42, 0.6) 100%);
+}
+
+.status-banner-lead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.status-banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #34d399;
+}
+
+.submission-status-banner.is-graded .status-banner-badge {
+  color: #fbbf24;
+}
+
+.status-banner-note {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.status-banner-feedback {
+  background: rgba(4, 120, 87, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.72rem;
+  color: #d1fae5;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Inline Specs Drawer inside Hero Card */
+.hero-inline-specs-drawer {
+  margin-top: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 0.2s ease;
+}
+
+.specs-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.specs-drawer-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.2rem;
+  transition: color 0.15s ease;
+}
+
+.specs-drawer-close:hover {
+  color: #f43f5e;
+}
+
+.specs-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.specs-note-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.7rem;
+  color: #cbd5e1;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 

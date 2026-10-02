@@ -71,6 +71,8 @@ export const NotificationsController = {
 
       const badgeEl = document.getElementById("notificationsUnreadBadge");
       const btnEl = document.getElementById("openNotificationsModalBtn");
+      const tasksBellIndicator = document.getElementById("tasksBellIndicator") || document.querySelector("#btnTasksNotification .notification-indicator");
+      const tasksBellRing = document.querySelector("#btnTasksNotification .bell-ping-ring");
 
       if (badgeEl) {
         if (unreadCount > 0) {
@@ -82,8 +84,15 @@ export const NotificationsController = {
       } else if (btnEl && unreadCount > 0) {
         btnEl.insertAdjacentHTML(
           "beforeend",
-          `<span class="badge badge-danger position-absolute" id="notificationsUnreadBadge" style="top:2px;inset-inline-end:2px;min-width:18px;height:18px;border-radius:10px;font-size:0.65rem;padding:0 4px;font-weight:900;display:flex;align-items:center;justify-content:center;">${unreadCount > 9 ? "9+" : unreadCount}</span>`
+          `<span class="bell-badge-pill" id="notificationsUnreadBadge">${unreadCount > 9 ? "9+" : unreadCount}</span>`
         );
+      }
+
+      if (tasksBellIndicator) {
+        tasksBellIndicator.style.display = unreadCount > 0 ? "block" : "none";
+      }
+      if (tasksBellRing) {
+        tasksBellRing.style.display = unreadCount > 0 ? "block" : "none";
       }
     } catch (e) {
       console.warn("Refresh unread badge error:", e);
