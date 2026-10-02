@@ -147,11 +147,13 @@ export const AssignmentController = {
     const btnDownloadStarter = container.querySelector("#btnDownloadStarterCode");
     btnDownloadStarter?.addEventListener("click", () => {
       const activeTask = relevantAssignments.find((a) => a.id === currentAssignmentId) || relevantAssignments[0];
-      const codeEditor = container.querySelector("#heroTaskCodeEditor");
+      const sN1 = (currentStudent?.name || "").trim();
+      const sN2 = (currentStudent?.studentName || "").trim();
+      const resolvedDevName = (sN1 && sN1 !== "طالب مسجل") ? sN1 : ((sN2 && sN2 !== "طالب مسجل") ? sN2 : (auth.currentUser?.displayName || sN1 || sN2 || "طالب مسجل"));
       const starterCode = (codeEditor?.value || activeTask?.starterCode || `"""
 مشروع: ${activeTask?.title || "مشروع تطبيقي"} - لغة بايثون
 المطلوب: كتابة الدوال واختبار مخرجاتها في الكونسول قبل الاعتماد
-المطور / الطالب: ${currentStudent?.name || "طالب مسجل"}
+المطور / الطالب: ${resolvedDevName}
 """
 
 def main():
@@ -547,7 +549,9 @@ if __name__ == "__main__":
 
         // Optimistically record submission in memory
         const studentUid = auth.currentUser?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
-        const studentName = currentStudent?.studentName || currentStudent?.name || "طالب مسجل";
+        const sN1 = (currentStudent?.name || "").trim();
+        const sN2 = (currentStudent?.studentName || "").trim();
+        const studentName = (sN1 && sN1 !== "طالب مسجل") ? sN1 : ((sN2 && sN2 !== "طالب مسجل") ? sN2 : (auth.currentUser?.displayName || sN1 || sN2 || "طالب مسجل"));
         const newSubmission = {
           assignmentId,
           studentUid,
@@ -920,7 +924,9 @@ if __name__ == "__main__":
 
         // Optimistically create submission record in local state
         const studentUid = auth.currentUser?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
-        const studentName = currentStudent?.studentName || currentStudent?.name || "طالب مسجل";
+        const sN1 = (currentStudent?.name || "").trim();
+        const sN2 = (currentStudent?.studentName || "").trim();
+        const studentName = (sN1 && sN1 !== "طالب مسجل") ? sN1 : ((sN2 && sN2 !== "طالب مسجل") ? sN2 : (auth.currentUser?.displayName || sN1 || sN2 || "طالب مسجل"));
         const newSubmission = {
           assignmentId: assignment.id,
           studentUid,

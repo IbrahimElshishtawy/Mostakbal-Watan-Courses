@@ -200,7 +200,11 @@
         }
       });
 
-      const initialDisplayName = student.name || student.studentName || "طالب مسجل";
+      const sN1 = (student.name || "").trim();
+      const sN2 = (student.studentName || "").trim();
+      const initialDisplayName = (sN1 && sN1 !== "طالب مسجل")
+        ? sN1
+        : ((sN2 && sN2 !== "طالب مسجل") ? sN2 : (user.displayName || sN1 || sN2 || "طالب مسجل"));
       layout.updateProfile({
         name: initialDisplayName,
         phone: student.studentPhone,

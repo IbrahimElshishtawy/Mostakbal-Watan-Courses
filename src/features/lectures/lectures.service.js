@@ -415,8 +415,10 @@ export const LecturesService = {
       eligibleStudents.forEach((student) => {
         const uid = student.id || student.firestoreId;
         const phone = student.studentPhone || student.phone || "";
-        const name = student.studentName || student.name || "طالب مسجل";
-        const studentGroup = student.studentGroup || student.group || "ALL";
+        const sN1 = (student.name || "").trim();
+        const sN2 = (student.studentName || "").trim();
+        const name = (sN1 && sN1 !== "طالب مسجل") ? sN1 : ((sN2 && sN2 !== "طالب مسجل") ? sN2 : (sN1 || sN2 || "طالب مسجل"));
+        const studentGroup = (student.group && student.group !== "ALL") ? student.group : (student.studentGroup || "ALL");
 
         const log = (uid && logsMap.get(uid)) || (phone && logsMap.get(phone));
 

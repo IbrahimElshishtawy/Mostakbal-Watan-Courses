@@ -85,11 +85,14 @@ export const LeaderboardService = {
       if (!dedupeKey) continue;
 
       if (!mergedStudentsMap.has(dedupeKey)) {
+        const sN1 = (s.name || "").trim();
+        const sN2 = (s.studentName || "").trim();
+        const sName = (sN1 && sN1 !== "طالب مسجل") ? sN1 : ((sN2 && sN2 !== "طالب مسجل") ? sN2 : (sN1 || sN2 || "طالب مسجل"));
         mergedStudentsMap.set(dedupeKey, {
           studentUid: sUid,
-          name: s.name || s.studentName || "طالب مسجل",
+          name: sName,
           phone: sPhone,
-          group: s.group || s.studentGroup || "ALL",
+          group: (s.group && s.group !== "ALL") ? s.group : (s.studentGroup || "ALL"),
           student: s
         });
       }
@@ -103,9 +106,12 @@ export const LeaderboardService = {
       if (!dedupeKey) continue;
 
       if (!mergedStudentsMap.has(dedupeKey)) {
+        const gN1 = (g.name || "").trim();
+        const gN2 = (g.studentName || "").trim();
+        const gName = (gN1 && gN1 !== "طالب مسجل") ? gN1 : ((gN2 && gN2 !== "طالب مسجل") ? gN2 : (gN1 || gN2 || "طالب مسجل"));
         mergedStudentsMap.set(dedupeKey, {
           studentUid: gUid,
-          name: g.studentName || g.name || "طالب مسجل",
+          name: gName,
           phone: gPhone,
           group: g.group || "ALL",
           gamification: g
