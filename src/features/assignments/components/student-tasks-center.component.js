@@ -136,47 +136,8 @@ export function renderStudentTasksCenter({
   const isHeroSubmitted = !!heroSubmission;
   const isHeroGraded = heroStatus?.type === "graded";
 
-  const defaultStarterCode = heroTask?.starterCode || `"""
-مشروع: ${heroTask?.title || "مشروع تطبيقي"} - لغة بايثون
-المطلوب: بناء الدوال واختبار مخرجاتها في الكونسول أدناه قبل التسليم
-المطور / الطالب: ${safeStudentName}
-"""
-
-def add(a: float, b: float) -> float:
-    """دالة الجمع"""
-    return a + b
-
-def subtract(a: float, b: float) -> float:
-    """دالة الطرح"""
-    return a - b
-
-def multiply(a: float, b: float) -> float:
-    """دالة الضرب"""
-    return a * b
-
-def divide(a: float, b: float) -> float:
-    """دالة القسمة مع معالجة القسمة على الصفر"""
-    if b == 0:
-        raise ZeroDivisionError("لا يمكن القسمة على الصفر!")
-    return a / b
-
-# تجربة واختبار الدوال:
-print("=" * 45)
-print("  بدء تشغيل البرنامج التفاعلي 🐍")
-print("=" * 45)
-
-num1 = 20
-num2 = 5
-
-print(f"{num1} + {num2} = {add(num1, num2)}")
-print(f"{num1} - {num2} = {subtract(num1, num2)}")
-print(f"{num1} * {num2} = {multiply(num1, num2)}")
-print(f"{num1} / {num2} = {divide(num1, num2)}")
-
-print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتسليم الأكاديمي!")
-`;
-
-  const initialEditorCode = (heroSubmission?.answerText || "").trim() || defaultStarterCode;
+  const defaultStarterCode = "";
+  const initialEditorCode = (heroSubmission?.answerText || "").trim();
 
   return `
     <div class="student-tasks-center-page" dir="rtl">
