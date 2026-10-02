@@ -5,7 +5,11 @@ import { escapeHtml } from "../../../shared/utils/dom.utils.js";
  * Returns HTML string for the student profile view with 100% real dynamic data.
  */
 export function renderProfileCard({ student, stats = null }) {
-  const rawName = student?.studentName || student?.name || "طالب مسجل";
+  const n1 = (student?.name || "").trim();
+  const n2 = (student?.studentName || "").trim();
+  const rawName = (n1 && n1 !== "طالب مسجل")
+    ? n1
+    : ((n2 && n2 !== "طالب مسجل") ? n2 : (n1 || n2 || "طالب مسجل"));
   const safeName = escapeHtml(rawName);
 
   const phone = student?.studentPhone || student?.phone || "—";
@@ -15,13 +19,17 @@ export function renderProfileCard({ student, stats = null }) {
   const defaultCode = cleanPhone.length >= 4 ? `STU-2026-${cleanPhone.slice(-4)}` : "STU-2026-01";
   const studentCode = student?.studentCode || student?.idCode || defaultCode;
 
-  const natId = student?.studentNationalId || student?.nationalId || "غير مسجل";
+  const natId = student?.nationalId || student?.studentNationalId || "غير مسجل";
   const safeNatId = escapeHtml(natId);
 
-  const address = student?.studentAddress || student?.address || "المحلة الكبرى - محافظة الغربية";
+  const address = student?.address || student?.studentAddress || "المحلة الكبرى - محافظة الغربية";
   const safeAddress = escapeHtml(address);
 
-  const group = student?.studentGroup || student?.group || "مجموعة الأحد والأربعاء";
+  const g1 = (student?.group || "").trim();
+  const g2 = (student?.studentGroup || "").trim();
+  const group = (g1 && g1 !== "ALL")
+    ? g1
+    : ((g2 && g2 !== "ALL") ? g2 : (g1 || g2 || "مجموعة الأحد والأربعاء"));
   const safeGroup = escapeHtml(group);
 
   const initial = safeName.trim().charAt(0) || "ط";

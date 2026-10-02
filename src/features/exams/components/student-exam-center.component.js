@@ -35,8 +35,12 @@ export function renderStudentExamCenter({
   pastExams = [],
   stats = null
 }) {
-  const safeStudentName = escapeHtml(student?.name || student?.studentName || "طالب مسجل");
-  const studentTrack = escapeHtml(student?.group || student?.studentGroup || "مسار بايثون وهندسة النظم");
+  const n1 = (student?.name || "").trim();
+  const n2 = (student?.studentName || "").trim();
+  const safeStudentName = escapeHtml((n1 && n1 !== "طالب مسجل") ? n1 : ((n2 && n2 !== "طالب مسجل") ? n2 : (n1 || n2 || "طالب مسجل")));
+  const g1 = (student?.group || "").trim();
+  const g2 = (student?.studentGroup || "").trim();
+  const studentTrack = escapeHtml((g1 && g1 !== "ALL") ? g1 : ((g2 && g2 !== "ALL") ? g2 : (g1 || g2 || "مسار بايثون وهندسة النظم")));
 
   // Dynamic statistics
   const activeCount = stats?.activeCount ?? (activeExam ? 1 : 0);

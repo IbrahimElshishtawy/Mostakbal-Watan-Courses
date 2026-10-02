@@ -12,9 +12,17 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
   const isSubdir = window.location.pathname.includes("/pages/");
   const logoSrc = isSubdir ? "../assets/images/logo_union.jpeg" : "assets/images/logo_union.jpeg";
 
-  const safeName = escapeHtml(initialStudent?.name || initialStudent?.studentName || "طالب مسجل");
+  const n1 = (initialStudent?.name || "").trim();
+  const n2 = (initialStudent?.studentName || "").trim();
+  const resolvedName = (n1 && n1 !== "طالب مسجل")
+    ? n1
+    : ((n2 && n2 !== "طالب مسجل") ? n2 : (n1 || n2 || "طالب مسجل"));
+  const safeName = escapeHtml(resolvedName);
   const safePhone = escapeHtml(initialStudent?.phone || initialStudent?.studentPhone || "—");
-  const safeTrack = escapeHtml(initialStudent?.group || initialStudent?.studentGroup || "مسار بايثون وهندسة النظم");
+
+  const g1 = (initialStudent?.group || "").trim();
+  const g2 = (initialStudent?.studentGroup || "").trim();
+  const safeTrack = escapeHtml((g1 && g1 !== "ALL") ? g1 : ((g2 && g2 !== "ALL") ? g2 : (g1 || g2 || "مسار بايثون وهندسة النظم")));
   const initialChar = safeName.trim().charAt(0) || "ط";
 
   container.innerHTML = `

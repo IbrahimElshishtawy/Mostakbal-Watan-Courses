@@ -116,8 +116,30 @@ export const AuthService = {
       appStore.set("claims", claims);
 
       let redirectPage = "pages/student.html";
-      if (role === ROLES.ADMIN) redirectPage = "pages/admin.html";
-      else if (role === ROLES.TEACHER) redirectPage = "pages/teacher.html";
+      if (role === ROLES.ADMIN) {
+        redirectPage = "pages/admin.html";
+      } else if (role === ROLES.TEACHER) {
+        redirectPage = "pages/teacher.html";
+      } else if (role === ROLES.STUDENT) {
+        try {
+          const studentPhone = (targetEmail || user.email || "").split("@")[0];
+          const { StudentsService } = await import("../students/students.service.js");
+          const profile = await StudentsService.getStudentProfile(user.uid) || await StudentsService.getStudentByPhone(studentPhone);
+          if (profile) {
+            const resolvedName = (profile.name || profile.studentName || "").trim();
+            const resolvedGroup = profile.group || profile.studentGroup || "ALL";
+            const fullData = { ...profile, name: resolvedName, studentName: resolvedName, group: resolvedGroup };
+            sessionStorage.setItem(`mw_student_profile_${studentPhone}`, JSON.stringify(fullData));
+            localStorage.setItem(`mw_student_profile_${studentPhone}`, JSON.stringify(fullData));
+            if (resolvedName && (!user.displayName || user.displayName !== resolvedName)) {
+              const { updateProfile } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+              await updateProfile(user, { displayName: resolvedName }).catch(() => {});
+            }
+          }
+        } catch (cacheErr) {
+          console.warn("Pre-redirect student cache warning:", cacheErr);
+        }
+      }
 
       return {
         user,

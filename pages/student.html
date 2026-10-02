@@ -121,20 +121,25 @@
         if (raw) cachedStudent = JSON.parse(raw);
       } catch (_) {}
 
-      // Default baseline student info (populated immediately from cache if available)
+      // Default baseline student info (populated immediately from cache or user.displayName if available)
+      const initialName = (cachedStudent?.name || cachedStudent?.studentName || user.displayName || "").trim();
+      const initialGroup = cachedStudent?.group || cachedStudent?.studentGroup || "";
+      const initialNatId = cachedStudent?.nationalId || cachedStudent?.studentNationalId || "";
+      const initialAddress = cachedStudent?.address || cachedStudent?.studentAddress || "";
+
       let student = {
         id: user.uid,
         firestoreId: cachedStudent?.firestoreId || user.uid,
-        name: cachedStudent?.name || "",
-        studentName: cachedStudent?.name || cachedStudent?.studentName || "",
+        name: initialName,
+        studentName: initialName,
         studentPhone: studentPhone,
         phone: studentPhone,
-        group: cachedStudent?.group || "",
-        studentGroup: cachedStudent?.group || cachedStudent?.studentGroup || "",
-        nationalId: cachedStudent?.nationalId || cachedStudent?.studentNationalId || "",
-        studentNationalId: cachedStudent?.nationalId || cachedStudent?.studentNationalId || "",
-        address: cachedStudent?.address || cachedStudent?.studentAddress || "",
-        studentAddress: cachedStudent?.address || cachedStudent?.studentAddress || ""
+        group: initialGroup,
+        studentGroup: initialGroup,
+        nationalId: initialNatId,
+        studentNationalId: initialNatId,
+        address: initialAddress,
+        studentAddress: initialAddress
       };
 
       // Lazy feature loaders with promise caching
@@ -248,30 +253,42 @@
       // 5. In Background: Fetch Enriched Student Profile & Update UI without blocking
       (async () => {
         try {
-          const withTimeout = (promise, ms = 4500) =>
-            Promise.race([
-              promise,
-              new Promise((res) => setTimeout(() => res(null), ms))
-            ]);
-
-          let enrichedStudent = await withTimeout(StudentsService.getStudentProfile(user.uid), 3500);
+          let enrichedStudent = null;
+          try {
+            enrichedStudent = await StudentsService.getStudentProfile(user.uid);
+          } catch (e1) {
+            console.warn("getStudentProfile(uid) error:", e1);
+          }
 
           if (!enrichedStudent) {
-            enrichedStudent = await withTimeout(StudentsService.getStudentByPhone(studentPhone), 4500);
+            try {
+              enrichedStudent = await StudentsService.getStudentByPhone(studentPhone);
+            } catch (e2) {
+              console.warn("getStudentByPhone(phone) error:", e2);
+            }
+          }
+
+          if (!enrichedStudent) {
+            try {
+              const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+              const { db } = await import("../src/core/firebase.js");
+              const userSnap = await getDoc(doc(db, "users", user.uid));
+              if (userSnap.exists()) {
+                enrichedStudent = { id: user.uid, firestoreId: user.uid, ...userSnap.data() };
+              }
+            } catch (_) {}
           }
 
           if (enrichedStudent) {
-            const resolvedName = (enrichedStudent.name && enrichedStudent.name !== "طالب مسجل")
-              ? enrichedStudent.name
-              : (enrichedStudent.studentName && enrichedStudent.studentName !== "طالب مسجل"
-                  ? enrichedStudent.studentName
-                  : (student.name || student.studentName || "طالب مسجل"));
+            const rawName = (enrichedStudent.name || enrichedStudent.studentName || "").trim();
+            const resolvedName = (rawName && rawName !== "طالب مسجل")
+              ? rawName
+              : (student.name || user.displayName || "طالب مسجل");
 
-            const resolvedGroup = (enrichedStudent.group && enrichedStudent.group !== "ALL")
-              ? enrichedStudent.group
-              : (enrichedStudent.studentGroup && enrichedStudent.studentGroup !== "ALL"
-                  ? enrichedStudent.studentGroup
-                  : (student.group || student.studentGroup || "ALL"));
+            const rawGroup = (enrichedStudent.group || enrichedStudent.studentGroup || "").trim();
+            const resolvedGroup = (rawGroup && rawGroup !== "ALL")
+              ? rawGroup
+              : (student.group || "ALL");
 
             const resolvedPhone = enrichedStudent.studentPhone || enrichedStudent.phone || studentPhone;
             const resolvedNatId = enrichedStudent.nationalId || enrichedStudent.studentNationalId || student.nationalId || "";
@@ -280,9 +297,8 @@
             const prevGroup = student.group || student.studentGroup;
             const prevName = student.name || student.studentName;
 
-            student = {
-              ...student,
-              ...enrichedStudent,
+            // Mutate existing student object in place so all active closures and tab controllers see updated data
+            Object.assign(student, enrichedStudent, {
               name: resolvedName,
               studentName: resolvedName,
               group: resolvedGroup,
@@ -293,13 +309,20 @@
               studentNationalId: resolvedNatId,
               address: resolvedAddress,
               studentAddress: resolvedAddress
-            };
+            });
 
             // Cache in storage for instant paint on subsequent visits
             try {
               sessionStorage.setItem(`mw_student_profile_${studentPhone}`, JSON.stringify(student));
               localStorage.setItem(`mw_student_profile_${studentPhone}`, JSON.stringify(student));
             } catch (_) {}
+
+            // Keep Auth displayName synced
+            if (resolvedName && resolvedName !== "طالب مسجل" && (!user.displayName || user.displayName !== resolvedName)) {
+              import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js").then(({ updateProfile }) => {
+                updateProfile(user, { displayName: resolvedName }).catch(() => {});
+              }).catch(() => {});
+            }
 
             // Update UI shell & Interactive Banner
             layout.updateProfile({
