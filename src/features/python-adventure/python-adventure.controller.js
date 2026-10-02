@@ -457,6 +457,10 @@ export const PythonAdventureController = {
   },
 
   navigateTo(view, extraState = {}) {
+    if (this._dailyTimerInterval) {
+      clearInterval(this._dailyTimerInterval);
+      this._dailyTimerInterval = null;
+    }
     adventureStore.setState({ activeView: view, ...extraState });
   },
 
@@ -1262,7 +1266,43 @@ export const PythonAdventureController = {
   },
 
   wireDailyEvents() {
+    if (this._dailyTimerInterval) {
+      clearInterval(this._dailyTimerInterval);
+      this._dailyTimerInterval = null;
+    }
+
+    const updateTimer = () => {
+      const now = new Date();
+      const midnight = new Date();
+      midnight.setHours(24, 0, 0, 0);
+      const diffMs = Math.max(0, midnight - now);
+      const h = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, "0");
+      const m = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, "0");
+      const s = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, "0");
+
+      const hEl = document.getElementById("dailyCountdownHours");
+      const mEl = document.getElementById("dailyCountdownMins");
+      const sEl = document.getElementById("dailyCountdownSecs");
+      if (hEl && mEl && sEl) {
+        hEl.textContent = h;
+        mEl.textContent = m;
+        sEl.textContent = s;
+      } else {
+        if (this._dailyTimerInterval) {
+          clearInterval(this._dailyTimerInterval);
+          this._dailyTimerInterval = null;
+        }
+      }
+    };
+
+    updateTimer();
+    this._dailyTimerInterval = setInterval(updateTimer, 1000);
+
     document.getElementById("dailyBackBtn")?.addEventListener("click", () => {
+      if (this._dailyTimerInterval) {
+        clearInterval(this._dailyTimerInterval);
+        this._dailyTimerInterval = null;
+      }
       this.navigateTo("home");
     });
 
@@ -1283,7 +1323,7 @@ export const PythonAdventureController = {
           summary: "يمكنك استخدام for i in range(2, 21, 2) للمرور على الأعداد الزوجية فقط، وجمعها في متغير total."
         },
         starterCode: "total = 0\n# احسب واطبع مجموع الأعداد الزوجية من 1 إلى 20\n",
-        requirements: ["استخدم for loop", "اطبع الناتج النهائي فقط (110)"],
+        requirements: ["استخدم for loop مع range", "اطبع الناتج النهائي فقط (110)"],
         hints: ["for i in range(2, 21, 2): total += i", "print(total)"]
       };
       this.showMissionModal(dailyChallengeObj, "story");
