@@ -16,30 +16,36 @@ export function renderStudentLessonCard({ lesson, isWatched = false }) {
   const safeId = escapeHtml(lesson.id || "");
   const safeTitle = escapeHtml(lesson.title || lesson.name || "محاضرة بدون عنوان");
   const rawDesc = (lesson.description || "").trim();
-  const safeDesc = rawDesc ? escapeHtml(rawDesc) : "شرح تفصيلي للمفاهيم الأساسية، الأمثلة التطبيقية، والتطبيقات البرمجية المصاحبة للمحاضرة.";
-  const safeDate = escapeHtml(lesson.sessionDate || "22 سبتمبر 2026");
-  const category = escapeHtml(lesson.category || "بايثون التأسيسي");
-  const duration = escapeHtml(lesson.duration || "1 ساعة و 45 دقيقة");
+  const safeDesc = rawDesc ? escapeHtml(rawDesc) : "شرح تفصيلي للمفاهيم الأساسية والأمثلة التطبيقية المصاحبة للمحاضرة.";
+  const rawDate = lesson.sessionDate || (lesson.createdAt ? formatDate(lesson.createdAt) : "");
+  const safeDate = rawDate ? escapeHtml(rawDate) : "—";
+  const category = escapeHtml(lesson.category || (lesson.group && lesson.group !== "ALL" ? lesson.group : "المحتوى الأكاديمي"));
+
+  let rawDuration = "";
+  if (lesson.duration) {
+    rawDuration = typeof lesson.duration === "number" ? `${lesson.duration} دقيقة` : String(lesson.duration);
+  }
+  const duration = rawDuration ? escapeHtml(rawDuration) : "—";
+
   const orderNum = lesson.order ? (lesson.order < 10 ? `0${lesson.order}` : `${lesson.order}`) : "01";
   const numBadge = escapeHtml(lesson.lectureNumberBadge || `المحاضرة ${orderNum}`);
-  const isLive = Boolean(lesson.isLive || (lesson.statusType === "live") || safeTitle.includes("الجمل الشرطية"));
-  const statusBadge = escapeHtml(lesson.statusBadge || (isLive ? "جلسة حية" : (orderNum === "02" ? "تسجيل بدقة 4K" : "متاحة للمشاهدة")));
-  const statusType = lesson.statusType || (isLive ? "live" : (orderNum === "02" ? "4k" : "available"));
+  const isLive = Boolean(lesson.isLive || (lesson.statusType === "live"));
+  const statusBadge = escapeHtml(lesson.statusBadge || (isLive ? "جلسة حية" : (lesson.statusType === "4k" ? "تسجيل بدقة 4K" : "متاحة للمشاهدة")));
+  const statusType = lesson.statusType || (isLive ? "live" : "available");
 
   const ytId = extractYouTubeId(lesson.videoUrl || lesson.videoId || "");
+  const fallbackThumb = window.location.pathname.includes("/pages/")
+    ? "../assets/images/logo_union.jpeg"
+    : "assets/images/logo_union.jpeg";
   const thumbUrl = ytId
     ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
-    : (lesson.thumbnailUrl || (orderNum === "02" ? "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" : (isLive ? "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" : "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80")));
+    : (lesson.thumbnailUrl || lesson.thumbnail || fallbackThumb);
 
-  // Resources formatting
+  // Resources formatting: purely from real lesson attachments
   const resourcesLabel = escapeHtml(lesson.resourcesLabel || (isLive ? "المواد التحضيرية المسبقة:" : "المواد الملحقة بالدرس:"));
   let resources = Array.isArray(lesson.resources) && lesson.resources.length > 0
     ? lesson.resources
-    : [
-        { title: "سلايدات", type: "pdf", color: "red" },
-        { title: "الكود .py", type: "code", color: "cyan" },
-        { title: "الواجب", type: "task", color: "green" }
-      ];
+    : (lesson.fileUrl ? [{ title: lesson.fileName || "ملف الدرس المرفق", type: "file", url: lesson.fileUrl, color: "cyan" }] : []);
 
   const resourceChipsHtml = resources.map((r) => {
     let icon = "📄";
@@ -75,7 +81,7 @@ export function renderStudentLessonCard({ lesson, isWatched = false }) {
     <article class="student-lecture-card" data-lesson-id="${safeId}">
       <!-- Thumbnail & Top Badges Overlay -->
       <div class="lecture-thumb-wrap">
-        <img src="${escapeHtml(thumbUrl)}" alt="${safeTitle}" loading="lazy" class="lecture-thumb-img" onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80'" />
+        <img src="${escapeHtml(thumbUrl)}" alt="${safeTitle}" loading="lazy" class="lecture-thumb-img" onerror="this.src='${fallbackThumb}'" />
         
         <div class="lecture-thumb-overlay" data-open-student-lesson="${safeId}">
           <button type="button" class="lecture-play-circle" aria-label="تشغيل المحاضرة">
@@ -121,13 +127,15 @@ export function renderStudentLessonCard({ lesson, isWatched = false }) {
           ${safeDesc}
         </p>
 
-        <!-- Material Chips Section -->
-        <div class="lecture-materials-section">
-          <span class="materials-label">${resourcesLabel}</span>
-          <div class="materials-chips-list" aria-label="مرفقات المحاضرة">
-            ${resourceChipsHtml}
+        <!-- Material Chips Section (Only if real materials exist) -->
+        ${resources.length > 0 ? `
+          <div class="lecture-materials-section">
+            <span class="materials-label">${resourcesLabel}</span>
+            <div class="materials-chips-list" aria-label="مرفقات المحاضرة">
+              ${resourceChipsHtml}
+            </div>
           </div>
-        </div>
+        ` : ""}
       </div>
 
       <!-- Card Action Footer -->

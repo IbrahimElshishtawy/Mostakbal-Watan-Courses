@@ -88,12 +88,26 @@ export function normalizeLecture(id, data = {}) {
 
 export const LecturesService = {
   /**
-   * Fetches all published video lectures and normalizes them.
+   * Fetches all published video lectures directly from Firestore and normalizes them.
    */
   async getAllLectures() {
     try {
       const snap = await getDocs(collection(db, COLLECTIONS.VIDEOS));
-      return snap.docs.map((d) => normalizeLecture(d.id, d.data()));
+      const lectures = snap.docs.map((d) => normalizeLecture(d.id, d.data()));
+      const ids = new Set(lectures.map((l) => l.id));
+
+      // Also check alternate "lectures" collection if any exist
+      try {
+        const altSnap = await getDocs(collection(db, "lectures"));
+        altSnap.docs.forEach((d) => {
+          if (!ids.has(d.id)) {
+            lectures.push(normalizeLecture(d.id, d.data()));
+            ids.add(d.id);
+          }
+        });
+      } catch (_) {}
+
+      return lectures;
     } catch (err) {
       throw normalizeError(err);
     }

@@ -673,84 +673,7 @@ export const LecturesController = {
   // ========================================================
 
   /**
-   * Signature lectures matching Image 10.jpeg for guaranteed rich visual rendering.
-   */
-  getSignatureStudentLectures() {
-    return [
-      {
-        id: "lec-py-01",
-        title: "مقدمة في عالم البرمجة، تثبيت لغة Python، وإعداد بيئة التطوير VS Code",
-        description: "شرح مبسط لكيفية عمل المترجم، ضبط المتغيرات البيئية PATH، تشغيل أول سكريبت تطبيقي، وفهم بنية أوامر بايثون.",
-        category: "بايثون التأسيسي",
-        sessionDate: "22 سبتمبر 2026",
-        duration: "1 ساعة و 45 دقيقة",
-        order: 1,
-        lectureNumberBadge: "المحاضرة 01",
-        statusBadge: "متاحة للمشاهدة",
-        statusType: "available",
-        type: "CORE",
-        videoUrl: "https://www.youtube.com/watch?v=kqtD5dpn9C8",
-        thumbnailUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
-        resourcesLabel: "المواد الملحقة بالدرس:",
-        resources: [
-          { title: "سلايدات", type: "pdf", color: "red", url: "#" },
-          { title: "الكود .py", type: "code", color: "cyan", url: "#" },
-          { title: "الواجب", type: "task", color: "green", url: "#" }
-        ],
-        group: "ALL",
-        active: true
-      },
-      {
-        id: "lec-py-02",
-        title: "المتغيرات وأنواع البيانات والعمليات الحسابية (& Data Types)",
-        description: "التعامل مع النصوص Strings، الأرقام Integers/Floats، المعاملات المنطقية، والتحويل بين الأنواع المختلفة.",
-        category: "بايثون التأسيسي",
-        sessionDate: "26 سبتمبر 2026",
-        duration: "2 ساعة و 10 دقائق",
-        order: 2,
-        lectureNumberBadge: "المحاضرة 02",
-        statusBadge: "تسجيل بدقة 4K",
-        statusType: "4k",
-        type: "CORE",
-        videoUrl: "https://www.youtube.com/watch?v=DZwmZ8Usvnk",
-        thumbnailUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80",
-        resourcesLabel: "المواد الملحقة بالدرس:",
-        resources: [
-          { title: "سلايدات", type: "pdf", color: "red", url: "#" },
-          { title: "دفتر Jupyter", type: "jupyter", color: "amber", url: "#" },
-          { title: "تمرين عملي", type: "exercise", color: "emerald", url: "#" }
-        ],
-        group: "ALL",
-        active: true
-      },
-      {
-        id: "lec-py-03",
-        title: "الجمل الشرطية والتحكم في التدفق (If / Elif / Else & Logical Operators)",
-        description: "بناء الخوارزميات المنطقية وصنع القرارات البرمجية، جداول الصواب والخطأ، وحل مسائل تدريبية وتطبيقية.",
-        category: "المنطق البرمجي",
-        sessionDate: "30 سبتمبر 2026",
-        duration: "البث القادم: غداً 7:00 م",
-        order: 3,
-        lectureNumberBadge: "المحاضرة 03",
-        statusBadge: "جلسة حية",
-        statusType: "live",
-        isLive: true,
-        type: "CORE",
-        videoUrl: "https://www.youtube.com/watch?v=6iF8Xb7Z3wQ",
-        thumbnailUrl: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80",
-        resourcesLabel: "المواد التحضيرية المسبقة:",
-        resources: [
-          { title: "كتيب التحضير PDF", type: "pdf", color: "cyan", url: "#" },
-          { title: "تذكير بالموعد", type: "reminder", color: "slate", url: "#" }
-        ],
-        group: "ALL",
-        active: true
-      }
-    ];
-  },
-
-  /**
-   * Loads and renders the educational lectures section for students.
+   * Loads and renders the educational lectures section for students solely from live Firestore.
    * @param {string|HTMLElement} containerId
    * @param {object} currentStudent
    */
@@ -765,36 +688,23 @@ export const LecturesController = {
     setHtml(container, renderStudentLessonSkeletonGrid(3));
 
     try {
-      const studentUid = currentStudent?.firestoreId || currentStudent?.id || "";
+      const studentUid = currentStudent?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
       const studentPhone = currentStudent?.studentPhone || currentStudent?.phone || "";
 
-      let [remoteLectures, watchedIds] = await Promise.all([
-        LecturesService.getAllLectures().catch(() => []),
+      const [remoteLectures, watchedIds] = await Promise.all([
+        LecturesService.getAllLectures(),
         LecturesService.getStudentWatchedLogs(studentUid, studentPhone).catch(() => new Set())
       ]);
 
-      // If Firestore is empty or sparsely populated, merge with signature lectures
-      const signatureLectures = this.getSignatureStudentLectures();
-      let combinedLectures = [...remoteLectures];
-      if (combinedLectures.length === 0) {
-        combinedLectures = signatureLectures;
-      } else {
-        // Ensure baseline lessons exist if not in remote
-        signatureLectures.forEach((sig) => {
-          if (!combinedLectures.some((l) => l.title === sig.title || l.id === sig.id)) {
-            combinedLectures.push(sig);
-          }
-        });
-      }
+      const liveLectures = Array.isArray(remoteLectures) ? remoteLectures : [];
 
-      lecturesState.set("lectures", combinedLectures);
+      lecturesState.set("lectures", liveLectures);
       lecturesState.set("watchedIds", watchedIds);
 
       this.renderStudentView(container, currentStudent);
     } catch (err) {
-      console.error("Failed to load student lectures:", err);
-      // Fallback gracefully to signature lectures rather than showing error state
-      lecturesState.set("lectures", this.getSignatureStudentLectures());
+      console.error("Failed to load student lectures from Firestore:", err);
+      lecturesState.set("lectures", []);
       lecturesState.set("watchedIds", new Set());
       this.renderStudentView(container, currentStudent);
     }
@@ -859,11 +769,19 @@ export const LecturesController = {
     // Lessons Grid or Empty State
     let listHtml = "";
     if (filtered.length === 0) {
-      listHtml = renderEmptyState({
-        icon: "📚",
-        title: "لا توجد محاضرات مطابقة للتصفية",
-        description: "يرجى تغيير كلمة البحث أو فلاتر العرض لإظهار الدروس."
-      });
+      if (relevantLectures.length === 0) {
+        listHtml = renderEmptyState({
+          icon: "📚",
+          title: "لا توجد محاضرات منشورة لمجموعتك حالياً",
+          description: "سيتم إتاحة الدروس والمحاضرات المسجلة فور نشرها من قبل إدارة الدورة والمدرب."
+        });
+      } else {
+        listHtml = renderEmptyState({
+          icon: "🔍",
+          title: "لا توجد نتائج مطابقة لبحثك",
+          description: "يرجى تغيير كلمة البحث أو فلاتر العرض لإظهار الدروس."
+        });
+      }
     } else {
       listHtml = `
         <div class="student-lessons-grid">
