@@ -434,7 +434,7 @@ export function renderLeaderboardView({
                 <span class="lb-reward-icon text-amber-400">📜</span>
                 <div class="lb-reward-content">
                   <h5>شهادة تميز معتمدة رسمياً</h5>
-                  <p>موقعة من أمانة العمل والمشرف الأكاديمي م/ إبراهيم الششتتاوي.</p>
+                  <p>موقعة من إدارة اتحاد بشبابها والمشرف الأكاديمي م/ إبراهيم الششتتاوي.</p>
                 </div>
               </div>
 
