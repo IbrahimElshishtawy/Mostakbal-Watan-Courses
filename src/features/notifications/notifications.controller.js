@@ -15,15 +15,18 @@ import { auth } from "../../core/firebase.js";
 export const NotificationsController = {
   _notifications: [],
   _onNavigateCallback: null,
+  _student: null,
 
   /**
    * Initializes the notifications system, mounts modal shell, and mounts bell widget.
    * @param {object} options
    * @param {string|HTMLElement} [options.bellMountPoint]
    * @param {function} [options.onNavigate]
+   * @param {object|null} [options.student]
    */
-  async init({ bellMountPoint = null, onNavigate = null } = {}) {
+  async init({ bellMountPoint = null, onNavigate = null, student = null } = {}) {
     this._onNavigateCallback = onNavigate;
+    this._student = student;
 
     // Ensure modal shell in DOM
     if (!document.getElementById(NOTIFICATIONS_MODAL_ID)) {
@@ -47,6 +50,15 @@ export const NotificationsController = {
   },
 
   /**
+   * Updates student context and refreshes notification indicators.
+   * @param {object} student
+   */
+  setStudent(student) {
+    this._student = student;
+    this.refreshUnreadBadge();
+  },
+
+  /**
    * Fetches latest notifications and updates the bell badge counter.
    */
   async refreshUnreadBadge() {
@@ -54,7 +66,7 @@ export const NotificationsController = {
     if (!user) return;
 
     try {
-      this._notifications = await NotificationsService.getUserNotifications(user.uid, 20);
+      this._notifications = await NotificationsService.getUserNotifications(user.uid, 20, this._student);
       const unreadCount = this._notifications.filter((n) => !n.read).length;
 
       const badgeEl = document.getElementById("notificationsUnreadBadge");
@@ -95,7 +107,7 @@ export const NotificationsController = {
     }
 
     try {
-      this._notifications = await NotificationsService.getUserNotifications(user.uid, 30);
+      this._notifications = await NotificationsService.getUserNotifications(user.uid, 30, this._student);
       this.renderList();
     } catch (err) {
       setHtml(bodySlot, `<div class="p-4 text-center text-danger text-sm">تعذر جلب قائمة الإشعارات.</div>`);
@@ -163,7 +175,7 @@ export const NotificationsController = {
       if (!user) return;
 
       try {
-        await NotificationsService.markAllAsRead(user.uid);
+        await NotificationsService.markAllAsRead(user.uid, this._student);
         this._notifications.forEach((n) => (n.read = true));
         this.renderList();
         this.refreshUnreadBadge();

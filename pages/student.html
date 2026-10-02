@@ -156,32 +156,6 @@
         }))
       };
 
-      function loadCompetitiveWidget(studentUser) {
-        const container = document.getElementById("competitiveDashboardWidgetContainer");
-        if (!container) return;
-        import("../src/features/problem-solving/problem-solving.service.js")
-          .then(({ ProblemSolvingService }) => ProblemSolvingService.getStudentCompetitiveProfile(studentUser))
-          .then((stats) => {
-            import("../src/features/problem-solving/components/competitive-dashboard-widget.component.js")
-              .then(({ renderCompetitiveDashboardWidget }) => {
-                container.innerHTML = renderCompetitiveDashboardWidget({ stats });
-                document.getElementById("dashGoToProblemsBtn")?.addEventListener("click", () => {
-                  layout.switchTab("python-adventure");
-                  lazyLoaders.adventure().then((ctrl) => ctrl.openWorldMapTrack("problem-solving", "ps-level-1"));
-                });
-                document.getElementById("dashGoToLeaderboardBtn")?.addEventListener("click", () => layout.switchTab("leaderboard"));
-                document.getElementById("dashSolveDailyBtn")?.addEventListener("click", (e) => {
-                  const pid = e.currentTarget.getAttribute("data-problem-id") || "prob-l1-sum";
-                  layout.switchTab("python-adventure");
-                  lazyLoaders.adventure().then((ctrl) => ctrl.openProblemSolvingChallenge(pid));
-                });
-              });
-          })
-          .catch((err) => {
-            console.warn("Competitive widget load warning:", err);
-          });
-      }
-
       // 2. Mount UI Layout Shell IMMEDIATELY with initial student data
       const layout = mountStudentLayout(root, {
         initialStudent: student,
@@ -189,8 +163,6 @@
         onTabChange: (tabId) => {
           if (tabId === "videos") {
             LecturesController.loadStudentLectures("videoListContainer", student);
-            AttendanceController.loadDashboardWidget("attendanceDashboardWidgetContainer", student, (tab) => layout.switchTab(tab));
-            loadCompetitiveWidget(student);
           } else if (tabId === "exams") {
             lazyLoaders.exams().then((ctrl) => ctrl.loadStudentExams("examListContainer", student));
           } else if (tabId === "tasks") {
@@ -271,8 +243,6 @@
         layout.switchTab("tasks");
       } else {
         LecturesController.loadStudentLectures("videoListContainer", student);
-        AttendanceController.loadDashboardWidget("attendanceDashboardWidgetContainer", student, (tab) => layout.switchTab(tab));
-        loadCompetitiveWidget(student);
       }
 
       // 5. In Background: Fetch Enriched Student Profile & Update UI without blocking
@@ -338,6 +308,7 @@
               group: resolvedGroup
             });
             interactiveBannerHandle?.updateStudent(student);
+            NotificationsController.setStudent(student);
 
             // If group or name changed, refresh active tab so student sees real data immediately
             const activeTabBtn = document.querySelector(".sidebar-item.active");
@@ -345,8 +316,6 @@
 
             if (activeSection === "videos" || prevGroup !== resolvedGroup) {
               LecturesController.loadStudentLectures("videoListContainer", student);
-              AttendanceController.loadDashboardWidget("attendanceDashboardWidgetContainer", student, (tab) => layout.switchTab(tab));
-              loadCompetitiveWidget(student);
             }
             if (activeSection === "profile" || prevName !== resolvedName) {
               lazyLoaders.profile().then(({ ProfileController, AttendanceService, renderProfileAttendanceCard }) => {
@@ -368,6 +337,7 @@
       // 6. In Background: Mount Notifications Bell (Non-blocking)
       NotificationsController.init({
         bellMountPoint: "studentNotificationBellSlot",
+        student,
         onNavigate: (section) => {
           if (!section) return;
           if (section === "assignments" || section === "assignment") {
@@ -376,6 +346,8 @@
             layout.switchTab("videos");
           } else if (section === "adventure" || section === "game") {
             layout.switchTab("python-adventure");
+          } else if (section === "attendance") {
+            layout.switchTab("attendance");
           } else {
             layout.switchTab(section);
           }

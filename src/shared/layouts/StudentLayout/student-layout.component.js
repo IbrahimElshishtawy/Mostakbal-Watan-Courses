@@ -211,10 +211,6 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
               <p class="student-lessons-subtitle">استكشف السلايدات، الشروحات، الكود المصدري، والتكليفات المصاحبة لكل جلسة</p>
             </div>
 
-            <!-- Dynamic Dashboard Status & Competitive Widgets -->
-            <div id="attendanceDashboardWidgetContainer"></div>
-            <div id="competitiveDashboardWidgetContainer"></div>
-
             <div id="videoListContainer"></div>
           </section>
 

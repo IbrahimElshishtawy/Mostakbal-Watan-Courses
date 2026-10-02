@@ -23,12 +23,16 @@ export const NotificationsService = {
   /**
    * Fetches notifications for a specific recipient user.
    * Supports backward-compatible query fallbacks if compound indexes are missing.
+   * Also dynamically checks and injects live academic alerts (such as attendance warnings).
    * @param {string} userId
    * @param {number} [maxLimit=30]
+   * @param {object|null} [studentContext=null]
    * @returns {Promise<Array>}
    */
-  async getUserNotifications(userId, maxLimit = 30) {
+  async getUserNotifications(userId, maxLimit = 30, studentContext = null) {
     if (!userId) return [];
+
+    let list = [];
 
     try {
       const notifRef = collection(db, COLLECTIONS.NOTIFICATIONS);
@@ -55,7 +59,7 @@ export const NotificationsService = {
         docs = snap.docs;
       }
 
-      const list = docs.map((d) => {
+      list = docs.map((d) => {
         const data = d.data();
         return {
           id: d.id,
@@ -70,19 +74,54 @@ export const NotificationsService = {
           createdAt: data.createdAt || null
         };
       });
-
-      // Sort in memory (newest first)
-      list.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
-        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
-        return timeB - timeA;
-      });
-
-      return list.slice(0, maxLimit);
     } catch (err) {
-      console.warn("Error fetching user notifications:", err?.message || err);
-      return [];
+      console.warn("Error fetching user notifications from Firestore:", err?.message || err);
     }
+
+    // Dynamic Academic & Attendance Alert Integration
+    if (studentContext) {
+      try {
+        const { AttendanceService } = await import("../attendance/attendance.service.js");
+        const attData = await AttendanceService.getStudentAttendance(studentContext).catch(() => null);
+
+        if (attData && typeof attData.attendanceRate === "number" && attData.totalSessions > 0) {
+          const rate = Math.round(attData.attendanceRate);
+          if (rate < 75) {
+            const notifId = `att_warning_${studentContext.id || studentContext.phone || userId}`;
+            const isRead = localStorage.getItem(`mw_notif_read_${notifId}`) === "true";
+
+            list.unshift({
+              id: notifId,
+              recipientUid: userId,
+              title: "تنبيه نسبة الحضور التراكمي",
+              body: `نسبة حضورك التراكمية الحالية هي ${rate}% (${rate < 50 ? 'نسبة منخفضة جداً' : 'أقل من الحد الأدنى 75%'}). تنبيه أكاديمي: يرجى متابعة تسجيل الحضور مع المهندس إبراهيم الششتواي لتفادي استبعادك من الاختبارات النهائية والمشروع الختامي.`,
+              type: NOTIFICATION_TYPES.ATTENDANCE_WARNING,
+              deepLink: "attendance",
+              metadata: {
+                attendanceRate: rate,
+                totalSessions: attData.totalSessions,
+                presentCount: attData.presentCount,
+                absentCount: attData.absentCount
+              },
+              read: isRead,
+              readAt: isRead ? new Date() : null,
+              createdAt: { toMillis: () => Date.now() }
+            });
+          }
+        }
+      } catch (attErr) {
+        console.warn("Notifications attendance check non-blocking warning:", attErr);
+      }
+    }
+
+    // Sort in memory (newest first)
+    list.sort((a, b) => {
+      const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+      const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+      return timeB - timeA;
+    });
+
+    return list.slice(0, maxLimit);
   },
 
   /**
@@ -91,6 +130,14 @@ export const NotificationsService = {
    */
   async markAsRead(notificationId) {
     if (!notificationId) return;
+
+    if (notificationId.startsWith("att_warning_") || notificationId.startsWith("sys_")) {
+      try {
+        localStorage.setItem(`mw_notif_read_${notificationId}`, "true");
+      } catch (_) {}
+      return { success: true };
+    }
+
     try {
       await updateDoc(doc(db, COLLECTIONS.NOTIFICATIONS, notificationId), {
         read: true,
@@ -105,19 +152,15 @@ export const NotificationsService = {
   /**
    * Marks all unread notifications for a user as read.
    * @param {string} userId
+   * @param {object|null} [studentContext=null]
    */
-  async markAllAsRead(userId) {
+  async markAllAsRead(userId, studentContext = null) {
     if (!userId) return;
     try {
-      const items = await this.getUserNotifications(userId, 50);
+      const items = await this.getUserNotifications(userId, 50, studentContext);
       const unread = items.filter((n) => !n.read);
       await Promise.all(
-        unread.map((n) =>
-          updateDoc(doc(db, COLLECTIONS.NOTIFICATIONS, n.id), {
-            read: true,
-            readAt: serverTimestamp()
-          }).catch(() => {})
-        )
+        unread.map((n) => this.markAsRead(n.id).catch(() => {}))
       );
       return { success: true, markedCount: unread.length };
     } catch (err) {

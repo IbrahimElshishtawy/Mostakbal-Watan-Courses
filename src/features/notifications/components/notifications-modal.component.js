@@ -158,7 +158,7 @@ export function renderNotificationsList(notifications = []) {
                     data-notif-deep-link="${escapeHtml(notif.deepLink || notif.link)}"
                     data-notification-id="${escapeHtml(notif.id)}"
                   >
-                    الانتقال للمعاينة ↗
+                    ${notif.type === NOTIFICATION_TYPES.ATTENDANCE_WARNING ? "عرض السجل المفصل والأعذار 📑" : "الانتقال للمعاينة ↗"}
                   </button>
                 `
                     : `<span></span>`
