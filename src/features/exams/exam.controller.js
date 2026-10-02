@@ -115,7 +115,7 @@ export const ExamController = {
     setHtml(container, renderExamListSkeleton(3));
 
     try {
-      const studentUid = currentStudent?.firestoreId || currentStudent?.id || "";
+      const studentUid = currentStudent?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
       const studentGroup = (currentStudent?.group && currentStudent.group !== "ALL")
         ? currentStudent.group
         : (currentStudent?.studentGroup && currentStudent.studentGroup !== "ALL"
@@ -295,7 +295,7 @@ export const ExamController = {
     }
 
     try {
-      const studentUid = currentStudent?.firestoreId || currentStudent?.id || "";
+      const studentUid = currentStudent?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
       const availableExams = examState.get("availableExams") || [];
       let exam = availableExams.find((e) => e.id === examId);
 
@@ -403,7 +403,7 @@ export const ExamController = {
         throw new Error("لا توجد أسئلة مسجلة في هذا الامتحان حالياً.");
       }
 
-      const studentUid = currentStudent.id || currentStudent.firestoreId;
+      const studentUid = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId || "";
       const draftKey = `${STORAGE_KEYS.EXAM_DRAFT_PREFIX}${studentUid}_${examId}`;
       const savedDraft = StorageUtils.get(draftKey, {});
       StorageUtils.set(STORAGE_KEYS.CURRENT_EXAM, examId);
@@ -658,7 +658,7 @@ export const ExamController = {
    * Binds interaction events for active exam mode.
    */
   bindExamModeEvents(activeContainer, examId, currentStudent) {
-    const studentUid = currentStudent.id || currentStudent.firestoreId;
+    const studentUid = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId || "";
     const draftKey = `${STORAGE_KEYS.EXAM_DRAFT_PREFIX}${studentUid}_${examId}`;
 
     // 1. Anti-cheat deterrent: intercept contextmenu and copy on questions
@@ -1044,7 +1044,7 @@ export const ExamController = {
       const result = await ExamService.submitExam(examId, answersArray, questions.length);
 
       // Clear draft & active session
-      const studentUid = currentStudent.id || currentStudent.firestoreId;
+      const studentUid = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId || "";
       const draftKey = `${STORAGE_KEYS.EXAM_DRAFT_PREFIX}${studentUid}_${examId}`;
       StorageUtils.remove(draftKey);
       StorageUtils.remove(STORAGE_KEYS.CURRENT_EXAM);
@@ -1096,7 +1096,7 @@ export const ExamController = {
     setHtml(activeContainer, renderLoader({ text: "جاري جلب نتيجتك الرسمية من السيرفر... 📊" }));
 
     try {
-      const studentUid = currentStudent?.firestoreId || currentStudent?.id || "";
+      const studentUid = currentStudent?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
       const result = await ExamService.getResult(examId, studentUid);
 
       const availableExams = examState.get("availableExams") || [];

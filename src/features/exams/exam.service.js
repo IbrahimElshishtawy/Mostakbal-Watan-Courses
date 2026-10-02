@@ -27,11 +27,18 @@ function _normalizeExamData(id, data = {}) {
     "امتحان بدون عنوان"
   ).trim();
 
+  const duration = Number(data.duration || data.durationMinutes || 30);
+  const passDegree = Number(data.passDegree || data.passingScore || 0);
+
   return {
     id,
     ...data,
     title: resolvedTitle,
-    name: resolvedTitle
+    name: resolvedTitle,
+    duration,
+    durationMinutes: duration,
+    passDegree,
+    passingScore: passDegree
   };
 }
 
@@ -234,24 +241,29 @@ export const ExamService = {
 
       // Sanitize questions: strip 'correct' to protect quiz integrity
       const rawQuestions = Array.isArray(examData.questions) ? examData.questions : [];
-      const sanitizedQuestions = rawQuestions.map((q, idx) => ({
-        id: q.id || `q_${idx}`,
-        type: q.type || "mcq",
-        question: q.question || q.text || "",
-        text: q.question || q.text || "",
-        options: Array.isArray(q.options) ? q.options : (Array.isArray(q.choices) ? q.choices : []),
-        choices: Array.isArray(q.options) ? q.options : (Array.isArray(q.choices) ? q.choices : []),
-        degree: Number(q.degree || 1)
-      }));
+      const sanitizedQuestions = rawQuestions.map((q, idx) => {
+        const qText = q.question || q.questionText || q.text || q.title || "";
+        const options = Array.isArray(q.options) ? q.options : (Array.isArray(q.choices) ? q.choices : []);
+        return {
+          id: q.id || `q_${idx}`,
+          type: q.type || "mcq",
+          question: qText,
+          text: qText,
+          title: qText,
+          options,
+          choices: options,
+          degree: Number(q.degree || q.points || q.score || 1)
+        };
+      });
 
       return {
         examId,
         id: examId,
         title: examData.title || examData.name || "",
         description: examData.description || "",
-        duration: Number(examData.duration || 30),
+        duration: Number(examData.duration || examData.durationMinutes || 30),
         deadline: examData.deadline || examData.endAt || null,
-        passDegree: Number(examData.passDegree || 0),
+        passDegree: Number(examData.passDegree || examData.passingScore || 0),
         questions: sanitizedQuestions
       };
     } catch (fsErr) {
@@ -281,7 +293,7 @@ export const ExamService = {
       try {
         const examSnap = await getDoc(doc(db, COLLECTIONS.EXAMS, examId));
         if (examSnap.exists()) {
-          durationMinutes = Number(examSnap.data()?.duration || 30);
+          durationMinutes = Number(examSnap.data()?.duration || examSnap.data()?.durationMinutes || 30);
         }
       } catch (_) {}
 
@@ -396,26 +408,27 @@ export const ExamService = {
 
       questions.forEach((q, idx) => {
         const studentAnswer = answersArray[idx];
-        const degree = Number(q.degree || 1);
+        const degree = Number(q.degree || q.points || q.score || 1);
+        const correctVal = q.correct !== undefined ? q.correct : q.correctAnswer;
 
         if (q.type === "mcq" || !q.type) {
           totalMcqPossible += degree;
-          const isCorrect = studentAnswer !== null && studentAnswer !== undefined && Number(studentAnswer) === Number(q.correct);
+          const isCorrect = studentAnswer !== null && studentAnswer !== undefined && Number(studentAnswer) === Number(correctVal);
           if (isCorrect) {
             mcqScore += degree;
           } else {
             const studentAnsText = (studentAnswer !== null && studentAnswer !== undefined && Array.isArray(q.options) && q.options[studentAnswer] !== undefined)
               ? q.options[studentAnswer]
               : (studentAnswer !== null && studentAnswer !== undefined ? String(studentAnswer) : "لم تتم الإجابة");
-            const correctAnsText = (Array.isArray(q.options) && q.options[q.correct] !== undefined)
-              ? q.options[q.correct]
-              : String(q.correct);
+            const correctAnsText = (Array.isArray(q.options) && q.options[correctVal] !== undefined)
+              ? q.options[correctVal]
+              : String(correctVal ?? "");
 
             wrongAnswers.push({
               questionIndex: idx,
               questionNumber: idx + 1,
-              questionTitle: q.title || `السؤال ${idx + 1}`,
-              question: q.question || "",
+              questionTitle: q.title || q.questionText || q.question || `السؤال ${idx + 1}`,
+              question: q.question || q.questionText || q.text || "",
               studentAnswer: studentAnsText,
               correctAnswer: correctAnsText,
               scoreReceived: 0,
@@ -448,7 +461,9 @@ export const ExamService = {
         answers: answersArray,
         mcqScore,
         score: mcqScore,
-        total: mcqScore,
+        total: totalMcqPossible,
+        totalPossible: totalMcqPossible,
+        totalQuestions: questions.length,
         essayScores,
         wrongAnswers,
         status: hasEssay ? "pending_essay" : "graded",

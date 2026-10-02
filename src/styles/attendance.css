@@ -518,3 +518,137 @@
     background: #1e2530;
   }
 }
+
+/* ========================================================
+   7. DASHBOARD ATTENDANCE WIDGET
+   ======================================================== */
+.dash-attendance-alert-card {
+  background: linear-gradient(135deg, rgba(24, 30, 41, 0.95) 0%, rgba(30, 38, 51, 0.92) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg, 16px);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-attendance-alert-card.is-good {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.08);
+}
+
+.dash-attendance-alert-card.is-low {
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.1);
+}
+
+.dash-attendance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.dash-attendance-title-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dash-attendance-title-box .alert-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.dash-attendance-title-box .alert-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-text-primary, #ffffff);
+  margin: 0;
+}
+
+.dash-attendance-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.dash-attendance-badge.badge-good {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.dash-attendance-badge.badge-low {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.dash-attendance-body {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.dash-attendance-rate-number .number-val {
+  font-size: 2rem;
+  font-weight: 900;
+  font-family: var(--font-mono, monospace);
+  color: var(--color-text-primary, #ffffff);
+  line-height: 1;
+}
+
+.is-good .dash-attendance-rate-number .number-val {
+  color: #10b981;
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.is-low .dash-attendance-rate-number .number-val {
+  color: #f59e0b;
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.dash-attendance-notice {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #94a3b8);
+  margin: 0;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.dash-attendance-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-attendance-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md, 8px);
+  color: var(--color-text-primary, #ffffff);
+  font-size: 0.825rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-attendance-detail:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+

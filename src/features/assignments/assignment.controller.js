@@ -37,6 +37,7 @@ import { renderBadge } from "../../shared/components/Badge/badge.component.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { setHtml, escapeHtml } from "../../shared/utils/dom.utils.js";
 import { formatDate, formatDateTime, isDeadlinePassed } from "../../shared/utils/date.utils.js";
+import { isGroupMatch } from "../../shared/utils/group.utils.js";
 import { auth } from "../../core/firebase.js";
 import { GROUPS } from "../../core/constants.js";
 import { triggerPrintReport } from "../exams/components/exam-report.component.js";
@@ -76,7 +77,7 @@ export const AssignmentController = {
     setHtml(container, renderStudentAssignmentSkeletonGrid(3));
 
     try {
-      const studentUid = auth.currentUser?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
+      const studentUid = currentStudent?.uid || currentStudent?.firestoreId || currentStudent?.id || auth.currentUser?.uid || "";
       const studentGroup = (currentStudent?.group && currentStudent.group !== "ALL")
         ? currentStudent.group
         : (currentStudent?.studentGroup && currentStudent.studentGroup !== "ALL"
@@ -94,7 +95,7 @@ export const AssignmentController = {
       }
 
       const relevant = allAssignments.filter(
-        (a) => !a.group || a.group === "ALL" || a.group === studentGroup
+        (a) => !a.group || a.group === "ALL" || isGroupMatch(a.group, studentGroup)
       );
 
       // 2. Fetch submissions for relevant assignments
