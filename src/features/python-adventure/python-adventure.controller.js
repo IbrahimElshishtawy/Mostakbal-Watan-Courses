@@ -473,67 +473,7 @@ export const PythonAdventureController = {
       this.handleContinue();
     });
 
-    document.getElementById("btnContinuePlayQuest")?.addEventListener("click", () => {
-      this.handleContinue();
-    });
 
-    document.getElementById("adventureContinueBtn")?.addEventListener("click", () => {
-      this.handleContinue();
-    });
-
-    document.getElementById("adventureStartMissionBtn")?.addEventListener("click", () => {
-      this.handleContinue();
-    });
-
-    // 2. Leaderboard Navigation
-    const openLeaderboard = () => {
-      const lbBtn = document.querySelector('.sidebar-item[data-section="leaderboard"]');
-      if (lbBtn) {
-        lbBtn.click();
-      } else {
-        this.navigateTo("leaderboard");
-      }
-    };
-
-    document.getElementById("heroLeaderboardBtn")?.addEventListener("click", openLeaderboard);
-    document.getElementById("advOpenFullLeaderboardBtn")?.addEventListener("click", openLeaderboard);
-
-    // 3. XP Booster Button
-    document.getElementById("btnGoXpBoost")?.addEventListener("click", () => {
-      this.navigateTo("daily");
-    });
-
-    // 4. Copy Code Snippet Button
-    document.getElementById("btnCopyQuestCode")?.addEventListener("click", () => {
-      const codeSnippet = `def decode_telemetry(stream_payload: str) -> dict:
-    tokens = stream_payload.split(":")
-    valid_checksum = sum([int(x) for x in tokens[1] if int(x) % 2 == 0])
-    return {"status": True, "code": valid_checksum}`;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(codeSnippet).then(() => {
-          showToast("تم نسخ الكود الأولي إلى الحافظة! 📋", "success");
-        }).catch(() => {
-          showToast("تم نسخ الكود بنجاح.", "info");
-        });
-      } else {
-        showToast("تم نسخ الكود بنجاح.", "info");
-      }
-    });
-
-    // 5. Open World Map
-    document.getElementById("btnOpenWorldMap8")?.addEventListener("click", () => {
-      this.navigateTo("world-map");
-    });
-
-    // 6. Cloud Lab / Console IDE
-    document.getElementById("btnOpenCloudLab")?.addEventListener("click", () => {
-      const consoleBtn = document.querySelector('.sidebar-item[data-section="cloud-console"]');
-      if (consoleBtn) {
-        consoleBtn.click();
-      } else {
-        showToast("جاري فتح الكونسول السحابي التفاعلي... 💻", "info");
-      }
-    });
 
     // 7. Top Header Controls
     document.getElementById("adv5NotificationBtn")?.addEventListener("click", () => {
