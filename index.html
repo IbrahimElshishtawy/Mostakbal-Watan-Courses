@@ -166,7 +166,7 @@
   <!-- ============================================================
        MAIN CONTENT
        ============================================================ -->
-  <main id="home" class="w-full pt-18 sm:pt-24 3xl:pt-28 pb-14 sm:pb-16 3xl:pb-24">
+  <main id="home" class="w-full pt-18 sm:pt-24 3xl:pt-28 pb-2 sm:pb-4">
     <div class="flex flex-col w-full text-right" dir="rtl">
 
       <!-- HERO SECTION (Fluid Responsive Across Small & Large Displays) -->
@@ -216,7 +216,7 @@
               <div class="p-2 xs:p-2.5 sm:p-3.5 3xl:p-5 rounded-xl sm:rounded-2xl 3xl:rounded-3xl bg-slate-900/70 border border-slate-800/90 shadow-md backdrop-blur-sm flex flex-col items-center lg:items-start text-center lg:text-right interactive-hover-card">
                 <div class="flex items-center gap-1 text-sky-400 mb-0.5 xs:mb-1">
                   <span class="material-symbols-outlined text-[14px] xs:text-[15px] sm:text-[18px] 3xl:text-[22px]">timer</span>
-                  <span class="font-mono text-[10px] xs:text-xs sm:text-sm 3xl:text-base font-bold" data-counter="800" data-counter-prefix="+" data-counter-suffix=" ساعة">+800 ساعة</span>
+                  <span class="font-mono text-[10px] xs:text-xs sm:text-sm 3xl:text-base font-bold" data-counter="30" data-counter-prefix="+" data-counter-suffix=" ساعة">+30 ساعة</span>
                 </div>
                 <span class="text-[9px] xs:text-[10px] sm:text-xs 3xl:text-sm text-slate-400 leading-tight">تدريب عملي</span>
               </div>
@@ -904,54 +904,76 @@
       </section>
 
       <!-- DEV TEAM & LEAD DEVELOPER SPOTLIGHT (Compact & Realistic Architecture) -->
-      <section class="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] 4xl:max-w-[2160px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12 py-2 sm:py-3.5" id="dev-section">
-        <div class="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-slate-900/95 via-[#0d1627]/95 to-slate-900/95 border border-sky-500/30 p-4 sm:p-6 sm:px-8 backdrop-blur-xl flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 shadow-xl text-center lg:text-right transition-all hover:border-sky-500/50 relative overflow-hidden reveal-on-scroll interactive-hover-card">
+      <section class="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] 4xl:max-w-[2160px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12 py-2 sm:py-2.5" id="dev-section">
+        <div class="rounded-3xl bg-gradient-to-r from-slate-900/98 via-[#0b1424]/98 to-slate-900/98 border border-sky-500/40 hover:border-sky-400/80 p-5 sm:p-7 3xl:p-8 backdrop-blur-xl flex flex-col lg:flex-row items-center justify-between gap-6 shadow-[0_20px_50px_rgba(2,6,23,0.9),0_0_35px_rgba(56,189,248,0.18)] text-center lg:text-right transition-all duration-300 hover:-translate-y-1 relative overflow-hidden reveal-on-scroll interactive-hover-card">
           
-          <!-- Subtle Top Luminous Line -->
-          <div class="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-sky-400/40 via-cyan-400/60 to-indigo-400/40"></div>
+          <!-- Subtle Top Luminous Line & Ambient Glows -->
+          <div class="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400 to-transparent"></div>
+          <div class="absolute -right-20 -top-20 w-60 h-60 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -left-20 -bottom-20 w-60 h-60 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
           <!-- Right Side (in RTL): Avatar + Identity -->
-          <div class="flex items-center gap-4 sm:gap-5 flex-col sm:flex-row">
+          <div class="flex items-center gap-4 sm:gap-6 flex-col sm:flex-row w-full lg:w-auto relative z-10">
             
-            <!-- Avatar with Status -->
-            <div class="relative shrink-0">
-              <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-sky-400/50 shadow-[0_0_25px_rgba(56,189,248,0.3)] bg-slate-950 p-0.5">
-                <img src="assets/images/ibrahim_dev_avatar.jpg" alt="المهندس / إبراهيم الششتاوي" class="w-full h-full object-cover object-center rounded-xl" onerror="this.onerror=null; this.src='https://ibrahimelshishtawy.github.io/assets/assets/hero_seamless_3d.jpg';" />
+            <!-- Avatar with Executive Frame & Radar Status -->
+            <div class="relative shrink-0 group/avatar">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 3xl:w-28 3xl:h-28 rounded-2xl sm:rounded-3xl overflow-hidden p-1 bg-gradient-to-b from-sky-400/80 via-blue-500/40 to-indigo-500/80 shadow-[0_0_30px_rgba(56,189,248,0.35)]">
+                <img src="assets/images/ibrahim_dev_avatar.jpeg" alt="المهندس / إبراهيم الششتاوي" class="w-full h-full object-cover object-[center_12%] rounded-xl sm:rounded-2xl transition-transform duration-500 group-hover/avatar:scale-105" onerror="this.onerror=null; this.src='assets/images/logo_union.jpeg';" />
               </div>
-              <span class="absolute -bottom-1 -left-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-slate-900 shadow-[0_0_8px_#10b981]" title="مُبتكر ومطور المنصة"></span>
+              <span class="absolute -bottom-1 -left-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-slate-900 shadow-[0_0_12px_#10b981] flex items-center justify-center" title="مُبتكر ومطور المنصة">
+                <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              </span>
             </div>
 
             <!-- Details -->
-            <div class="flex flex-col">
-              <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 xs:gap-2">
-                <h3 class="text-base sm:text-xl 3xl:text-2xl font-black text-white">المهندس / إبراهيم الششتاوي</h3>
-                <span class="px-2.5 py-0.5 rounded-full bg-sky-500/15 text-sky-300 font-mono text-xs font-bold border border-sky-500/30">Dev Lead & Platform Architect</span>
-                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold border border-emerald-500/30">مُبتكر ومطور المنصة</span>
+            <div class="flex flex-col items-center sm:items-start text-center sm:text-right">
+              <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 xs:gap-2 mb-1.5">
+                <h3 class="text-lg sm:text-2xl 3xl:text-3xl font-black text-white tracking-wide">المهندس / إبراهيم الششتاوي</h3>
+                <span class="px-3 py-0.5 rounded-full bg-sky-500/15 text-sky-300 font-mono text-xs font-bold border border-sky-500/30 flex items-center gap-1 shadow-sm">
+                  <span class="material-symbols-outlined text-[14px]">terminal</span>
+                  <span>Dev Lead & Platform Architect</span>
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold border border-emerald-500/30 flex items-center gap-1 shadow-sm">
+                  <span class="material-symbols-outlined text-[14px]">verified</span>
+                  <span>مُبتكر ومطور المنصة</span>
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 text-xs font-bold border border-indigo-500/30 flex items-center gap-1 shadow-sm">
+                  <span class="material-symbols-outlined text-[14px]">school</span>
+                  <span>محاضر دبلومة بايثون</span>
+                </span>
               </div>
               <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">
-                مهندس برمجيات ومحاضر كورس البرمجة بالمبادرة • مطور ومعماري المنصة الرقمية
+                مهندس برمجيات ومحاضر كورس البرمجة بالمبادرة • مطور ومعماري المنصة الرقمية التفاعلية وهندسة النظم السحابية.
               </p>
+              
+              <!-- Tech Specialty Pills -->
+              <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 mt-2.5">
+                <span class="px-2.5 py-0.5 rounded-lg bg-slate-950/80 text-sky-300 font-mono text-[11px] border border-sky-500/20">Python 3.12</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-slate-950/80 text-cyan-300 font-mono text-[11px] border border-cyan-500/20">Full-Stack Systems</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-slate-950/80 text-indigo-300 font-mono text-[11px] border border-indigo-500/20">Cloud Architecture</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-slate-950/80 text-emerald-300 font-mono text-[11px] border border-emerald-500/20">Interactive IDE</span>
+              </div>
             </div>
           </div>
 
           <!-- Left Side (in RTL): Action Links in Clean Row -->
-          <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 w-full lg:w-auto shrink-0">
+          <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 w-full lg:w-auto shrink-0 mt-2 lg:mt-0 relative z-10">
             
             <!-- Portfolio Button -->
-            <a href="https://ibrahimelshishtawy.github.io/" target="_blank" rel="noopener noreferrer" class="btn-shimmer inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-[0_0_15px_rgba(56,189,248,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] no-underline" title="زيارة معرض الأعمال الشخصي للمهندس إبراهيم الششتاوي">
+            <a href="https://ibrahimelshishtawy.github.io/" target="_blank" rel="noopener noreferrer" class="btn-shimmer inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all hover:scale-[1.02] active:scale-[0.98] no-underline" title="زيارة معرض الأعمال الشخصي للمهندس إبراهيم الششتاوي">
               <span class="material-symbols-outlined text-[18px]">public</span>
               <span class="font-mono dir-ltr text-xs sm:text-sm">ibrahimelshishtawy.github.io</span>
               <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
             </a>
 
             <!-- WhatsApp Button -->
-            <a href="https://wa.me/201223070571" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-emerald-200 border border-emerald-500/40 hover:border-emerald-400 font-bold text-xs sm:text-sm transition-all hover:scale-[1.02] active:scale-[0.98] no-underline" title="تواصل واتساب مباشر">
+            <a href="https://wa.me/201223070571" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-emerald-200 border border-emerald-500/40 hover:border-emerald-400 font-bold text-xs sm:text-sm transition-all hover:scale-[1.02] active:scale-[0.98] no-underline shadow-sm" title="تواصل واتساب مباشر">
               <span class="material-symbols-outlined text-[18px] text-emerald-400">chat</span>
               <span class="font-mono dir-ltr text-xs sm:text-sm font-bold">01223070571</span>
             </a>
 
             <!-- GitHub Button -->
-            <a href="https://github.com/IbrahimElshishtawy" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 font-bold text-xs sm:text-sm transition-all hover:scale-[1.02] active:scale-[0.98] no-underline" title="حساب GitHub">
+            <a href="https://github.com/IbrahimElshishtawy" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-3 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500 font-bold text-xs sm:text-sm transition-all hover:scale-[1.02] active:scale-[0.98] no-underline shadow-sm" title="حساب GitHub">
               <span class="material-symbols-outlined text-[17px]">code</span>
               <span class="text-xs sm:text-sm">GitHub</span>
             </a>
@@ -961,8 +983,8 @@
       </section>
 
       <!-- SUPPORT & CONTACT BAR (Responsive Across All Displays) -->
-      <section class="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] 4xl:max-w-[2160px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12 py-2 sm:py-3.5 pb-6 sm:pb-8" id="contact-section">
-        <div class="rounded-2xl sm:rounded-3xl 3xl:rounded-[2rem] bg-slate-900/70 border border-slate-800 p-4 xs:p-5 sm:p-8 3xl:p-10 backdrop-blur-xl flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 shadow-xl text-center lg:text-right reveal-on-scroll interactive-hover-card">
+      <section class="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] 4xl:max-w-[2160px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12 py-2 sm:py-2.5 pb-1 sm:pb-2" id="contact-section">
+        <div class="rounded-3xl bg-gradient-to-r from-slate-900/95 via-[#0b1322]/95 to-slate-900/95 border border-slate-800 hover:border-emerald-500/40 p-4 xs:p-5 sm:p-7 3xl:p-8 backdrop-blur-xl flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 shadow-xl text-center lg:text-right reveal-on-scroll interactive-hover-card transition-all">
           <div class="flex flex-col gap-1">
             <span class="text-[10px] xs:text-xs 3xl:text-sm font-mono text-sky-400 uppercase tracking-wider">Official Support Desk</span>
             <h2 class="text-lg xs:text-xl sm:text-2xl 3xl:text-3xl font-black text-white">فريق اتحاد بشبابها في خدمتكم</h2>
@@ -1186,7 +1208,7 @@
   <!-- ============================================================
        FOOTER (Responsive Grid)
        ============================================================ -->
-  <footer class="w-full bg-[#070b14] border-t border-slate-800/90 py-8 sm:py-10 3xl:py-14 mt-12">
+  <footer class="w-full bg-[#070b14] border-t border-slate-800/90 py-5 sm:py-7 mt-4 sm:mt-6">
     <div class="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] 4xl:max-w-[2160px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12">
       <div class="flex flex-col lg:flex-row items-center justify-between gap-6 text-center lg:text-right">
         
