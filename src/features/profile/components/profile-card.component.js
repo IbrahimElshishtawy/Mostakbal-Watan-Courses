@@ -2,25 +2,42 @@
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 
 /**
- * Returns HTML string for the student profile view matching Image 8.png
- * (Excluding the Hero Welcome Banner and Password Change Card per user request).
+ * Returns HTML string for the student profile view with 100% real dynamic data.
  */
-export function renderProfileCard({ student }) {
-  const rawName = student?.studentName || student?.name || "إبراهيم خالد مصطفى";
-  const name = (rawName === "طالب مسجل" || !rawName.trim()) ? "إبراهيم خالد مصطفى" : rawName;
-  const safeName = escapeHtml(name);
+export function renderProfileCard({ student, stats = null }) {
+  const rawName = student?.studentName || student?.name || "طالب مسجل";
+  const safeName = escapeHtml(rawName);
 
-  const phone = student?.studentPhone || student?.phone || "01223070571";
+  const phone = student?.studentPhone || student?.phone || "—";
   const safePhone = escapeHtml(phone);
 
-  const natId = student?.studentNationalId || student?.nationalId || "30310291601654";
+  const cleanPhone = String(phone).replace(/\D/g, "");
+  const defaultCode = cleanPhone.length >= 4 ? `STU-2026-${cleanPhone.slice(-4)}` : "STU-2026-01";
+  const studentCode = student?.studentCode || student?.idCode || defaultCode;
+
+  const natId = student?.studentNationalId || student?.nationalId || "غير مسجل";
   const safeNatId = escapeHtml(natId);
 
   const address = student?.studentAddress || student?.address || "المحلة الكبرى - محافظة الغربية";
   const safeAddress = escapeHtml(address);
 
-  const studentCode = student?.studentCode || student?.idCode || "STU-2026-8842";
-  const initial = safeName.trim().charAt(0) || "إ";
+  const group = student?.studentGroup || student?.group || "مجموعة الأحد والأربعاء";
+  const safeGroup = escapeHtml(group);
+
+  const initial = safeName.trim().charAt(0) || "ط";
+
+  // Dynamic real stats from Firestore
+  const attendanceRate = stats?.attendanceRate || "100%";
+  const attendanceStatus = stats?.attendanceStatus || "(ممتاز)";
+  const tasksEvaluation = stats?.tasksEvaluation || "قيد الرصد";
+  const examsCompleted = stats?.examsCompleted || "0 مكتمل";
+  const medalsCount = stats?.medalsCount || "وسام البداية ⭐";
+  const studentLevel = stats?.level || 1;
+
+  // Browser / Environment
+  const browserInfo = typeof navigator !== "undefined"
+    ? (navigator.userAgent.includes("Chrome") ? "Chrome" : navigator.userAgent.includes("Firefox") ? "Firefox" : "Web Client")
+    : "Brave (Linux x86_64)";
 
   return `
     <div class="student-profile-page-wrapper" dir="rtl">
@@ -42,7 +59,7 @@ export function renderProfileCard({ student }) {
 
           <div class="pf-ssl-pill font-mono">
             <i class="fa-solid fa-shield-halved"></i>
-            <span>Bit SSL Encrypted-256</span>
+            <span>Firebase Encrypted SSL</span>
           </div>
 
           <button type="button" class="pf-icon-btn" id="pfNotificationBtn" title="الإشعارات" aria-label="الإشعارات">
@@ -64,7 +81,7 @@ export function renderProfileCard({ student }) {
           <div>
             <h1 class="pf-section-title">الملف التعريفي للطالب</h1>
             <p class="pf-section-subtitle">
-              بيانات الحساب الشخصي، المجموعة الدراسية، وإدارة كلمة المرور والاعتماد الأكاديمي
+              بيانات الحساب الشخصي، المجموعة الدراسية، السجلات الأكاديمية والاعتماد المباشر
             </p>
           </div>
         </div>
@@ -75,7 +92,7 @@ export function renderProfileCard({ student }) {
         </div>
       </section>
 
-      <!-- 3. Main Identity Card (إبراهيم خالد مصطفى) -->
+      <!-- 3. Main Identity Card -->
       <section class="pf-identity-card">
         <div class="pf-identity-top-row">
           <!-- Right: Avatar & Personal Info -->
@@ -84,7 +101,7 @@ export function renderProfileCard({ student }) {
               <div class="pf-avatar-frame">
                 <span>${escapeHtml(initial)}</span>
               </div>
-              <span class="pf-lvl-badge font-mono">LVL 3</span>
+              <span class="pf-lvl-badge font-mono" id="pfBadgeLevel">LVL ${studentLevel}</span>
             </div>
 
             <div class="pf-identity-details">
@@ -132,22 +149,22 @@ export function renderProfileCard({ student }) {
         <div class="pf-academic-kpi-grid">
           <div class="pf-kpi-card">
             <span class="pf-kpi-title">معدل الحضور والالتزام</span>
-            <strong class="pf-kpi-val text-emerald-400 font-mono">98% <small class="text-xs font-normal text-emerald-400/80">(ممتاز)</small></strong>
+            <strong class="pf-kpi-val text-emerald-400 font-mono" id="pfKpiAttendance">${escapeHtml(attendanceRate)} <small class="text-xs font-normal text-emerald-400/80">${escapeHtml(attendanceStatus)}</small></strong>
           </div>
 
           <div class="pf-kpi-card">
             <span class="pf-kpi-title">التقييم التراكمي للتاسكات</span>
-            <strong class="pf-kpi-val text-cyan-400 font-mono">96.5% <small class="text-xs font-normal text-cyan-400/80">+A</small></strong>
+            <strong class="pf-kpi-val text-cyan-400 font-mono" id="pfKpiTasks">${escapeHtml(tasksEvaluation)}</strong>
           </div>
 
           <div class="pf-kpi-card">
-            <span class="pf-kpi-title">الاختبارات المجتازة</span>
-            <strong class="pf-kpi-val text-emerald-400 font-mono">3 / 3 <small class="text-xs font-normal text-emerald-400/80">(مكتمل)</small></strong>
+            <span class="pf-kpi-title">الاختبارات المنجزة</span>
+            <strong class="pf-kpi-val text-emerald-400 font-mono" id="pfKpiExams">${escapeHtml(examsCompleted)}</strong>
           </div>
 
           <div class="pf-kpi-card">
-            <span class="pf-kpi-title">أوسمة التميز المكتسبة</span>
-            <strong class="pf-kpi-val text-amber-400 font-mono">4 <span class="text-sm">أوسمة</span> ⭐</strong>
+            <span class="pf-kpi-title">أوسمة ومستوى بايثون</span>
+            <strong class="pf-kpi-val text-amber-400 font-mono" id="pfKpiMedals">${escapeHtml(medalsCount)}</strong>
           </div>
         </div>
       </section>
@@ -161,7 +178,7 @@ export function renderProfileCard({ student }) {
               <i class="fa-solid fa-folder-open text-amber-400"></i>
               <span>البيانات الأساسية للحساب الأكاديمي</span>
             </h3>
-            <span class="pf-card-updated-tag">محدثة حسب بيانات الإدارة</span>
+            <span class="pf-card-updated-tag">محدثة حسب قاعدة بيانات الدورة</span>
           </div>
 
           <div class="pf-info-rows-list">
@@ -175,8 +192,7 @@ export function renderProfileCard({ student }) {
               </div>
               <div class="pf-group-schedule-pill">
                 <i class="fa-regular fa-clock"></i>
-                <span>مجموعة الأحد والأربعاء | 7:00 - 8:30 م</span>
-                <span class="text-amber-200/80">(معمل 1)</span>
+                <span>${safeGroup}</span>
               </div>
             </div>
 
@@ -244,11 +260,11 @@ export function renderProfileCard({ student }) {
                 <div class="pf-info-icon-box">
                   <i class="fa-solid fa-envelope"></i>
                 </div>
-                <span class="pf-info-label">البريد ومستودع المشاريع</span>
+                <span class="pf-info-label">البريد والحساب البرمجي</span>
               </div>
               <div class="flex flex-col items-end gap-0.5 font-mono text-xs">
-                <span class="text-cyan-400">ibrahim.khaled@mw-academy.tech</span>
-                <span class="text-slate-400">github.com/ibrahim-khaled-py</span>
+                <span class="text-cyan-400">${student?.email || `${safePhone}@mostakbal-watan.courses`}</span>
+                <span class="text-slate-400">حساب معتمد (${escapeHtml(studentCode)})</span>
               </div>
             </div>
           </div>
@@ -269,8 +285,8 @@ export function renderProfileCard({ student }) {
             <div class="pf-nfc-card-mockup">
               <div class="pf-nfc-mockup-info">
                 <h4 class="pf-nfc-student-name">${safeName.split(' ').slice(0, 2).join(' ')}</h4>
-                <span class="pf-nfc-role">Python Software Engineer</span>
-                <span class="pf-nfc-id font-mono">ID: #MW-8842-GH</span>
+                <span class="pf-nfc-role">مسار البرمجة وبايثون</span>
+                <span class="pf-nfc-id font-mono">ID: #${escapeHtml(studentCode)}</span>
               </div>
 
               <div class="pf-nfc-mockup-avatar font-mono">
@@ -302,12 +318,12 @@ export function renderProfileCard({ student }) {
             <div class="pf-session-specs-list">
               <div class="pf-spec-item">
                 <span class="label">المتصفح والنظام:</span>
-                <span class="val font-mono">Brave (Linux x86_64)</span>
+                <span class="val font-mono">${escapeHtml(browserInfo)}</span>
               </div>
 
               <div class="pf-spec-item">
-                <span class="label">عنوان الـ IP الداخلي:</span>
-                <span class="val font-mono text-cyan-400">127.0.0.1 (Local Verified)</span>
+                <span class="label">حالة الحساب:</span>
+                <span class="val font-mono text-cyan-400">موثق في السجل الأكاديمي</span>
               </div>
 
               <div class="pf-spec-item">

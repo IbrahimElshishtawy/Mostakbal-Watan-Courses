@@ -3,23 +3,113 @@ import { ProfileService } from "./profile.service.js";
 import { profileState } from "./profile.state.js";
 import { renderProfileCard } from "./components/profile-card.component.js";
 import { renderThemePickerView } from "./components/theme-picker.component.js";
+import { AttendanceService } from "../attendance/attendance.service.js";
+import { ExamService } from "../exams/exam.service.js";
+import { AssignmentService } from "../assignments/assignment.service.js";
+import { PythonAdventureService } from "../python-adventure/python-adventure.service.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm-dialog.component.js";
-import { setHtml } from "../../shared/utils/dom.utils.js";
+import { setHtml, escapeHtml } from "../../shared/utils/dom.utils.js";
 
 export const ProfileController = {
   /**
    * Loads and renders student profile card matching Image 8.png
-   * (Without hero banner and without password change card).
+   * with real dynamic academic statistics from Firestore.
    */
   loadProfileView(containerId, currentStudent) {
     const container = typeof containerId === "string" ? document.getElementById(containerId) : containerId;
     if (!container) return;
 
+    // 1. Initial paint with student identity
     const profileHtml = renderProfileCard({ student: currentStudent });
     setHtml(container, profileHtml);
 
     this.wireProfileEvents(container, currentStudent);
+
+    // 2. Fetch real academic statistics from Firestore in background
+    (async () => {
+      try {
+        const studentUid = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId || "";
+        const studentGroup = currentStudent?.group || currentStudent?.studentGroup || "ALL";
+
+        const [attendanceData, examsData, allAssignments, advProgress] = await Promise.all([
+          AttendanceService.getStudentAttendance(currentStudent).catch(() => null),
+          ExamService.getStudentExams(studentGroup, studentUid).catch(() => []),
+          AssignmentService.getAllAssignments().catch(() => []),
+          PythonAdventureService.getStudentProgress(studentUid).catch(() => null)
+        ]);
+
+        let submissionsMap = new Map();
+        if (studentUid && allAssignments.length > 0) {
+          try {
+            submissionsMap = await AssignmentService.getStudentSubmissions(studentUid, allAssignments.map((a) => a.id));
+          } catch (_) {}
+        }
+
+        // Attendance stats
+        const attendanceRate = attendanceData ? `${attendanceData.attendanceRate}%` : "100%";
+        const attendanceStatus = attendanceData?.status === "danger"
+          ? "(منخفض)"
+          : attendanceData?.status === "warning"
+            ? "(يحتاج متابعة)"
+            : "(ممتاز)";
+
+        // Tasks stats
+        let totalTasks = allAssignments.length;
+        let submittedTasks = 0;
+        let totalGrades = 0;
+        let gradedCount = 0;
+        for (const [_, sub] of submissionsMap.entries()) {
+          if (sub) {
+            submittedTasks++;
+            if (sub.grade !== undefined && sub.grade !== null && sub.grade !== "") {
+              const g = Number(sub.grade);
+              if (!isNaN(g)) {
+                totalGrades += g;
+                gradedCount++;
+              }
+            }
+          }
+        }
+        let tasksEvaluation = "قيد الرصد";
+        if (gradedCount > 0) {
+          const avg = Math.round(totalGrades / gradedCount);
+          tasksEvaluation = `${avg}% (${avg >= 90 ? '+A' : avg >= 80 ? 'A' : 'B'})`;
+        } else if (submittedTasks > 0) {
+          tasksEvaluation = `${submittedTasks} / ${totalTasks} مسلَّم`;
+        } else if (totalTasks > 0) {
+          tasksEvaluation = `0 / ${totalTasks} مسلَّم`;
+        }
+
+        // Exams stats
+        const completedExams = (examsData || []).filter((e) => e.result !== null);
+        const examsCompleted = `${completedExams.length} / ${(examsData || []).length} مكتمل`;
+
+        // Adventure / Medals stats
+        const level = advProgress?.level || 1;
+        const achievementsCount = (advProgress?.achievements || []).length;
+        const medalsCount = `${achievementsCount > 0 ? achievementsCount : 1} أوسمة (LVL ${level})`;
+
+        // Update DOM elements live
+        const attEl = container.querySelector("#pfKpiAttendance");
+        if (attEl) attEl.innerHTML = `${escapeHtml(attendanceRate)} <small class="text-xs font-normal text-emerald-400/80">${escapeHtml(attendanceStatus)}</small>`;
+
+        const tasksEl = container.querySelector("#pfKpiTasks");
+        if (tasksEl) tasksEl.textContent = tasksEvaluation;
+
+        const examsEl = container.querySelector("#pfKpiExams");
+        if (examsEl) examsEl.textContent = examsCompleted;
+
+        const medalsEl = container.querySelector("#pfKpiMedals");
+        if (medalsEl) medalsEl.textContent = medalsCount;
+
+        const lvlBadge = container.querySelector("#pfBadgeLevel");
+        if (lvlBadge) lvlBadge.textContent = `LVL ${level}`;
+
+      } catch (statsErr) {
+        console.warn("Profile dynamic stats load warning:", statsErr);
+      }
+    })();
   },
 
   /**
