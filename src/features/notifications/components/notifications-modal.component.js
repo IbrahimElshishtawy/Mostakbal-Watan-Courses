@@ -17,23 +17,21 @@ export function renderNotificationBellButton(unreadCount = 0) {
     <button
       type="button"
       id="openNotificationsModalBtn"
-      class="btn btn-ghost btn-sm position-relative d-inline-flex items-center justify-center"
-      style="padding:0.45rem;border-radius:var(--radius-full);width:38px;height:38px;"
+      class="pro-bell-btn position-relative d-inline-flex items-center justify-center"
       aria-label="عرض الإشعارات (${unreadCount} إشعار غير مقروء)"
-      title="الإشعارات"
+      title="الإشعارات والتنبيهات الأكاديمية"
     >
-      <span style="font-size:1.25rem;" aria-hidden="true">🔔</span>
-      ${
-        hasUnread
-          ? `<span
-              class="badge badge-danger position-absolute"
-              id="notificationsUnreadBadge"
-              style="top:2px;inset-inline-end:2px;min-width:18px;height:18px;border-radius:10px;font-size:0.65rem;padding:0 4px;font-weight:900;display:flex;align-items:center;justify-content:center;"
-            >
-              ${unreadCount > 9 ? "9+" : unreadCount}
-            </span>`
-          : ""
-      }
+      <div class="bell-icon-inner">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      ${hasUnread ? `<span class="bell-ping-ring"></span>` : ""}
+      <span
+        class="bell-badge-pill"
+        id="notificationsUnreadBadge"
+        style="${hasUnread ? 'display:flex;' : 'display:none;'}"
+      >
+        ${unreadCount > 9 ? "9+" : unreadCount}
+      </span>
     </button>
   `;
 }

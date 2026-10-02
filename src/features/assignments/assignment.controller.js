@@ -143,120 +143,58 @@ export const AssignmentController = {
    */
   bindStudentTasksCenterEvents(container, currentStudent, relevantAssignments, submissionsMap) {
     // 1. Starter Code Download Handler
+    // 1. Starter Code Download Handler (Dynamic per active task)
     const btnDownloadStarter = container.querySelector("#btnDownloadStarterCode");
     btnDownloadStarter?.addEventListener("click", () => {
-      const templateCode = `"""
-مشروع 1: آلة حاسبة تفاعلية متقدمة مع معالجة الاستثناءات بلغة بايثون
-Interactive Python CLI Calculator with Exception Handling (try-except-finally)
-منصة اتحاد بشبابها للتعليم الرقمي - مسار بايثون وهندسة النظم
-المحاضرة 03: معالجة الاستثناءات والمنطق الحسابي
-المطور / الطالب: ${currentStudent?.name || "إبراهيم خالد"}
+      const activeTask = relevantAssignments.find((a) => a.id === currentAssignmentId) || relevantAssignments[0];
+      const codeEditor = container.querySelector("#heroTaskCodeEditor");
+      const starterCode = (codeEditor?.value || activeTask?.starterCode || `"""
+مشروع: ${activeTask?.title || "مشروع تطبيقي"} - لغة بايثون
+المطلوب: كتابة الدوال واختبار مخرجاتها في الكونسول قبل الاعتماد
+المطور / الطالب: ${currentStudent?.name || "طالب مسجل"}
 """
 
-def add(a: float, b: float) -> float:
-    """جمع عددين وإرجاع الناتج."""
-    return a + b
-
-def subtract(a: float, b: float) -> float:
-    """طرح عددين وإرجاع الناتج."""
-    return a - b
-
-def multiply(a: float, b: float) -> float:
-    """ضرب عددين وإرجاع الناتج."""
-    return a * b
-
-def divide(a: float, b: float) -> float:
-    """قسمة عددين مع معالجة القسمة على الصفر."""
-    if b == 0:
-        raise ZeroDivisionError("لا يمكن القسمة على الصفر إطلاقاً.")
-    return a / b
-
-def power(a: float, b: float) -> float:
-    """حساب الأس (a مرفوع للقوة b)."""
-    return a ** b
-
-def calculate(num1: float, operator: str, num2: float) -> float:
-    """توجيه العملية الحسابية للدالة المنفصلة المناسبة."""
-    ops = {
-        '+': add,
-        '-': subtract,
-        '*': multiply,
-        '/': divide,
-        '^': power
-    }
-    if operator not in ops:
-        raise ValueError(f"العملية الحسابية غير مدعومة: {operator}")
-    return ops[operator](num1, num2)
-
 def main():
-    history = []
-    print("=" * 65)
-    print("  آلة حاسبة تفاعلية متقدمة - بايثون CLI (TASK-PY-03)")
-    print("  العمليات المدعومة: +, -, *, /, ^")
-    print("  الأوامر: اكتب 'history' لعرض السجل أو 'exit' للخروج بأمان")
-    print("=" * 65)
-
-    while True:
-        try:
-            user_entry = input("\\n[Calc CLI] أدخل العملية أو الأمر: ").strip()
-            if not user_entry:
-                continue
-
-            if user_entry.lower() == 'exit':
-                print("\\nشكراً لاستخدامك الآلة الحاسبة. تم إنهاء البرنامج بسلام ونجاح.")
-                break
-
-            if user_entry.lower() == 'history':
-                print("\\n--- سجل العمليات الحسابية المتتالية ---")
-                if not history:
-                    print("السجل فارغ حالياً.")
-                for idx, record in enumerate(history, 1):
-                    print(f"  {idx}. {record}")
-                continue
-
-            parts = user_entry.split()
-            if len(parts) != 3:
-                print("[تنبيه]: يرجى إدخال العملية بالصيغة: <رقم1> <العملية> <رقم2> (مثال: 15.5 + 4.5)")
-                continue
-
-            n1 = float(parts[0])
-            op = parts[1]
-            n2 = float(parts[2])
-
-            ans = calculate(n1, op, n2)
-            log_line = f"{n1} {op} {n2} = {ans}"
-            history.append(log_line)
-            print(f"-> النتيجة: {ans}")
-
-        except ZeroDivisionError as zde:
-            print(f"[خطأ حسابي]: {zde}")
-        except ValueError as ve:
-            print(f"[خطأ في الإدخال]: {ve}")
-        except Exception as ex:
-            print(f"[استثناء غير متوقع]: {ex}")
-        finally:
-            # يمكن وضع عمليات تنظيف أو تسجيل هنا
-            pass
+    print("مرحباً بك في مشروع: ${activeTask?.title || 'بايثون'} 🐍")
 
 if __name__ == "__main__":
     main()
-`;
-      const blob = new Blob([templateCode], { type: "text/x-python;charset=utf-8" });
+`).trim();
+
+      const fileName = `starter_${activeTask?.code || activeTask?.id || 'python_task'}.py`;
+      const blob = new Blob([starterCode], { type: "text/x-python;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "template_task_03_calculator.py";
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast("تم تنزيل ملف Starter Code (template.py) بنجاح! 📥", "success");
+      showToast("تم تنزيل ملف قالب الكود (Starter Code) بنجاح! 📥", "success");
     });
 
-    // 2. Task Specs PDF Modal Handler
+    // 2. Task Specs Inline Drawer Handler (Direct inside card, NO MODALS!)
     const btnViewSpecs = container.querySelector("#btnViewTaskSpecsPdf");
+    const specsDrawer = container.querySelector("#heroInlineSpecsDrawer");
+    const btnCloseSpecs = container.querySelector("#btnCloseSpecsDrawer");
+
     btnViewSpecs?.addEventListener("click", () => {
-      openModal(TASK_SPECS_MODAL_ID);
+      const activeTask = relevantAssignments.find((a) => a.id === currentAssignmentId);
+      if (activeTask?.fileUrl) {
+        window.open(activeTask.fileUrl, "_blank", "noopener,noreferrer");
+      } else if (specsDrawer) {
+        specsDrawer.classList.toggle("d-none");
+        if (!specsDrawer.classList.contains("d-none")) {
+          specsDrawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      } else {
+        showToast("كافة المتطلبات والمعايير الفنية للتكليف موضحة في القائمة أعلاه 📋", "info");
+      }
+    });
+
+    btnCloseSpecs?.addEventListener("click", () => {
+      specsDrawer?.classList.add("d-none");
     });
 
     // 3. Student Guide Manual Modal Handler
@@ -265,10 +203,16 @@ if __name__ == "__main__":
       openModal(TASKS_MANUAL_MODAL_ID);
     });
 
-    // 4. Notifications Bell Handler
+    // 4. Professional Notifications Bell Handler
     const btnBell = container.querySelector("#btnTasksNotification");
-    btnBell?.addEventListener("click", () => {
-      showToast("تنبيه أكاديمي: متبقي يومان على موعد تسليم مشروع TASK-PY-03 (الآلة الحاسبة) ⏰", "info");
+    btnBell?.addEventListener("click", async () => {
+      try {
+        const { NotificationsController } = await import("../notifications/notifications.controller.js");
+        NotificationsController.openNotificationsModal();
+      } catch (err) {
+        console.warn("Could not open notifications modal:", err);
+        showToast("مركز الإشعارات والتنبيهات الأكاديمية 🔔", "info");
+      }
     });
 
     // 5. Interactive Python Code Editor & Live Console Workspace
@@ -601,16 +545,7 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
       consoleLiveBadge?.classList.add("d-none");
     });
 
-    // Resubmit Toggle
-    btnToggleResubmit?.addEventListener("click", () => {
-      heroFormWrap?.classList.toggle("d-none");
-      if (!heroFormWrap?.classList.contains("d-none")) {
-        updateLineNumbers();
-        codeEditor?.focus();
-      }
-    });
-
-    // Submit Hero Assignment (Direct Code Submission)
+    // 7. Submit Hero Assignment (Direct Code Submission from Card - NO MODALS!)
     btnSubmitHero?.addEventListener("click", async () => {
       const code = (codeEditor?.value || "").trim();
       const assignmentId = btnSubmitHero.getAttribute("data-assignment-id") || currentAssignmentId;
@@ -632,37 +567,61 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
         return;
       }
 
-      const confirmed = await showConfirmDialog({
-        title: "تأكيد تسليم الكود البرمجي",
-        message: "هل أنت متأكد من تسليم واعتماد هذا الكود للتقييم الأكاديمي؟ تم توثيق المخرجات وتجربتها في الكونسول.",
-        confirmText: "تسليم واعتماد الكود 🚀",
-        cancelText: "مراجعة الكود",
-        variant: "primary",
-        icon: "📤"
-      });
-
-      if (!confirmed) return;
-
       try {
         btnSubmitHero.disabled = true;
         if (btnSubmitText) {
-          btnSubmitText.innerHTML = `<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري الاعتماد والتسليم...`;
+          btnSubmitText.innerHTML = `<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري تسليم واعتماد الكود... 🚀`;
         }
 
-        await AssignmentService.submitTask(assignmentId, code, null);
+        const result = await AssignmentService.submitTask(assignmentId, code, null);
+
+        // Optimistically record submission in memory
+        const studentUid = auth.currentUser?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
+        const studentName = currentStudent?.studentName || currentStudent?.name || "طالب مسجل";
+        const newSubmission = {
+          assignmentId,
+          studentUid,
+          studentId: studentUid,
+          studentName,
+          answerText: code,
+          fileUrl: result?.fileUrl || "",
+          grade: null,
+          score: null,
+          feedback: null,
+          submittedAt: new Date()
+        };
+
+        submissionsMap.set(assignmentId, newSubmission);
+        assignmentState.set("submissions", new Map(submissionsMap));
 
         // Clear draft from localStorage
         localStorage.removeItem(`task_draft_${assignmentId}`);
 
         showToast("تم تسليم واعتماد الكود البرمجي بنجاح وحفظه في حسابك الأكاديمي! 🎉", "success");
 
-        // Reload assignments to reflect submitted state
-        this.loadStudentAssignments(container, currentStudent);
+        // Immediately update Student Tasks Center with active task in submitted state
+        const activeTask = relevantAssignments.find((a) => a.id === assignmentId) || heroTask;
+        setHtml(
+          container,
+          renderStudentTasksCenter({
+            student: currentStudent,
+            activeTask,
+            directoryTasks: relevantAssignments,
+            submissionsMap
+          })
+        );
+        this.bindStudentTasksCenterEvents(container, currentStudent, relevantAssignments, submissionsMap);
+
+        const heroEl = container.querySelector("#heroActiveAssignmentSection");
+        if (heroEl) {
+          heroEl.classList.add("hero-task-pulse-highlight");
+          setTimeout(() => heroEl.classList.remove("hero-task-pulse-highlight"), 1200);
+        }
       } catch (submitErr) {
         console.error("Submission failed:", submitErr);
         btnSubmitHero.disabled = false;
         if (btnSubmitText) {
-          btnSubmitText.textContent = "تسليم واعتماد الكود للتقييم";
+          btnSubmitText.textContent = isHeroSubmitted ? "تحديث واعتماد الكود المسلم 🚀" : "تسليم واعتماد الكود للتقييم 🚀";
         }
         showToast(submitErr.message || "حدث خطأ أثناء اعتماد الحل. يرجى المحاولة مرة أخرى.", "error");
       }
@@ -691,111 +650,58 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
       });
     });
 
-    // 9. Card Action: Select Task to be Hero
+    // Helper: Switches active task smoothly into the Hero Code Editor Card (NO MODALS!)
+    const switchToTask = (assignmentId) => {
+      if (!assignmentId) return;
+
+      // 1. Save current task code draft before switching
+      const prevId = container.querySelector("#heroActiveAssignmentSection")?.getAttribute("data-hero-task-id");
+      const prevCode = container.querySelector("#heroTaskCodeEditor")?.value;
+      if (prevId && prevCode !== undefined) {
+        localStorage.setItem(`task_draft_${prevId}`, prevCode);
+      }
+
+      // 2. Locate target task
+      const selected = relevantAssignments.find((a) => a.id === assignmentId);
+      if (!selected) return;
+
+      // 3. Render Student Tasks Center with selected task as Hero
+      setHtml(
+        container,
+        renderStudentTasksCenter({
+          student: currentStudent,
+          activeTask: selected,
+          directoryTasks: relevantAssignments,
+          submissionsMap
+        })
+      );
+      this.bindStudentTasksCenterEvents(container, currentStudent, relevantAssignments, submissionsMap);
+
+      // 4. Smooth scroll and highlight Hero section
+      const heroEl = container.querySelector("#heroActiveAssignmentSection");
+      if (heroEl) {
+        heroEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        heroEl.classList.add("hero-task-pulse-highlight");
+        setTimeout(() => heroEl.classList.remove("hero-task-pulse-highlight"), 1200);
+      }
+    };
+
+    // 9. Directory Card Click: Clicking ANY card loads it into the Hero Editor!
+    container.querySelectorAll(".directory-task-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const assignmentId = card.getAttribute("data-task-id");
+        switchToTask(assignmentId);
+      });
+    });
+
+    // 10. Card Actions: Buttons with data-action="select-task"
     container.querySelectorAll('[data-action="select-task"]').forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
         const assignmentId = btn.getAttribute("data-assignment-id");
-        const selected = relevantAssignments.find((a) => a.id === assignmentId);
-        if (!selected) return;
-
-        setHtml(
-          container,
-          renderStudentTasksCenter({
-            student: currentStudent,
-            activeTask: selected,
-            directoryTasks: relevantAssignments,
-            submissionsMap
-          })
-        );
-        this.bindStudentTasksCenterEvents(container, currentStudent, relevantAssignments, submissionsMap);
-        container.querySelector("#heroActiveAssignmentSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        switchToTask(assignmentId);
       });
     });
-
-    // 10. Card Action: View Assignment Specs/Details
-    container.querySelectorAll('[data-action="view-specs"], #btnViewTaskSpecsPdf').forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const assignmentId = btn.getAttribute("data-assignment-id") || container.querySelector("#heroActiveAssignmentSection")?.getAttribute("data-hero-task-id");
-        if (assignmentId) {
-          this.openStudentAssignmentDetails(assignmentId, currentStudent);
-        } else {
-          openModal(TASK_SPECS_MODAL_ID);
-        }
-      });
-    });
-
-    // 11. Card Action: View Submitted Code
-    container.querySelectorAll('[data-action="view-code"]').forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const assignmentId = btn.getAttribute("data-assignment-id");
-        const sub = submissionsMap.get(assignmentId);
-        const task = relevantAssignments.find((a) => a.id === assignmentId);
-
-        const fileNameEl = document.getElementById("submittedCodeFileName");
-        const dateEl = document.getElementById("submittedCodeDate");
-        const codeBlock = document.getElementById("submittedCodeBlock");
-        const titleEl = document.getElementById("submittedCodeModalTitle");
-
-        if (titleEl) titleEl.textContent = `استعراض كود: ${task?.title || "الحل المسلم"}`;
-        if (fileNameEl) fileNameEl.textContent = sub?.fileName || (sub?.fileUrl ? "ملف حل مرفق" : "كود نصي / رابط");
-        if (dateEl) dateEl.textContent = sub?.submittedAt ? formatDateTime(sub.submittedAt) : "تم التسليم";
-
-        if (codeBlock) {
-          let content = "";
-          if (sub?.answerText) {
-            content += `# إجابة وملاحظات الطالب:\n${sub.answerText}\n\n`;
-          }
-          if (sub?.fileUrl) {
-            content += `# رابط الملف المرفوع في التخزين السحابي:\n# ${sub.fileUrl}\n`;
-          }
-          if (!content) {
-            content = "# لم يتم تسجيل نص برمجي إضافي في هذا التسليم.";
-          }
-          codeBlock.textContent = content;
-        }
-
-        openModal(SUBMITTED_CODE_MODAL_ID);
-      });
-    });
-
-    // 12. Card Action: View Evaluation Report
-    container.querySelectorAll('[data-action="view-report"]').forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const assignmentId = btn.getAttribute("data-assignment-id");
-        const sub = submissionsMap.get(assignmentId);
-        const task = relevantAssignments.find((a) => a.id === assignmentId);
-
-        const taskCodeEl = document.getElementById("evalReportTaskCode");
-        const taskTitleEl = document.getElementById("evalReportTaskTitle");
-        const scoreEl = document.getElementById("evalReportScore");
-        const feedbackEl = document.getElementById("evalReportFeedbackText");
-        const rubricList = document.getElementById("evalReportRubricList");
-
-        if (taskCodeEl) taskCodeEl.textContent = `${task?.code || task?.id || 'TASK'} • ${task?.group || 'مسار بايثون'}`;
-        if (taskTitleEl) taskTitleEl.textContent = task?.title || "واجب تطبيقي";
-        if (scoreEl) scoreEl.textContent = `${sub?.grade ?? sub?.score ?? '—'} / ${task?.maxScore || 100}`;
-        if (feedbackEl) feedbackEl.textContent = sub?.feedback ? `"${sub.feedback}"` : "تم اعتماد ومراجعة الحل بنجاح.";
-
-        if (rubricList) {
-          rubricList.innerHTML = `
-            <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-              <span>صحة المنطق والحل البرمجي</span>
-              <span class="font-mono text-emerald-400 font-bold">معتمد</span>
-            </div>
-            <div class="flex justify-between text-xs p-2 rounded bg-brand-surface border border-brand-border">
-              <span>الالتزام بمعايير التسليم</span>
-              <span class="font-mono text-emerald-400 font-bold">مستوفى</span>
-            </div>
-          `;
-        }
-
-        openModal(TASK_EVALUATION_REPORT_MODAL_ID);
-      });
-    });
-
-    // 12. Modal Print Helpers
-    document.getElementById("btnPrintTaskSpecsBtn")?.addEventListener("click", () => window.print());
-    document.getElementById("btnPrintEvalReportBtn")?.addEventListener("click", () => window.print());
   },
 
   /**

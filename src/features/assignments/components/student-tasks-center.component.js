@@ -211,8 +211,11 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
             <span>دليل الطالب</span>
           </button>
 
-          <button type="button" class="tasks-bell-btn" id="btnTasksNotification" aria-label="الإشعارات" title="الإشعارات">
-            <i class="fa-regular fa-bell"></i>
+          <button type="button" class="tasks-bell-btn pro-bell-btn" id="btnTasksNotification" aria-label="الإشعارات الأكاديمية" title="مركز الإشعارات والتنبيهات">
+            <span class="bell-icon-inner">
+              <i class="fa-solid fa-bell"></i>
+            </span>
+            <span class="bell-ping-ring"></span>
             <span class="notification-indicator"></span>
           </button>
         </div>
@@ -315,7 +318,7 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
               </div>
 
               <p class="assignment-description">
-                ${escapeHtml(heroTask.description || "المطلوب كتابة الكود البرمجي وفقاً للمتطلبات والشروط الموضحة وتسليمه عبر النموذج المرفق.")}
+                ${escapeHtml(heroTask.description || "المطلوب كتابة الكود البرمجي وفقاً للمتطلبات والشروط الموضحة وتسليمه عبر المحرر البرمجي أدناه مباشرة.")}
               </p>
 
               <!-- Technical Requirements Checklist -->
@@ -344,7 +347,7 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
                 </div>
               </div>
 
-              <!-- Download Supporting Materials (if any) -->
+              <!-- Download Supporting Materials & Specs -->
               <div class="assignment-downloads-row">
                 ${heroTask.fileUrl ? `
                   <a href="${escapeHtml(heroTask.fileUrl)}" target="_blank" rel="noopener noreferrer" class="btn-download-material" download>
@@ -361,6 +364,34 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
                   <i class="fa-regular fa-file-pdf text-rose-400"></i>
                   <span>كراسة مواصفات التكليف</span>
                 </button>
+              </div>
+
+              <!-- Inline Specs Drawer (Toggled inline, NO MODAL!) -->
+              <div class="hero-inline-specs-drawer d-none" id="heroInlineSpecsDrawer">
+                <div class="specs-drawer-header">
+                  <div class="flex items-center gap-2 text-rose-400 font-bold text-xs">
+                    <i class="fa-regular fa-file-lines"></i>
+                    <span>المواصفات والمعايير الفنية للتكليف:</span>
+                  </div>
+                  <button type="button" class="specs-drawer-close" id="btnCloseSpecsDrawer" aria-label="إغلاق">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+                <div class="specs-drawer-body">
+                  <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                    ${escapeHtml(heroTask.description || "قم بكتابة كود بايثون وحل متطلبات التكليف مباشرة في المحرر على اليسار، واختبر المخرجات في الكونسول ثم اضغط تسليم الحل.")}
+                  </p>
+                  <div class="specs-notes-list">
+                    <div class="specs-note-item">
+                      <i class="fa-solid fa-shield-halved text-cyan-400"></i>
+                      <span>يتم تقييم الكود بناءً على صحة المنطق، معالجة الاستثناءات، ونظافة الكود.</span>
+                    </div>
+                    <div class="specs-note-item">
+                      <i class="fa-solid fa-rotate text-emerald-400"></i>
+                      <span>يمكنك تعديل الكود في المحرر وإعادة تسليمه في أي وقت طالما أن موعد التسليم مفتوح.</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -386,57 +417,33 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
                 </div>
 
                 ${isHeroSubmitted ? `
-                  <!-- Already Submitted State Box -->
-                  <div class="submission-already-done p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/20 text-right space-y-3 mb-3">
-                    <div class="flex items-center justify-between">
-                      <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-check"></i>
-                        ${isHeroGraded ? "تم الاعتماد والتقييم" : "تم استلام واعتماد كودك بنجاح"}
+                  <!-- Compact Submission Status Strip inside Editor Card -->
+                  <div class="submission-status-banner ${isHeroGraded ? 'is-graded' : 'is-submitted'}">
+                    <div class="status-banner-lead">
+                      <span class="status-banner-badge">
+                        <i class="fa-solid ${isHeroGraded ? 'fa-award text-amber-300' : 'fa-circle-check text-emerald-400'}"></i>
+                        <span>${isHeroGraded ? `معتمد ومقيّم: ${heroSubmission.grade ?? heroSubmission.score} / ${heroTask.maxScore || 100}` : "تم استلام الكود بنجاح • قيد مراجعة المحاضر"}</span>
                       </span>
                       <small class="text-slate-400 font-mono text-[11px]">
                         ${formatDateTime(heroSubmission.submittedAt || new Date())}
                       </small>
                     </div>
 
-                    ${isHeroGraded ? `
-                      <div class="p-3 rounded-lg bg-emerald-900/30 border border-emerald-500/20">
-                        <div class="flex justify-between items-center mb-1">
-                          <span class="text-xs text-slate-300">الدرجة النهائية:</span>
-                          <strong class="text-emerald-400 font-mono text-base">${heroSubmission.grade ?? heroSubmission.score} / ${heroTask.maxScore || 100}</strong>
-                        </div>
-                        ${heroSubmission.feedback ? `
-                          <p class="text-xs text-slate-300 mt-1 italic">
-                            <i class="fa-solid fa-quote-right text-emerald-400 ml-1"></i>
-                            "${escapeHtml(heroSubmission.feedback)}"
-                          </p>
-                        ` : ""}
+                    ${isHeroGraded && heroSubmission.feedback ? `
+                      <div class="status-banner-feedback">
+                        <i class="fa-solid fa-chalkboard-user text-emerald-400"></i>
+                        <span><strong>ملاحظة المصحح:</strong> "${escapeHtml(heroSubmission.feedback)}"</span>
                       </div>
                     ` : `
-                      <p class="text-xs text-slate-300 leading-relaxed">
-                        كودك قيد المراجعة والتقييم من قبل المحاضر. يمكنك تعديل الكود وإعادة تشغيله في الكونسول وتسليمه مجدداً في أي وقت.
+                      <p class="status-banner-note">
+                        كودك مسجل في المنصة. يمكنك تجربته وتعديله مباشرة في المحرر أدناه وتحديث التسليم في أي وقت.
                       </p>
                     `}
-
-                    <!-- Submitted Code Preview Block -->
-                    <div class="submitted-code-preview-wrap">
-                      <div class="flex items-center justify-between text-xs text-slate-400 mb-1 font-mono">
-                        <span><i class="fa-brands fa-python text-brand-cyan ml-1"></i> الكود المسلم حالياً:</span>
-                        <button type="button" class="text-brand-cyan hover:underline text-[11px]" id="btnCopySubmittedCode">
-                          <i class="fa-regular fa-copy ml-0.5"></i> نسخ الكود
-                        </button>
-                      </div>
-                      <pre class="submitted-code-preview-pre" dir="ltr" id="previewSubmittedCodePre">${escapeHtml(heroSubmission.answerText || "# لا يوجد كود مسجل")}</pre>
-                    </div>
-
-                    <button type="button" class="btn btn-secondary w-full text-xs py-2 mt-2" id="btnToggleHeroResubmit">
-                      <i class="fa-solid fa-code ml-1 text-brand-cyan"></i>
-                      تعديل الكود في المحرر وتجربته مجدداً
-                    </button>
                   </div>
                 ` : ""}
 
-                <!-- Submission Code Workspace -->
-                <div class="submission-code-workspace ${isHeroSubmitted ? 'd-none' : ''}" id="heroSubmissionFormWrap">
+                <!-- Submission Code Workspace (ALWAYS VISIBLE & EDITABLE DIRECTLY) -->
+                <div class="submission-code-workspace" id="heroSubmissionFormWrap">
                   
                   <!-- Workspace Navigation Tabs (Editor vs Console vs Split) -->
                   <div class="workspace-tabs-bar">
@@ -560,21 +567,21 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
 
                   </div>
 
-                  <!-- Submission Action Bar -->
+                  <!-- Submission Action Bar (Direct Code Submission from Card!) -->
                   <div class="submission-action-area">
                     <div class="submission-verify-notice">
                       <i class="fa-solid fa-circle-check text-brand-cyan"></i>
-                      <span>تأكد من تجربة وتشغيل الكود في الكونسول وظهور النتائج المطلوبة بنجاح قبل الاعتماد النهائي.</span>
+                      <span>${isHeroSubmitted ? "يمكنك اختبار الكود في الكونسول ثم الضغط على الزر أدناه لتحديث واعتماد الكود المسلم مباشرة." : "تأكد من تجربة وتشغيل الكود في الكونسول وظهور النتائج المطلوبة بنجاح قبل الاعتماد النهائي."}</span>
                     </div>
 
                     <button type="button" class="btn-submit-assignment" id="btnSubmitHeroAssignment" data-assignment-id="${escapeHtml(heroTask.id)}">
                       <i class="fa-solid fa-paper-plane"></i>
-                      <span id="btnSubmitHeroAssignmentText">${isHeroSubmitted ? "تحديث واعتماد الكود المسلم" : "تسليم واعتماد الكود للتقييم"}</span>
+                      <span id="btnSubmitHeroAssignmentText">${isHeroSubmitted ? "تحديث واعتماد الكود المسلم 🚀" : "تسليم واعتماد الكود للتقييم 🚀"}</span>
                     </button>
 
                     <p class="submission-subtext">
                       <i class="fa-solid fa-lock text-[11px] ml-1"></i>
-                      يتم توثيق الكود ووقت التسليم وحفظه مباشرة في حسابك الأكاديمي لدى المحاضر
+                      يتم تسليم الكود وتوثيق الوقت مباشرة في حسابك الأكاديمي لدى المحاضر من هذا الكارد مباشرة
                     </p>
                   </div>
 
@@ -616,16 +623,24 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
           </div>
         </div>
 
-        <!-- Assignments Cards Grid -->
+        <!-- Assignments Cards Grid: Clicking any card loads it into the Hero Editor! -->
         <div class="tasks-cards-grid" id="tasksCardsGridContainer">
           ${directoryTasks.length > 0 ? directoryTasks.map((task) => {
             const sub = submissionsMap?.get(task.id);
             const status = resolveTaskStatus(task, sub);
             const isGraded = status.type === "graded";
             const isSubmitted = !!sub;
+            const isHeroActive = heroTask && heroTask.id === task.id;
 
             return `
-              <div class="glass-panel directory-task-card group" data-category="${status.type}" data-task-id="${escapeHtml(task.id)}">
+              <div
+                class="glass-panel directory-task-card group ${isHeroActive ? 'is-active-task' : ''}"
+                data-category="${status.type}"
+                data-task-id="${escapeHtml(task.id)}"
+                role="button"
+                tabindex="0"
+                title="اضغط لعرض وحل هذا التكليف في محرر الكود ⚡"
+              >
                 <div class="card-body-content">
                   <!-- Top Badges -->
                   <div class="card-top-badges">
@@ -633,9 +648,15 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
                       <i class="fa-solid ${isGraded ? 'fa-circle-check text-emerald-400' : (isSubmitted ? 'fa-hourglass-half text-cyan-400' : 'fa-circle-dot text-brand-cyan')}"></i>
                       ${status.label}
                     </span>
-                    <span class="badge-academic-date font-mono">
-                      ${formatDate(task.dueDate || task.deadline || task.createdAt || new Date())}
-                    </span>
+                    ${isHeroActive ? `
+                      <span class="badge-active-in-editor font-mono">
+                        <span class="pulse-dot"></span> معروض في المحرر ⚡
+                      </span>
+                    ` : `
+                      <span class="badge-academic-date font-mono">
+                        ${formatDate(task.dueDate || task.deadline || task.createdAt || new Date())}
+                      </span>
+                    `}
                   </div>
 
                   <!-- Title -->
@@ -648,7 +669,7 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
 
                   <!-- Description -->
                   <p class="task-card-desc">
-                    ${escapeHtml(task.description || "راجع متطلبات التكليف وسلم الكود البرمجي المطلوب.")}
+                    ${escapeHtml(task.description || "اضغط لعرض هذا التكليف وتشغيل واختبار وتسليم الكود في المحرر مباشرة.")}
                   </p>
 
                   <!-- Grade & Instructor Feedback (if graded) -->
@@ -687,28 +708,30 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
                   `)}
                 </div>
 
-                <!-- Actions -->
+                <!-- Actions: Direct Load into Editor (NO MODALS!) -->
                 <div class="card-footer-actions">
                   ${isSubmitted ? `
-                    <button type="button" class="btn-card-action" data-action="view-code" data-assignment-id="${escapeHtml(task.id)}">
-                      <i class="fa-solid fa-code text-brand-cyan"></i>
-                      <span>استعراض الكود المسلم</span>
+                    <button type="button" class="btn-card-action text-brand-cyan hover:text-white" data-action="select-task" data-assignment-id="${escapeHtml(task.id)}">
+                      <i class="fa-solid fa-code"></i>
+                      <span>${isHeroActive ? "معروض في المحرر ⚡" : "استعراض وتعديل الكود في المحرر"}</span>
                     </button>
                     ${isGraded ? `
-                      <button type="button" class="btn-card-action text-emerald-400 hover:text-emerald-300" data-action="view-report" data-assignment-id="${escapeHtml(task.id)}">
-                        <span>تقرير التقييم</span>
-                        <i class="fa-solid fa-arrow-left text-[10px]"></i>
-                      </button>
-                    ` : ""}
+                      <span class="text-xs font-mono text-emerald-400 font-bold">
+                        ${status.score}/${status.maxScore} نقطة
+                      </span>
+                    ` : `
+                      <span class="text-[11px] text-slate-400 font-mono">
+                        مسلّم ✓
+                      </span>
+                    `}
                   ` : `
                     <button type="button" class="btn-card-action text-brand-cyan hover:text-white" data-action="select-task" data-assignment-id="${escapeHtml(task.id)}">
                       <i class="fa-solid fa-upload ml-1"></i>
-                      <span>تسليم الحل</span>
+                      <span>${isHeroActive ? "معروض في المحرر ⚡" : "فتح في المحرر والتسليم 🚀"}</span>
                     </button>
-                    <button type="button" class="btn-card-action text-slate-300 hover:text-white" data-action="view-specs" data-assignment-id="${escapeHtml(task.id)}">
-                      <i class="fa-regular fa-file-lines ml-1"></i>
-                      <span>التفاصيل</span>
-                    </button>
+                    <span class="text-xs text-slate-400 font-mono">
+                      ${task.maxScore || 100} نقطة
+                    </span>
                   `}
                 </div>
               </div>
