@@ -5,7 +5,7 @@ import { escapeHtml } from "../../../shared/utils/dom.utils.js";
  * Renders the responsive code editor workspace for a Python coding problem.
  */
 export function renderProblemWorkspace({ problem, userCode = "", testResults = null, submissionResult = null, isRunning = false, isSubmitting = false, activeTab = "description" }) {
-  const codeToDisplay = userCode || problem.starterCode || "# اكتب كودك هنا بلغة بايثون\n";
+  const codeToDisplay = userCode || "";
   const publicCases = problem.publicTestCases || [];
   const examples = problem.examples || [];
   const constraints = problem.constraints || [];

@@ -171,7 +171,7 @@ export const ProblemSolvingController = {
 
     try {
       this._currentProblem = await ProblemSolvingService.getProblemDetails(problemId);
-      this._userCode = this._currentProblem.starterCode || "";
+      this._userCode = "";
       this._testResults = null;
       this._submissionResult = null;
       this._workspaceTab = "description";
@@ -250,8 +250,8 @@ export const ProblemSolvingController = {
 
     // Reset Code Button
     document.getElementById("psResetCodeBtn")?.addEventListener("click", () => {
-      if (confirm("هل أنت متأكد من إعادة تعيين الكود إلى الحالة الأولية؟")) {
-        this._userCode = this._currentProblem.starterCode || "";
+      if (confirm("هل أنت متأكد من تفريغ المحرر للبدء من جديد؟")) {
+        this._userCode = "";
         this.renderWorkspace();
       }
     });

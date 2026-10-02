@@ -257,8 +257,16 @@ if __name__ == "__main__":
     if (codeEditor && currentAssignmentId) {
       const savedDraft = localStorage.getItem(`task_draft_${currentAssignmentId}`);
       if (savedDraft && savedDraft.trim() && savedDraft !== codeEditor.value) {
-        codeEditor.value = savedDraft;
-        if (draftStatusText) draftStatusText.textContent = "تم استعادة مسودتك السابقة 💾";
+        const isOldBoilerplate = savedDraft.includes("def add(a: float, b: float)") ||
+                                 savedDraft.includes("بدء تشغيل البرنامج التفاعلي") ||
+                                 (savedDraft.includes("def main():") && savedDraft.includes("starter_"));
+        if (!isOldBoilerplate) {
+          codeEditor.value = savedDraft;
+          if (draftStatusText) draftStatusText.textContent = "تم استعادة مسودتك السابقة 💾";
+        } else {
+          localStorage.removeItem(`task_draft_${currentAssignmentId}`);
+          codeEditor.value = "";
+        }
       }
     }
 
@@ -344,68 +352,30 @@ if __name__ == "__main__":
       }
     });
 
-    // Insert Starter Code Tool
+    // Insert Starter Code Tool (Resets to clean blank solution line)
     btnInsertStarter?.addEventListener("click", async () => {
       const activeTask = relevantAssignments.find((a) => a.id === currentAssignmentId);
-      const starterCode = activeTask?.starterCode || `"""
-مشروع: ${activeTask?.title || "مشروع تطبيقي"} - لغة بايثون
-المطلوب: بناء الدوال واختبار مخرجاتها في الكونسول أدناه قبل التسليم
-المطور / الطالب: ${currentStudent?.name || "طالب مسجل"}
-"""
-
-def add(a: float, b: float) -> float:
-    """دالة الجمع"""
-    return a + b
-
-def subtract(a: float, b: float) -> float:
-    """دالة الطرح"""
-    return a - b
-
-def multiply(a: float, b: float) -> float:
-    """دالة الضرب"""
-    return a * b
-
-def divide(a: float, b: float) -> float:
-    """دالة القسمة مع معالجة القسمة على الصفر"""
-    if b == 0:
-        raise ZeroDivisionError("لا يمكن القسمة على الصفر!")
-    return a / b
-
-# تجربة واختبار الدوال:
-print("=" * 45)
-print("  بدء تشغيل البرنامج التفاعلي 🐍")
-print("=" * 45)
-
-num1 = 20
-num2 = 5
-
-print(f"{num1} + {num2} = {add(num1, num2)}")
-print(f"{num1} - {num2} = {subtract(num1, num2)}")
-print(f"{num1} * {num2} = {multiply(num1, num2)}")
-print(f"{num1} / {num2} = {divide(num1, num2)}")
-
-print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتسليم الأكاديمي!")
-`;
+      const starterCode = "";
 
       const hasContent = (codeEditor?.value || "").trim().length > 0;
       if (hasContent) {
         const confirmed = await showConfirmDialog({
-          title: "استرجاع قالب الكود الأولي",
-          message: "هل أنت متأكد من رغبتك في استرجاع قالب الكود الأولي؟ سيتم استبدال النص الحالي في المحرر.",
-          confirmText: "نعم، استرجع القالب",
+          title: "مسح المحرر للبدء من جديد",
+          message: "هل أنت متأكد من رغبتك في تفريغ المحرر لكتابة الكود من البداية؟",
+          confirmText: "نعم، فرّغ المحرر",
           cancelText: "إلغاء",
-          icon: "📋"
+          icon: "🧹"
         });
         if (!confirmed) return;
       }
 
       if (codeEditor) {
-        codeEditor.value = starterCode;
+        codeEditor.value = "";
         updateLineNumbers();
         if (currentAssignmentId) {
-          localStorage.setItem(`task_draft_${currentAssignmentId}`, starterCode);
+          localStorage.removeItem(`task_draft_${currentAssignmentId}`);
         }
-        showToast("تم إدراج قالب الكود الأولي في المحرر بنجاح! 📥", "info");
+        showToast("تم تجهيز المحرر لكتابة الكود من البداية! ✍️", "info");
       }
     });
 

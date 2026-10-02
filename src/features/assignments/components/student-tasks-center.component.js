@@ -315,12 +315,7 @@ export function renderStudentTasksCenter({
                     <i class="fa-solid fa-download text-brand-cyan"></i>
                     <span>تحميل ملف المرفقات المرفق مع التكليف</span>
                   </a>
-                ` : `
-                  <button type="button" class="btn-download-material" id="btnDownloadStarterCode">
-                    <i class="fa-solid fa-download text-brand-cyan"></i>
-                    <span>تحميل قالب الكود الأولي (Starter Code)</span>
-                  </button>
-                `}
+                ` : ""}
                 <button type="button" class="btn-download-material" id="btnViewTaskSpecsPdf" data-task-id="${escapeHtml(heroTask.id)}">
                   <i class="fa-regular fa-file-pdf text-rose-400"></i>
                   <span>كراسة مواصفات التكليف</span>
@@ -425,7 +420,7 @@ export function renderStudentTasksCenter({
                     </div>
 
                     <div class="workspace-tools-group">
-                      <button type="button" class="btn-ws-tool" id="btnInsertStarterCode" title="استرجاع قالب الكود الأولي">
+                      <button type="button" class="btn-ws-tool d-none" id="btnInsertStarterCode" title="استرجاع قالب الكود الأولي">
                         <i class="fa-solid fa-file-code text-cyan-400"></i>
                         <span>القالب الأولي</span>
                       </button>
