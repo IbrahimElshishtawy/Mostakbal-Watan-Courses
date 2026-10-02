@@ -26,10 +26,14 @@
     "public": ".",
     "ignore": [
       "firebase.json",
+      "**/.*/**",
       "**/.*",
+      ".*/**",
+      ".*",
       "**/node_modules/**",
       "backend/**",
       "scripts/**",
+      "skills/**",
       "docs/**",
       "**/*.log",
       "*-adminsdk-*.json"
