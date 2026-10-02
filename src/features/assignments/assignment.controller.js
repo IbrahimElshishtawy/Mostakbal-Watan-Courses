@@ -793,65 +793,6 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
       });
     });
 
-    // 11. Cloud Sandbox Interactive Test Runner Simulation
-    const btnRunSandbox = container.querySelector("#btnExecuteSandboxTests");
-    const btnRerunSandbox = container.querySelector("#btnRerunSandbox");
-    const terminalLines = container.querySelector("#sandboxTerminalLines");
-    const terminalStats = container.querySelector("#sandboxTerminalStats");
-
-    const runSandboxSuite = () => {
-      if (!terminalLines) return;
-
-      terminalLines.innerHTML = `
-        <p class="term-line-muted">platform linux -- Python 3.12.3, pytest-8.1.1, pluggy-1.4.0</p>
-        <p class="term-line-muted">rootdir: /home/student/workspace/task_03_calc</p>
-        <div class="py-3 text-cyan-400 font-mono text-xs flex items-center gap-2">
-          <span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;"></span>
-          <span>جاري فحص الدوال وتشغيل اختبارات pytest السحابية...</span>
-        </div>
-      `;
-
-      if (terminalStats) terminalStats.textContent = "Running pytest...";
-
-      setTimeout(() => {
-        const durationSec = (0.35 + Math.random() * 0.1).toFixed(2);
-        terminalLines.innerHTML = `
-          <p class="term-line-muted">platform linux -- Python 3.12.3, pytest-8.1.1, pluggy-1.4.0</p>
-          <p class="term-line-muted">rootdir: /home/student/workspace/task_03_calc</p>
-          <div class="term-tests-list pt-1">
-            <p class="term-test-item term-pass">
-              <span>test_calculator.py::test_addition_integers</span>
-              <span class="font-bold">PASSED [ 20%]</span>
-            </p>
-            <p class="term-test-item term-pass">
-              <span>test_calculator.py::test_division_by_zero_handling</span>
-              <span class="font-bold">PASSED [ 40%]</span>
-            </p>
-            <p class="term-test-item term-pass">
-              <span>test_calculator.py::test_invalid_string_input</span>
-              <span class="font-bold">PASSED [ 60%]</span>
-            </p>
-            <p class="term-test-item term-pass">
-              <span>test_calculator.py::test_history_stack_persistence</span>
-              <span class="font-bold">PASSED [ 80%]</span>
-            </p>
-            <p class="term-test-item term-pass">
-              <span>test_calculator.py::test_clean_exit_graceful</span>
-              <span class="font-bold">PASSED [100%]</span>
-            </p>
-          </div>
-          <div class="term-summary-line term-pass">
-            <span>========================= 5 passed, 0 warnings in ${durationSec}s =========================</span>
-          </div>
-        `;
-        if (terminalStats) terminalStats.textContent = `Duration: ${durationSec}s • Memory: 14MB`;
-        showToast("اكتملت جميع الـ Unit Tests بنجاح بنسبة 100%! كودك جاهز للتسليم 🚀", "success");
-      }, 900);
-    };
-
-    btnRunSandbox?.addEventListener("click", runSandboxSuite);
-    btnRerunSandbox?.addEventListener("click", runSandboxSuite);
-
     // 12. Modal Print Helpers
     document.getElementById("btnPrintTaskSpecsBtn")?.addEventListener("click", () => window.print());
     document.getElementById("btnPrintEvalReportBtn")?.addEventListener("click", () => window.print());

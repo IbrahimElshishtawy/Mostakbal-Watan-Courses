@@ -723,66 +723,6 @@ print("\\n🎉 تم اختبار العمليات بنجاح وجاهز للتس
         </div>
       </section>
       <!-- END: AssignmentsDirectoryAndFilters -->
-
-      <!-- BEGIN: CloudSandboxCodeTester -->
-      <section class="glass-panel cloud-sandbox-tester" data-purpose="cloud-sandbox-unit-tests">
-        <div class="sandbox-header-row">
-          <div class="sandbox-lead-group">
-            <div class="sandbox-icon-box">
-              <i class="fa-solid fa-terminal text-brand-cyan"></i>
-            </div>
-            <div>
-              <h3 class="sandbox-title">
-                <span>بيئة الفحص والتجربة السحابية السريعة (Python Sandbox)</span>
-                <span class="sandbox-badge font-mono">Python 3.12 OK</span>
-              </h3>
-              <p class="sandbox-desc">هل تود اختبار كودك السريع والتأكد من مخرجات الدوال قبل التسليم النهائي؟</p>
-            </div>
-          </div>
-
-          <div class="sandbox-actions-group">
-            <button type="button" class="btn-sandbox-tool" id="btnRerunSandbox">
-              <i class="fa-solid fa-rotate text-xs"></i>
-              <span>إعادة التشغيل</span>
-            </button>
-            <button type="button" class="btn-sandbox-primary" id="btnExecuteSandboxTests">
-              <i class="fa-solid fa-play text-[10px]"></i>
-              <span>تشغيل الاختبار السحابي</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="sandbox-terminal-window font-mono" dir="ltr" id="sandboxTerminalBody">
-          <div class="terminal-meta-bar">
-            <div class="terminal-window-dots">
-              <span class="w-dot dot-red"></span>
-              <span class="w-dot dot-yellow"></span>
-              <span class="w-dot dot-green"></span>
-              <span class="terminal-cmd-label">pytest -v test_solution.py</span>
-            </div>
-            <span class="terminal-stats-label" id="sandboxTerminalStats">Duration: 0.35s • Memory: 12MB</span>
-          </div>
-
-          <div class="terminal-console-lines" id="sandboxTerminalLines">
-            <p class="term-line-muted">platform linux -- Python 3.12, pytest-8.1</p>
-            <p class="term-line-muted">rootdir: /home/student/workspace</p>
-            <div class="term-tests-list">
-              <p class="term-test-item term-pass">
-                <span>test_solution.py::test_basic_execution</span>
-                <span class="font-bold">PASSED [ 50%]</span>
-              </p>
-              <p class="term-test-item term-pass">
-                <span>test_solution.py::test_edge_cases_and_exceptions</span>
-                <span class="font-bold">PASSED [100%]</span>
-              </p>
-            </div>
-            <div class="term-summary-line term-pass">
-              <span>========================= 2 passed, 0 warnings in 0.35s =========================</span>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- END: CloudSandboxCodeTester -->
     </div>
   `;
 }
