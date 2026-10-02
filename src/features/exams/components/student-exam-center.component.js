@@ -17,8 +17,8 @@ function getGradeBadge(percentage) {
 }
 
 /**
- * Renders the Student Exam & Assessment Center UI matching Image 7.png,
- * dynamically bound to real Firestore exams and student results.
+ * Renders the Student Exam & Assessment Center UI with an executive,
+ * state-of-the-art cyber-glassmorphic design system.
  *
  * @param {object} props
  * @param {object} props.student
@@ -62,94 +62,130 @@ export function renderStudentExamCenter({
 
   return `
     <div class="student-exam-center-page" dir="rtl">
-      <!-- 1. Top Header Section -->
-      <div class="exam-center-top-header mb-6">
-        <div class="exam-header-lead">
-          <div class="exam-header-academic-tag">
-            <span class="tag-pulse-dot"></span>
-            <span>بوابة التقييم الأكاديمي المباشر • الموسم التدريبي 2026/2027</span>
-          </div>
-          <h2 class="exam-header-main-title">مركز الاختبارات والتقييم الذكي</h2>
-          <p class="exam-header-main-desc">
-            منظومة الامتحانات البرمجية التفاعلية لطلاب ${studentTrack}. استعرض الاختبارات المتاحة، ابدأ الاختبار الفوري، وراجع تحليلات أدائك المعتمدة.
-          </p>
-        </div>
+      <!-- 1. Executive Hero Command Center Banner -->
+      <div class="exam-hero-executive-card mb-6">
+        <div class="exam-hero-ambient-glow cyan-glow" aria-hidden="true"></div>
+        <div class="exam-hero-ambient-glow purple-glow" aria-hidden="true"></div>
 
-        <div class="exam-header-tools">
-          <button type="button" class="btn-exam-header-tool" id="btnRunExamSystemCheck">
-            <span class="tool-icon">((•))</span>
-            <span>فحص البيئة الامتحانية</span>
-          </button>
-          <button type="button" class="btn-exam-header-tool" id="btnOpenStudentGuide">
-            <span class="tool-icon">📖</span>
-            <span>دليل الطالب</span>
-          </button>
+        <div class="exam-hero-content-row">
+          <div class="exam-hero-lead-box">
+            <div class="exam-hero-academic-tag">
+              <span class="tag-live-radar">
+                <span class="radar-ping"></span>
+                <span class="radar-dot"></span>
+              </span>
+              <span>بوابة التقييم الأكاديمي المباشر • الموسم التدريبي 2026/2027</span>
+              <span class="tag-security-badge"><i class="fa-solid fa-shield-halved"></i> تشفير 256-bit</span>
+            </div>
+
+            <h2 class="exam-hero-main-title">
+              مركز الاختبارات والتقييم الذكي
+            </h2>
+
+            <p class="exam-hero-main-desc">
+              منظومة الامتحانات البرمجية التفاعلية لطلاب <span class="student-track-badge"><i class="fa-solid fa-code-branch"></i> ${studentTrack}</span>. استعرض الاختبارات المتاحة، ابدأ التقييم الفوري، وراجع تحليلات أدائك المعتمدة بدقة متناهية.
+            </p>
+          </div>
+
+          <div class="exam-hero-tools-box">
+            <button type="button" class="btn-exam-cyber-tool primary-cyber" id="btnRunExamSystemCheck" title="فحص كاميرا المتصفح والاتصال بالخادم">
+              <span class="cyber-tool-icon"><i class="fa-solid fa-microchip"></i></span>
+              <div class="cyber-tool-text">
+                <span class="cyber-tool-title">فحص البيئة الامتحانية</span>
+                <span class="cyber-tool-status">System Readiness: OK</span>
+              </div>
+            </button>
+
+            <button type="button" class="btn-exam-cyber-tool secondary-cyber" id="btnOpenStudentGuide" title="دليل الإرشادات وقواعد النزاهة الرقمية">
+              <span class="cyber-tool-icon"><i class="fa-solid fa-book-bookmark"></i></span>
+              <div class="cyber-tool-text">
+                <span class="cyber-tool-title">دليل وضوابط الاختبار</span>
+                <span class="cyber-tool-status">شروط النزاهة الرقمية</span>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- 2. Top Stats Strip (4 Real Metric Cards) -->
+      <!-- 2. Cybernetic KPI Metrics Strip (4 Dynamic Themed Cards) -->
       <div class="exam-stats-strip-grid mb-6">
-        <!-- Metric 1: الامتحانات النشطة المتاحة -->
-        <div class="exam-stat-card ${activeCount > 0 ? 'is-active-cyan' : ''}">
+        <!-- Metric 1: الامتحانات النشطة (Active Exams - Neon Cyan) -->
+        <div class="exam-stat-card theme-cyan ${activeCount > 0 ? 'is-highlighted-active' : ''}">
           <div class="stat-card-header">
-            <span class="stat-card-icon cyan-tint">⚡</span>
+            <div class="stat-card-icon-wrap cyan-tint">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
             <span class="stat-card-label">الامتحانات النشطة المتاحة</span>
           </div>
           <div class="stat-card-body">
-            <span class="stat-card-value text-cyan-400 font-mono">${activeCount < 10 ? `0${activeCount}` : activeCount}</span>
+            <span class="stat-card-value text-cyan-glow font-mono">${activeCount < 10 ? `0${activeCount}` : activeCount}</span>
           </div>
           <div class="stat-card-footer">
-            <span class="stat-footer-text">${activeCount > 0 ? "جاهز للبدء فوراً" : "لا توجد اختبارات نشطة الآن"}</span>
+            ${activeCount > 0
+              ? `<span class="stat-chip-pill active-cyan"><span class="chip-ping"></span>جاهز للبدء فوراً</span>`
+              : `<span class="stat-chip-pill inactive-slate">لا توجد اختبارات نشطة الآن</span>`
+            }
           </div>
-          ${activeCount > 0 ? '<div class="stat-card-accent-bar cyan-bar"></div>' : ''}
+          <div class="stat-card-beam-glow cyan-beam"></div>
         </div>
 
-        <!-- Metric 2: الاختبارات المجتازة -->
-        <div class="exam-stat-card">
+        <!-- Metric 2: الاختبارات المجتازة (Passed Exams - Emerald Neon) -->
+        <div class="exam-stat-card theme-emerald">
           <div class="stat-card-header">
-            <span class="stat-card-icon purple-tint">✔️</span>
+            <div class="stat-card-icon-wrap emerald-tint">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
             <span class="stat-card-label">الاختبارات المجتازة</span>
           </div>
           <div class="stat-card-body">
-            <span class="stat-card-value text-slate-100 font-mono">${passedCount < 10 ? `0${passedCount}` : passedCount}</span>
+            <span class="stat-card-value text-emerald-glow font-mono">${passedCount < 10 ? `0${passedCount}` : passedCount}</span>
           </div>
           <div class="stat-card-footer">
-            <span class="stat-footer-text">من أصل ${totalCompleted} اختبارات منجزة</span>
+            <span class="stat-chip-pill neutral-slate">من أصل ${totalCompleted} اختبارات منجزة</span>
           </div>
+          <div class="stat-card-beam-glow emerald-beam"></div>
         </div>
 
-        <!-- Metric 3: المعدل التراكمي للاختبارات -->
-        <div class="exam-stat-card">
+        <!-- Metric 3: المعدل التراكمي (GPA / Performance - Royal Violet) -->
+        <div class="exam-stat-card theme-violet">
           <div class="stat-card-header">
-            <span class="stat-card-icon teal-tint">📈</span>
+            <div class="stat-card-icon-wrap violet-tint">
+              <i class="fa-solid fa-chart-line"></i>
+            </div>
             <span class="stat-card-label">المعدل التراكمي للاختبارات</span>
           </div>
           <div class="stat-card-body">
-            <span class="stat-card-value text-slate-100 font-mono">${avgScore}</span>
+            <span class="stat-card-value text-violet-glow font-mono">${avgScore}</span>
           </div>
           <div class="stat-card-footer">
-            <span class="stat-pill-badge emerald">
+            <span class="stat-chip-pill ${avgScore !== '—' ? 'active-emerald' : 'pending-amber'}">
               ${avgScore !== "—" ? `⚡ الأداء الأكاديمي: ${avgScore}` : "في انتظار التقييم"}
             </span>
           </div>
+          <div class="stat-card-beam-glow violet-beam"></div>
         </div>
 
-        <!-- Metric 4: الشهادات المكتسبة -->
-        <div class="exam-stat-card">
+        <!-- Metric 4: الشهادات والاعتمادات (Certificates & Honors - Radiant Amber) -->
+        <div class="exam-stat-card theme-amber">
           <div class="stat-card-header">
-            <span class="stat-card-icon pink-tint">🎖️</span>
+            <div class="stat-card-icon-wrap amber-tint">
+              <i class="fa-solid fa-award"></i>
+            </div>
             <span class="stat-card-label">الشهادات المكتسبة</span>
           </div>
           <div class="stat-card-body">
-            <span class="stat-card-value text-slate-100 font-mono">${certificatesCount}</span>
+            <span class="stat-card-value text-amber-glow font-mono">${certificatesCount}</span>
           </div>
           <div class="stat-card-footer">
-            <span class="stat-footer-text">${passedCount > 0 ? "معتمد في المسار" : "تمنح فور اجتياز الاختبارات"}</span>
+            <span class="stat-chip-pill ${passedCount > 0 ? 'active-gold' : 'neutral-slate'}">
+              ${passedCount > 0 ? "معتمد في المسار 🎓" : "تمنح فور اجتياز الاختبارات"}
+            </span>
           </div>
+          <div class="stat-card-beam-glow amber-beam"></div>
         </div>
       </div>
 
-      <!-- 3. Featured Active Exam Hero Card -->
+      <!-- 3. Featured Active Exam Hero Card OR Exam Readiness Console -->
       ${activeExam ? `
         <div class="featured-active-exam-card mb-8">
           <div class="featured-exam-top-strip">
@@ -158,7 +194,7 @@ export function renderStudentExamCenter({
                 <span class="pulse-dot"></span>
                 <span>متاح الآن للإجراء الفوري</span>
               </span>
-              <span class="featured-track-label">${studentTrack}</span>
+              <span class="featured-track-label"><i class="fa-solid fa-tag"></i> ${studentTrack}</span>
               <span class="featured-code-chip font-mono">CODE: ${escapeHtml(activeExam.code || activeExam.id)}</span>
             </div>
           </div>
@@ -182,18 +218,20 @@ export function renderStudentExamCenter({
                   <span class="dot dot-green"></span>
                 </div>
                 <span class="window-filename">exam_session.py</span>
+                <span class="window-lang-tag">Python 3.12</span>
               </div>
-              <pre class="sandbox-code-content"><code><span class="c-comment"># Interactive Exam Session</span>
-<span class="c-keyword">def</span> <span class="c-fn">verify_candidate</span>():
-    student = <span class="c-string">"${safeStudentName}"</span>
-    exam_id = <span class="c-string">"${escapeHtml(activeExam.id)}"</span>
-    <span class="c-keyword">return</span> {<span class="c-string">"status"</span>: <span class="c-string">"READY"</span>, <span class="c-string">"questions"</span>: ${activeExam.totalQuestions || 1}}
+              <pre class="sandbox-code-content"><code><span class="c-comment"># Interactive Academic Exam Session</span>
+<span class="c-keyword">def</span> <span class="c-fn">verify_candidate_session</span>():
+    candidate_name = <span class="c-string">"${safeStudentName}"</span>
+    session_id     = <span class="c-string">"${escapeHtml(activeExam.id)}"</span>
+    exam_questions = ${activeExam.totalQuestions || 1}
+    <span class="c-keyword">return</span> {<span class="c-string">"status"</span>: <span class="c-string">"AUTHORIZED"</span>, <span class="c-string">"ready"</span>: <span class="c-builtin">True</span>}
 
-<span class="c-comment"># Engine State: Online and Protected</span></code></pre>
+<span class="c-comment"># System: Anti-Cheat & Sandbox Initialized</span></code></pre>
               <div class="sandbox-window-footer">
                 <span class="footer-dot-green"></span>
-                <span>بيئة الامتحان متصلة</span>
-                <span class="footer-latency font-mono">Status: 200 OK</span>
+                <span>بيئة الاختبار متصلة ومؤمنة</span>
+                <span class="footer-latency font-mono">Status: 200 OK • Sandbox Active</span>
               </div>
             </div>
 
@@ -201,7 +239,7 @@ export function renderStudentExamCenter({
             <div class="exam-specs-column">
               <div class="exam-specs-2x2-grid mb-4">
                 <div class="exam-spec-item">
-                  <span class="spec-icon">⏱️</span>
+                  <div class="spec-icon-box cyan"><i class="fa-solid fa-clock"></i></div>
                   <div class="spec-text">
                     <span class="spec-label">المدة الزمنية</span>
                     <strong class="spec-val font-mono">${activeExam.duration || 30} دقيقة</strong>
@@ -209,7 +247,7 @@ export function renderStudentExamCenter({
                 </div>
 
                 <div class="exam-spec-item">
-                  <span class="spec-icon">❓</span>
+                  <div class="spec-icon-box purple"><i class="fa-solid fa-circle-question"></i></div>
                   <div class="spec-text">
                     <span class="spec-label">عدد الأسئلة</span>
                     <strong class="spec-val font-mono">${activeExam.totalQuestions || 0} أسئلة</strong>
@@ -217,7 +255,7 @@ export function renderStudentExamCenter({
                 </div>
 
                 <div class="exam-spec-item">
-                  <span class="spec-icon">⭐</span>
+                  <div class="spec-icon-box amber"><i class="fa-solid fa-star"></i></div>
                   <div class="spec-text">
                     <span class="spec-label">درجة الاجتياز</span>
                     <strong class="spec-val font-mono">${activeExam.passDegree || activeExam.passingScore || 60}%</strong>
@@ -225,7 +263,7 @@ export function renderStudentExamCenter({
                 </div>
 
                 <div class="exam-spec-item">
-                  <span class="spec-icon">🔒</span>
+                  <div class="spec-icon-box emerald"><i class="fa-solid fa-shield-halved"></i></div>
                   <div class="spec-text">
                     <span class="spec-label">نظام المراقبة</span>
                     <strong class="spec-val text-emerald-400">حفظ تلقائي معتمد</strong>
@@ -236,11 +274,11 @@ export function renderStudentExamCenter({
               <!-- Integrity Rules Box -->
               <div class="exam-integrity-rules-box">
                 <div class="rules-box-header">
-                  <span class="rules-shield-icon">🛡️</span>
-                  <strong>قواعد النزاهة الرقمية:</strong>
+                  <span class="rules-shield-icon"><i class="fa-solid fa-lock"></i></span>
+                  <strong>قواعد النزاهة الرقمية المعتمدة:</strong>
                 </div>
                 <p class="rules-box-desc">
-                  يتم حفظ إجاباتك تلقائياً عند اختيار كل سؤال. لا تقم بتحديث الصفحة أو إغلاق المتصفح أثناء تشغيل مؤقت الامتحان.
+                  يتم حفظ إجاباتك تلقائياً عند اختيار كل سؤال. لا تقم بتحديث الصفحة أو إغلاق المتصفح أثناء تشغيل مؤقت الاختبار لضمان توثيق النتيجة.
                 </p>
               </div>
             </div>
@@ -249,24 +287,70 @@ export function renderStudentExamCenter({
           <!-- Action Buttons Footer -->
           <div class="featured-exam-action-bar">
             <button type="button" class="btn-enter-exam-hall" id="btnEnterExamHall" data-exam-id="${escapeHtml(activeExam.id)}">
-              <span class="btn-enter-icon">▷</span>
+              <span class="btn-enter-icon"><i class="fa-solid fa-play"></i></span>
               <span>دخول قاعة الاختبار الآن</span>
             </button>
             <button type="button" class="btn-exam-guidelines" id="btnExamGuidelines">
-              <span class="guidelines-icon">ℹ️</span>
-              <span>الإرشادات وشروط التقييم</span>
+              <span class="guidelines-icon"><i class="fa-solid fa-circle-info"></i></span>
+              <span>الإرشادات وشروط التقييم الأكاديمي</span>
             </button>
           </div>
         </div>
       ` : `
-        <!-- Informative Banner when no exam is currently live -->
-        <div class="glass-card p-6 mb-8 text-center border border-brand-border">
-          <div class="max-w-md mx-auto space-y-2">
-            <span style="font-size: 2.5rem;">🎉</span>
-            <h3 class="text-white font-bold text-base">لا توجد امتحانات نشطة مفتوحة للبدء الآن</h3>
-            <p class="text-slate-400 text-xs leading-relaxed">
-              أنت على اطلاع بكافة متطلباتك الامتحانية. راجع قائمة الامتحانات المجدولة القادمة أدناه أو تصفح سجل نتائجك المعتمدة.
-            </p>
+        <!-- High-Tech Exam Readiness & Integrity Showcase Console -->
+        <div class="exam-readiness-console-card mb-8">
+          <div class="readiness-header-row">
+            <div class="readiness-badge-lead">
+              <div class="readiness-shield-wrap">
+                <div class="readiness-ping-ring"></div>
+                <div class="readiness-shield-icon">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+              </div>
+              <div>
+                <div class="readiness-status-tag">
+                  <span class="readiness-dot"></span>
+                  <span>المنظومة الامتحانية في أتم الجاهزية والاستقرار</span>
+                </div>
+                <h3 class="readiness-main-title">لا توجد امتحانات نشطة مفتوحة للبدء حالياً</h3>
+                <p class="readiness-sub-desc">
+                  أنت على اطلاع تام بكافة متطلباتك الامتحانية. راجع قائمة الامتحانات المجدولة القادمة أدناه أو تصفح سجل نتائجك المعتمدة.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 System Readiness Features -->
+          <div class="readiness-pillars-grid">
+            <div class="readiness-pillar-item">
+              <div class="pillar-icon-box cyan">
+                <i class="fa-solid fa-bolt-lightning"></i>
+              </div>
+              <div class="pillar-text">
+                <strong class="pillar-title">محرك التصحيح الذكي</strong>
+                <p class="pillar-desc">تصحيح فوري لإجابات الاختيار من متعدد واختبارات الكود البرمجي وحساب دقيق للنتائج.</p>
+              </div>
+            </div>
+
+            <div class="readiness-pillar-item">
+              <div class="pillar-icon-box emerald">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <div class="pillar-text">
+                <strong class="pillar-title">حفظ مسودات تلقائي</strong>
+                <p class="pillar-desc">مزامنة سحابية لحظية لكل إجابة لضمان أمان درجاتك في حال انقطاع الاتصال المفاجئ.</p>
+              </div>
+            </div>
+
+            <div class="readiness-pillar-item">
+              <div class="pillar-icon-box violet">
+                <i class="fa-solid fa-award"></i>
+              </div>
+              <div class="pillar-text">
+                <strong class="pillar-title">تقارير واعتمادات فورية</strong>
+                <p class="pillar-desc">توليد شهادة اجتياز وتقرير تحليلي مفصل للمهارات ونقاط القوة فور اعتماد الاختبار.</p>
+              </div>
+            </div>
           </div>
         </div>
       `}
@@ -275,13 +359,19 @@ export function renderStudentExamCenter({
       <div class="exam-toolbar-row mb-6">
         <div class="exam-toolbar-tabs" role="tablist">
           <button type="button" class="exam-tab-pill is-active" data-exam-tab="active">
-            <span>الامتحانات النشطة والمتاحة (${activeCount})</span>
+            <span class="tab-pill-icon"><i class="fa-solid fa-bolt"></i></span>
+            <span>الامتحانات النشطة والمتاحة</span>
+            <span class="tab-pill-badge">${activeCount}</span>
           </button>
           <button type="button" class="exam-tab-pill" data-exam-tab="upcoming">
-            <span>المجدولة والقادمة (${upcomingExams.length})</span>
+            <span class="tab-pill-icon"><i class="fa-solid fa-calendar-days"></i></span>
+            <span>المجدولة والقادمة</span>
+            <span class="tab-pill-badge">${upcomingExams.length}</span>
           </button>
           <button type="button" class="exam-tab-pill" data-exam-tab="completed">
-            <span>السابقة والنتائج المعتمدة (${pastExams.length})</span>
+            <span class="tab-pill-icon"><i class="fa-solid fa-circle-check"></i></span>
+            <span>السابقة والنتائج المعتمدة</span>
+            <span class="tab-pill-badge">${pastExams.length}</span>
           </button>
         </div>
       </div>
@@ -289,47 +379,54 @@ export function renderStudentExamCenter({
       <!-- 5. Scheduled & Upcoming Exams Section -->
       <section class="exam-section-block mb-8" id="secUpcomingExams">
         <div class="exam-section-title-wrap mb-4">
-          <h3 class="exam-section-title">
-            <span class="sec-icon">📅</span>
-            <span>الاختبارات المجدولة والقادمة</span>
-          </h3>
-          <span class="exam-section-subtitle">التقويم الأكاديمي للاختبارات</span>
+          <div class="section-title-box">
+            <div class="section-title-icon-box cyan">
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <div>
+              <h3 class="exam-section-title">الاختبارات المجدولة والقادمة</h3>
+              <span class="exam-section-subtitle">التقويم الأكاديمي لمواعيد التقييمات المستقبلية</span>
+            </div>
+          </div>
         </div>
 
         <div class="scheduled-exams-grid">
           ${upcomingExams.length > 0 ? upcomingExams.map((exam) => `
             <div class="scheduled-exam-card">
               <div class="scheduled-card-top">
-                <span class="pill-days-left pill-blue">مجدول</span>
+                <span class="pill-days-left pill-blue"><i class="fa-solid fa-clock"></i> مجدول</span>
                 <span class="scheduled-code font-mono">${escapeHtml(exam.code || exam.id)}</span>
               </div>
               <h4 class="scheduled-card-title">${escapeHtml(exam.title || "اختبار قادم")}</h4>
               <p class="scheduled-card-desc">
-                ${escapeHtml(exam.description || "اختبار دوري مجدول ضمن المسار التدريبي.")}
+                ${escapeHtml(exam.description || "اختبار دوري مجدول ضمن المسار التدريبي لقياس المهارات المكتسبة.")}
               </p>
               <div class="scheduled-card-meta-row">
                 <div class="scheduled-meta-item">
-                  <span class="meta-icon">📅</span>
+                  <span class="meta-icon"><i class="fa-solid fa-calendar"></i></span>
                   <span>${formatDate(exam.startDate || exam.dateDisplay || new Date())}</span>
                 </div>
                 <div class="scheduled-meta-item">
-                  <span class="meta-icon">⏱️</span>
+                  <span class="meta-icon"><i class="fa-solid fa-hourglass-half"></i></span>
                   <span>${exam.duration || 30} دقيقة</span>
                 </div>
                 <div class="scheduled-meta-item">
-                  <span class="meta-icon">❓</span>
+                  <span class="meta-icon"><i class="fa-solid fa-circle-question"></i></span>
                   <span>${exam.totalQuestions || 0} أسئلة</span>
                 </div>
                 <button type="button" class="btn-add-calendar" data-exam-reminder="${escapeHtml(exam.code || exam.id)}">
-                  <span>🔔</span>
+                  <span><i class="fa-solid fa-bell"></i></span>
                   <span>تذكير</span>
                 </button>
               </div>
             </div>
           `).join("") : `
-            <div class="col-span-full p-6 text-center text-slate-400 bg-brand-surface/40 border border-brand-border rounded-xl">
-              <span class="text-2xl block mb-2">📅</span>
-              <p class="text-xs">لا توجد اختبارات مجدولة قادمة حالياً. سيتم إخطارك فور إعلان أي اختبار جديد.</p>
+            <div class="col-span-full exam-empty-state-card">
+              <div class="empty-state-icon-box">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <h4 class="empty-state-title">لا توجد اختبارات مجدولة قادمة حالياً</h4>
+              <p class="empty-state-desc">سيتم إخطارك فور إعلان أي اختبار جديد عبر مركز الإشعارات والتنبيهات 🔔.</p>
             </div>
           `}
         </div>
@@ -338,13 +435,18 @@ export function renderStudentExamCenter({
       <!-- 6. Completed Exams & Reports Table -->
       <section class="exam-section-block mb-8" id="secCompletedExams">
         <div class="exam-table-header-bar mb-4">
-          <h3 class="exam-section-title">
-            <span class="sec-icon text-emerald-400">✔️</span>
-            <span>سجل الاختبارات المكتملة وتقارير التحليل</span>
-          </h3>
-          <div class="exam-gpa-stat">
-            <span>المعدل التراكمي العام:</span>
-            <strong class="gpa-score font-mono">${avgScore}</strong>
+          <div class="section-title-box">
+            <div class="section-title-icon-box emerald">
+              <i class="fa-solid fa-square-poll-vertical"></i>
+            </div>
+            <div>
+              <h3 class="exam-section-title">سجل الاختبارات المكتملة وتقارير التحليل</h3>
+              <span class="exam-section-subtitle">بيانات النتائج المعتمدة، التقديرات، ونسب الإنجاز</span>
+            </div>
+          </div>
+          <div class="exam-gpa-stat-pill">
+            <span class="gpa-label">المعدل التراكمي العام:</span>
+            <strong class="gpa-score-val font-mono">${avgScore}</strong>
           </div>
         </div>
 
@@ -390,7 +492,7 @@ export function renderStudentExamCenter({
                     </td>
                     <td>
                       <button type="button" class="btn-table-action" data-review-result="${escapeHtml(exam.id)}" data-exam-id="${escapeHtml(exam.id)}">
-                        <span>👁️</span>
+                        <span><i class="fa-solid fa-eye"></i></span>
                         <span>استعراض تقرير النتيجة</span>
                       </button>
                     </td>
@@ -399,7 +501,11 @@ export function renderStudentExamCenter({
               }).join("") : `
                 <tr>
                   <td colspan="6" class="p-8 text-center text-slate-400">
-                    لم تجتز أي اختبارات بعد. ستظهر نتائجك وتقاريرك الأكاديمية هنا فور أداء الاختبارات.
+                    <div class="table-empty-wrap">
+                      <div class="table-empty-icon"><i class="fa-solid fa-chart-simple"></i></div>
+                      <strong class="table-empty-title">لم تجتز أي اختبارات بعد</strong>
+                      <p class="table-empty-sub">ستظهر هنا سجلات نتائجك، تقديراتك الرسمية، وتقارير مراجعة الإجابات فور خوضك لأول اختبار.</p>
+                    </div>
                   </td>
                 </tr>
               `}
