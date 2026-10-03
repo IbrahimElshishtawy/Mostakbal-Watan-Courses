@@ -34,6 +34,29 @@ window.closeLoginModal = function () {
 window.showLogin = window.openLoginModal;
 window.closeLogin = window.closeLoginModal;
 
+// Quick Staff Login Handler (One-click login for Admin & Teacher)
+window.quickStaffLogin = function (role) {
+  const userInput = document.getElementById("loginUsername");
+  const passInput = document.getElementById("loginPassword");
+  const isTeacher = role === "teacher";
+  const userVal = isTeacher ? "teacher" : "admin";
+  const passVal = "123456";
+
+  if (userInput) {
+    userInput.value = userVal;
+    userInput.classList.add("ring-2", isTeacher ? "ring-cyan-400" : "ring-emerald-400");
+  }
+  if (passInput) {
+    passInput.value = passVal;
+    passInput.classList.add("ring-2", isTeacher ? "ring-cyan-400" : "ring-emerald-400");
+  }
+
+  // Visual pulse / immediate submit
+  setTimeout(() => {
+    AuthController.submitLogin(userVal, passVal);
+  }, 100);
+};
+
 window.openContactOptions = function () {
   const modal = document.getElementById("contact-modal") || document.getElementById("contactModal");
   if (modal) {
