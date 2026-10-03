@@ -216,14 +216,16 @@ export function renderTeacherExamCard({ exam }) {
  * @param {object} options
  * @param {object} options.exam
  * @param {number} [options.resultsCount=0]
+ * @param {number} [options.totalStudentsCount=1]
+ * @param {Array} [options.resultsList=[]]
  * @returns {string}
  */
-export function renderAdminExamCard({ exam, resultsCount = 0 }) {
+export function renderAdminExamCard({ exam, resultsCount = 0, totalStudentsCount = 1, resultsList = [] }) {
   const isActive = exam.active !== false;
-  const questionsCount = Array.isArray(exam.questions) ? exam.questions.length : (exam.questionCount || 25);
+  const questionsCount = Array.isArray(exam.questions) ? exam.questions.length : (exam.questionCount || 0);
   const durationMin = Number(exam.duration) || 30;
-  const groupLabel = exam.targetGroupLabel || exam.group || "مجموعة الأحد والأربعاء | 7:00 - 8:30 م";
-  const examCode = exam.code || (exam.id ? String(exam.id).substring(0, 10).toUpperCase() : "PY-101-MID");
+  const groupLabel = (exam.group && exam.group !== "ALL") ? exam.group : "المجموعة التدريبية المعتمدة";
+  const examCode = exam.code || (exam.id ? String(exam.id).substring(0, 10).toUpperCase() : "EXAM");
 
   // Status computation matching Image 4.png
   let statusBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
@@ -246,18 +248,30 @@ export function renderAdminExamCard({ exam, resultsCount = 0 }) {
     if (exam.startDate || exam.deadline) {
       const parts = [];
       if (exam.startDate) parts.push(formatDate(exam.startDate));
-      dateDisplay = parts.join(" • ") || "28 سبتمبر 2026";
+      if (exam.deadline) parts.push(formatDate(exam.deadline));
+      dateDisplay = parts.join(" • ") || "غير محدد";
+    } else if (exam.createdAt) {
+      dateDisplay = formatDate(exam.createdAt);
     } else {
-      dateDisplay = "28 سبتمبر 2026";
+      dateDisplay = "غير محدد";
     }
   }
 
-  const structureText = exam.structure || `${questionsCount} سؤال (23 اختيار + 2 كود)`;
-  const completedNumber = resultsCount > 0 ? resultsCount : 38;
-  const totalEnrolled = 40;
-  const completionText = `${completedNumber} طالب أتموا الاختبار من أصل ${totalEnrolled}`;
-  const progressPercent = exam.progressPercent !== undefined ? exam.progressPercent : (resultsCount > 0 ? Math.min(100, Math.round((resultsCount / totalEnrolled) * 100)) : 95);
-  const averageScoreText = "92.4 / 100";
+  const structureText = exam.structure || (questionsCount > 0 ? `${questionsCount} سؤال` : "اختبار إلكتروني");
+  const completedNumber = resultsCount || 0;
+  const totalEnrolled = totalStudentsCount > 0 ? totalStudentsCount : 1;
+  const completionText = completedNumber > 0 ? `${completedNumber} طالب أتموا الاختبار من أصل ${totalEnrolled}` : `لم يتم أداء الاختبار بعد (من أصل ${totalEnrolled} طالب)`;
+  const progressPercent = totalEnrolled > 0 ? Math.min(100, Math.round((completedNumber / totalEnrolled) * 100)) : 0;
+  
+  let averageScoreText = "لم ترصد درجات بعد";
+  if (Array.isArray(resultsList) && resultsList.length > 0) {
+    const totalScore = resultsList.reduce((sum, r) => {
+      const score = Number(r.score) || Number(r.percentage) || (r.scorePercentage !== undefined ? Number(r.scorePercentage) : 0);
+      return sum + score;
+    }, 0);
+    const avg = Math.round(totalScore / resultsList.length);
+    averageScoreText = `${avg} / 100`;
+  }
 
   return `
     <article class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-6 shadow-lg hover:border-emerald-500/40 transition-all space-y-4" data-exam-id="${escapeHtml(exam.id)}">
@@ -289,7 +303,7 @@ export function renderAdminExamCard({ exam, resultsCount = 0 }) {
           ${escapeHtml(exam.title || "امتحان بدون عنوان")}
         </h3>
         <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">
-          ${escapeHtml(exam.description || "اختبار تجريبي على المفاهيم الأساسية، المتغيرات، والعمليات الحسابية والشرطية وقوائم بايثون.")}
+          ${escapeHtml(exam.description || "تقييم واختبار إلكتروني لقياس المستوى الأكاديمي للطلاب.")}
         </p>
       </div>
 

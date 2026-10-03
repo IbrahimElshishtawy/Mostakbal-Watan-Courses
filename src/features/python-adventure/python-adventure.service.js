@@ -562,16 +562,7 @@ export const PythonAdventureService = {
     }
 
     if (students.length === 0) {
-      students = [
-        { id: "std-1", name: "عمر مصطفى الجوهري", studentCode: "STD-2026-001", group: "مجموعة الأحد والأربعاء", phone: "01012345671", avatarBg: "bg-emerald-500/20 text-emerald-400" },
-        { id: "std-2", name: "سارة محمود غنيم", studentCode: "STD-2026-002", group: "مجموعة الأحد والأربعاء", phone: "01012345672", avatarBg: "bg-cyan-500/20 text-cyan-400" },
-        { id: "std-3", name: "كريم أحمد الشربيني", studentCode: "STD-2026-003", group: "مجموعة السبت والثلاثاء", phone: "01012345673", avatarBg: "bg-amber-500/20 text-amber-400" },
-        { id: "std-4", name: "نور إبراهيم الدسوقي", studentCode: "STD-2026-004", group: "مجموعة الأحد والأربعاء", phone: "01012345674", avatarBg: "bg-purple-500/20 text-purple-400" },
-        { id: "std-5", name: "يوسف خالد النجار", studentCode: "STD-2026-005", group: "مجموعة السبت والثلاثاء", phone: "01012345675", avatarBg: "bg-rose-500/20 text-rose-400" },
-        { id: "std-6", name: "مريم حسن عبد الله", studentCode: "STD-2026-006", group: "مجموعة الأحد والأربعاء", phone: "01012345676", avatarBg: "bg-blue-500/20 text-blue-400" },
-        { id: "std-7", name: "أحمد حسام البدري", studentCode: "STD-2026-007", group: "مجموعة السبت والثلاثاء", phone: "01012345677", avatarBg: "bg-teal-500/20 text-teal-400" },
-        { id: "std-8", name: "فاطمة طارق الشافعي", studentCode: "STD-2026-008", group: "مجموعة الأحد والأربعاء", phone: "01012345678", avatarBg: "bg-indigo-500/20 text-indigo-400" }
-      ];
+      return [];
     }
 
     // Try fetching progress documents from Firestore

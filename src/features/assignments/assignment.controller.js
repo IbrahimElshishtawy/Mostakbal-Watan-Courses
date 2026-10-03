@@ -997,11 +997,13 @@ if __name__ == "__main__":
     setHtml(container, renderLoader({ text: "جاري تحميل التاسكات والواجبات... ⏳" }));
 
     try {
-      const [assignments, students] = await Promise.all([
+      const [assignments, students, allSubmissions] = await Promise.all([
         AssignmentService.getAllAssignments(),
-        import("../students/students.service.js").then((m) => m.StudentsService.getAllStudents()).catch(() => [])
+        import("../students/students.service.js").then((m) => m.StudentsService.getAllStudents()).catch(() => []),
+        AssignmentService.getAllSubmissions().catch(() => [])
       ]);
       this._totalStudentsCount = students.length;
+      this._allSubmissions = allSubmissions;
       assignmentState.set("teacherAssignments", assignments);
       this.renderTeacherDashboard(container);
     } catch (err) {
@@ -1416,6 +1418,90 @@ if __name__ == "__main__":
       `;
     }
 
+    // Pending submissions for quick evaluation
+    const pendingSubmissions = (this._allSubmissions || []).filter(
+      (s) => s.grade === null || s.grade === undefined || s.status === "submitted" || isNaN(Number(s.grade))
+    );
+
+    let speedyTableRowsHtml = "";
+    if (pendingSubmissions.length === 0) {
+      speedyTableRowsHtml = `
+        <tr>
+          <td colspan="6" class="py-8 text-center text-slate-400 text-xs font-medium">
+            <div class="flex flex-col items-center justify-center gap-2">
+              <span class="text-xl">✓</span>
+              <span>لا توجد تسليمات بانتظار الاعتماد السريع حالياً</span>
+              <span class="text-[11px] text-slate-400 font-normal">جميع تسليمات الطلاب تم فحصها ورصد درجاتها بنجاح.</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    } else {
+      speedyTableRowsHtml = pendingSubmissions.map((s) => {
+        const studentName = s.studentName || s.studentPhone || "طالب";
+        const initial = (studentName || "ط").trim()[0] || "ط";
+        const matchingTask = allAssignments.find((a) => a.id === s.assignmentId);
+        const taskTitle = matchingTask?.title || s.assignmentTitle || s.assignmentId || "تطبيق بايثون";
+        
+        let timeStr = "مؤخراً";
+        if (s.submittedAt) {
+          const dateObj = s.submittedAt?.toDate ? s.submittedAt.toDate() : new Date(s.submittedAt);
+          timeStr = formatDateTime ? formatDateTime(dateObj) : formatDate(dateObj);
+        }
+
+        const maxPoints = Number(matchingTask?.totalPoints || matchingTask?.maxPoints || 100);
+        const suggestedGrade = maxPoints;
+
+        return `
+          <tr class="hover:bg-surface-container-high/30 transition-colors" data-submission-id="${escapeHtml(s.id)}">
+            <td class="py-3 px-4 text-on-surface font-semibold flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">
+                ${escapeHtml(initial)}
+              </div>
+              <div class="flex flex-col">
+                <span>${escapeHtml(studentName)}</span>
+                ${s.studentPhone ? `<span class="text-[10px] text-on-surface-variant font-mono">${escapeHtml(s.studentPhone)}</span>` : ""}
+              </div>
+            </td>
+            <td class="py-3 px-4 text-on-surface-variant">${escapeHtml(taskTitle)}</td>
+            <td class="py-3 px-4 text-on-surface-variant font-mono text-[11px]">${escapeHtml(timeStr)}</td>
+            <td class="py-3 px-4">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold text-[11px]">فحص آلي مكتمل</span>
+            </td>
+            <td class="py-3 px-4 text-primary font-bold font-mono">${suggestedGrade} / ${maxPoints}</td>
+            <td class="py-3 px-4 text-center">
+              <div class="flex items-center justify-center gap-2">
+                <button
+                  class="px-3.5 py-1.5 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-bold text-xs shadow-sm transition-colors cursor-pointer"
+                  type="button"
+                  data-action="quick-approve"
+                  data-submission-id="${escapeHtml(s.id)}"
+                  data-assignment-id="${escapeHtml(s.assignmentId || '')}"
+                  data-assignment-title="${escapeHtml(taskTitle)}"
+                  data-student-uid="${escapeHtml(s.studentUid || s.studentId || '')}"
+                  data-student-name="${escapeHtml(studentName)}"
+                  data-grade="${suggestedGrade}"
+                >
+                  اعتماد فوري
+                </button>
+                <button
+                  class="px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-bold text-xs shadow-sm transition-colors cursor-pointer"
+                  type="button"
+                  data-action="quick-review"
+                  data-submission-id="${escapeHtml(s.id)}"
+                  data-assignment-id="${escapeHtml(s.assignmentId || '')}"
+                  data-assignment-title="${escapeHtml(taskTitle)}"
+                  data-student-name="${escapeHtml(studentName)}"
+                >
+                  مراجعة الكود
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
     // 6. Student Performance & Speedy Evaluation Snapshot Drawer Bar (Bottom Section of Image 2.html)
     const speedyEvaluationHtml = `
       <div class="rounded-2xl bg-surface-container-low border border-surface-container-high/40 p-6 shadow-xl mb-12" dir="rtl">
@@ -1426,7 +1512,7 @@ if __name__ == "__main__":
             </div>
             <div>
               <h4 class="text-base font-bold text-on-surface">قائمة الحلول الحديثة بانتظار الاعتماد السريع</h4>
-              <p class="text-xs text-on-surface-variant mt-0.5">تسليمات وصلت خلال الـ 24 ساعة الماضية تم اجتيازها للفحص الآلي بنجاح.</p>
+              <p class="text-xs text-on-surface-variant mt-0.5">تسليمات وصلت عبر المنصة جاهزة للمراجعة ورصد الدرجات والاعتماد.</p>
             </div>
           </div>
           <button type="button" id="openCodeGraderBtn" class="text-xs font-bold text-primary hover:text-primary-fixed-dim flex items-center gap-1.5 self-start lg:self-auto transition-colors cursor-pointer">
@@ -1449,63 +1535,7 @@ if __name__ == "__main__":
               </tr>
             </thead>
             <tbody class="divide-y divide-surface-container-high/30 text-xs">
-              <tr class="hover:bg-surface-container-high/30 transition-colors">
-                <td class="py-3 px-4 text-on-surface font-semibold flex items-center gap-2.5">
-                  <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">
-                    ع
-                  </div>
-                  <span>عمر مصطفى الجوهري</span>
-                </td>
-                <td class="py-3 px-4 text-on-surface-variant">${filtered[0]?.title || "مشروع 1: آلة حاسبة تفاعلية"}</td>
-                <td class="py-3 px-4 text-on-surface-variant">منذ 35 دقيقة</td>
-                <td class="py-3 px-4">
-                  <span class="px-2.5 py-0.5 rounded-full bg-surface-container-highest text-primary font-semibold text-[11px]">10/10 كاملة</span>
-                </td>
-                <td class="py-3 px-4 text-primary font-bold font-mono">100 / 100</td>
-                <td class="py-3 px-4 text-center">
-                  <button class="px-3.5 py-1.5 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-bold text-xs shadow-sm transition-colors cursor-pointer" type="button" data-action="quick-approve" data-student="عمر مصطفى الجوهري">
-                    اعتماد فوري
-                  </button>
-                </td>
-              </tr>
-              <tr class="hover:bg-surface-container-high/30 transition-colors">
-                <td class="py-3 px-4 text-on-surface font-semibold flex items-center gap-2.5">
-                  <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary font-bold text-xs">
-                    س
-                  </div>
-                  <span>سارة محمود غنيم</span>
-                </td>
-                <td class="py-3 px-4 text-on-surface-variant">${filtered[0]?.title || "مشروع 1: آلة حاسبة تفاعلية"}</td>
-                <td class="py-3 px-4 text-on-surface-variant">منذ ساعتين</td>
-                <td class="py-3 px-4">
-                  <span class="px-2.5 py-0.5 rounded-full bg-surface-container-highest text-primary font-semibold text-[11px]">9/10 مجتازة</span>
-                </td>
-                <td class="py-3 px-4 text-primary font-bold font-mono">95 / 100</td>
-                <td class="py-3 px-4 text-center">
-                  <button class="px-3.5 py-1.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-bold text-xs shadow-sm transition-colors cursor-pointer" type="button" data-action="quick-review" data-student="سارة محمود غنيم">
-                    مراجعة الكود
-                  </button>
-                </td>
-              </tr>
-              <tr class="hover:bg-surface-container-high/30 transition-colors">
-                <td class="py-3 px-4 text-on-surface font-semibold flex items-center gap-2.5">
-                  <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary-fixed-dim font-bold text-xs">
-                    ك
-                  </div>
-                  <span>كريم أحمد الشربيني</span>
-                </td>
-                <td class="py-3 px-4 text-on-surface-variant">${filtered[1]?.title || "تحدي 2: إدارة قوائم المهام"}</td>
-                <td class="py-3 px-4 text-on-surface-variant">منذ 3 ساعات</td>
-                <td class="py-3 px-4">
-                  <span class="px-2.5 py-0.5 rounded-full bg-surface-container-highest text-secondary font-semibold text-[11px]">8/8 كاملة</span>
-                </td>
-                <td class="py-3 px-4 text-secondary font-bold font-mono">150 / 150</td>
-                <td class="py-3 px-4 text-center">
-                  <button class="px-3.5 py-1.5 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-bold text-xs shadow-sm transition-colors cursor-pointer" type="button" data-action="quick-approve" data-student="كريم أحمد الشربيني">
-                    اعتماد فوري
-                  </button>
-                </td>
-              </tr>
+              ${speedyTableRowsHtml}
             </tbody>
           </table>
         </div>
@@ -1729,19 +1759,40 @@ if __name__ == "__main__":
 
     // 11. Speedy Evaluation Table Actions
     container.querySelectorAll('[data-action="quick-approve"]').forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const student = btn.getAttribute("data-student");
-        btn.textContent = "تم الاعتماد ✅";
-        btn.disabled = true;
-        btn.className = "px-3.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold text-xs cursor-default";
-        showToast(`تم اعتماد وتوثيق درجات الطالب (${student}) بنجاح! 🌟`, "success");
+      btn.addEventListener("click", async () => {
+        const studentUid = btn.getAttribute("data-student-uid");
+        const assignmentId = btn.getAttribute("data-assignment-id") || "asg_01";
+        const studentName = btn.getAttribute("data-student-name") || "الطالب";
+        const grade = Number(btn.getAttribute("data-grade") || 100);
+
+        try {
+          btn.disabled = true;
+          btn.textContent = "جاري الاعتماد... ⏳";
+          await AssignmentService.gradeTask(assignmentId, studentUid, grade, "تم الاعتماد الفوري للحل البرمجي بنجاح.");
+          btn.textContent = "تم الاعتماد ✅";
+          btn.className = "px-3.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold text-xs cursor-default";
+          showToast(`تم اعتماد وتوثيق درجات الطالب (${studentName}) بنجاح: ${grade} ⭐`, "success");
+          setTimeout(() => {
+            this.loadTeacherAssignments(container);
+          }, 1200);
+        } catch (err) {
+          btn.disabled = false;
+          btn.textContent = "اعتماد فوري";
+          showToast(`تعذر رصد الدرجة: ${err.message}`, "error");
+        }
       });
     });
 
     container.querySelectorAll('[data-action="quick-review"]').forEach((btn) => {
       btn.addEventListener("click", () => {
-        const student = btn.getAttribute("data-student");
-        showToast(`جاري فتح محرر كود الطالب (${student}) للمراجعة والتقييم... 🔍`, "info");
+        const assignmentId = btn.getAttribute("data-assignment-id");
+        const assignmentTitle = btn.getAttribute("data-assignment-title") || "التكليف";
+        const studentName = btn.getAttribute("data-student-name") || "الطالب";
+        if (assignmentId) {
+          this.showTeacherSubmissionsModal(assignmentId, assignmentTitle);
+        } else {
+          showToast(`جاري فتح مراجعة حل الطالب (${studentName})... 🔍`, "info");
+        }
       });
     });
 

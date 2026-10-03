@@ -6,65 +6,9 @@ import { renderExamStatusBadge } from "./exam-status-badge.component.js";
 import { formatDate } from "../../../shared/utils/date.utils.js";
 
 /**
- * Signature Exams matching Image 4.png specifications.
+ * Signature Exams constant (kept empty - all exams are loaded from Firestore).
  */
-export const SIGNATURE_EXAMS = [
-  {
-    id: "PY-101-MID",
-    code: "PY-101-MID",
-    title: "اختبار بايثون الشامل - المستوى الأول",
-    description: "اختبار تجريبي على المفاهيم الأساسية، المتغيرات، والعمليات الحسابية والشرطية وقوائم بايثون.",
-    status: "ACTIVE",
-    statusLabel: "متاح الآن • Active",
-    group: "مجموعة الأحد والأربعاء",
-    targetGroupLabel: "مجموعة الأحد والأربعاء | 7:00 - 8:30 م",
-    structure: "25 سؤال (23 اختيار + 2 كود)",
-    duration: 30,
-    dateDisplay: "28 سبتمبر 2026",
-    completionDisplay: "38 طالب أتموا الاختبار من أصل 40",
-    progressPercent: 95,
-    scoreSummary: "متوسط درجات الطلاب: 92.4 / 100",
-    active: true,
-    questionCount: 25
-  },
-  {
-    id: "PY-201-PRJ",
-    code: "PY-201-PRJ",
-    title: "مشروع التقييم العملي: تطبيق بايثون وقواعد البيانات",
-    description: "مشروع عملي لبناء برنامج متكامل مع التعامل مع الملفات وقواعد البيانات ومعالجة الاستثناءات.",
-    status: "UPCOMING",
-    scheduled: true,
-    statusLabel: "مجدول • Scheduled",
-    group: "مجموعة السبت والثلاثاء",
-    targetGroupLabel: "مجموعة السبت والثلاثاء | 5:00 - 6:30 م",
-    structure: "مشروع كود عملي + 5 أسئلة مناقشة",
-    duration: 60,
-    dateDisplay: "05 أكتوبر 2026",
-    completionDisplay: "14 طالب أتموا التسليم من أصل 38",
-    progressPercent: 37,
-    scoreSummary: "بانتظار اكتمال التسليمات للبدء في الرصد النهائي",
-    active: true,
-    questionCount: 6
-  },
-  {
-    id: "ALG-BASIC-01",
-    code: "ALG-BASIC-01",
-    title: "كويز سريع: تحليل الخوارزميات وتراكيب البيانات",
-    description: "اختبار سريع لتقييم استيعاب مفهوم التعقيد الزمني (Time Complexity) والبحث والقواميس.",
-    status: "EXPIRED",
-    statusLabel: "مكتمل ومؤرشف • Completed",
-    group: "جميع المجموعات",
-    targetGroupLabel: "جميع المجموعات المشتركة",
-    structure: "10 أسئلة اختيار من متعدد",
-    duration: 20,
-    dateDisplay: "21 سبتمبر 2026",
-    completionDisplay: "70 طالب أتموا الاختبار من أصل 78",
-    progressPercent: 100,
-    scoreSummary: "متوسط الدرجات: 88 / 100",
-    active: false,
-    questionCount: 10
-  }
-];
+export const SIGNATURE_EXAMS = [];
 
 /**
  * Returns HTML string for the Admin Exam Table View.
@@ -183,21 +127,36 @@ export function renderAdminExamsView({
   filteredExams = [],
   resultsMap = {},
   filters = {},
+  totalStudentsCount = 0,
+  pendingReviewsCount = 0,
   viewMode = "cards"
 } = {}) {
-  // Merge signature exams if list is minimal
-  const existingIds = new Set(allExams.map((e) => e.id));
-  const fullExamsList = [
-    ...allExams,
-    ...SIGNATURE_EXAMS.filter((se) => !existingIds.has(se.id))
-  ];
+  const totalCount = allExams.length;
+  const activeCount = allExams.filter((e) => e.active !== false && !e.scheduled && e.status !== "EXPIRED").length;
+  const scheduledCount = allExams.filter((e) => e.scheduled || e.status === "UPCOMING").length;
+  const inactiveCount = allExams.filter((e) => e.active === false || e.status === "EXPIRED").length;
 
-  const totalCount = fullExamsList.length || 12;
-  const activeCount = fullExamsList.filter((e) => e.active !== false && !e.scheduled).length || 3;
-  const scheduledCount = fullExamsList.filter((e) => e.scheduled || e.status === "UPCOMING").length || 4;
-  const inactiveCount = fullExamsList.filter((e) => e.active === false || e.status === "EXPIRED").length || 5;
+  // Real aggregate calculations
+  const allResults = Object.values(resultsMap).flat();
+  const testedStudentUids = new Set(allResults.map((r) => r.studentUid || r.studentId).filter(Boolean));
+  const testedStudentsCount = testedStudentUids.size;
 
-  // Hero Section matching Image 4.png
+  let avgSuccessRate = 0;
+  if (allResults.length > 0) {
+    const totalScore = allResults.reduce((sum, r) => {
+      const score = Number(r.score) || Number(r.percentage) || (r.scorePercentage !== undefined ? Number(r.scorePercentage) : 0);
+      return sum + score;
+    }, 0);
+    avgSuccessRate = Math.min(100, Math.round(totalScore / allResults.length));
+  }
+
+  const performanceLabel = avgSuccessRate >= 85
+    ? "مستوى أداء: ممتاز جداً"
+    : (avgSuccessRate >= 70
+        ? "مستوى أداء: جيد جداً"
+        : (avgSuccessRate > 0 ? "مستوى أداء: متوسط" : "لا توجد نتائج مسجلة بعد"));
+
+  // Hero Section
   const heroHtml = `
     <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#121927] via-[#152136] to-[#0f1726] border border-[#1f2e47] p-6 lg:p-8 shadow-xl" data-purpose="exams-hero">
       <div class="absolute -left-12 -top-12 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -217,7 +176,7 @@ export function renderAdminExamsView({
             إدارة وإنشاء ومتابعة الاختبارات التفاعلية والبرمجية، التصحيح التلقائي وتوزيع شهادات الإنجاز.
           </p>
 
-          <!-- Summary Pills inside Hero matching Image 4.png -->
+          <!-- Summary Pills inside Hero -->
           <div class="flex flex-wrap items-center gap-2 mt-4 text-xs font-mono">
             <span class="px-3 py-1.5 rounded-lg bg-[#182338] border border-[#273754] text-slate-200">
               إجمالي الامتحانات: <strong class="text-white">${totalCount}</strong>
@@ -235,7 +194,7 @@ export function renderAdminExamsView({
           </div>
         </div>
 
-        <!-- Action CTAs matching Image 4.png -->
+        <!-- Action CTAs -->
         <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           <button type="button" id="openCreateExamBtn" class="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 text-slate-950 font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-500/25 glow-emerald text-sm cursor-pointer transition-all">
             <i class="fa-solid fa-plus text-xs"></i>
@@ -245,16 +204,12 @@ export function renderAdminExamsView({
             <i class="fa-solid fa-print text-cyan-400 text-xs"></i>
             <span>تقرير الامتحانات الشامل</span>
           </button>
-          <button type="button" id="adminQuestionBankBtn" class="flex items-center justify-center gap-2 bg-[#182336] hover:bg-[#202e47] text-slate-200 border border-[#273856] px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer" onclick="showToast('بنك الأسئلة يحتوي على أكثر من 300 سؤال مبرمج 📚', 'info')">
-            <i class="fa-solid fa-boxes-stacked text-amber-400 text-xs"></i>
-            <span>بنك الأسئلة</span>
-          </button>
         </div>
       </div>
     </section>
   `;
 
-  // 4 KPI Metric Cards matching Image 4.png
+  // 4 KPI Metric Cards with real live data
   const statsCardsHtml = `
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-purpose="exam-metrics">
       <!-- Card 1: Total Exams -->
@@ -269,9 +224,9 @@ export function renderAdminExamsView({
           <span class="text-2xl font-black text-white font-mono">${totalCount}</span>
           <span class="text-xs text-slate-400 font-medium">اختبار ومهمة</span>
         </div>
-        <div class="mt-2 flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
-          <i class="fa-solid fa-arrow-up text-[10px]"></i>
-          <span>+2 اختبارات مضافة هذا الشهر</span>
+        <div class="mt-2 flex items-center gap-1.5 text-xs ${totalCount > 0 ? 'text-emerald-400' : 'text-slate-400'} font-semibold">
+          <i class="fa-solid ${totalCount > 0 ? 'fa-circle-check' : 'fa-circle-info'} text-[10px]"></i>
+          <span>${totalCount > 0 ? `${activeCount} اختبار متاح للطلاب حالياً` : 'لا توجد اختبارات مضافة حالياً'}</span>
         </div>
       </div>
 
@@ -284,28 +239,28 @@ export function renderAdminExamsView({
           </div>
         </div>
         <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-2xl font-black text-white font-mono">88.4%</span>
-          <span class="text-[11px] text-emerald-400 font-semibold">مستوى أداء: ممتاز جداً</span>
+          <span class="text-2xl font-black text-white font-mono">${avgSuccessRate}%</span>
+          <span class="text-[11px] ${avgSuccessRate > 0 ? 'text-emerald-400' : 'text-slate-400'} font-semibold">${performanceLabel}</span>
         </div>
         <div class="w-full bg-[#1b263b] h-1.5 rounded-full mt-2.5 overflow-hidden">
-          <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full" style="width: 88.4%"></div>
+          <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full" style="width: ${avgSuccessRate}%"></div>
         </div>
       </div>
 
       <!-- Card 3: Tested Students -->
       <div class="bg-[#121824] border border-[#1e2a3f] hover:border-indigo-500/40 rounded-xl p-4 transition-all hover:-translate-y-0.5 shadow-sm group">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-400">الطلاب المختبرين هذا الأسبوع</span>
+          <span class="text-xs font-bold text-slate-400">الطلاب الذين أجروا اختبارات</span>
           <div class="w-9 h-9 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
             <i class="fa-solid fa-users text-sm"></i>
           </div>
         </div>
         <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-2xl font-black text-white font-mono">156</span>
+          <span class="text-2xl font-black text-white font-mono">${testedStudentsCount}</span>
           <span class="text-xs text-slate-400 font-medium">طالب</span>
         </div>
         <div class="mt-2 text-xs text-slate-400">
-          <span>من أصل 180 طالباً مسجلاً</span>
+          <span>من أصل ${totalStudentsCount > 0 ? totalStudentsCount : 1} طالباً مسجلاً</span>
         </div>
       </div>
 
@@ -318,18 +273,18 @@ export function renderAdminExamsView({
           </div>
         </div>
         <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-2xl font-black text-amber-400 font-mono">2</span>
+          <span class="text-2xl font-black text-amber-400 font-mono">${pendingReviewsCount}</span>
           <span class="text-xs text-slate-400 font-medium">مهام متبقية</span>
         </div>
         <div class="mt-2 flex items-center gap-1.5 text-xs text-amber-400/90 font-medium">
           <i class="fa-solid fa-pen-nib text-[10px]"></i>
-          <span>مراجعة أكواد بايثون وتوزيع الدرجات</span>
+          <span>${pendingReviewsCount > 0 ? 'مراجعة الأكواد ورصد الدرجات' : 'لا توجد مشاريع بانتظار التصحيح ✓'}</span>
         </div>
       </div>
     </section>
   `;
 
-  // Filters Bar matching Image 4.png
+  // Filters Bar
   const filtersHtml = renderExamFilters({
     searchQuery: filters.searchQuery || "",
     groupFilter: filters.group || "ALL",
@@ -339,21 +294,51 @@ export function renderAdminExamsView({
   });
 
   // Effective list to render
-  const effectiveFiltered = filteredExams.length > 0 ? filteredExams : fullExamsList;
+  const effectiveFiltered = filteredExams;
 
   // Exams List Body
   let contentHtml = "";
-  if (viewMode === "table") {
+  if (allExams.length === 0) {
+    contentHtml = `
+      <div class="rounded-2xl border border-[#1e2a3f] bg-[#121825] p-12 text-center my-6 shadow-sm">
+        <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto text-3xl mb-4">
+          📝
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">لا توجد امتحانات أو تقييمات أكاديمية حتى الآن</h3>
+        <p class="text-slate-400 text-sm max-w-md mx-auto mb-6 leading-relaxed">
+          لم يتم إنشاء أي اختبارات في قاعدة البيانات بعد. يمكنك الضغط على الزر أدناه لإنشاء أول امتحان وتحديد الأسئلة وضبط التوقيت والتصحيح الآلي.
+        </p>
+        <button type="button" id="emptyStateCreateExamBtn" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-xl shadow-lg shadow-emerald-500/25 glow-emerald text-sm cursor-pointer transition-all">
+          <i class="fa-solid fa-plus text-xs"></i>
+          <span>إنشاء أول امتحان جديد</span>
+        </button>
+      </div>
+    `;
+  } else if (effectiveFiltered.length === 0) {
+    contentHtml = `
+      <div class="rounded-2xl border border-[#1e2a3f] bg-[#121825] p-12 text-center my-6 shadow-sm">
+        <div class="w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto text-3xl mb-4">
+          🔍
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">لا توجد امتحانات مطابقة لمعايير البحث</h3>
+        <p class="text-slate-400 text-sm max-w-md mx-auto mb-4 leading-relaxed">
+          لم يتم العثور على أي نتائج مطابقة للفلاتر أو كلمة البحث الحالية.
+        </p>
+      </div>
+    `;
+  } else if (viewMode === "table") {
     contentHtml = renderAdminExamsTable(effectiveFiltered, resultsMap);
   } else {
-    // Detailed Cards Grid View matching Image 4.png
+    // Detailed Cards Grid View
     contentHtml = `
       <div class="space-y-4 mt-2">
         ${effectiveFiltered
           .map((exam) =>
             renderAdminExamCard({
               exam,
-              resultsCount: (resultsMap[exam.id] || []).length
+              resultsCount: (resultsMap[exam.id] || []).length,
+              totalStudentsCount,
+              resultsList: resultsMap[exam.id] || []
             })
           )
           .join("")}

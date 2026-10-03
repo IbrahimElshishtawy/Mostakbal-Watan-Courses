@@ -1185,8 +1185,18 @@ export const ExamController = {
     this.ensureAdminModals();
 
     try {
-      const exams = await ExamService.getAllExams();
+      const [exams, students, submissions] = await Promise.all([
+        ExamService.getAllExams(),
+        import("../students/students.service.js").then((m) => m.StudentsService.getAllStudents()).catch(() => []),
+        import("../assignments/assignment.service.js").then((m) => m.AssignmentService.getAllSubmissions()).catch(() => [])
+      ]);
       examState.set("adminExams", exams);
+      examState.set("adminTotalStudentsCount", students.length);
+
+      const pendingReviews = (submissions || []).filter(
+        (s) => s.grade === null || s.grade === undefined || isNaN(Number(s.grade))
+      );
+      examState.set("adminPendingReviewsCount", pendingReviews.length);
 
       // Fetch results count in parallel for real metrics
       const resultsMap = {};
@@ -1226,6 +1236,8 @@ export const ExamController = {
   renderAdminView(container) {
     const allExams = examState.get("adminExams") || [];
     const resultsMap = examState.get("adminResultsMap") || {};
+    const totalStudentsCount = examState.get("adminTotalStudentsCount") || 0;
+    const pendingReviewsCount = examState.get("adminPendingReviewsCount") || 0;
     const filters = examState.get("adminFilters") || { searchQuery: "", group: "ALL", status: "ALL", sort: "newest" };
 
     // Apply filters
@@ -1267,6 +1279,8 @@ export const ExamController = {
       filteredExams: filtered,
       resultsMap,
       filters,
+      totalStudentsCount,
+      pendingReviewsCount,
       viewMode: adminViewMode
     });
 

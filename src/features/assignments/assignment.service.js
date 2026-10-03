@@ -308,6 +308,25 @@ export const AssignmentService = {
   },
 
   /**
+   * Fetches all submissions across the platform (Teacher / Admin).
+   * Queries top-level /submissions collection and maps documents.
+   */
+  async getAllSubmissions() {
+    try {
+      const snap = await getDocs(collection(db, COLLECTIONS.SUBMISSIONS));
+      const submissions = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      return submissions.sort((a, b) => {
+        const timeA = a.submittedAt?.toDate?.() || new Date(a.submittedAt || a.createdAt || 0);
+        const timeB = b.submittedAt?.toDate?.() || new Date(b.submittedAt || b.createdAt || 0);
+        return timeB - timeA;
+      });
+    } catch (err) {
+      console.warn("Could not fetch all submissions:", err);
+      return [];
+    }
+  },
+
+  /**
    * Fetches all submissions for an assignment (Teacher / Admin).
    * Queries both subcollection and legacy collection.
    */
