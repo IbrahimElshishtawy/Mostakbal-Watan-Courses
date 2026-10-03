@@ -1,7 +1,7 @@
 // src/features/exams/exam.controller.js
 import { ExamService } from "./exam.service.js";
 import { examState } from "./exam.state.js";
-import { renderStudentExamCard, renderTeacherExamCard, renderAdminExamCard } from "./components/exam-card.component.js";
+import { renderStudentExamCard, renderTeacherExamCard, renderAdminExamCard } from "./components/exam-card.component.js?v=3.5.2";
 import { renderExamTimer } from "./components/exam-timer.component.js";
 import { renderExamQuestion } from "./components/exam-question.component.js";
 import { renderExamQuestionNavigator } from "./components/exam-question-navigator.component.js";
@@ -9,7 +9,7 @@ import { renderExamProgress } from "./components/exam-progress.component.js";
 import { renderExamSubmitDialog, EXAM_SUBMIT_MODAL_ID } from "./components/exam-submit-dialog.component.js";
 import { renderExamResult } from "./components/exam-result.component.js";
 import { renderExamListSkeleton, renderExamQuestionSkeleton } from "./components/exam-skeleton.component.js";
-import { renderAdminExamsView } from "./components/exam-list.component.js";
+import { renderAdminExamsView } from "./components/exam-list.component.js?v=3.5.2";
 import {
   renderExamFormModal,
   renderExamFormStepper,
@@ -2352,14 +2352,25 @@ export const ExamController = {
 
     if (confirmed) {
       try {
+        // Optimistic UI update: instantly drop from state and re-render
+        const currentExams = examState.get("adminExams") || [];
+        examState.set("adminExams", currentExams.filter((e) => e.id !== examId));
+        if (activeAdminContainer) {
+          this.renderAdminView(activeAdminContainer);
+        }
+
         await ExamService.deleteExam(examId);
         showToast("تم حذف الامتحان بنجاح 🗑️", "info");
+
         if (activeAdminContainer) {
-          this.loadAdminExams(activeAdminContainer);
+          await this.loadAdminExams(activeAdminContainer);
         }
       } catch (err) {
         console.error("Delete exam error:", err);
         showToast(err.message || "تعذر حذف الامتحان.", "error");
+        if (activeAdminContainer) {
+          this.loadAdminExams(activeAdminContainer);
+        }
       }
     }
   }
