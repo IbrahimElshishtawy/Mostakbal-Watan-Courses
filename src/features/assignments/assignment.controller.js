@@ -1,22 +1,21 @@
-// src/features/assignments/assignment.controller.js
-import { AssignmentService } from "./assignment.service.js";
-import { assignmentState } from "./assignment.state.js";
+import { AssignmentService, getAllSubmissions, getAllAssignments } from "./assignment.service.js?v=3.5.3";
+import { assignmentState } from "./assignment.state.js?v=3.5.3";
 import {
   renderStudentAssignmentCard,
   renderStudentAssignmentSkeletonGrid,
   renderTeacherAssignmentCard,
   formatAssignmentContent
-} from "./components/assignment-card.component.js";
+} from "./components/assignment-card.component.js?v=3.5.3";
 import {
   renderAssignmentDetailsModal,
   renderAssignmentDetailsContent,
   ASSIGNMENT_DETAILS_MODAL_ID
-} from "./components/assignment-details-modal.component.js";
+} from "./components/assignment-details-modal.component.js?v=3.5.3";
 import {
   renderAssignmentEvaluationModal,
   renderAssignmentEvaluationContent,
   ASSIGNMENT_EVALUATION_MODAL_ID
-} from "./components/assignment-evaluation-modal.component.js";
+} from "./components/assignment-evaluation-modal.component.js?v=3.5.3";
 import { bindFileUploadZone } from "../../shared/components/FileUpload/file-upload.component.js";
 import { openModal, closeModal, renderModal } from "../../shared/components/Modal/modal.component.js";
 import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm-dialog.component.js";
@@ -42,7 +41,7 @@ import { auth } from "../../core/firebase.js";
 import { GROUPS } from "../../core/constants.js";
 import { triggerPrintReport } from "../exams/components/exam-report.component.js";
 import { renderAssignmentPrintableReport } from "./components/assignment-report.component.js";
-import { normalizeAssignmentGrade, formatAssignmentGradeDisplay } from "./assignment.service.js";
+import { normalizeAssignmentGrade, formatAssignmentGradeDisplay } from "./assignment.service.js?v=3.5.3";
 import { runPythonCode, ensurePythonRuntime } from "../python-adventure/python-adventure-runtime.js";
 
 // Internal debounce helper
@@ -997,13 +996,24 @@ if __name__ == "__main__":
     setHtml(container, renderLoader({ text: "جاري تحميل التاسكات والواجبات... ⏳" }));
 
     try {
+      const fetchAssignments = typeof AssignmentService?.getAllAssignments === "function"
+        ? AssignmentService.getAllAssignments()
+        : (typeof getAllAssignments === "function" ? getAllAssignments() : Promise.resolve([]));
+
+      const fetchSubmissions = typeof AssignmentService?.getAllSubmissions === "function"
+        ? AssignmentService.getAllSubmissions()
+        : (typeof getAllSubmissions === "function" ? getAllSubmissions() : Promise.resolve([]));
+
       const [assignments, students, allSubmissions] = await Promise.all([
-        AssignmentService.getAllAssignments().catch((err) => {
+        fetchAssignments.catch((err) => {
           console.warn("Direct assignments fetch warning, defaulting to empty list:", err);
           return [];
         }),
-        import("../students/students.service.js").then((m) => m.StudentsService.getAllStudents()).catch(() => []),
-        AssignmentService.getAllSubmissions().catch(() => [])
+        import("../students/students.service.js?v=3.5.3").then((m) => m.StudentsService.getAllStudents()).catch(() => []),
+        fetchSubmissions.catch((err) => {
+          console.warn("Direct submissions fetch warning, defaulting to empty list:", err);
+          return [];
+        })
       ]);
       this._totalStudentsCount = students.length;
       this._allSubmissions = allSubmissions;

@@ -112,7 +112,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
             <i class="fa-solid fa-shield-halved text-emerald-400 text-xs"></i>
             <span>حماية مشفرة 256-bit</span>
           </span>
-          <span class="font-mono text-slate-400">v3.5.2</span>
+          <span class="font-mono text-slate-400">v3.5.3</span>
         </div>
         <button id="adminLogoutBtn" type="button" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-all cursor-pointer">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>

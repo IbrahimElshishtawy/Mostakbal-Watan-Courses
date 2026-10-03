@@ -1,7 +1,7 @@
 // src/features/exams/exam.controller.js
 import { ExamService } from "./exam.service.js";
 import { examState } from "./exam.state.js";
-import { renderStudentExamCard, renderTeacherExamCard, renderAdminExamCard } from "./components/exam-card.component.js?v=3.5.2";
+import { renderStudentExamCard, renderTeacherExamCard, renderAdminExamCard } from "./components/exam-card.component.js?v=3.5.3";
 import { renderExamTimer } from "./components/exam-timer.component.js";
 import { renderExamQuestion } from "./components/exam-question.component.js";
 import { renderExamQuestionNavigator } from "./components/exam-question-navigator.component.js";
@@ -9,7 +9,7 @@ import { renderExamProgress } from "./components/exam-progress.component.js";
 import { renderExamSubmitDialog, EXAM_SUBMIT_MODAL_ID } from "./components/exam-submit-dialog.component.js";
 import { renderExamResult } from "./components/exam-result.component.js";
 import { renderExamListSkeleton, renderExamQuestionSkeleton } from "./components/exam-skeleton.component.js";
-import { renderAdminExamsView } from "./components/exam-list.component.js?v=3.5.2";
+import { renderAdminExamsView } from "./components/exam-list.component.js?v=3.5.3";
 import {
   renderExamFormModal,
   renderExamFormStepper,
@@ -1188,7 +1188,7 @@ export const ExamController = {
       const [exams, students, submissions] = await Promise.all([
         ExamService.getAllExams(),
         import("../students/students.service.js").then((m) => m.StudentsService.getAllStudents()).catch(() => []),
-        import("../assignments/assignment.service.js").then((m) => m.AssignmentService.getAllSubmissions()).catch(() => [])
+        import("../assignments/assignment.service.js?v=3.5.3").then((m) => (typeof m.AssignmentService?.getAllSubmissions === "function" ? m.AssignmentService.getAllSubmissions() : (typeof m.getAllSubmissions === "function" ? m.getAllSubmissions() : []))).catch(() => [])
       ]);
       examState.set("adminExams", exams);
       examState.set("adminTotalStudentsCount", students.length);

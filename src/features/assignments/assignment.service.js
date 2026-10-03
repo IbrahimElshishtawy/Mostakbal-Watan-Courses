@@ -55,18 +55,41 @@ export function formatAssignmentGradeDisplay(rawGrade, maxScore = 100) {
   return `${norm} / 10`;
 }
 
+/**
+ * Fetches all assignments from Firestore.
+ */
+export async function getAllAssignments() {
+  try {
+    const snap = await getDocs(collection(db, COLLECTIONS.ASSIGNMENTS));
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    console.warn("Could not fetch all assignments:", err);
+    return [];
+  }
+}
+
+/**
+ * Fetches all submissions across the platform (Teacher / Admin).
+ * Queries top-level /submissions collection and maps documents.
+ */
+export async function getAllSubmissions() {
+  try {
+    const snap = await getDocs(collection(db, COLLECTIONS.SUBMISSIONS));
+    const submissions = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    return submissions.sort((a, b) => {
+      const timeA = a.submittedAt?.toDate?.() || new Date(a.submittedAt || a.createdAt || 0);
+      const timeB = b.submittedAt?.toDate?.() || new Date(b.submittedAt || b.createdAt || 0);
+      return timeB - timeA;
+    });
+  } catch (err) {
+    console.warn("Could not fetch all submissions:", err);
+    return [];
+  }
+}
+
 export const AssignmentService = {
-  /**
-   * Fetches all assignments.
-   */
-  async getAllAssignments() {
-    try {
-      const snap = await getDocs(collection(db, COLLECTIONS.ASSIGNMENTS));
-      return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    } catch (err) {
-      throw normalizeError(err);
-    }
-  },
+  getAllAssignments,
+  getAllSubmissions,
 
   /**
    * Fetches submissions for a given student across known assignments.
@@ -307,24 +330,7 @@ export const AssignmentService = {
     }
   },
 
-  /**
-   * Fetches all submissions across the platform (Teacher / Admin).
-   * Queries top-level /submissions collection and maps documents.
-   */
-  async getAllSubmissions() {
-    try {
-      const snap = await getDocs(collection(db, COLLECTIONS.SUBMISSIONS));
-      const submissions = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      return submissions.sort((a, b) => {
-        const timeA = a.submittedAt?.toDate?.() || new Date(a.submittedAt || a.createdAt || 0);
-        const timeB = b.submittedAt?.toDate?.() || new Date(b.submittedAt || b.createdAt || 0);
-        return timeB - timeA;
-      });
-    } catch (err) {
-      console.warn("Could not fetch all submissions:", err);
-      return [];
-    }
-  },
+
 
   /**
    * Fetches all submissions for an assignment (Teacher / Admin).
