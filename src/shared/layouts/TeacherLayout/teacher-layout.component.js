@@ -78,7 +78,7 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
                 <i class="fa-solid fa-file-pen w-4 text-center text-slate-400 group-hover:text-amber-400"></i>
                 <span>الاختبارات والتقييمات</span>
               </div>
-              <span class="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded-full border border-slate-700">12</span>
+              <span class="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded-full border border-slate-700" id="teacherNavExamsBadge">0</span>
             </button>
 
             <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="assignments" id="tab-btn-assignments">
@@ -136,7 +136,7 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
             <i class="fa-solid fa-shield-halved text-emerald-400 text-xs"></i>
             <span>تشفير 256-bit آمن</span>
           </span>
-          <span class="font-mono text-slate-400">v2.6.4</span>
+          <span class="font-mono text-slate-400">v3.5.2</span>
         </div>
         <button id="teacherLogoutBtn" type="button" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition-all cursor-pointer">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -315,15 +315,25 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
     }
   });
 
-  // Automatically sync live student count from Firestore
+  // Automatically sync live student count and exams count from Firestore
   const updateStudentBadge = (count) => {
     const badge = document.getElementById("teacherNavStudentsBadge");
+    if (badge) badge.textContent = String(count);
+  };
+
+  const updateExamsBadge = (count) => {
+    const badge = document.getElementById("teacherNavExamsBadge");
     if (badge) badge.textContent = String(count);
   };
 
   import("../../../features/students/students.service.js")
     .then((m) => m.StudentsService.getAllStudents())
     .then((students) => updateStudentBadge(students.length))
+    .catch(() => {});
+
+  import("../../../features/exams/exam.service.js")
+    .then((m) => m.ExamService.getAllExams())
+    .then((exams) => updateExamsBadge(exams.length))
     .catch(() => {});
 
   // Set default active tab

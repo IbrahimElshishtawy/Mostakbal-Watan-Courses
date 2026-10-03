@@ -998,13 +998,16 @@ if __name__ == "__main__":
 
     try {
       const [assignments, students, allSubmissions] = await Promise.all([
-        AssignmentService.getAllAssignments(),
+        AssignmentService.getAllAssignments().catch((err) => {
+          console.warn("Direct assignments fetch warning, defaulting to empty list:", err);
+          return [];
+        }),
         import("../students/students.service.js").then((m) => m.StudentsService.getAllStudents()).catch(() => []),
         AssignmentService.getAllSubmissions().catch(() => [])
       ]);
       this._totalStudentsCount = students.length;
       this._allSubmissions = allSubmissions;
-      assignmentState.set("teacherAssignments", assignments);
+      assignmentState.set("teacherAssignments", assignments || []);
       this.renderTeacherDashboard(container);
     } catch (err) {
       console.error("Error loading teacher assignments:", err);
@@ -1013,7 +1016,7 @@ if __name__ == "__main__":
         renderEmptyState({
           icon: "⚠️",
           title: "تعذر تحميل التكليفات والواجبات",
-          description: "حدث خطأ أثناء جلب قائمة الواجبات من قاعدة البيانات. يرجى التحقق من اتصالك بالإنترنت.",
+          description: err.message || "حدث خطأ أثناء جلب قائمة الواجبات من قاعدة البيانات. يرجى التحقق من اتصالك بالإنترنت.",
           actionButtonHtml: `<button type="button" id="retryLoadTeacherAssignmentsBtn" class="px-4 py-2 rounded-xl bg-primary-container text-on-primary-container text-xs font-bold transition-all cursor-pointer">إعادة المحاولة 🔄</button>`
         })
       );

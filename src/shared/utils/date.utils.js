@@ -11,6 +11,10 @@ export function formatDate(dateVal) {
   let dateObj;
   if (typeof dateVal?.toDate === "function") {
     dateObj = dateVal.toDate();
+  } else if (typeof dateVal?.seconds === "number") {
+    dateObj = new Date(dateVal.seconds * 1000);
+  } else if (typeof dateVal?._seconds === "number") {
+    dateObj = new Date(dateVal._seconds * 1000);
   } else if (dateVal instanceof Date) {
     dateObj = dateVal;
   } else {
@@ -48,6 +52,12 @@ export function parseDeadline(deadline) {
   if (!deadline) return null;
   if (typeof deadline?.toDate === "function") {
     return deadline.toDate();
+  }
+  if (typeof deadline?.seconds === "number") {
+    return new Date(deadline.seconds * 1000);
+  }
+  if (typeof deadline?._seconds === "number") {
+    return new Date(deadline._seconds * 1000);
   }
   if (deadline instanceof Date) {
     return isNaN(deadline.getTime()) ? null : deadline;
@@ -87,6 +97,10 @@ export function formatDateTime(dateVal) {
   let dateObj;
   if (typeof dateVal?.toDate === "function") {
     dateObj = dateVal.toDate();
+  } else if (typeof dateVal?.seconds === "number") {
+    dateObj = new Date(dateVal.seconds * 1000);
+  } else if (typeof dateVal?._seconds === "number") {
+    dateObj = new Date(dateVal._seconds * 1000);
   } else if (dateVal instanceof Date) {
     dateObj = dateVal;
   } else {
