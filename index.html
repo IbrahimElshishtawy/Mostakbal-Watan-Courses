@@ -1060,17 +1060,16 @@
         <div class="flex flex-col gap-1.5">
           <label for="loginUsername" class="text-xs sm:text-sm font-bold text-slate-200">اسم المستخدم أو رقم الهاتف *</label>
           <input id="loginUsername" name="username" class="w-full px-4 py-3 min-h-[46px] rounded-xl bg-slate-900 border-2 border-slate-600 text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 text-xs sm:text-sm font-mono transition-colors shadow-inner"
-                 placeholder="010xxxxxxxx أو admin أو teacher" required type="text" autocomplete="username" />
+                 placeholder="أدخل اسم المستخدم أو رقم الهاتف" required type="text" autocomplete="username" />
         </div>
 
         <div class="flex flex-col gap-1.5">
           <div class="flex items-center justify-between">
             <label for="loginPassword" class="text-xs sm:text-sm font-bold text-slate-200">كلمة المرور *</label>
-            <span class="text-[11px] text-sky-400 font-medium">الطلاب: الهاتف | الإدارة: 123456</span>
           </div>
           <div class="relative">
             <input id="loginPassword" name="password" class="w-full px-4 py-3 min-h-[46px] rounded-xl bg-slate-900 border-2 border-slate-600 text-white placeholder:text-slate-400 focus:outline-none focus:border-sky-400 text-xs sm:text-sm font-mono transition-colors pr-4 pl-12 shadow-inner"
-                   placeholder="أدخل كلمة المرور (أو 123456 للإدارة)" type="password" autocomplete="current-password" />
+                   placeholder="أدخل كلمة المرور" type="password" autocomplete="current-password" />
             <button id="passwordToggle" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-sky-400 p-1.5 min-h-[36px] min-w-[36px] rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center cursor-pointer transition-colors" onclick="togglePassword()" type="button" aria-label="إظهار كلمة المرور">
               <span id="passwordToggleIcon" class="material-symbols-outlined text-[20px]">visibility</span>
             </button>
@@ -1089,41 +1088,6 @@
           <span class="material-symbols-outlined text-[19px]">login</span>
           <span>تسجيل الدخول إلى الحساب</span>
         </button>
-
-        <!-- Quick Staff Login (Admin & Teacher Direct Access) -->
-        <div class="pt-3 border-t border-slate-800/90 flex flex-col gap-2">
-          <div class="flex items-center justify-between text-[11px] text-slate-400 font-medium">
-            <span class="flex items-center gap-1.5 text-amber-400 font-bold">
-              <span class="material-symbols-outlined text-[16px]">key</span>
-              <span>الدخول السريع للإدارة والمحاضر:</span>
-            </span>
-            <span class="text-[10px] text-slate-500 font-mono">Password: 123456</span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <!-- Quick Admin Login Button -->
-            <button type="button" onclick="quickStaffLogin('admin')" class="group p-2.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-slate-900 border border-emerald-500/30 hover:border-emerald-400 text-right transition-all flex items-center gap-2 cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(16,185,129,0.25)] touch-manipulation">
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
-              </div>
-              <div class="flex flex-col min-w-0">
-                <span class="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors truncate">مدير المنصة</span>
-                <span class="text-[10px] text-emerald-400/80 font-mono truncate">admin • بنقرة واحدة</span>
-              </div>
-            </button>
-
-            <!-- Quick Teacher Login Button -->
-            <button type="button" onclick="quickStaffLogin('teacher')" class="group p-2.5 rounded-xl bg-gradient-to-r from-cyan-950/80 to-slate-900 border border-cyan-500/30 hover:border-cyan-400 text-right transition-all flex items-center gap-2 cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.25)] touch-manipulation">
-              <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-[18px]">school</span>
-              </div>
-              <div class="flex flex-col min-w-0">
-                <span class="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors truncate">المحاضر الأكاديمي</span>
-                <span class="text-[10px] text-cyan-400/80 font-mono truncate">teacher • بنقرة واحدة</span>
-              </div>
-            </button>
-          </div>
-        </div>
       </form>
 
     </div>
@@ -1290,12 +1254,8 @@
           <p>جميع الحقوق محفوظة © 2026 • اتحاد بشبابها</p>
           <span class="hidden md:inline text-slate-700">•</span>
           <div class="flex items-center gap-2.5">
-            <button type="button" onclick="openLoginModal(); quickStaffLogin('admin');" class="text-emerald-400/90 hover:text-emerald-300 hover:underline transition-colors cursor-pointer text-xs font-medium flex items-center gap-1">
-              <span>👑 لوحة الإدارة</span>
-            </button>
-            <span class="text-slate-700">•</span>
-            <button type="button" onclick="openLoginModal(); quickStaffLogin('teacher');" class="text-cyan-400/90 hover:text-cyan-300 hover:underline transition-colors cursor-pointer text-xs font-medium flex items-center gap-1">
-              <span>👨‍🏫 لوحة المحاضر</span>
+            <button type="button" onclick="openLoginModal();" class="text-sky-400/90 hover:text-sky-300 hover:underline transition-colors cursor-pointer text-xs font-medium flex items-center gap-1">
+              <span>تسجيل الدخول للمنصة 🔐</span>
             </button>
           </div>
           <span class="hidden md:inline text-slate-700">•</span>
@@ -1307,7 +1267,7 @@
   </footer>
 
   <!-- Application Bootstrap & Authentication Wiring -->
-  <script type="module" src="src/app/landing.js"></script>
+  <script type="module" src="src/app/landing.js?v=3.5.0"></script>
 
 </body>
 

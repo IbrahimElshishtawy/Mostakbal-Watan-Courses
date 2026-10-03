@@ -10,7 +10,7 @@ export function renderLoginModal() {
         id: "loginUsername",
         name: "username",
         label: "اسم المستخدم / رقم الهاتف",
-        placeholder: "010xxxxxxxx أو اسم المستخدم",
+        placeholder: "أدخل اسم المستخدم أو رقم الهاتف",
         required: true
       })}
 
@@ -18,7 +18,7 @@ export function renderLoginModal() {
         id: "loginPassword",
         name: "password",
         label: "كلمة المرور",
-        placeholder: "••••••••",
+        placeholder: "أدخل كلمة المرور",
         required: true
       })}
 
@@ -32,21 +32,6 @@ export function renderLoginModal() {
           variant: "primary",
           className: "w-full btn-lg"
         })}
-      </div>
-
-      <div class="pt-3 mt-3 border-top border-slate-800 d-flex flex-column gap-2">
-        <div class="d-flex justify-content-between text-muted" style="font-size: 0.8rem;">
-          <span style="color: #fbbf24; font-weight: bold;">⚡ دخول سريع للإدارة والمحاضر:</span>
-          <span style="font-family: monospace;">Pass: 123456</span>
-        </div>
-        <div class="d-flex gap-2">
-          <button type="button" onclick="window.quickStaffLogin && window.quickStaffLogin('admin')" class="btn btn-secondary flex-1 d-flex align-items-center justify-content-center gap-1" style="font-size: 0.85rem; border-color: rgba(16,185,129,0.4);">
-            <span>👑 مدير المنصة</span>
-          </button>
-          <button type="button" onclick="window.quickStaffLogin && window.quickStaffLogin('teacher')" class="btn btn-secondary flex-1 d-flex align-items-center justify-content-center gap-1" style="font-size: 0.85rem; border-color: rgba(6,182,212,0.4);">
-            <span>👨‍🏫 المحاضر</span>
-          </button>
-        </div>
       </div>
     </form>
   `;

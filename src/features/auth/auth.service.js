@@ -31,21 +31,12 @@ export const AuthService = {
       normalized = "0" + normalized.slice(2);
     }
 
-    // Check staff aliases (admin & teacher in English and Arabic or official phone numbers)
+    // Check staff aliases (admin & teacher in English and Arabic or official usernames)
     const lowerUser = cleanUser.toLowerCase().replace(/[\s\-_]/g, "");
-    const isAdmin = /^(admin|ادمن|الادمن|مدير|المدير)$/i.test(lowerUser) || normalized === "01020084862" || lowerUser === "admin@admin.local";
-    const isTeacher = /^(teacher|محاضر|المحاضر|معلم|المعلم|مدرس|المدرس)$/i.test(lowerUser) || normalized === "01099959133" || lowerUser === "teacher@system.local";
+    const isAdmin = /^(admin2026|admin|ادمن|الادمن|مدير|المدير)$/i.test(lowerUser) || lowerUser === "admin2026@admin.local" || lowerUser === "admin@admin.local" || normalized === "01020084862";
+    const isTeacher = /^(ibrahim|teacher|محاضر|المحاضر|معلم|المعلم|مدرس|المدرس|ابراهيم|إبراهيم)$/i.test(lowerUser) || lowerUser === "ibrahim@system.local" || lowerUser === "teacher@system.local" || normalized === "01099959133";
 
     const isPhone = !isAdmin && !isTeacher && (/^01[0125][0-9]{8}$/.test(normalized) || /^[0-9]{8,15}$/.test(normalized));
-
-    // If password was not entered, default reasonably
-    if (!cleanPass) {
-      if (isAdmin || isTeacher) {
-        cleanPass = "123456";
-      } else if (isPhone) {
-        cleanPass = normalized;
-      }
-    }
 
     // Also normalize Arabic-Indic digits in password if present
     if (cleanPass) {
@@ -53,7 +44,11 @@ export const AuthService = {
     }
 
     if (!cleanPass) {
-      throw new AuthError("يرجى إدخال كلمة المرور أو رقم الهاتف.");
+      if (isPhone) {
+        cleanPass = normalized;
+      } else {
+        throw new AuthError("يرجى إدخال كلمة المرور للمتابعة.");
+      }
     }
 
     let userCredential = null;
@@ -61,33 +56,43 @@ export const AuthService = {
 
     try {
       if (isAdmin) {
-        targetEmail = "admin@admin.local";
-        const adminPasses = Array.from(new Set([cleanPass, "123456", "admin", "admin123", "Admin#2026!Watan", "01020084862"].filter(Boolean)));
+        const adminAttempts = [
+          { email: "admin2026@admin.local", pass: cleanPass },
+          { email: "admin@admin.local", pass: cleanPass }
+        ];
         let lastErr = null;
-        for (const pass of adminPasses) {
+        for (const attempt of adminAttempts) {
           try {
-            userCredential = await signInWithEmailAndPassword(auth, targetEmail, pass);
+            userCredential = await signInWithEmailAndPassword(auth, attempt.email, attempt.pass);
+            targetEmail = attempt.email;
             break;
           } catch (err) {
             lastErr = err;
             if (err.code === "auth/too-many-requests") break;
           }
         }
-        if (!userCredential && lastErr) throw lastErr;
+        if (!userCredential) {
+          throw new AuthError("بيانات الدخول غير صحيحة لمدير المنصة (تأكد من اسم المستخدم وكلمة المرور) ❌");
+        }
       } else if (isTeacher) {
-        targetEmail = "teacher@system.local";
-        const teacherPasses = Array.from(new Set([cleanPass, "123456", "teacher", "teacher123", "Teacher#2026!Watan", "01099959133"].filter(Boolean)));
+        const teacherAttempts = [
+          { email: "ibrahim@system.local", pass: cleanPass },
+          { email: "teacher@system.local", pass: cleanPass }
+        ];
         let lastErr = null;
-        for (const pass of teacherPasses) {
+        for (const attempt of teacherAttempts) {
           try {
-            userCredential = await signInWithEmailAndPassword(auth, targetEmail, pass);
+            userCredential = await signInWithEmailAndPassword(auth, attempt.email, attempt.pass);
+            targetEmail = attempt.email;
             break;
           } catch (err) {
             lastErr = err;
             if (err.code === "auth/too-many-requests") break;
           }
         }
-        if (!userCredential && lastErr) throw lastErr;
+        if (!userCredential) {
+          throw new AuthError("بيانات الدخول غير صحيحة للمحاضر (تأكد من اسم المستخدم وكلمة المرور) ❌");
+        }
       } else if (cleanUser.includes("@")) {
         targetEmail = cleanUser.replace(/\s+/g, "");
         userCredential = await signInWithEmailAndPassword(auth, targetEmail, cleanPass);
