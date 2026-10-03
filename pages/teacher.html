@@ -136,14 +136,14 @@
 
   <!-- Application Bootstrap & Controller Wiring -->
   <script type="module">
-    import { Router } from "../src/app/router.js";
-    import { ROLES } from "../src/core/constants.js";
-    import { mountTeacherLayout } from "../src/shared/layouts/TeacherLayout/teacher-layout.component.js";
-    import { renderVideoPlayerModal } from "../src/features/lectures/components/video-player-modal.component.js";
-    import { LecturesController } from "../src/features/lectures/lectures.controller.js";
-    import { NotificationsController } from "../src/features/notifications/notifications.controller.js";
-    import { AuthController } from "../src/features/auth/auth.controller.js";
-    import { bootstrapApp } from "../src/app/bootstrap.js";
+    import { Router } from "../src/app/router.js?v=3.5.0";
+    import { ROLES } from "../src/core/constants.js?v=3.5.0";
+    import { mountTeacherLayout } from "../src/shared/layouts/TeacherLayout/teacher-layout.component.js?v=3.5.0";
+    import { renderVideoPlayerModal } from "../src/features/lectures/components/video-player-modal.component.js?v=3.5.0";
+    import { LecturesController } from "../src/features/lectures/lectures.controller.js?v=3.5.0";
+    import { NotificationsController } from "../src/features/notifications/notifications.controller.js?v=3.5.0";
+    import { AuthController } from "../src/features/auth/auth.controller.js?v=3.5.0";
+    import { bootstrapApp } from "../src/app/bootstrap.js?v=3.5.0";
 
     bootstrapApp();
 
@@ -194,12 +194,12 @@
 
       // Lazy feature loaders with promise caching
       const lazyLoaders = {
-        exams: () => import("../src/features/exams/exam.controller.js").then((m) => m.ExamController),
-        assignments: () => import("../src/features/assignments/assignment.controller.js").then((m) => m.AssignmentController),
-        students: () => import("../src/features/students/students.controller.js").then((m) => m.StudentsController),
-        attendance: () => import("../src/features/attendance/attendance.controller.js").then((m) => m.AttendanceController),
-        pythonAdventure: () => import("../src/features/python-adventure/python-adventure.controller.js").then((m) => m.PythonAdventureController),
-        profile: () => import("../src/features/profile/profile.controller.js").then((m) => m.ProfileController)
+        exams: () => import("../src/features/exams/exam.controller.js?v=3.5.0").then((m) => m.ExamController),
+        assignments: () => import("../src/features/assignments/assignment.controller.js?v=3.5.0").then((m) => m.AssignmentController),
+        students: () => import("../src/features/students/students.controller.js?v=3.5.0").then((m) => m.StudentsController),
+        attendance: () => import("../src/features/attendance/attendance.controller.js?v=3.5.0").then((m) => m.AttendanceController),
+        pythonAdventure: () => import("../src/features/python-adventure/python-adventure.controller.js?v=3.5.0").then((m) => m.PythonAdventureController),
+        profile: () => import("../src/features/profile/profile.controller.js?v=3.5.0").then((m) => m.ProfileController)
       };
 
       // 2. Mount Teacher Layout Immediately

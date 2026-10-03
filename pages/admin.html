@@ -107,13 +107,13 @@
 
   <!-- Application Bootstrap & Controller Wiring -->
   <script type="module">
-    import { Router } from "../src/app/router.js";
-    import { ROLES } from "../src/core/constants.js";
-    import { mountAdminLayout } from "../src/shared/layouts/AdminLayout/admin-layout.component.js";
-    import { AttendanceController } from "../src/features/attendance/attendance.controller.js";
-    import { NotificationsController } from "../src/features/notifications/notifications.controller.js";
-    import { AuthController } from "../src/features/auth/auth.controller.js";
-    import { bootstrapApp } from "../src/app/bootstrap.js";
+    import { Router } from "../src/app/router.js?v=3.5.0";
+    import { ROLES } from "../src/core/constants.js?v=3.5.0";
+    import { mountAdminLayout } from "../src/shared/layouts/AdminLayout/admin-layout.component.js?v=3.5.0";
+    import { AttendanceController } from "../src/features/attendance/attendance.controller.js?v=3.5.0";
+    import { NotificationsController } from "../src/features/notifications/notifications.controller.js?v=3.5.0";
+    import { AuthController } from "../src/features/auth/auth.controller.js?v=3.5.0";
+    import { bootstrapApp } from "../src/app/bootstrap.js?v=3.5.0";
 
     bootstrapApp();
 
@@ -164,9 +164,9 @@
 
       // Lazy feature loaders with promise caching
       const lazyLoaders = {
-        students: () => import("../src/features/students/students.controller.js").then((m) => m.StudentsController),
-        exams: () => import("../src/features/exams/exam.controller.js").then((m) => m.ExamController),
-        profile: () => import("../src/features/profile/profile.controller.js").then((m) => m.ProfileController)
+        students: () => import("../src/features/students/students.controller.js?v=3.5.0").then((m) => m.StudentsController),
+        exams: () => import("../src/features/exams/exam.controller.js?v=3.5.0").then((m) => m.ExamController),
+        profile: () => import("../src/features/profile/profile.controller.js?v=3.5.0").then((m) => m.ProfileController)
       };
 
       // 2. Mount Admin Layout Immediately

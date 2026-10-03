@@ -12,7 +12,7 @@ export function renderAttendanceDashboardWidget({ attendanceData }) {
   const isLow = attendanceRate < 75;
 
   return `
-    <div class="dash-attendance-alert-card ${isLow ? 'is-low' : 'is-good'}">
+    <div class="attendance-dashboard-widget dash-attendance-alert-card ${isLow ? 'is-low' : 'is-good'}">
       <div class="dash-attendance-header">
         <div class="dash-attendance-title-box">
           <span class="alert-icon">⚠️</span>
@@ -26,6 +26,9 @@ export function renderAttendanceDashboardWidget({ attendanceData }) {
       <div class="dash-attendance-body">
         <div class="dash-attendance-rate-number">
           <span class="number-val">${attendanceRate}%</span>
+        </div>
+        <div class="dash-attendance-counts text-xs font-mono text-slate-400 mb-2">
+          <span>${presentCount} حاضر · ${absentCount} غياب</span>
         </div>
         <p class="dash-attendance-notice">
           ${isLow
