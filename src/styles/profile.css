@@ -811,6 +811,13 @@ input:checked + .pf-slider:before {
   animation: stFadeIn 0.25s ease-out;
 }
 
+#adminSettingsContainer .student-settings-page-wrapper,
+.admin-settings-theme {
+  min-height: auto !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
 @keyframes stFadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }

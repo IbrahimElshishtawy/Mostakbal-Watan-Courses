@@ -7,8 +7,7 @@ export const ROLES = Object.freeze({
 });
 
 export const GROUPS = Object.freeze([
-  "مجموعة الأحد والأربعاء | 7:00 - 8:30",
-  "مجموعة الأحد والأربعاء | 9:00 - 10:30"
+  "المجموعة التدريبية المعتمدة"
 ]);
 
 export const COLLECTIONS = Object.freeze({

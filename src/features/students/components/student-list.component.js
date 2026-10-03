@@ -101,48 +101,47 @@ export function renderStudentListView({
           </div>
         </div>
 
-        <!-- Card 2: مجموعة الأحد والأربعاء -->
-        <div class="admin-stat-card">
-          <div class="admin-stat-card-header">
-            <span class="admin-stat-card-label">مجموعة الأحد والأربعاء</span>
-            <div class="admin-stat-card-icon blue">📖</div>
-          </div>
-          <div class="d-flex items-baseline gap-2">
-            <div class="admin-stat-card-value font-mono">${group1Count}</div>
-            <span style="color: var(--admin-text-muted); font-size: 0.9rem;">طالباً مسجلاً</span>
-          </div>
-          <div class="admin-stat-card-subtext" style="color: #60a5fa;">
-            <span>مسار بايثون والذكاء الاصطناعي</span>
-          </div>
-        </div>
-
-        <!-- Card 3: مجموعة السبت والثلاثاء -->
-        <div class="admin-stat-card">
-          <div class="admin-stat-card-header">
-            <span class="admin-stat-card-label">مجموعة السبت والثلاثاء</span>
-            <div class="admin-stat-card-icon green">💻</div>
-          </div>
-          <div class="d-flex items-baseline gap-2">
-            <div class="admin-stat-card-value font-mono">${group2Count}</div>
-            <span style="color: var(--admin-text-muted); font-size: 0.9rem;">طالباً مسجلاً</span>
-          </div>
-          <div class="admin-stat-card-subtext" style="color: #34d399;">
-            <span>مسار الويب والتطوير الشامل</span>
-          </div>
-        </div>
-
-        <!-- Card 4: الحسابات المفعلة -->
+        <!-- Card 2: الحسابات المفعلة -->
         <div class="admin-stat-card">
           <div class="admin-stat-card-header">
             <span class="admin-stat-card-label">الحسابات النشطة والمفعلة</span>
-            <div class="admin-stat-card-icon purple">✔</div>
+            <div class="admin-stat-card-icon green">✔</div>
           </div>
           <div class="d-flex items-baseline gap-2">
-            <div class="admin-stat-card-value font-mono" style="color: #c084fc;">${activeCount}</div>
-            <span style="color: #34d399; font-weight: 800; font-size: 0.85rem;">${activePercent}%</span>
+            <div class="admin-stat-card-value font-mono" style="color: #34d399;">${activeCount}</div>
+            <span style="color: var(--admin-text-muted); font-size: 0.85rem;">طالباً نشطاً</span>
           </div>
-          <div class="admin-progress-bar-container">
-            <div class="admin-progress-bar-fill purple-cyan" style="width: ${activePercent}%;"></div>
+          <div class="admin-stat-card-subtext" style="color: #34d399;">
+            <span>نسبة التفعيل المباشر: ${activePercent}%</span>
+          </div>
+        </div>
+
+        <!-- Card 3: المجموعة التدريبية المعتمدة -->
+        <div class="admin-stat-card">
+          <div class="admin-stat-card-header">
+            <span class="admin-stat-card-label">المجموعة التدريبية المعتمدة</span>
+            <div class="admin-stat-card-icon purple">🎓</div>
+          </div>
+          <div class="d-flex items-baseline gap-2">
+            <div class="admin-stat-card-value font-mono" style="font-size: 1.15rem; color: #c084fc;">دفعة موحدة</div>
+          </div>
+          <div class="admin-stat-card-subtext" style="color: #c084fc;">
+            <span>المجموعة العامة لاتحاد بشبابها</span>
+          </div>
+        </div>
+
+        <!-- Card 4: المزامنة السحابية -->
+        <div class="admin-stat-card">
+          <div class="admin-stat-card-header">
+            <span class="admin-stat-card-label">جاهزية السحابة والأمان</span>
+            <div class="admin-stat-card-icon blue">⚡</div>
+          </div>
+          <div class="d-flex items-baseline gap-2">
+            <div class="admin-stat-card-value font-mono" style="color: #60a5fa;">100%</div>
+            <span style="color: var(--admin-text-muted); font-size: 0.85rem;">مزامنة مباشرة</span>
+          </div>
+          <div class="admin-stat-card-subtext" style="color: #60a5fa;">
+            <span>سجلات مشفرة ومدعومة سحابياً</span>
           </div>
         </div>
       </div>
@@ -160,14 +159,7 @@ export function renderStudentListView({
             />
           </div>
 
-          <div style="min-width: 200px; flex: 1;">
-            <select id="studentGroupFilter" class="admin-select-input w-full" aria-label="تصفية بالمجموعة">
-              <option value="ALL">جميع المجموعات (الكل)</option>
-              ${GROUPS.map((g) => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join("")}
-            </select>
-          </div>
-
-          <div style="min-width: 160px;">
+          <div style="min-width: 180px;">
             <select id="studentStatusFilter" class="admin-select-input w-full" aria-label="تصفية بالحالة">
               <option value="ALL">كل الحالات</option>
               <option value="active">نشط ومفعل</option>
@@ -268,9 +260,9 @@ export function renderStudentListView({
                     </td>
                     <td>
                       <div class="group-badge-card">
-                        <div style="font-weight: 700;">${escapeHtml(s.group.split('|')[0] || s.group)}</div>
+                        <div style="font-weight: 700;">${escapeHtml(s.group || "المجموعة التدريبية المعتمدة")}</div>
                         <div style="font-size: 0.68rem; opacity: 0.85; margin-top: 2px;">
-                          ${escapeHtml(s.group.includes('|') ? s.group.split('|')[1].trim() : "7:00 - 8:30")}
+                          دفعة موحدة معتمدة
                         </div>
                       </div>
                     </td>

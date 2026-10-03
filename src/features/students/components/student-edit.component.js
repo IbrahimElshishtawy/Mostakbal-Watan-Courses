@@ -9,8 +9,7 @@ import { GROUPS } from "../../../core/constants.js";
  */
 export function renderEditStudentModal() {
   const groupOptions = [
-    { value: "", label: "-- اختر المجموعة الدراسية --" },
-    ...GROUPS.map((g) => ({ value: g, label: g }))
+    { value: "المجموعة التدريبية المعتمدة", label: "المجموعة التدريبية المعتمدة (الدفعة الموحدة)" }
   ];
 
   const bodyHtml = `

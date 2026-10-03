@@ -88,6 +88,27 @@ export const NotificationsController = {
         );
       }
 
+      // Update in-modal badges if modal is currently open/rendered
+      const headerBadge = document.getElementById("notifUnreadHeaderBadge");
+      if (headerBadge) {
+        if (unreadCount > 0) {
+          headerBadge.textContent = `${unreadCount} جديدة`;
+          headerBadge.style.display = "inline-flex";
+        } else {
+          headerBadge.style.display = "none";
+        }
+      }
+
+      const tabCounter = document.getElementById("notifTabCounterUnread");
+      if (tabCounter) {
+        if (unreadCount > 0) {
+          tabCounter.textContent = String(unreadCount);
+          tabCounter.style.display = "inline-flex";
+        } else {
+          tabCounter.style.display = "none";
+        }
+      }
+
       if (tasksBellIndicator) {
         tasksBellIndicator.style.display = unreadCount > 0 ? "block" : "none";
       }
@@ -107,19 +128,26 @@ export const NotificationsController = {
     const bodySlot = document.getElementById("notificationsListBodySlot");
     if (!bodySlot) return;
 
-    setHtml(bodySlot, `<div class="p-4 text-center"><div class="spinner"></div><div class="text-xs text-muted mt-2">جاري جلب الإشعارات... ⏳</div></div>`);
+    setHtml(bodySlot, `
+      <div class="notif-loading-box">
+        <div class="spinner"></div>
+        <span>جاري جلب وتحديث الإشعارات... ⏳</span>
+      </div>
+    `);
 
     const user = auth.currentUser;
     if (!user) {
-      setHtml(bodySlot, `<div class="p-4 text-center text-muted">يرجى تسجيل الدخول لعرض الإشعارات.</div>`);
+      setHtml(bodySlot, `<div class="notif-empty-state"><p class="text-xs text-slate-400">يرجى تسجيل الدخول لعرض الإشعارات.</p></div>`);
       return;
     }
 
     try {
       this._notifications = await NotificationsService.getUserNotifications(user.uid, 30, this._student);
+      this._activeFilter = "all";
       this.renderList();
+      this.refreshUnreadBadge();
     } catch (err) {
-      setHtml(bodySlot, `<div class="p-4 text-center text-danger text-sm">تعذر جلب قائمة الإشعارات.</div>`);
+      setHtml(bodySlot, `<div class="p-6 text-center text-rose-400 text-sm">تعذر جلب قائمة الإشعارات. يرجى المحاولة لاحقاً.</div>`);
     }
   },
 
@@ -130,7 +158,25 @@ export const NotificationsController = {
     const bodySlot = document.getElementById("notificationsListBodySlot");
     if (!bodySlot) return;
 
-    setHtml(bodySlot, renderNotificationsList(this._notifications));
+    const currentFilter = this._activeFilter || "all";
+    setHtml(bodySlot, renderNotificationsList(this._notifications, currentFilter));
+
+    // Update filter tabs active state
+    const tabsBar = document.getElementById("notifFilterTabsBar");
+    if (tabsBar) {
+      tabsBar.querySelectorAll(".notif-tab-item").forEach((tab) => {
+        const f = tab.getAttribute("data-notif-filter");
+        tab.classList.toggle("active", f === currentFilter);
+      });
+    }
+
+    // Bind filter tabs click
+    tabsBar?.querySelectorAll(".notif-tab-item[data-notif-filter]").forEach((tab) => {
+      tab.onclick = () => {
+        this._activeFilter = tab.getAttribute("data-notif-filter") || "all";
+        this.renderList();
+      };
+    });
 
     // Bind individual mark as read
     bodySlot.querySelectorAll("[data-notif-mark-read]").forEach((btn) => {
@@ -142,6 +188,7 @@ export const NotificationsController = {
           if (item) item.read = true;
           this.renderList();
           this.refreshUnreadBadge();
+          showToast("تم تحديث حالة الإشعار ✓", "success");
         } catch (e) {
           showToast("تعذر تحديث حالة الإشعار", "error");
         }
@@ -168,7 +215,7 @@ export const NotificationsController = {
           this._onNavigateCallback(link);
         } else {
           // Fallback tab navigation
-          const tabBtn = document.querySelector(`[data-tab="${link}"]`);
+          const tabBtn = document.querySelector(`[data-tab="${link}"]`) || document.querySelector(`[data-section="${link}"]`);
           if (tabBtn) tabBtn.click();
         }
       });

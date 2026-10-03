@@ -64,17 +64,19 @@ export function renderThemePickerView({
   ];
 
   const currentThemeObj = themes.find((t) => t.id === currentTheme) || themes[0];
+  const isAdmin = typeof window !== "undefined" && (window.location.pathname.includes("admin") || !!document.getElementById("adminSidebar"));
+  const portalName = isAdmin ? "لوحة الإدارة العامة" : "بوابة الطالب";
 
   return `
-    <div class="student-settings-page-wrapper" dir="rtl">
+    <div class="student-settings-page-wrapper ${isAdmin ? 'admin-settings-theme' : ''}" dir="rtl">
       <!-- 1. Top Header Bar -->
       <header class="st-topbar">
         <nav aria-label="Breadcrumb" class="st-breadcrumbs">
           <span class="st-crumb-root">منصة اتحاد بشبابها</span>
           <span class="st-crumb-sep">/</span>
-          <span class="st-crumb-mid">بوابة الطالب</span>
+          <span class="st-crumb-mid">${portalName}</span>
           <span class="st-crumb-sep">/</span>
-          <span class="st-crumb-active">إعدادات المنصة والمظهر ⚙️</span>
+          <span class="st-crumb-active">${isAdmin ? "إعدادات النظام والمظهر ⚙️" : "إعدادات المنصة والمظهر ⚙️"}</span>
         </nav>
 
         <div class="st-topbar-controls">
@@ -106,9 +108,12 @@ export function renderThemePickerView({
           <i class="fa-solid fa-sliders text-cyan-400"></i>
           <span>لوحة التحكم والتخصيص الشاملة</span>
         </div>
-        <h2 id="heading-settings" class="st-section-title">⚙️ تخصيص المنصة والمظهر العام</h2>
+        <h2 id="heading-settings" class="st-section-title">${isAdmin ? "⚙️ إعدادات النظام وتخصيص المظهر" : "⚙️ تخصيص المنصة والمظهر العام"}</h2>
         <p class="st-section-desc">
-          قم بتخصيص السمة اللونية لواجهتك، ضبط حجم الخط للقراءة المريحة، تفعيل المؤثرات الصوتية، وإدارة المزامنة السحابية لحسابك الأكاديمي.
+          ${isAdmin
+            ? "قم بتخصيص السمة اللونية للوحة الإدارة، ضبط مقياس الخط وسهولة القراءة، تفعيل المؤثرات التفاعلية، وإدارة المزامنة السحابية لقاعدة البيانات."
+            : "قم بتخصيص السمة اللونية لواجهتك، ضبط حجم الخط للقراءة المريحة، تفعيل المؤثرات الصوتية، وإدارة المزامنة السحابية لحسابك الأكاديمي."
+          }
         </p>
       </div>
 

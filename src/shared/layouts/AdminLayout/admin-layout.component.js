@@ -97,11 +97,6 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
         <div class="px-4 mt-6">
           <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">النظام والتحكم الفني</p>
           <nav class="space-y-1">
-            <button type="button" class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="financial" id="tab-btn-financial">
-              <i class="fa-solid fa-boxes-stacked w-4 text-center text-slate-400 group-hover:text-indigo-400"></i>
-              <span>بنك الأكواد والخوارزميات</span>
-            </button>
-
             <button type="button" class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="settings" id="tab-btn-settings">
               <i class="fa-solid fa-sliders w-4 text-center text-slate-400 group-hover:text-purple-400"></i>
               <span>إعدادات النظام والمظهر</span>
@@ -203,15 +198,6 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
         <section id="sec-settings" class="tab-content hidden" aria-labelledby="tab-btn-settings">
           <div id="adminSettingsContainer"></div>
         </section>
-
-        <!-- Tab 5: Algorithms & Records -->
-        <section id="sec-financial" class="tab-content hidden" aria-labelledby="tab-btn-financial">
-          <div class="bg-[#121825] border border-[#1e2a3f] rounded-2xl p-8 text-center">
-            <i class="fa-solid fa-boxes-stacked text-indigo-400 text-4xl mb-3"></i>
-            <h3 class="text-white text-base font-bold">بنك الأكواد والخوارزميات البرمجية</h3>
-            <p class="text-slate-400 text-xs mt-1 max-w-md mx-auto">مكتبة الخوارزميات وحلول التحديات البرمجية المعتمدة لطلاب منصة اتحاد بشبابها التعليمية.</p>
-          </div>
-        </section>
       </main>
     </div>
   `;
@@ -225,8 +211,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
     attendance: `<i class="fa-solid fa-chart-pie mr-1"></i> <span>إدارة الغياب والحضور العام</span>`,
     students: `<i class="fa-solid fa-users-gear mr-1"></i> <span>إدارة شؤون الطلاب</span>`,
     exams: `<i class="fa-solid fa-file-pen mr-1"></i> <span>الامتحانات والاختبارات</span>`,
-    settings: `<i class="fa-solid fa-sliders mr-1"></i> <span>إعدادات النظام والمظهر</span>`,
-    financial: `<i class="fa-solid fa-boxes-stacked mr-1"></i> <span>بنك الأكواد والخوارزميات</span>`
+    settings: `<i class="fa-solid fa-sliders mr-1"></i> <span>إعدادات النظام والمظهر</span>`
   };
 
   const activeNavClasses = "bg-gradient-to-l from-emerald-500/20 via-emerald-600/10 to-transparent border-r-4 border-emerald-400 text-emerald-300 font-bold active-nav-glow shadow-sm";

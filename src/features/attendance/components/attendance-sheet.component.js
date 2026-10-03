@@ -218,10 +218,7 @@ export function renderAttendanceManagementView({
               </label>
               <div class="relative">
                 <select class="glass-input w-full rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:ring-1 focus:ring-accent-cyan appearance-none cursor-pointer" id="session-group">
-                  <option value="group_sun_wed" ${currentGroup === "group_sun_wed" ? "selected" : ""}>مجموعة الأحد والأربعاء | 7:00 - 8:30 م</option>
-                  <option value="group_sat_tue" ${currentGroup === "group_sat_tue" ? "selected" : ""}>مجموعة السبت والثلاثاء | 5:00 - 6:30 م</option>
-                  <option value="group_mon_thu" ${currentGroup === "group_mon_thu" ? "selected" : ""}>مجموعة الاثنين والخميس | 8:30 - 10:00 م</option>
-                  <option value="all" ${currentGroup === "all" ? "selected" : ""}>جميع المجموعات المشتركة</option>
+                  <option value="unified_group" selected>المجموعة التدريبية المعتمدة (الدفعة الموحدة)</option>
                 </select>
                 <i class="fa-solid fa-layer-group absolute left-3.5 top-3.5 text-slate-500 pointer-events-none text-xs"></i>
               </div>
@@ -256,15 +253,6 @@ export function renderAttendanceManagementView({
             <div class="relative min-w-[260px] flex-1 max-w-md">
               <input class="glass-input w-full rounded-xl pr-10 pl-4 py-2 text-xs sm:text-sm text-slate-100 placeholder-slate-500" id="search-input" placeholder="بحث باسم الطالب، كود التسجيل، أو الهاتف..." type="text"/>
               <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3 text-slate-500 text-xs sm:text-sm pointer-events-none"></i>
-            </div>
-            <!-- Group Filter Dropdown -->
-            <div class="relative">
-              <select class="glass-input rounded-xl px-4 py-2 text-xs sm:text-sm text-slate-200 pr-8 appearance-none cursor-pointer" id="attendanceGroupFilter">
-                <option value="all">جميع المجموعات (الكل)</option>
-                <option value="sun_wed">مجموعة الأحد والأربعاء</option>
-                <option value="sat_tue">مجموعة السبت والثلاثاء</option>
-              </select>
-              <i class="fa-solid fa-filter absolute left-3 top-3 text-slate-500 text-xs pointer-events-none"></i>
             </div>
             <!-- Status Filter -->
             <div class="flex items-center rounded-xl bg-surface-card border border-surface-border p-1 text-xs">
@@ -304,7 +292,7 @@ export function renderAttendanceManagementView({
                 <th class="py-3 px-4 w-12 text-center" scope="col">#</th>
                 <th class="py-3 px-4" scope="col">كود الطالب</th>
                 <th class="py-3 px-4 min-w-[220px]" scope="col">اسم الطالب وبيانات الدورة</th>
-                <th class="py-3 px-4" scope="col">المجموعة والموعد</th>
+                <th class="py-3 px-4" scope="col">المجموعة المعتمدة</th>
                 <th class="py-3 px-4" scope="col">رقم الهاتف / واتساب</th>
                 <th class="py-3 px-4 text-center min-w-[260px]" scope="col">تسجيل ورصد الحالة</th>
                 <th class="py-3 px-4 text-center" scope="col">إجراءات سريعة</th>
@@ -344,8 +332,8 @@ export function renderAttendanceManagementView({
                         </div>
                       </td>
                       <td class="py-3.5 px-4">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[11px] font-semibold">
-                          <i class="fa-regular fa-clock text-[10px]"></i> ${escapeHtml(student.group || 'مجموعة الأحد والأربعاء | 7:00 - 8:30')}
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[11px] font-semibold">
+                          <i class="fa-solid fa-graduation-cap text-[10px]"></i> ${escapeHtml(student.group || 'المجموعة المعتمدة')}
                         </span>
                       </td>
                       <td class="py-3.5 px-4 font-mono text-slate-300 text-xs">
