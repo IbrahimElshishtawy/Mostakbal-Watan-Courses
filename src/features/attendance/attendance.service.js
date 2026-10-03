@@ -124,8 +124,9 @@ export const AttendanceService = {
           if (!hasRecord && Array.isArray(session.records)) {
             const legacyRec = session.records.find((r) =>
               r.studentId === studentUid ||
+              r.studentUid === studentUid ||
               r.uid === studentUid ||
-              (studentPhone && (r.studentPhone === studentPhone || r.studentId === studentPhone))
+              (studentPhone && (r.studentPhone === studentPhone || r.studentId === studentPhone || r.phone === studentPhone))
             );
             if (legacyRec) {
               hasRecord = true;
@@ -277,13 +278,23 @@ export const AttendanceService = {
     try {
       const sessionRef = doc(db, COLLECTIONS.ATTENDANCE_SESSIONS, sessionId);
       await Promise.all(
-        sanitizedRecords.map((rec) => {
-          if (!rec.studentUid) return Promise.resolve();
+        sanitizedRecords.map(async (rec) => {
+          if (!rec.studentUid) return;
           const recRef = doc(db, COLLECTIONS.ATTENDANCE_SESSIONS, sessionId, COLLECTIONS.RECORDS, rec.studentUid);
-          return setDoc(recRef, {
+          await setDoc(recRef, {
             ...rec,
             markedAt: serverTimestamp()
           }, { merge: true });
+
+          if (rec.studentPhone && rec.studentPhone !== rec.studentUid) {
+            try {
+              const phoneRecRef = doc(db, COLLECTIONS.ATTENDANCE_SESSIONS, sessionId, COLLECTIONS.RECORDS, rec.studentPhone);
+              await setDoc(phoneRecRef, {
+                ...rec,
+                markedAt: serverTimestamp()
+              }, { merge: true });
+            } catch (_) {}
+          }
         })
       );
 

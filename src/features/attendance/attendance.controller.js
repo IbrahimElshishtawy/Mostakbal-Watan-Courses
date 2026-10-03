@@ -266,7 +266,6 @@ export const AttendanceController = {
     let activeFilter = "all";
     const applyFilters = () => {
       const term = (container.querySelector("#search-input")?.value || "").toLowerCase().trim();
-      const groupVal = container.querySelector("#attendanceGroupFilter")?.value || "all";
 
       container.querySelectorAll("#student-roster-rows tr").forEach((row) => {
         const text = row.innerText.toLowerCase();
@@ -275,14 +274,12 @@ export const AttendanceController = {
 
         const matchesTerm = !term || text.includes(term);
         const matchesStatus = activeFilter === "all" || activeFilter === status;
-        const matchesGroup = groupVal === "all" || text.includes("الأحد") && groupVal === "sun_wed" || text.includes("السبت") && groupVal === "sat_tue";
 
-        row.style.display = matchesTerm && matchesStatus && matchesGroup ? "" : "none";
+        row.style.display = matchesTerm && matchesStatus ? "" : "none";
       });
     };
 
     container.querySelector("#search-input")?.addEventListener("input", applyFilters);
-    container.querySelector("#attendanceGroupFilter")?.addEventListener("change", applyFilters);
 
     container.querySelectorAll(".filter-status-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -303,26 +300,36 @@ export const AttendanceController = {
       }
     });
 
-    // 7. Open Roster Scroll
+    // 7. Start New Lecture Quick Action
+    container.querySelector("#startNewLectureBtn")?.addEventListener("click", async () => {
+      if (typeof onSessionChange === "function") {
+        await onSessionChange("NEW");
+        const titleInput = container.querySelector("#session-title");
+        titleInput?.focus();
+        showToast("تم فتح محاضرة جديدة! الكشف جاهز لرصد الحضور والغياب الآن 🚀", "success");
+      }
+    });
+
+    // 8. Open Roster Scroll
     container.querySelector("#openRosterBtn")?.addEventListener("click", () => {
       const rosterTable = container.querySelector("[data-purpose='attendance-roster-table']");
       rosterTable?.scrollIntoView({ behavior: "smooth", block: "start" });
       showToast("تم فتح الكشف بنجاح، يمكنك الآن تسجيل الحضور والغياب 🚀", "info");
     });
 
-    // 8. History Sessions
+    // 9. History Sessions
     container.querySelector("#historySessionsBtn")?.addEventListener("click", () => {
       const select = container.querySelector("#session-list");
       select?.focus();
       showToast("يرجى اختيار الجلسة السابقة من قائمة الجلسات أعلاه 📑", "info");
     });
 
-    // 9. Export Report
+    // 10. Export Report
     container.querySelector("#exportFullReportBtn")?.addEventListener("click", () => {
       window.print();
     });
 
-    // 10. Student note & profile triggers
+    // 11. Student note & profile triggers
     container.querySelectorAll(".student-note-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         showToast("ميزة تدوين الملاحظات السلوكية مفعلة ومرتبطة بملف الطالب 📝", "info");
@@ -335,20 +342,25 @@ export const AttendanceController = {
       });
     });
 
-    // 11. Save Roster Button
-    container.querySelector("#save-roster-btn")?.addEventListener("click", async () => {
+    // 12. Save Roster Action (unified for top, middle, and bottom buttons)
+    const handleSaveRoster = async () => {
       if (this._isSavingAttendance) return;
 
       const date = container.querySelector("#session-date")?.value || new Date().toISOString().slice(0, 10);
-      const title = container.querySelector("#session-title")?.value?.trim() || "المحاضرة 4 - الدوال والمصفوفات البرمجية";
-      const group = container.querySelector("#session-group")?.value || "group_sun_wed";
+      const title = container.querySelector("#session-title")?.value?.trim() || `المحاضرة ${sessions.length + 1}`;
+      const group = "المجموعة التدريبية المعتمدة";
 
       this._isSavingAttendance = true;
-      const saveBtn = container.querySelector("#save-roster-btn");
-      if (saveBtn) {
-        saveBtn.disabled = true;
-        saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base"></i> <span>جاري الاعتماد...</span>`;
-      }
+      const saveBtns = [
+        container.querySelector("#save-roster-btn"),
+        container.querySelector("#topSaveRosterBtn"),
+        container.querySelector("#bottomSaveRosterBtn")
+      ].filter(Boolean);
+
+      saveBtns.forEach((btn) => {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-base"></i> <span>جاري الاعتماد...</span>`;
+      });
 
       try {
         let targetSessionId = selectedSessionId;
@@ -376,19 +388,23 @@ export const AttendanceController = {
         });
 
         await AttendanceService.recordBatch(targetSessionId, records);
-        showToast("تم اعتماد الكشف، وتم ترحيل بيانات الحضور والغياب بنجاح ✅", "success");
+        showToast("تم اعتماد الكشف، وتم ترحيل وتسميع بيانات الحضور والغياب للطالب بنجاح ✅", "success");
         await this.loadTeacherAttendance(container, targetSessionId);
       } catch (err) {
         console.error("Save attendance error:", err);
         showToast(err.message || "تعذر حفظ كشف الحضور.", "error");
-        if (saveBtn) {
-          saveBtn.disabled = false;
-          saveBtn.innerHTML = `<i class="fa-solid fa-floppy-disk text-base"></i> <span>حفظ واعتماد الكشف</span>`;
-        }
+        saveBtns.forEach((btn) => {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-floppy-disk text-base"></i> <span>حفظ واعتماد الكشف</span>`;
+        });
       } finally {
         this._isSavingAttendance = false;
       }
-    });
+    };
+
+    container.querySelector("#save-roster-btn")?.addEventListener("click", handleSaveRoster);
+    container.querySelector("#topSaveRosterBtn")?.addEventListener("click", handleSaveRoster);
+    container.querySelector("#bottomSaveRosterBtn")?.addEventListener("click", handleSaveRoster);
 
     updateCounters();
   }

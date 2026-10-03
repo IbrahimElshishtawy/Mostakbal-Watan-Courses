@@ -146,102 +146,73 @@ export function renderAttendanceManagementView({
         </div>
       </section>
 
-      <!-- BEGIN: NewSessionCreationSection matching Image 2.html -->
-      <section class="glass-panel rounded-2xl p-6 border border-surface-border shadow-xl relative overflow-hidden" data-purpose="session-registration-card">
-        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 mb-5 border-b border-surface-border/70">
-          <div class="flex items-center gap-3">
-            <span class="w-3 h-3 rounded-full bg-accent-cyan shadow-glow-cyan"></span>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-regular fa-clipboard text-accent-cyan"></i>
-              <span>تسجيل جلسة حضور وغياب جديدة</span>
-            </h2>
+      <!-- BEGIN: Streamlined Active Lecture Control Bar -->
+      <section class="glass-panel rounded-2xl p-5 sm:p-6 border border-brand-500/30 shadow-2xl relative overflow-hidden bg-gradient-to-br from-surface-card via-surface-card to-brand-950/20" data-purpose="session-control-bar">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          
+          <!-- Left: Current Lecture Details & Actions -->
+          <div class="flex-1 space-y-3">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-xs font-bold flex items-center gap-1.5 shadow-glow-emerald">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>${isNewSession ? "محاضرة جديدة قيد الرصد" : "رصد محاضرة سابقة"}</span>
+              </span>
+              <span class="px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+                <i class="fa-solid fa-users mr-1"></i> الدفعة الموحدة (جميع الطلاب)
+              </span>
+            </div>
+
+            <!-- Lecture Title and Date Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <!-- Select Existing Session / Start New -->
+              <div class="md:col-span-1">
+                <label class="block text-xs font-bold text-slate-300 mb-1" for="session-list">
+                  اختر المحاضرة:
+                </label>
+                <div class="relative">
+                  <select class="glass-input w-full rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 font-semibold focus:ring-1 focus:ring-accent-cyan bg-slate-900 border border-slate-700 appearance-none cursor-pointer" id="session-list">
+                    <option value="new" ${isNewSession ? "selected" : ""}>⚡ [+ محاضرة جديدة الآن]</option>
+                    ${sessions.map((s, idx) => `
+                      <option value="${escapeHtml(s.id)}" ${selectedSessionId === s.id ? "selected" : ""}>
+                        ${escapeHtml(s.name || s.title || `المحاضرة ${sessions.length - idx}`)} (${escapeHtml(s.date || '')})
+                      </option>
+                    `).join("")}
+                  </select>
+                  <i class="fa-solid fa-chevron-down absolute left-3 top-3.5 text-slate-400 pointer-events-none text-xs"></i>
+                </div>
+              </div>
+
+              <!-- Lecture Title Input -->
+              <div class="md:col-span-1">
+                <label class="block text-xs font-bold text-slate-300 mb-1" for="session-title">
+                  اسم أو عنوان المحاضرة:
+                </label>
+                <input class="glass-input w-full rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:ring-1 focus:ring-accent-cyan bg-slate-900 border border-slate-700" id="session-title" placeholder="مثال: المحاضرة 5 - الدوال والبرمجة" type="text" value="${escapeHtml(currentTitle)}"/>
+              </div>
+
+              <!-- Lecture Date Input -->
+              <div class="md:col-span-1">
+                <label class="block text-xs font-bold text-slate-300 mb-1" for="session-date">
+                  تاريخ الانعقاد:
+                </label>
+                <input class="glass-input w-full rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 font-mono focus:ring-1 focus:ring-accent-cyan bg-slate-900 border border-slate-700" id="session-date" type="date" value="${escapeHtml(currentDate)}"/>
+              </div>
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <span class="px-3 py-1 rounded-full bg-brand-500/20 text-accent-cyan text-xs font-semibold border border-brand-500/30">
-              <i class="fa-solid fa-bolt mr-1"></i> جلسة جديدة نشطة
-            </span>
-            <span class="text-xs text-slate-400 hidden sm:inline">يتم ضبط الطلاب تلقائياً (غياب) حتى يتم تأكيد الحضور</span>
+
+          <!-- Right: Actions (New Session Button & Save Button) -->
+          <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 justify-center">
+            <button class="px-5 py-3 rounded-xl bg-gradient-to-r from-sky-500 via-cyan-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-black text-xs sm:text-sm shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]" id="startNewLectureBtn" type="button">
+              <i class="fa-solid fa-plus-circle text-base"></i>
+              <span>+ فتح محاضرة جديدة</span>
+            </button>
+            <button class="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-xs sm:text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]" id="topSaveRosterBtn" type="button">
+              <i class="fa-solid fa-floppy-disk text-base"></i>
+              <span>حفظ واعتماد الكشف 🚀</span>
+            </button>
           </div>
+
         </div>
-
-        <form class="space-y-4" id="sessionForm">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Input 1: Session Date -->
-            <div>
-              <label class="block text-xs font-bold text-slate-300 mb-1.5" for="session-date">
-                <span class="text-rose-400">*</span> تاريخ الانعقاد:
-              </label>
-              <div class="relative">
-                <input class="glass-input w-full rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:ring-1 focus:ring-accent-cyan focus:border-accent-cyan" id="session-date" type="date" value="${escapeHtml(currentDate)}"/>
-                <i class="fa-regular fa-calendar absolute left-3.5 top-3.5 text-slate-500 pointer-events-none text-sm"></i>
-              </div>
-            </div>
-
-            <!-- Input 2: Session Selection / Topic -->
-            <div>
-              <label class="block text-xs font-bold text-slate-300 mb-1.5" for="session-list">
-                <span class="text-rose-400">*</span> اختر الجلسة الدراسية:
-              </label>
-              <div class="relative">
-                <select class="glass-input w-full rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:ring-1 focus:ring-accent-cyan focus:border-accent-cyan appearance-none cursor-pointer" id="session-list">
-                  <option value="new" ${isNewSession ? "selected" : ""}>[+ جلسة جديدة ] - بدء رصد جلسة جديدة</option>
-                  ${sessions.map((s) => `
-                    <option value="${escapeHtml(s.id)}" ${selectedSessionId === s.id ? "selected" : ""}>
-                      ${escapeHtml(s.name || s.title || `جلسة ${s.sessionNumber || ''}`)} (${escapeHtml(s.date || s.sessionDate || '')})
-                    </option>
-                  `).join("")}
-                  ${sessions.length === 0 ? `
-                    <option value="sess_03">الجلسة 03 - الدوال ومصفوفات البيانات (2026-09-25)</option>
-                    <option value="sess_02">الجلسة 02 - هياكل التحكم وحلقات التكرار (2026-09-21)</option>
-                    <option value="sess_01">الجلسة 01 - مقدمة بايثون وبيئة التطوير (2026-09-18)</option>
-                  ` : ""}
-                </select>
-                <i class="fa-solid fa-chevron-down absolute left-3.5 top-3.5 text-slate-500 pointer-events-none text-xs"></i>
-              </div>
-            </div>
-
-            <!-- Input 3: Lecture Title -->
-            <div>
-              <label class="block text-xs font-bold text-slate-300 mb-1.5" for="session-title">
-                عنوان الجلسة / المحاضرة:
-              </label>
-              <div class="relative">
-                <input class="glass-input w-full rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:ring-1 focus:ring-accent-cyan" id="session-title" placeholder="مثال: المحاضرة 4 - الدوال والمصفوفات وقواعد البيانات" type="text" value="${escapeHtml(currentTitle)}"/>
-                <i class="fa-solid fa-code absolute left-3.5 top-3.5 text-slate-500 pointer-events-none text-xs"></i>
-              </div>
-            </div>
-
-            <!-- Input 4: Target Group -->
-            <div>
-              <label class="block text-xs font-bold text-slate-300 mb-1.5" for="session-group">
-                المجموعة المستهدفة:
-              </label>
-              <div class="relative">
-                <select class="glass-input w-full rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:ring-1 focus:ring-accent-cyan appearance-none cursor-pointer" id="session-group">
-                  <option value="unified_group" selected>المجموعة التدريبية المعتمدة (الدفعة الموحدة)</option>
-                </select>
-                <i class="fa-solid fa-layer-group absolute left-3.5 top-3.5 text-slate-500 pointer-events-none text-xs"></i>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Action Row -->
-          <div class="flex flex-wrap items-center justify-between pt-2 gap-3">
-            <div class="flex items-center gap-2 text-xs text-slate-400">
-              <i class="fa-solid fa-circle-info text-brand-400"></i>
-              <span>المشرف المسؤول عن توثيق الحضور: <strong class="text-slate-200">أحمد ممدوح</strong></span>
-            </div>
-            <div class="flex items-center gap-2">
-              <button class="px-5 py-2 rounded-xl bg-surface-lighter hover:bg-surface-border text-slate-300 text-xs font-semibold transition-all" id="resetSessionFormBtn" type="button">
-                مسح البيانات
-              </button>
-              <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 via-brand-500 to-accent-cyan hover:brightness-110 text-white font-bold text-xs sm:text-sm shadow-glow-cyan transition-all flex items-center gap-2" id="openRosterBtn" type="button">
-                <i class="fa-solid fa-folder-open"></i>
-                <span>بدء فتح الكشف ورصد الحضور</span>
-              </button>
-            </div>
-          </div>
-        </form>
       </section>
 
       <!-- BEGIN: AttendanceRosterTableSection matching Image 2.html -->
@@ -399,25 +370,18 @@ export function renderAttendanceManagementView({
         <!-- Table Footer / Pagination matching Image 2.html -->
         <div class="p-4 border-t border-surface-border bg-surface-lowest/70 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div class="flex items-center gap-2">
-            <span>عرض 1 إلى ${displayStudents.length} من إجمالي 24 طالب مسجل</span>
+            <span>عرض 1 إلى ${displayStudents.length} من إجمالي ${displayStudents.length} طالب مسجل</span>
             <span class="text-slate-600">|</span>
-            <span class="text-emerald-400 font-semibold" id="footer-present-count">${presentCount || 22} حاضر</span>
+            <span class="text-emerald-400 font-semibold" id="footer-present-count">${presentCount} حاضر</span>
             <span class="text-slate-600">•</span>
-            <span class="text-rose-400 font-semibold" id="footer-absent-count">${absentCount || 2} غائب</span>
+            <span class="text-rose-400 font-semibold" id="footer-absent-count">${absentCount} غائب</span>
             <span class="text-slate-600">•</span>
-            <span class="text-amber-400 font-semibold" id="footer-excused-count">${excusedCount || 1} معتذر</span>
+            <span class="text-amber-400 font-semibold" id="footer-excused-count">${excusedCount} معتذر</span>
           </div>
-          <div class="flex items-center gap-2">
-            <button class="px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border hover:bg-surface-lighter text-slate-400 hover:text-white disabled:opacity-50" disabled="">
-              <i class="fa-solid fa-chevron-right ml-1"></i> السابق
-            </button>
-            <div class="flex items-center gap-1 font-mono">
-              <button class="w-8 h-8 rounded-lg bg-brand-500 text-white font-bold">1</button>
-              <button class="w-8 h-8 rounded-lg hover:bg-surface-lighter text-slate-400">2</button>
-              <button class="w-8 h-8 rounded-lg hover:bg-surface-lighter text-slate-400">3</button>
-            </div>
-            <button class="px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border hover:bg-surface-lighter text-slate-300 hover:text-white">
-              التالي <i class="fa-solid fa-chevron-left mr-1"></i>
+          <div class="flex items-center gap-3">
+            <button class="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-glow-emerald transition-all flex items-center gap-2 cursor-pointer" id="bottomSaveRosterBtn" type="button">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>حفظ واعتماد الكشف الآن</span>
             </button>
           </div>
         </div>
