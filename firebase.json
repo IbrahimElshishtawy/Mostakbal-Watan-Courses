@@ -22,88 +22,116 @@
   "storage": {
     "rules": "storage.rules"
   },
-  "hosting": {
-    "public": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*/**",
-      "**/.*",
-      ".*/**",
-      ".*",
-      "**/node_modules/**",
-      "backend/**",
-      "scripts/**",
-      "skills/**",
-      "docs/**",
-      "**/*.log",
-      "*-adminsdk-*.json"
-    ],
-    "headers": [
-      {
-        "source": "**/*.@(jpg|jpeg|gif|png|webp|svg|woff2|woff)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=31536000, immutable"
-          }
-        ]
-      },
-      {
-        "source": "**/*.@(css|js)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=604800, stale-while-revalidate=86400"
-          }
-        ]
-      },
-      {
-        "source": "**/*.html",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-cache, must-revalidate"
-          },
-          {
-            "key": "X-Content-Type-Options",
-            "value": "nosniff"
-          },
-          {
-            "key": "X-Frame-Options",
-            "value": "SAMEORIGIN"
-          }
-        ]
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "/student",
-        "destination": "/pages/student.html"
-      },
-      {
-        "source": "/student.html",
-        "destination": "/pages/student.html"
-      },
-      {
-        "source": "/teacher",
-        "destination": "/pages/teacher.html"
-      },
-      {
-        "source": "/teacher.html",
-        "destination": "/pages/teacher.html"
-      },
-      {
-        "source": "/admin",
-        "destination": "/pages/admin.html"
-      },
-      {
-        "source": "/admin.html",
-        "destination": "/pages/admin.html"
-      },
-      {
-        "source": "/api/**",
-        "function": "api"
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "site": "etihad-bshababha",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*/**",
+        "**/.*",
+        ".*/**",
+        ".*",
+        "**/node_modules/**",
+        "backend/**",
+        "scripts/**",
+        "skills/**",
+        "docs/**",
+        "**/*.log",
+        "*-adminsdk-*.json"
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(jpg|jpeg|gif|png|webp|svg|woff2|woff)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            }
+          ]
+        },
+        {
+          "source": "**/*.@(css|js)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=604800, stale-while-revalidate=86400"
+            }
+          ]
+        },
+        {
+          "source": "**/*.html",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, must-revalidate"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            }
+          ]
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "/student",
+          "destination": "/pages/student.html"
+        },
+        {
+          "source": "/student.html",
+          "destination": "/pages/student.html"
+        },
+        {
+          "source": "/teacher",
+          "destination": "/pages/teacher.html"
+        },
+        {
+          "source": "/teacher.html",
+          "destination": "/pages/teacher.html"
+        },
+        {
+          "source": "/admin",
+          "destination": "/pages/admin.html"
+        },
+        {
+          "source": "/admin.html",
+          "destination": "/pages/admin.html"
+        },
+        {
+          "source": "/api/**",
+          "function": "api"
+        }
+      ]
+    },
+    {
+      "site": "mostakbal-watan-courses",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*/**",
+        "**/.*",
+        ".*/**",
+        ".*",
+        "**/node_modules/**",
+        "backend/**",
+        "scripts/**",
+        "skills/**",
+        "docs/**",
+        "**/*.log",
+        "*-adminsdk-*.json"
+      ],
+      "redirects": [
+        {
+          "source": "/:path*",
+          "destination": "https://etihad-bshababha.web.app/:path*",
+          "type": 301
+        }
+      ]
+    }
+  ]
 }

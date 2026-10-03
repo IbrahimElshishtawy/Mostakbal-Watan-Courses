@@ -7,7 +7,7 @@ import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/
 
 const firebaseConfig = {
   apiKey: "AIzaSyCy6l-t5Kji_3Pxs0fcy7ZH4VZL3aOudx0",
-  authDomain: "mostakbal-watan-courses.firebaseapp.com",
+  authDomain: "etihad-bshababha.firebaseapp.com",
   projectId: "mostakbal-watan-courses",
   storageBucket: "mostakbal-watan-courses.firebasestorage.app",
   messagingSenderId: "28994305753",
