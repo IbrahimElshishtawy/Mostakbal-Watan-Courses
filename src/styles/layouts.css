@@ -7,7 +7,9 @@
   display: flex;
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
   background-color: var(--bg-primary);
 }
 
