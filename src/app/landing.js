@@ -231,7 +231,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize visual animations and scroll reveals
   initLandingAnimations();
+  initLeadersCarousel();
 });
+
+/**
+ * Mobile Leaders Horizontal Scroll Carousel Navigation
+ */
+function initLeadersCarousel() {
+  const carousel = document.getElementById("leaders-carousel");
+  const prevBtn = document.getElementById("leaders-scroll-prev");
+  const nextBtn = document.getElementById("leaders-scroll-next");
+  const counterEl = document.getElementById("current-leader-idx");
+
+  if (!carousel) return;
+
+  const getStep = () => {
+    const card = carousel.querySelector(".leader-card");
+    return card ? card.offsetWidth + 16 : 290;
+  };
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      // In RTL, scrolling positive value moves toward previous card
+      carousel.scrollBy({ left: getStep(), behavior: "smooth" });
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      // In RTL, scrolling negative value moves toward next card
+      carousel.scrollBy({ left: -getStep(), behavior: "smooth" });
+    });
+  }
+
+  if (counterEl) {
+    carousel.addEventListener(
+      "scroll",
+      () => {
+        const step = getStep();
+        const scrollDistance = Math.abs(carousel.scrollLeft);
+        const activeIdx = Math.min(9, Math.max(1, Math.round(scrollDistance / step) + 1));
+        counterEl.textContent = activeIdx;
+      },
+      { passive: true }
+    );
+  }
+}
 
 /**
  * Interactive Presentation & Scroll Reveal Animation Engine

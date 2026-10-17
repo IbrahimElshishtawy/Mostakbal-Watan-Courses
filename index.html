@@ -340,10 +340,17 @@
           <p class="text-[11px] xs:text-xs sm:text-base 3xl:text-lg text-slate-400 max-w-xl 3xl:max-w-2xl mt-1.5 xs:mt-2">نخبة وطنية متخصصة تضمن تقديم أعلى المعايير التعليمية والمهنية لشبابنا</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 2xl:gap-7 max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] mx-auto">
+        <!-- Mobile Swipe Guide Badge (Visible on screens < 640px) -->
+        <div class="sm:hidden flex items-center justify-center gap-2 mb-4 text-xs text-sky-300 bg-sky-950/60 border border-sky-500/30 px-3.5 py-1.5 rounded-full w-fit mx-auto backdrop-blur-md shadow-sm">
+          <span class="material-symbols-outlined text-[17px] text-sky-400 animate-pulse">swipe</span>
+          <span>اسحب يميناً ويساراً لتصفح القيادات</span>
+          <span class="material-symbols-outlined text-[15px] text-sky-400">swap_horiz</span>
+        </div>
+
+        <div id="leaders-carousel" class="flex sm:grid overflow-x-auto sm:overflow-visible gap-4 sm:gap-6 2xl:gap-7 sm:grid-cols-2 lg:grid-cols-4 pb-4 sm:pb-0 px-2 sm:px-0 snap-x snap-mandatory scroll-smooth touch-pan-x leaders-carousel max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1720px] mx-auto">
           
           <!-- Leader 1: أستاذ / محمد محمود -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-sky-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(56,189,248,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-1">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-sky-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(56,189,248,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-1">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500"></div>
             
             <!-- Studio Portrait Frame -->
@@ -361,7 +368,7 @@
           </div>
 
           <!-- Leader 2: المهندس / إياد عمر -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-indigo-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(99,102,241,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-2">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-indigo-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(99,102,241,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-2">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-indigo-400 via-purple-500 to-sky-400"></div>
             
             <!-- Studio Portrait Frame -->
@@ -379,7 +386,7 @@
           </div>
 
           <!-- Leader 3: تسنيم طارق الباجورى -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-purple-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(168,85,247,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-3">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-purple-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(168,85,247,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-3">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-cyan-400"></div>
             
             <!-- Studio Portrait Frame -->
@@ -397,7 +404,7 @@
           </div>
 
           <!-- Leader 4: المحاسب / أيمن وليد -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-cyan-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(6,182,212,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-4">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-cyan-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(6,182,212,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-4">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-cyan-400 via-teal-500 to-blue-500"></div>
             
             <!-- Studio Portrait Frame -->
@@ -415,7 +422,7 @@
           </div>
 
           <!-- Leader 5: روان محمد الشوربجي -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-rose-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(244,63,94,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-1">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-rose-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(244,63,94,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-1">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-rose-400 via-pink-500 to-amber-400"></div>
             
             <!-- Studio Portrait Frame -->
@@ -433,7 +440,7 @@
           </div>
 
           <!-- Leader 6: مي محمود كساب -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-emerald-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(16,185,129,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-2">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-emerald-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(16,185,129,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-2">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-500 to-sky-400"></div>
             
             <!-- Studio Portrait Frame -->
@@ -451,7 +458,7 @@
           </div>
 
           <!-- Leader 7: مروان اشرف صقر -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-amber-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(245,158,11,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-3">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-amber-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(245,158,11,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-3">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-500"></div>
             
             <!-- Studio Portrait Frame -->
@@ -469,7 +476,7 @@
           </div>
 
           <!-- Leader 8: شيماء -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-pink-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(236,72,153,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-4">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-auto sm:max-w-none snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-pink-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(236,72,153,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-4">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-pink-400 via-rose-500 to-purple-500"></div>
             
             <!-- Studio Portrait Frame -->
@@ -487,7 +494,7 @@
           </div>
 
           <!-- Leader 9: محمد طارق محمد الباجوري -->
-          <div class="relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-blue-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(59,130,246,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-1 sm:col-span-2 lg:col-span-4 max-w-sm w-full mx-auto">
+          <div class="leader-card flex-none w-[78vw] max-w-[280px] sm:w-full snap-center sm:snap-align-none relative group rounded-3xl bg-gradient-to-b from-slate-900/95 via-[#0d1527]/95 to-[#080d1a]/95 border border-slate-800/80 hover:border-blue-500/50 p-4 sm:p-5 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 shadow-2xl hover:shadow-[0_15px_40px_rgba(59,130,246,0.2)] overflow-hidden reveal-on-scroll interactive-hover-card stagger-1 sm:col-span-2 lg:col-span-4 sm:max-w-sm sm:mx-auto">
             <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-400 via-sky-500 to-indigo-500"></div>
             
             <!-- Studio Portrait Frame -->
@@ -504,6 +511,20 @@
             <p class="text-[11px] sm:text-xs text-slate-400 mt-1 leading-relaxed">عضو هيئة مكتب بوحدة ملتقيات محافظة الغربية</p>
           </div>
 
+        </div>
+
+        <!-- Mobile Carousel Navigation Controls (Visible on screens < 640px) -->
+        <div class="sm:hidden flex items-center justify-center gap-3 mt-4 pt-1">
+          <button id="leaders-scroll-prev" type="button" aria-label="السابق" class="w-10 h-10 rounded-2xl bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-sky-400 active:scale-90 hover:bg-slate-800 transition-all shadow-lg backdrop-blur-sm cursor-pointer">
+            <span class="material-symbols-outlined text-[22px]">arrow_forward</span>
+          </button>
+          <div class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs text-slate-300 font-mono shadow-inner" id="leaders-counter">
+            <span class="material-symbols-outlined text-[14px] text-sky-400">group</span>
+            <span id="current-leader-idx" class="text-sky-400 font-bold">1</span> / <span>9</span>
+          </div>
+          <button id="leaders-scroll-next" type="button" aria-label="التالي" class="w-10 h-10 rounded-2xl bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-sky-400 active:scale-90 hover:bg-slate-800 transition-all shadow-lg backdrop-blur-sm cursor-pointer">
+            <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+          </button>
         </div>
       </section>
 
@@ -978,9 +999,9 @@
           <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 w-full lg:w-auto shrink-0 mt-2 lg:mt-0 relative z-10">
             
             <!-- Portfolio Button -->
-            <a href="https://ibrahimelshishtawy.github.io/" target="_blank" rel="noopener noreferrer" class="btn-shimmer inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all hover:scale-[1.02] active:scale-[0.98] no-underline" title="زيارة معرض الأعمال الشخصي للمهندس إبراهيم الششتاوي">
+            <a href="https://ibrahimelshishtawy.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-shimmer inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all hover:scale-[1.02] active:scale-[0.98] no-underline" title="زيارة الموقع الشخصي ومعرض الأعمال للمهندس إبراهيم الششتاوي">
               <span class="material-symbols-outlined text-[18px]">public</span>
-              <span class="font-mono dir-ltr text-xs sm:text-sm">ibrahimelshishtawy.github.io</span>
+              <span class="font-mono dir-ltr text-xs sm:text-sm">ibrahimelshishtawy.vercel.app</span>
               <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
             </a>
 
@@ -1258,8 +1279,10 @@
               <span>تسجيل الدخول للمنصة 🔐</span>
             </button>
           </div>
-          <span class="hidden md:inline text-slate-700">•</span>
-          <p class="text-sky-400 font-mono">Dev Team: Eng. Ibrahim El-Sheshtawy</p>
+          <a href="https://ibrahimelshishtawy.vercel.app/" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 font-mono transition-colors hover:underline flex items-center gap-1" title="زيارة الموقع الشخصي للمهندس إبراهيم الششتاوي">
+            <span>Dev Team: Eng. Ibrahim El-Sheshtawy</span>
+            <span class="material-symbols-outlined text-[13px]">arrow_outward</span>
+          </a>
         </div>
 
       </div>
