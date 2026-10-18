@@ -242,36 +242,111 @@ function initLeadersCarousel() {
   const prevBtn = document.getElementById("leaders-scroll-prev");
   const nextBtn = document.getElementById("leaders-scroll-next");
   const counterEl = document.getElementById("current-leader-idx");
+  const dotsContainer = document.getElementById("leaders-dots");
 
   if (!carousel) return;
+  const cards = Array.from(carousel.querySelectorAll(".leader-card"));
+  if (!cards.length) return;
 
-  const getStep = () => {
-    const card = carousel.querySelector(".leader-card");
-    return card ? card.offsetWidth + 16 : 290;
-  };
+  let currentIndex = 0;
+
+  // Render clickable pagination dots
+  if (dotsContainer) {
+    dotsContainer.innerHTML = "";
+    cards.forEach((_, idx) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = `leader-dot w-2 h-2 rounded-full transition-all duration-300 ${
+        idx === 0 ? "active w-6 bg-sky-400" : "bg-slate-700 hover:bg-slate-500"
+      }`;
+      dot.setAttribute("aria-label", `بطاقة ${idx + 1}`);
+      dot.addEventListener("click", () => {
+        scrollToCard(idx);
+      });
+      dotsContainer.appendChild(dot);
+    });
+  }
+
+  function updateActiveUI(idx) {
+    currentIndex = idx;
+    if (counterEl) {
+      counterEl.textContent = idx + 1;
+    }
+    if (dotsContainer) {
+      const dots = dotsContainer.querySelectorAll(".leader-dot");
+      dots.forEach((dot, i) => {
+        if (i === idx) {
+          dot.classList.add("active", "w-6", "bg-sky-400");
+          dot.classList.remove("w-2", "bg-slate-700");
+        } else {
+          dot.classList.remove("active", "w-6", "bg-sky-400");
+          dot.classList.add("w-2", "bg-slate-700");
+        }
+      });
+    }
+  }
+
+  function scrollToCard(idx) {
+    if (idx < 0 || idx >= cards.length) return;
+    cards[idx].scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+    updateActiveUI(idx);
+  }
 
   if (prevBtn) {
     prevBtn.addEventListener("click", () => {
-      // In RTL, scrolling positive value moves toward previous card
-      carousel.scrollBy({ left: getStep(), behavior: "smooth" });
+      const targetIdx = Math.max(0, currentIndex - 1);
+      scrollToCard(targetIdx);
     });
   }
 
   if (nextBtn) {
     nextBtn.addEventListener("click", () => {
-      // In RTL, scrolling negative value moves toward next card
-      carousel.scrollBy({ left: -getStep(), behavior: "smooth" });
+      const targetIdx = Math.min(cards.length - 1, currentIndex + 1);
+      scrollToCard(targetIdx);
     });
   }
 
-  if (counterEl) {
+  // IntersectionObserver to accurately track the active card in view
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = cards.indexOf(entry.target);
+            if (idx !== -1) {
+              updateActiveUI(idx);
+            }
+          }
+        });
+      },
+      {
+        root: carousel,
+        threshold: 0.6,
+      }
+    );
+    cards.forEach((card) => observer.observe(card));
+  } else {
     carousel.addEventListener(
       "scroll",
       () => {
-        const step = getStep();
-        const scrollDistance = Math.abs(carousel.scrollLeft);
-        const activeIdx = Math.min(9, Math.max(1, Math.round(scrollDistance / step) + 1));
-        counterEl.textContent = activeIdx;
+        const carouselRect = carousel.getBoundingClientRect();
+        const carouselCenter = carouselRect.left + carouselRect.width / 2;
+        let closestIdx = 0;
+        let minDiff = Infinity;
+        cards.forEach((card, idx) => {
+          const cardRect = card.getBoundingClientRect();
+          const cardCenter = cardRect.left + cardRect.width / 2;
+          const diff = Math.abs(carouselCenter - cardCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = idx;
+          }
+        });
+        updateActiveUI(closestIdx);
       },
       { passive: true }
     );

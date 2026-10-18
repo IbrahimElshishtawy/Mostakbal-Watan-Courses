@@ -62,24 +62,27 @@ body {
 .leaders-carousel {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 
 @media (max-width: 639px) {
   .leaders-carousel {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
   .leaders-carousel::-webkit-scrollbar {
-    height: 5px;
+    display: none;
   }
-  .leaders-carousel::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.6);
-    border-radius: 9999px;
-  }
-  .leaders-carousel::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, #38bdf8, #818cf8);
-    border-radius: 9999px;
-  }
+}
+
+.leader-dot {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.leader-dot.active {
+  width: 1.5rem !important;
+  background-color: #38bdf8 !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
 }
 
 /* Custom Scrollbar - High Visibility & Ergonomic Touch Target */
