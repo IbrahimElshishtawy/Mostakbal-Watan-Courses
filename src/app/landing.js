@@ -288,7 +288,8 @@ function initLeadersCarousel() {
 
   function scrollToCard(idx) {
     if (idx < 0 || idx >= cards.length) return;
-    cards[idx].scrollIntoView({
+    const card = cards[idx];
+    card.scrollIntoView({
       behavior: "smooth",
       inline: "center",
       block: "nearest",
@@ -310,26 +311,46 @@ function initLeadersCarousel() {
     });
   }
 
-  // IntersectionObserver to accurately track the active card in view
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = cards.indexOf(entry.target);
-            if (idx !== -1) {
-              updateActiveUI(idx);
-            }
-          }
-        });
-      },
-      {
-        root: carousel,
-        threshold: 0.6,
+  // Real-time synchronization of active card & counter without threshold edge clipping
+  function syncActiveCard() {
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    const currentScroll = Math.abs(carousel.scrollLeft);
+
+    // Precise edge detection for start (Card 1) and end (Card 9)
+    if (maxScroll > 20 && currentScroll >= maxScroll - 35) {
+      updateActiveUI(cards.length - 1);
+      return;
+    }
+    if (maxScroll > 20 && currentScroll <= 35) {
+      updateActiveUI(0);
+      return;
+    }
+
+    const carouselRect = carousel.getBoundingClientRect();
+    const carouselCenter = carouselRect.left + carouselRect.width / 2;
+    let closestIdx = 0;
+    let minDiff = Infinity;
+    cards.forEach((card, idx) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const diff = Math.abs(carouselCenter - cardCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIdx = idx;
       }
-    );
-    cards.forEach((card) => observer.observe(card));
+    });
+    updateActiveUI(closestIdx);
   }
+
+  let scrollRafId = null;
+  carousel.addEventListener(
+    "scroll",
+    () => {
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
+      scrollRafId = requestAnimationFrame(syncActiveCard);
+    },
+    { passive: true }
+  );
 
   // Mouse drag-to-scroll support for desktop responsive preview & trackpads
   let isDown = false;
@@ -339,7 +360,7 @@ function initLeadersCarousel() {
   carousel.addEventListener("mousedown", (e) => {
     isDown = true;
     carousel.classList.add("is-dragging");
-    startX = e.pageX - carousel.offsetLeft;
+    startX = e.pageX;
     scrollStart = carousel.scrollLeft;
   });
 
@@ -355,9 +376,8 @@ function initLeadersCarousel() {
   carousel.addEventListener("mousemove", (e) => {
     if (!isDown) return;
     e.preventDefault();
-    const x = e.pageX - carousel.offsetLeft;
-    const walk = (x - startX) * 1.4;
-    carousel.scrollLeft = scrollStart - walk;
+    const deltaX = (e.pageX - startX) * 1.5;
+    carousel.scrollLeft = scrollStart - deltaX;
   });
 
   // Ensure card 1 is active on init
