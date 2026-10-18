@@ -329,28 +329,39 @@ function initLeadersCarousel() {
       }
     );
     cards.forEach((card) => observer.observe(card));
-  } else {
-    carousel.addEventListener(
-      "scroll",
-      () => {
-        const carouselRect = carousel.getBoundingClientRect();
-        const carouselCenter = carouselRect.left + carouselRect.width / 2;
-        let closestIdx = 0;
-        let minDiff = Infinity;
-        cards.forEach((card, idx) => {
-          const cardRect = card.getBoundingClientRect();
-          const cardCenter = cardRect.left + cardRect.width / 2;
-          const diff = Math.abs(carouselCenter - cardCenter);
-          if (diff < minDiff) {
-            minDiff = diff;
-            closestIdx = idx;
-          }
-        });
-        updateActiveUI(closestIdx);
-      },
-      { passive: true }
-    );
   }
+
+  // Mouse drag-to-scroll support for desktop responsive preview & trackpads
+  let isDown = false;
+  let startX = 0;
+  let scrollStart = 0;
+
+  carousel.addEventListener("mousedown", (e) => {
+    isDown = true;
+    carousel.classList.add("is-dragging");
+    startX = e.pageX - carousel.offsetLeft;
+    scrollStart = carousel.scrollLeft;
+  });
+
+  const stopDrag = () => {
+    if (!isDown) return;
+    isDown = false;
+    carousel.classList.remove("is-dragging");
+  };
+
+  carousel.addEventListener("mouseleave", stopDrag);
+  carousel.addEventListener("mouseup", stopDrag);
+
+  carousel.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 1.4;
+    carousel.scrollLeft = scrollStart - walk;
+  });
+
+  // Ensure card 1 is active on init
+  updateActiveUI(0);
 }
 
 /**
