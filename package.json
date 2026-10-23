@@ -10,7 +10,8 @@
     "functions:build": "npm --prefix backend run build",
     "functions:serve": "npm --prefix backend run serve",
     "deploy": "NODE_OPTIONS=\"--no-network-family-autoselection\" GOOGLE_APPLICATION_CREDENTIALS=\"./mostakbal-watan-courses-firebase-adminsdk-fbsvc-1d9a16560b.json\" firebase deploy",
-    "deploy:hosting": "NODE_OPTIONS=\"--no-network-family-autoselection\" GOOGLE_APPLICATION_CREDENTIALS=\"./mostakbal-watan-courses-firebase-adminsdk-fbsvc-1d9a16560b.json\" firebase deploy --only hosting"
+    "deploy:hosting": "NODE_OPTIONS=\"--no-network-family-autoselection\" GOOGLE_APPLICATION_CREDENTIALS=\"./mostakbal-watan-courses-firebase-adminsdk-fbsvc-1d9a16560b.json\" firebase deploy --only hosting",
+    "import:students": "NODE_OPTIONS=\"--no-network-family-autoselection\" node scripts/import-students-to-firebase.js"
   },
   "keywords": [
     "education",
