@@ -93,21 +93,7 @@ export const LecturesService = {
   async getAllLectures() {
     try {
       const snap = await getDocs(collection(db, COLLECTIONS.VIDEOS));
-      const lectures = snap.docs.map((d) => normalizeLecture(d.id, d.data()));
-      const ids = new Set(lectures.map((l) => l.id));
-
-      // Also check alternate "lectures" collection if any exist
-      try {
-        const altSnap = await getDocs(collection(db, "lectures"));
-        altSnap.docs.forEach((d) => {
-          if (!ids.has(d.id)) {
-            lectures.push(normalizeLecture(d.id, d.data()));
-            ids.add(d.id);
-          }
-        });
-      } catch (_) {}
-
-      return lectures;
+      return snap.docs.map((d) => normalizeLecture(d.id, d.data()));
     } catch (err) {
       throw normalizeError(err);
     }

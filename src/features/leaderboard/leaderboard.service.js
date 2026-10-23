@@ -38,21 +38,30 @@ export const LeaderboardService = {
       } catch (_) {}
     }
 
-    // 1. Concurrently fetch all source collections
+    // 1. Concurrently fetch all source collections with fast fallbacks
     let studentsDocs = [];
     let gamificationDocs = [];
     let adventureDocs = [];
 
     try {
       if (db) {
-        const [stSnap, gamSnap, advSnap] = await Promise.all([
-          getDocs(collection(db, COLLECTIONS.STUDENTS)).catch(() => ({ docs: [] })),
-          getDocs(collection(db, "student_gamification")).catch(() => ({ docs: [] })),
-          getDocs(collection(db, COLLECTIONS.PYTHON_ADVENTURE_PROGRESS)).catch(() => ({ docs: [] }))
-        ]);
-        studentsDocs = stSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        gamificationDocs = gamSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        adventureDocs = advSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        // student_gamification is publicly readable by all authenticated students and has all registered students
+        const fetches = [
+          getDocs(collection(db, "student_gamification")).catch(() => ({ docs: [] }))
+        ];
+
+        // If current user is logged in, fetch their personal adventure progress directly (guaranteed permitted)
+        if (uid) {
+          fetches.push(
+            getDoc(doc(db, COLLECTIONS.PYTHON_ADVENTURE_PROGRESS, uid))
+              .then((snap) => (snap.exists() ? [{ id: snap.id, ...snap.data() }] : []))
+              .catch(() => [])
+          );
+        }
+
+        const [gamSnap, myAdvDocs] = await Promise.all(fetches);
+        gamificationDocs = (gamSnap?.docs || []).map((d) => ({ id: d.id, ...d.data() }));
+        adventureDocs = Array.isArray(myAdvDocs) ? myAdvDocs : [];
       }
     } catch (fetchErr) {
       console.warn("Error fetching leaderboard collections:", fetchErr);
@@ -74,59 +83,77 @@ export const LeaderboardService = {
       if (aUid) advByUid.set(aUid, a);
     }
 
-    // Deduplication map keyed by normalized phone or UID
+    // Unified deduplication maps ensuring no student is duplicated by phone or UID
     const mergedStudentsMap = new Map();
+    const phoneToKeyMap = new Map();
+    const uidToKeyMap = new Map();
 
-    // Add all students from Firestore
-    for (const s of studentsDocs) {
-      const sPhone = String(s.studentPhone || s.phone || "").replace(/\D/g, "");
-      const sUid = s.id || s.uid;
-      const dedupeKey = sPhone || sUid;
-      if (!dedupeKey) continue;
+    const addStudentToMap = (entry) => {
+      const sPhone = String(entry.phone || entry.studentPhone || "").replace(/\D/g, "");
+      const sUid = entry.studentUid || entry.id || entry.uid || "";
 
-      if (!mergedStudentsMap.has(dedupeKey)) {
-        const sN1 = (s.name || "").trim();
-        const sN2 = (s.studentName || "").trim();
-        const sName = (sN1 && sN1 !== "طالب مسجل") ? sN1 : ((sN2 && sN2 !== "طالب مسجل") ? sN2 : (sN1 || sN2 || "طالب مسجل"));
-        mergedStudentsMap.set(dedupeKey, {
+      let canonicalKey = null;
+      if (sUid && uidToKeyMap.has(sUid)) {
+        canonicalKey = uidToKeyMap.get(sUid);
+      } else if (sPhone && phoneToKeyMap.has(sPhone)) {
+        canonicalKey = phoneToKeyMap.get(sPhone);
+      } else {
+        canonicalKey = sUid || sPhone;
+      }
+
+      if (!canonicalKey) return;
+
+      const rawN1 = (entry.name || "").trim();
+      const rawN2 = (entry.studentName || "").trim();
+      const validName = (rawN1 && rawN1 !== "طالب مسجل") ? rawN1 : ((rawN2 && rawN2 !== "طالب مسجل") ? rawN2 : "");
+
+      if (mergedStudentsMap.has(canonicalKey)) {
+        const prev = mergedStudentsMap.get(canonicalKey);
+        const resolvedName = validName || prev.name;
+        const resolvedPhone = sPhone || prev.phone;
+        const resolvedUid = sUid || prev.studentUid;
+        const resolvedGroup = (entry.group && entry.group !== "ALL") ? entry.group : prev.group;
+
+        mergedStudentsMap.set(canonicalKey, {
+          ...prev,
+          ...entry,
+          name: resolvedName,
+          phone: resolvedPhone,
+          studentUid: resolvedUid,
+          group: resolvedGroup
+        });
+      } else {
+        const finalName = validName || rawN1 || rawN2 || "طالب مسجل";
+        mergedStudentsMap.set(canonicalKey, {
           studentUid: sUid,
-          name: sName,
+          name: finalName,
           phone: sPhone,
-          group: (s.group && s.group !== "ALL") ? s.group : (s.studentGroup || "ALL"),
-          student: s
+          group: (entry.group && entry.group !== "ALL") ? entry.group : (entry.studentGroup || "ALL"),
+          ...entry
         });
       }
-    }
 
-    // Also include gamification records that might not be in students collection
+      if (sPhone) phoneToKeyMap.set(sPhone, canonicalKey);
+      if (sUid) uidToKeyMap.set(sUid, canonicalKey);
+    };
+
+    // Add all students from student_gamification
     for (const g of gamificationDocs) {
-      const gPhone = String(g.studentPhone || g.phone || "").replace(/\D/g, "");
-      const gUid = g.studentUid || g.id;
-      const dedupeKey = gPhone || gUid;
-      if (!dedupeKey) continue;
-
-      if (!mergedStudentsMap.has(dedupeKey)) {
-        const gN1 = (g.name || "").trim();
-        const gN2 = (g.studentName || "").trim();
-        const gName = (gN1 && gN1 !== "طالب مسجل") ? gN1 : ((gN2 && gN2 !== "طالب مسجل") ? gN2 : (gN1 || gN2 || "طالب مسجل"));
-        mergedStudentsMap.set(dedupeKey, {
-          studentUid: gUid,
-          name: gName,
-          phone: gPhone,
-          group: g.group || "ALL",
-          gamification: g
-        });
-      }
+      addStudentToMap({
+        studentUid: g.studentUid || g.id,
+        name: g.studentName || g.name,
+        phone: g.studentPhone || g.phone,
+        group: g.group || "ALL",
+        gamification: g
+      });
     }
 
-    // Ensure current user is in merged map
-    const curPhone = targetPhone;
-    const curKey = curPhone || uid;
-    if (curKey && !mergedStudentsMap.has(curKey)) {
-      mergedStudentsMap.set(curKey, {
+    // Ensure current user is linked and updated in the merged map
+    if (uid || targetPhone) {
+      addStudentToMap({
         studentUid: uid,
-        name: targetName || "حسابي الشخصي",
-        phone: curPhone,
+        name: targetName || "",
+        phone: targetPhone,
         group: studentGroup,
         isCurrentUser: true
       });

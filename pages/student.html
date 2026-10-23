@@ -337,11 +337,11 @@
             interactiveBannerHandle?.updateStudent(student);
             NotificationsController.setStudent(student);
 
-            // If group or name changed, refresh active tab so student sees real data immediately
+            // If group changed, refresh active tab so student sees real data immediately
             const activeTabBtn = document.querySelector(".sidebar-item.active");
             const activeSection = activeTabBtn ? activeTabBtn.getAttribute("data-section") : "videos";
 
-            if (activeSection === "videos" || prevGroup !== resolvedGroup) {
+            if (prevGroup && prevGroup !== resolvedGroup && activeSection === "videos") {
               LecturesController.loadStudentLectures("videoListContainer", student);
             }
             if (activeSection === "profile" || prevName !== resolvedName) {
