@@ -177,6 +177,16 @@ window.hideLoading = function () {
 
 // Initialize login form listeners
 document.addEventListener("DOMContentLoaded", () => {
+  // Protect all Material Symbols icons from browser translation corruption
+  const protectIcons = () => {
+    document.querySelectorAll(".material-symbols-outlined, [class*='material-symbols']").forEach((icon) => {
+      icon.setAttribute("translate", "no");
+      icon.classList.add("notranslate");
+    });
+  };
+  protectIcons();
+  setTimeout(protectIcons, 500);
+
   AuthController.initLoginForm();
 
   // Smart Session Check: If already authenticated, update buttons to direct portal access
