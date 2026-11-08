@@ -22,9 +22,9 @@ export function renderAttendanceManagementView({
   const today = new Date().toISOString().slice(0, 10);
   const isNewSession = selectedSessionId === "new" || !selectedSession;
 
-  const currentTitle = !isNewSession ? (selectedSession?.title || selectedSession?.name || "") : "المحاضرة 4 - الدوال والمصفوفات البرمجية";
+  const currentTitle = !isNewSession ? (selectedSession?.title || selectedSession?.name || "") : (sessions.length > 0 ? `المحاضرة ${sessions.length + 1}` : "المحاضرة 1");
   const currentDate = !isNewSession ? (selectedSession?.date || selectedSession?.sessionDate || today) : today;
-  const currentGroup = !isNewSession ? (selectedSession?.group || "group_sun_wed") : "group_sun_wed";
+  const currentGroup = !isNewSession ? (selectedSession?.group || "المجموعة التدريبية المعتمدة") : "المجموعة التدريبية المعتمدة";
 
   // Authoritative student roster list from Firestore
   const displayStudents = Array.isArray(students) ? students : [];
@@ -61,6 +61,12 @@ export function renderAttendanceManagementView({
           </p>
         </div>
         <div class="flex items-center gap-3">
+          ${!isNewSession && selectedSession ? `
+            <button class="px-4 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer" id="deleteSessionBtn" type="button" data-session-id="${escapeHtml(selectedSession.id || selectedSession.sessionId)}" title="حذف هذه الجلسة بالكامل">
+              <i class="fa-solid fa-trash-can text-rose-400"></i>
+              <span>حذف الجلسة</span>
+            </button>
+          ` : ""}
           <button class="px-4 py-2.5 rounded-xl bg-surface-card hover:bg-surface-lighter border border-surface-border text-slate-300 hover:text-white font-medium text-xs sm:text-sm flex items-center gap-2 transition-all" id="historySessionsBtn" type="button">
             <i class="fa-solid fa-clock-rotate-left text-brand-400"></i>
             <span>سجل الجلسات السابقة</span>

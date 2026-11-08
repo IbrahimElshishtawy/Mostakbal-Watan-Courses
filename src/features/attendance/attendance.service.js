@@ -10,6 +10,7 @@ import {
   setDoc,
   addDoc,
   updateDoc,
+  deleteDoc,
   query,
   where,
   orderBy,
@@ -135,12 +136,12 @@ export const AttendanceService = {
           }
 
           const sessionDateStr = session.date || todayStr;
-          const isFutureSession = sessionDateStr > todayStr;
+          const isFutureOrToday = sessionDateStr >= todayStr;
 
           let status = "absent";
           if (isPresent) {
             status = "present";
-          } else if (isFutureSession && !hasRecord) {
+          } else if (isFutureOrToday && !hasRecord) {
             status = "upcoming";
           } else {
             status = "absent";
@@ -148,8 +149,11 @@ export const AttendanceService = {
 
           return {
             id: session.id,
-            name: session.name || "محاضرة رسمية",
+            name: session.name || session.title || "محاضرة رسمية",
             date: sessionDateStr,
+            time: session.time || "12:30 ظهراً - 2:00 ظهراً",
+            day: session.day || "",
+            sessionNumber: session.sessionNumber || null,
             group: session.group || "ALL",
             status,
             isPresent,
@@ -328,7 +332,7 @@ export const AttendanceService = {
       const snap = await getDocs(collection(db, COLLECTIONS.ATTENDANCE_SESSIONS));
       return snap.docs
         .map((d) => ({ id: d.id, ...d.data() }))
-        .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
+        .sort((a, b) => new Date(a.date || 0).getTime() - new Date(b.date || 0).getTime());
     } catch (err) {
       throw normalizeError(err);
     }
@@ -418,11 +422,20 @@ export const AttendanceService = {
   },
 
   /**
-   * Deletes a session.
+   * Deletes a session and its subcollection records.
    */
   async deleteSession(sessionId) {
+    if (!sessionId) return { success: false };
     try {
+      try {
+        const subSnap = await getDocs(
+          collection(db, COLLECTIONS.ATTENDANCE_SESSIONS, sessionId, COLLECTIONS.RECORDS)
+        );
+        await Promise.all(subSnap.docs.map((d) => deleteDoc(d.ref)));
+      } catch (_) {}
+
       await deleteDoc(doc(db, COLLECTIONS.ATTENDANCE_SESSIONS, sessionId));
+      this.clearCache();
       return { success: true };
     } catch (err) {
       throw normalizeError(err);

@@ -112,7 +112,7 @@ export const AttendanceController = {
    * @param {string|HTMLElement} containerId
    * @param {string} [initialSessionId="NEW"]
    */
-  async loadTeacherAttendance(containerId, initialSessionId = "NEW") {
+  async loadTeacherAttendance(containerId, initialSessionId = null) {
     const container = typeof containerId === "string" ? document.getElementById(containerId) : containerId;
     if (!container) return;
 
@@ -126,12 +126,23 @@ export const AttendanceController = {
 
       attendanceState.set("sessions", sessions);
 
+      const today = new Date().toISOString().slice(0, 10);
       let selectedSessionId = initialSessionId;
+      if (!selectedSessionId && sessions.length > 0) {
+        // Smart selection: prioritize today's lecture, or upcoming, or first lecture
+        const todaySession = sessions.find((s) => s.date === today);
+        const upcomingSession = sessions.find((s) => s.date > today);
+        selectedSessionId = (todaySession || upcomingSession || sessions[0])?.id || "NEW";
+      } else if (!selectedSessionId) {
+        selectedSessionId = "NEW";
+      }
+
       let selectedSession = sessions.find((s) => (s.id || s.sessionId) === selectedSessionId) || null;
       let sessionRecords = new Map();
 
       if (!selectedSession && selectedSessionId !== "NEW" && sessions.length > 0) {
-        selectedSessionId = "NEW";
+        selectedSession = sessions[0];
+        selectedSessionId = selectedSession.id;
       }
 
       if (selectedSession) {
@@ -327,6 +338,33 @@ export const AttendanceController = {
     // 10. Export Report
     container.querySelector("#exportFullReportBtn")?.addEventListener("click", () => {
       window.print();
+    });
+
+    // Delete Session Action
+    container.querySelector("#deleteSessionBtn")?.addEventListener("click", async (e) => {
+      const btn = e.currentTarget;
+      const sessionId = btn.getAttribute("data-session-id");
+      if (!sessionId) return;
+
+      const sessionName = selectedSession?.name || selectedSession?.title || "هذه الجلسة";
+      const confirmed = window.confirm(`هل أنت متأكد من رغبتك في حذف ${sessionName} وسجلاتها بالكامل؟`);
+      if (!confirmed) return;
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>جاري الحذف...</span>`;
+
+      try {
+        await AttendanceService.deleteSession(sessionId);
+        showToast("تم حذف الجلسة وسجلاتها بنجاح 🗑️", "success");
+        if (typeof onSessionChange === "function") {
+          await onSessionChange(null);
+        }
+      } catch (delErr) {
+        console.error("Delete session error:", delErr);
+        showToast(delErr.message || "تعذر حذف الجلسة", "error");
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-trash-can text-rose-400"></i> <span>حذف الجلسة</span>`;
+      }
     });
 
     // 11. Student note & profile triggers

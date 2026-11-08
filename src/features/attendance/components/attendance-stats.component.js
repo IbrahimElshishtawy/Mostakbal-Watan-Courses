@@ -94,10 +94,11 @@ export function renderStudentAttendanceView({
         return `
           <tr>
             <td>
-              <strong>${escapeHtml(session.name)}</strong>
+              <div class="font-bold text-slate-100">${escapeHtml(session.name)}</div>
             </td>
             <td>
-              <span class="text-muted text-sm">${formatDate(session.date)}</span>
+              <div class="text-sm font-semibold text-slate-200">${formatDate(session.date)}</div>
+              ${session.time ? `<div class="text-xs text-brand-400 font-mono mt-0.5"><i class="fa-regular fa-clock text-[10px]"></i> ${escapeHtml(session.time)}</div>` : ''}
             </td>
             <td>
               <span class="badge badge-outline">${escapeHtml(session.group || "ALL")}</span>
@@ -132,7 +133,7 @@ export function renderStudentAttendanceView({
           <div class="attendance-session-card">
             <div class="attendance-session-card-info">
               <strong>${escapeHtml(session.name)}</strong>
-              <span>📅 ${formatDate(session.date)} · ${escapeHtml(session.group || "ALL")}</span>
+              <span>📅 ${formatDate(session.date)} ${session.time ? `· ⏰ ${escapeHtml(session.time)}` : ''} · ${escapeHtml(session.group || "ALL")}</span>
             </div>
             <div>
               ${badgeHtml}
