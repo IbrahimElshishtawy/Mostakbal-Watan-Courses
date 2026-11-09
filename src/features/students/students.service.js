@@ -227,6 +227,24 @@ export const StudentsService = {
         }, { merge: true });
       } catch (_) {}
 
+      // 4. Sync to student_gamification for public leaderboard
+      try {
+        await setDoc(doc(db, "student_gamification", studentUid), {
+          studentUid,
+          name: studentPayload.name,
+          studentName: studentPayload.name,
+          phone: normalizedPhone,
+          studentPhone: normalizedPhone,
+          group: studentPayload.group || "المجموعة التدريبية المعتمدة",
+          xp: 0,
+          competitionPoints: 0,
+          challengesCompleted: 0,
+          level: 1,
+          currentStreak: 1,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      } catch (_) {}
+
       return {
         success: true,
         studentUid,

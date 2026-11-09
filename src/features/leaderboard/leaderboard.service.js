@@ -193,7 +193,7 @@ export const LeaderboardService = {
 
       const isCurrent = Boolean(
         (uid && (itemUid === uid || key === uid)) ||
-        (curPhone && itemPhone && curPhone === itemPhone) ||
+        (targetPhone && itemPhone && targetPhone === itemPhone) ||
         (targetName && item.name && targetName === item.name)
       );
 
