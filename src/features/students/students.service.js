@@ -28,16 +28,37 @@ export function getSecondaryAuth() {
 
 export const StudentsService = {
   /**
-   * Fetches all registered students (Teacher / Admin).
+   * Fetches all registered students (Teacher / Admin) deduplicated by phone/authUid.
    */
   async getAllStudents() {
     try {
       const snap = await getDocs(collection(db, COLLECTIONS.STUDENTS));
-      return snap.docs.map((d) => ({
-        id: d.id,
-        firestoreId: d.id,
-        ...d.data()
-      }));
+      const studentMap = new Map();
+      snap.docs.forEach((d) => {
+        const data = d.data();
+        const docId = d.id;
+        const phone = String(data.phone || data.studentPhone || (docId.startsWith("01") ? docId : "")).trim();
+        const authUid = data.authUid || (!docId.startsWith("01") && !docId.startsWith("+20") ? docId : "");
+        const key = phone || authUid || docId;
+
+        const existing = studentMap.get(key);
+        if (!existing) {
+          studentMap.set(key, {
+            id: authUid || docId,
+            firestoreId: docId,
+            authUid: authUid || (docId !== phone ? docId : ""),
+            ...data
+          });
+        } else {
+          studentMap.set(key, {
+            ...existing,
+            ...data,
+            authUid: authUid || existing.authUid || (docId !== phone ? docId : ""),
+            id: authUid || existing.id || docId
+          });
+        }
+      });
+      return Array.from(studentMap.values());
     } catch (err) {
       throw normalizeError(err);
     }
@@ -302,6 +323,15 @@ export const StudentsService = {
   async updateStudent(studentId, data) {
     try {
       await updateDoc(doc(db, COLLECTIONS.STUDENTS, studentId), data);
+      const snap = await getDoc(doc(db, COLLECTIONS.STUDENTS, studentId));
+      if (snap.exists()) {
+        const phone = snap.data().phone || snap.data().studentPhone;
+        if (phone && phone !== studentId) {
+          try {
+            await setDoc(doc(db, COLLECTIONS.STUDENTS, phone), data, { merge: true });
+          } catch (_) {}
+        }
+      }
     } catch (err) {
       throw normalizeError(err);
     }

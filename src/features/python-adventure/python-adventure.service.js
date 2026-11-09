@@ -543,6 +543,7 @@ export const PythonAdventureService = {
 
   /**
    * Fetches all registered students and merges their Python Adventure progress.
+   * Deduplicates students with dual documents (uid and phone) and sorts active students to the top.
    * Used by Teacher to track student levels, XP, and completed challenges.
    * @returns {Promise<Array<object>>}
    */
@@ -551,11 +552,32 @@ export const PythonAdventureService = {
     try {
       if (db) {
         const snap = await getDocs(collection(db, COLLECTIONS.STUDENTS));
-        students = snap.docs.map((d) => ({
-          id: d.id,
-          firestoreId: d.id,
-          ...d.data()
-        }));
+        const studentMap = new Map();
+        snap.docs.forEach((d) => {
+          const data = d.data();
+          const docId = d.id;
+          const phone = String(data.phone || data.studentPhone || (docId.startsWith("01") ? docId : "")).trim();
+          const authUid = data.authUid || (!docId.startsWith("01") && !docId.startsWith("+20") ? docId : "");
+          const key = phone || authUid || docId;
+
+          const existing = studentMap.get(key);
+          if (!existing) {
+            studentMap.set(key, {
+              id: authUid || docId,
+              firestoreId: docId,
+              authUid: authUid || (docId !== phone ? docId : ""),
+              ...data
+            });
+          } else {
+            studentMap.set(key, {
+              ...existing,
+              ...data,
+              authUid: authUid || existing.authUid || (docId !== phone ? docId : ""),
+              id: authUid || existing.id || docId
+            });
+          }
+        });
+        students = Array.from(studentMap.values());
       }
     } catch (err) {
       console.warn("Could not fetch students from Firestore, using default roster:", err);
@@ -576,12 +598,19 @@ export const PythonAdventureService = {
       }
     } catch (_) {}
 
-    const totalCurriculumLevels = Object.keys(CHALLENGES_CLIENT_DATA).length || 24;
+    const totalCurriculumLevels = Object.keys(CHALLENGES_CLIENT_DATA).length || 31;
 
-    return students.map((std) => {
-      const sId = std.id || std.uid || std.firestoreId;
+    const mapped = students.map((std) => {
+      const sAuthUid = std.authUid;
+      const sUid = std.uid;
+      const sId = std.id || std.firestoreId;
       const sPhone = std.phone || std.studentPhone;
-      const prg = progressMap[sId] || (sPhone ? progressMap[sPhone] : null) || {};
+
+      // Multi-key progress lookup (check authUid first, then uid, docId, phone)
+      const prg = (sAuthUid && progressMap[sAuthUid]) ||
+                  (sUid && progressMap[sUid]) ||
+                  (sId && progressMap[sId]) ||
+                  (sPhone && progressMap[sPhone]) || {};
 
       const completedCount = prg.stats?.totalCompleted ?? (prg.completedChallenges ? Object.keys(prg.completedChallenges).length : 0);
       const percent = totalCurriculumLevels > 0 ? Math.min(100, Math.round((completedCount / totalCurriculumLevels) * 100)) : 0;
@@ -604,16 +633,33 @@ export const PythonAdventureService = {
       const badgesCount = (prg.achievements?.length) ?? (prg.badges?.length) ?? (completedCount > 0 ? Math.floor(completedCount / 3) : 0);
 
       let lastActive = "غير نشط";
-      if (prg.lastActiveAt) {
-        lastActive = typeof prg.lastActiveAt.toDate === "function"
-          ? prg.lastActiveAt.toDate().toLocaleDateString("ar-EG")
-          : new Date(prg.lastActiveAt).toLocaleDateString("ar-EG");
+      const activeTime = prg.updatedAt || prg.lastActiveAt || prg.streak?.lastActiveDate;
+      if (activeTime) {
+        try {
+          const d = typeof activeTime.toDate === "function" ? activeTime.toDate() : new Date(activeTime);
+          if (!isNaN(d.getTime())) {
+            const todayStr = new Date().toISOString().slice(0, 10);
+            const dStr = d.toISOString().slice(0, 10);
+            if (todayStr === dStr) {
+              lastActive = "اليوم " + d.toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" });
+            } else {
+              lastActive = d.toLocaleDateString("ar-EG", { month: "short", day: "numeric" });
+            }
+          } else {
+            lastActive = String(activeTime);
+          }
+        } catch (_) {
+          lastActive = String(activeTime);
+        }
       } else if (completedCount > 0) {
-        lastActive = "مكتمل مؤخراً";
+        lastActive = "نشط مؤخراً";
       }
 
       return {
         ...std,
+        name: std.name || std.studentName || "طالب بدون اسم",
+        phone: std.phone || std.studentPhone || "",
+        studentCode: std.studentCode || std.nationalId || std.phone || std.id,
         completedCount,
         totalLevels: totalCurriculumLevels,
         percent,
@@ -625,6 +671,17 @@ export const PythonAdventureService = {
         lastActive,
         solvedChallenges: prg.completedChallenges || {}
       };
+    });
+
+    // Sort: Students with completed challenges and highest XP appear first
+    return mapped.sort((a, b) => {
+      if ((b.completedCount || 0) !== (a.completedCount || 0)) {
+        return (b.completedCount || 0) - (a.completedCount || 0);
+      }
+      if ((b.xp || 0) !== (a.xp || 0)) {
+        return (b.xp || 0) - (a.xp || 0);
+      }
+      return (a.name || "").localeCompare(b.name || "", "ar");
     });
   },
 

@@ -188,8 +188,218 @@ export const StudentsController = {
     container.addEventListener("click", (e) => {
       if (e.target.closest("#openAddStudentModalBtn")) {
         openModal("addStudentModal");
+      } else if (e.target.closest("#exportStudentsExcelBtn")) {
+        this.exportStudentsExcel();
+      } else if (e.target.closest("#importStudentsBatchBtn")) {
+        this.openBatchImportDialog(canDelete);
       }
     });
+  },
+
+  /**
+   * Exports student roster to Excel (.xlsx) with clean Arabic UTF-8 CSV fallback.
+   */
+  exportStudentsExcel() {
+    try {
+      const all = studentsState.get("students") || [];
+      const groupFilter = studentsState.get("filterGroup") || "ALL";
+      const search = (studentsState.get("searchQuery") || "").toLowerCase().trim();
+      const absencesMap = studentsState.get("absencesMap") || new Map();
+
+      const listToExport = (groupFilter !== "ALL" || search)
+        ? this._filterStudents(all, groupFilter, search)
+        : all;
+
+      if (!listToExport || listToExport.length === 0) {
+        showToast("لا توجد بيانات طلاب لتصديرها حالياً", "warning");
+        return;
+      }
+
+      const rows = listToExport.map((s, idx) => {
+        const phone = s.phone || s.studentPhone || "";
+        const nationalId = s.nationalId || "";
+        const pass = s.pass || s.password || (nationalId ? String(nationalId).slice(-6) : phone ? phone.slice(-6) : "");
+        const sId = s.id || s.firestoreId || s.authUid || phone;
+        const absObj = absencesMap.get(sId) || absencesMap.get(phone) || {};
+        const absCount = typeof absObj === "number" ? absObj : (absObj.absenceCount || s.absencesCount || 0);
+
+        return {
+          "م": idx + 1,
+          "اسم الطالب": s.name || s.studentName || "بدون اسم",
+          "رقم الهاتف (اسم المستخدم)": phone,
+          "الرقم القومي": nationalId,
+          "كلمة المرور": pass,
+          "الكلية / جهة الدراسة": s.collegeUniversity || s.faculty || "-",
+          "الفرقة / السنة الدراسية": s.academicYear || "-",
+          "المجموعة الدراسية": s.group || s.studentGroup || "المجموعة التدريبية المعتمدة",
+          "العنوان / المحافظة": s.governorate || s.address || "-",
+          "مرات الغياب": absCount,
+          "كود الحساب (UID)": s.authUid || s.id || "",
+          "حالة الحساب": s.active !== false ? "نشط" : "معطل"
+        };
+      });
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const filenameBase = `كشف_بيانات_الطلاب_اتحاد_بشبابها_${todayStr}`;
+
+      if (window.XLSX) {
+        const ws = window.XLSX.utils.json_to_sheet(rows);
+        ws["!dir"] = "rtl";
+        ws["!cols"] = [
+          { wch: 6 },
+          { wch: 30 },
+          { wch: 18 },
+          { wch: 20 },
+          { wch: 16 },
+          { wch: 26 },
+          { wch: 20 },
+          { wch: 22 },
+          { wch: 24 },
+          { wch: 12 },
+          { wch: 32 },
+          { wch: 12 }
+        ];
+
+        const wb = window.XLSX.utils.book_new();
+        window.XLSX.utils.book_append_sheet(wb, ws, "الطلاب");
+        window.XLSX.writeFile(wb, `${filenameBase}.xlsx`);
+        showToast(`تم تصدير كشف بيانات ${rows.length} طالب إلى ملف Excel بنجاح 📊`, "success");
+      } else {
+        const headers = Object.keys(rows[0]);
+        const csvRows = [
+          headers.join(","),
+          ...rows.map((row) =>
+            headers
+              .map((h) => {
+                const val = String(row[h] ?? "").replace(/"/g, '""');
+                return `"${val}"`;
+              })
+              .join(",")
+          )
+        ];
+        const csvContent = "\uFEFF" + csvRows.join("\r\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `${filenameBase}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast(`تم تصدير كشف بيانات ${rows.length} طالب بنجاح 📊`, "success");
+      }
+    } catch (err) {
+      console.error("Export error:", err);
+      showToast("تعذر تصدير بيانات الطلاب: " + (err.message || err), "error");
+    }
+  },
+
+  /**
+   * Opens batch import file dialog for Excel/CSV student files.
+   */
+  openBatchImportDialog(canDelete) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".xlsx, .xls, .csv";
+    input.style.display = "none";
+    document.body.appendChild(input);
+
+    input.addEventListener("change", async (e) => {
+      const file = e.target.files?.[0];
+      if (input.parentNode) input.parentNode.removeChild(input);
+      if (!file) return;
+
+      if (!window.XLSX) {
+        showToast("جاري تهيئة قارئ ملفات Excel... يرجى المحاولة بعد قليل", "info");
+        return;
+      }
+
+      try {
+        const data = await file.arrayBuffer();
+        const wb = window.XLSX.read(data, { type: "array" });
+        const firstSheetName = wb.SheetNames[0];
+        const ws = wb.Sheets[firstSheetName];
+        const jsonRows = window.XLSX.utils.sheet_to_json(ws, { defval: "" });
+
+        if (!jsonRows || jsonRows.length === 0) {
+          showToast("الملف فارغ أو لا يحتوي على بيانات صالحة.", "warning");
+          return;
+        }
+
+        const parsedStudents = [];
+        for (const row of jsonRows) {
+          const getField = (...keys) => {
+            for (const k of keys) {
+              const foundKey = Object.keys(row).find((col) => col.trim().toLowerCase().includes(k.toLowerCase()));
+              if (foundKey && String(row[foundKey]).trim()) return String(row[foundKey]).trim();
+            }
+            return "";
+          };
+
+          const name = getField("اسم الطالب", "الاسم", "name", "studentName");
+          let phone = getField("رقم التليفون", "رقم الهاتف", "الهاتف", "الموبايل", "phone", "mobile");
+          const nationalId = getField("الرقم القومي", "القومي", "nationalId", "nid");
+          const address = getField("العنوان", "محل الإقامة", "المحافظة", "address", "governorate");
+          const group = getField("المجموعة", "الفرقة", "السنة الدراسية", "group");
+          const customPass = getField("كلمة المرور", "الباسورد", "password", "pass");
+
+          phone = phone.replace(/[^\d+]/g, "");
+          if (phone.startsWith("+20")) phone = "0" + phone.slice(3);
+          if (phone.startsWith("20") && phone.length === 12) phone = phone.slice(1);
+
+          if (phone && phone.length >= 10) {
+            const pass = customPass || (nationalId && nationalId.length >= 6 ? nationalId.slice(-6) : phone);
+            parsedStudents.push({
+              name: name || "طالب جديد",
+              phone,
+              nationalId,
+              address,
+              group: group || "المجموعة التدريبية المعتمدة",
+              password: pass
+            });
+          }
+        }
+
+        if (parsedStudents.length === 0) {
+          showToast("لم يتم العثور على أرقام هواتف صالحة للطلاب في الملف المرفوع.", "error");
+          return;
+        }
+
+        const confirmed = await showConfirmDialog({
+          title: "تأكيد استيراد دفعة طلاب",
+          message: `تم العثور على (${parsedStudents.length}) طالب في الملف "${file.name}". هل تريد بدء الاستيراد وتوليد حساباتهم بكلمة المرور (آخر 6 أرقام من الرقم القومي / رقم الهاتف)؟`,
+          confirmText: `بدء الاستيراد (${parsedStudents.length}) طالب 🚀`,
+          confirmVariant: "primary",
+          cancelText: "إلغاء"
+        });
+
+        if (!confirmed) return;
+
+        showToast(`جاري استيراد ${parsedStudents.length} طالب، يرجى الانتظار... ⏳`, "info", 6000);
+
+        let importedCount = 0;
+        for (const std of parsedStudents) {
+          try {
+            await StudentsService.createStudent(std);
+            importedCount++;
+          } catch (err) {
+            console.warn(`Failed to import student ${std.name} (${std.phone}):`, err);
+          }
+        }
+
+        showToast(`تم استيراد ${importedCount} طالب بنجاح ✅`, "success");
+        const fresh = await StudentsService.getAllStudents();
+        studentsState.set("students", fresh);
+        this.updateTableOnly(canDelete);
+        this._refreshStats();
+      } catch (err) {
+        console.error("Batch import error:", err);
+        showToast("حدث خطأ أثناء معالجة الملف: " + (err.message || err), "error");
+      }
+    });
+
+    input.click();
   },
 
   // ─────────────────────────────────────────────
