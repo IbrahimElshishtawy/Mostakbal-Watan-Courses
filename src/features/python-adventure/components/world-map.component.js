@@ -14,9 +14,10 @@ import { PythonAdventureService } from "../python-adventure.service.js";
  * including both the 8 Concept Worlds and the 5 Problem Solving Level Worlds.
  */
 export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTrack = "all" }) {
-  const unlockedWorlds = new Set(progress?.unlockedWorlds || ["world-1"]);
-  const completedChallenges = progress?.completedChallenges || {};
-  const starsMap = progress?.stars || {};
+  const normProgress = PythonAdventureService.normalizeProgress(progress);
+  const unlockedWorlds = new Set(normProgress?.unlockedWorlds || ["world-1"]);
+  const completedChallenges = normProgress?.completedChallenges || {};
+  const starsMap = normProgress?.stars || {};
 
   // Group concept challenges by world honoring custom ordering and custom levels
   const worldChallengesMap = {};
@@ -296,8 +297,14 @@ export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTr
                 }).join("")
               : activeWorldChallenges.map((ch, idx) => {
                   const isCompleted = !!completedChallenges[ch.id];
-                  const unlockedList = progress?.unlockedChallenges || ["world-1-level-1"];
-                  const isLevelUnlocked = unlockedList.includes(ch.id);
+                  const unlockedSet = new Set(normProgress?.unlockedChallenges || ["world-1-level-1"]);
+                  const isFirstLevelOfUnlockedWorld = idx === 0 && (unlockedWorlds.has(selectedWorldId) || selectedWorldId === "world-1");
+                  const isPrevLevelCompleted = idx > 0 && !!completedChallenges[activeWorldChallenges[idx - 1].id];
+
+                  const isLevelUnlocked = isCompleted ||
+                                          unlockedSet.has(ch.id) ||
+                                          isFirstLevelOfUnlockedWorld ||
+                                          isPrevLevelCompleted;
                   const stars = starsMap[ch.id] || 0;
 
                   let levelClass = "level-card";
@@ -306,7 +313,7 @@ export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTr
                   else levelClass += " locked";
 
                   const prevLevel = activeWorldChallenges[idx - 1];
-                  const lockMsg = prevLevel ? `أكمل "${prevLevel.title}" لفتح هذه المهمة.` : "أكمل المهمات السابقة.";
+                  const lockMsg = prevLevel ? `أكمل "${prevLevel.title}" لفتح هذه المهمة.` : "أكمل العالم السابق أولاً.";
 
                   return `
                     <div class="${levelClass}" data-challenge-id="${ch.id}" role="button" tabindex="${isLevelUnlocked ? "0" : "-1"}">

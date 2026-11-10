@@ -536,8 +536,9 @@ export const PythonAdventureController = {
    */
   handleContinue() {
     const { progress } = adventureStore.getState();
-    const unlocked = progress?.unlockedChallenges || ["world-1-level-1"];
-    const completed = progress?.completedChallenges || {};
+    const norm = PythonAdventureService.normalizeProgress(progress);
+    const unlocked = norm?.unlockedChallenges || ["world-1-level-1"];
+    const completed = norm?.completedChallenges || {};
 
     // Find first unlocked challenge not yet completed
     let targetChallengeId = unlocked.find((id) => !completed[id]);
@@ -609,10 +610,14 @@ export const PythonAdventureController = {
       card.addEventListener("click", () => {
         const worldId = card.getAttribute("data-world-id");
         const { progress } = adventureStore.getState();
+        const norm = PythonAdventureService.normalizeProgress(progress);
         const isUnlocked =
-          worldId.startsWith("ps-level-") || (progress?.unlockedWorlds || ["world-1"]).includes(worldId);
+          worldId.startsWith("ps-level-") ||
+          (norm?.unlockedWorlds || ["world-1"]).includes(worldId) ||
+          card.classList.contains("unlocked") ||
+          card.classList.contains("completed");
         if (isUnlocked) {
-          adventureStore.setState({ selectedWorldId: worldId });
+          adventureStore.setState({ selectedWorldId: worldId, progress: norm });
           // Scroll levels section smoothly into view
           document.getElementById("worldLevelsSection")?.scrollIntoView({ behavior: "smooth" });
         }
@@ -624,7 +629,11 @@ export const PythonAdventureController = {
       card.addEventListener("click", () => {
         const challengeId = card.getAttribute("data-challenge-id");
         const { progress } = adventureStore.getState();
-        const isUnlocked = (progress?.unlockedChallenges || ["world-1-level-1"]).includes(challengeId);
+        const norm = PythonAdventureService.normalizeProgress(progress);
+        const isUnlocked =
+          (norm?.unlockedChallenges || ["world-1-level-1"]).includes(challengeId) ||
+          card.classList.contains("unlocked") ||
+          card.classList.contains("completed");
         if (isUnlocked && challengeId) {
           this.startMissionFlow(challengeId);
         }

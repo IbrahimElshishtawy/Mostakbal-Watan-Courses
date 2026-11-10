@@ -183,7 +183,8 @@ else:
  * @returns {string} HTML markup
  */
 export function renderCloudConsoleView({ initialCode = "" } = {}) {
-  const defaultCode = initialCode || CLOUD_CONSOLE_TEMPLATES.hello_world.code;
+  // Cloud Console starts completely empty by default as requested
+  const defaultCode = initialCode || "";
 
   return `
     <div class="cloud-console-workspace" id="cloudConsoleWorkspace">
@@ -196,7 +197,7 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
           </div>
           <h2 class="console-header-title">مختبر البرمجة والتشغيل السحابي</h2>
           <p class="console-header-desc">
-            محرر سحابي متكامل لتجربة أكواد بايثون، اختبار حلول الواجبات، واكتشاف الأخطاء البرمجية ذاتياً مع مخرجات فورية.
+            محرر سحابي ذكي لكتابة وتجربة أكواد بايثون بحرية، مع مساعد فوري لكشف الأخطاء النحوية والإملائية وتصحيحها أثناء الكتابة.
           </p>
         </div>
 
@@ -204,16 +205,16 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
           <div class="console-template-select-wrap">
             <label for="consoleTemplateSelect" class="sr-only">اختر قالباً برمجياً</label>
             <select id="consoleTemplateSelect" class="console-select-input" title="اختر قالباً جاهزاً للتجربة">
-              <option value="">💡 نماذج برمجية جاهزة...</option>
+              <option value="">💡 نماذج وأمثلة برمجية جاهزة...</option>
               ${Object.values(CLOUD_CONSOLE_TEMPLATES)
                 .map((t) => `<option value="${t.id}">${t.title}</option>`)
                 .join("")}
             </select>
           </div>
 
-          <button type="button" class="btn-console-pill" id="consoleResetBtn" title="إعادة تعيين المحرر">
-            <span>🔄</span>
-            <span>إعادة ضبط</span>
+          <button type="button" class="btn-console-pill" id="consoleResetBtn" title="مسح المحرر بالكامل">
+            <span>🗑️</span>
+            <span>مسح المحرر</span>
           </button>
         </div>
       </div>
@@ -248,6 +249,15 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
             </div>
           </div>
 
+          <!-- Smart Coding Assistant Bar -->
+          <div class="console-assistant-bar" id="consoleAssistantBar" dir="rtl">
+            <div class="assistant-status">
+              <span class="assistant-icon" id="consoleAssistantIcon">✨</span>
+              <span class="assistant-text" id="consoleAssistantText">المساعد الذكي جاهز لمراقبة الكود وتقديم المساعدة وتصحيح الأخطاء تلقائياً</span>
+            </div>
+            <div class="assistant-actions" id="consoleAssistantActions"></div>
+          </div>
+
           <!-- Code Area with Line Numbers -->
           <div class="console-editor-body" dir="ltr">
             <div class="console-line-numbers" id="consoleLineNumbers" dir="ltr" aria-hidden="true">1</div>
@@ -258,12 +268,12 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
               spellcheck="false"
               autocapitalize="off"
               autocomplete="off"
-              placeholder="# Write Python code here..."
+              placeholder="# اكتب كود بايثون هنا وجرب تشغيله... 🐍&#10;# يمكنك كتابة أي كود أو الاستعانة بالأوامر السريعة بالأسفل والنماذج الجاهزة."
               aria-label="محرر كود بايثون"
             >${defaultCode}</textarea>
           </div>
 
-          <div class="console-editor-footer">
+          <div class="console-editor-footer" dir="rtl">
             <div class="console-shortcut-hint">
               <kbd class="console-kbd">Ctrl</kbd> + <kbd class="console-kbd">Enter</kbd>
               <span>لتشغيل الكود مباشرة ⚡</span>

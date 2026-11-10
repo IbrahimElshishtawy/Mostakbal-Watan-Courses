@@ -51,7 +51,7 @@ export const PythonAdventureService = {
       if (uid && db) {
         const snap = await getDoc(doc(db, COLLECTIONS.PYTHON_ADVENTURE_PROGRESS, uid));
         if (snap.exists()) {
-          const data = snap.data();
+          const data = this.normalizeProgress(snap.data());
           this._saveLocalCache(uid, data);
           return data;
         }
@@ -62,7 +62,7 @@ export const PythonAdventureService = {
 
     // Fallback 2: Local cache or initial state
     const cached = this._getLocalCache(uid);
-    if (cached) return cached;
+    if (cached) return this.normalizeProgress(cached);
 
     const initial = {
       studentUid: uid,
@@ -89,6 +89,73 @@ export const PythonAdventureService = {
     } catch (_) {}
 
     return initial;
+  },
+
+  /**
+   * Guarantees structural integrity of student progress across all 8 worlds:
+   * - Ensures world-1 and world-1-level-1 are always unlocked.
+   * - Automatically unlocks the next level for any completed challenge.
+   * - For every unlocked world, ensures its first challenge is unlocked.
+   * - If all levels of a world are completed, unlocks the next world & its first level.
+   * @param {object} progress
+   * @returns {object} Normalized progress
+   */
+  normalizeProgress(progress) {
+    if (!progress) return progress;
+    const completed = progress.completedChallenges || {};
+    const unlockedWorlds = new Set(progress.unlockedWorlds || ["world-1"]);
+    const unlockedChallenges = new Set(progress.unlockedChallenges || ["world-1-level-1"]);
+
+    unlockedWorlds.add("world-1");
+    unlockedChallenges.add("world-1-level-1");
+
+    // 1. For each completed challenge, unlock its nextChallengeId & unlocksWorldId
+    for (const [chId, rec] of Object.entries(completed)) {
+      unlockedChallenges.add(chId);
+      const chData = CHALLENGES_CLIENT_DATA[chId];
+      if (chData) {
+        if (chData.nextChallengeId) unlockedChallenges.add(chData.nextChallengeId);
+        if (chData.unlocksWorldId) {
+          unlockedWorlds.add(chData.unlocksWorldId);
+        }
+      }
+    }
+
+    // 2. Cascade across all 8 concept worlds sequentially
+    for (let wNum = 1; wNum <= 8; wNum++) {
+      const curWorldId = `world-${wNum}`;
+      const nextWorldId = `world-${wNum + 1}`;
+      const curChallenges = this.getWorldChallenges(curWorldId);
+
+      // If this world is unlocked, its first level MUST be unlocked
+      if (unlockedWorlds.has(curWorldId) && curChallenges.length > 0) {
+        unlockedChallenges.add(curChallenges[0].id);
+
+        // Within this world: if challenge i is completed, challenge i+1 is unlocked
+        for (let i = 0; i < curChallenges.length - 1; i++) {
+          if (completed[curChallenges[i].id]) {
+            unlockedChallenges.add(curChallenges[i + 1].id);
+          }
+        }
+      }
+
+      // If all challenges in this world are completed, unlock next world and its first challenge!
+      if (curChallenges.length > 0 && curChallenges.every((c) => !!completed[c.id])) {
+        if (wNum < 8) {
+          unlockedWorlds.add(nextWorldId);
+          const nextChallenges = this.getWorldChallenges(nextWorldId);
+          if (nextChallenges.length > 0) {
+            unlockedChallenges.add(nextChallenges[0].id);
+          }
+        }
+      }
+    }
+
+    return {
+      ...progress,
+      unlockedWorlds: Array.from(unlockedWorlds),
+      unlockedChallenges: Array.from(unlockedChallenges)
+    };
   },
 
   /**
@@ -186,7 +253,13 @@ export const PythonAdventureService = {
     if (challenge.nextChallengeId) unlockedChallenges.add(challenge.nextChallengeId);
 
     const unlockedWorlds = new Set(existing.unlockedWorlds || ["world-1"]);
-    if (challenge.unlocksWorldId) unlockedWorlds.add(challenge.unlocksWorldId);
+    if (challenge.unlocksWorldId) {
+      unlockedWorlds.add(challenge.unlocksWorldId);
+      const nextWorldChallenges = this.getWorldChallenges(challenge.unlocksWorldId);
+      if (nextWorldChallenges.length > 0) {
+        unlockedChallenges.add(nextWorldChallenges[0].id);
+      }
+    }
 
     const currentAchievements = new Set(existing.achievements || []);
     const newlyUnlockedAchievements = [];
@@ -341,7 +414,11 @@ export const PythonAdventureService = {
     allInWorld.forEach((ch, idx) => {
       ch.levelNumber = idx + 1;
       const nextCh = allInWorld[idx + 1];
-      ch.nextChallengeId = nextCh ? nextCh.id : null;
+      if (nextCh) {
+        ch.nextChallengeId = nextCh.id;
+      } else if (CHALLENGES_CLIENT_DATA[ch.id]?.nextChallengeId) {
+        ch.nextChallengeId = CHALLENGES_CLIENT_DATA[ch.id].nextChallengeId;
+      }
     });
 
     return allInWorld;
