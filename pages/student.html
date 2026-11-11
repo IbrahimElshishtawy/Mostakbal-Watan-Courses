@@ -29,25 +29,121 @@
 </head>
 <body>
 
-  <!-- Root Mount Node -->
-  <div id="appRoot">
-    <div class="portal-initial-loader">
-      <div class="portal-loader-card">
-        <div class="portal-loader-emblem-wrap">
-          <div class="portal-loader-ring" aria-hidden="true"></div>
-          <img src="../assets/images/logo_union.jpeg" alt="شعار المنصة" class="portal-loader-logo">
+  <!-- Gamified Adventure Full-Screen Splash Loader -->
+  <div class="portal-initial-loader portal-adventure-splash" id="portalInitialLoader">
+    <!-- Cosmic Cyber Background -->
+    <div class="splash-cosmic-bg" aria-hidden="true">
+      <div class="splash-glow-orb splash-glow-emerald"></div>
+      <div class="splash-glow-orb splash-glow-cyan"></div>
+      <div class="splash-grid-overlay"></div>
+    </div>
+
+    <!-- Main Gamified Adventure Card -->
+    <div class="portal-loader-card adventure-loader-card">
+      <!-- RPG Hero Crest & Orbiting Rings -->
+      <div class="adventure-emblem-wrap">
+        <div class="adventure-orbit-ring ring-outer" aria-hidden="true"></div>
+        <div class="adventure-orbit-ring ring-inner" aria-hidden="true"></div>
+        <div class="adventure-crown-badge" aria-hidden="true">⚔️</div>
+        <img src="../assets/images/logo_union.jpeg" alt="شعار المنصة" class="portal-loader-logo adventure-logo">
+        <div class="adventure-xp-sparkle" aria-hidden="true">⚡</div>
+      </div>
+
+      <!-- Platform Title & Gamified Subtitle -->
+      <h2 class="portal-loader-title adventure-title">
+        <span>اتحاد بشبابها</span>
+        <span class="adventure-subtitle-tag">بوابة أبطال بايثون 🐍</span>
+      </h2>
+
+      <!-- Dynamic Mission Status Badge -->
+      <div class="portal-loader-status adventure-status-badge">
+        <span class="adventure-pulse-beacon" aria-hidden="true"></span>
+        <span id="adventureLoaderMsg" class="adventure-msg-text">جاري فحص تصريح الدخول ومزامنة بيانات البطل... 🛡️</span>
+      </div>
+
+      <!-- Gamified XP Energy Gauge & Percentage Counter -->
+      <div class="adventure-energy-gauge-wrap">
+        <div class="adventure-gauge-header">
+          <span class="adventure-gauge-label">
+            <span class="energy-bolt">⚡</span> شحن طاقة الـ XP البرمجية
+          </span>
+          <span id="adventureLoaderPercent" class="adventure-gauge-percent">15%</span>
         </div>
-        <h3 class="portal-loader-title">اتحاد بشبابها - بوابة الطالب</h3>
-        <div class="portal-loader-status">
-          <span class="splash-pulse-dot" aria-hidden="true"></span>
-          <span>جاري التحقق من الحساب وتجهيز دروسك... 🚀</span>
+        <div class="adventure-progress-track" aria-hidden="true">
+          <div id="adventureProgressBar" class="adventure-progress-bar" style="width: 15%;">
+            <div class="adventure-bar-shimmer"></div>
+          </div>
         </div>
-        <div class="portal-loader-progress" aria-hidden="true">
-          <div class="portal-loader-progress-bar"></div>
-        </div>
+      </div>
+
+      <!-- Footer Tagline -->
+      <div class="adventure-loader-footer">
+        <span>أكاديمية المستقبل البرمجية • Future Tech Academy 🚀</span>
       </div>
     </div>
   </div>
+
+  <!-- Dynamic Splash Animator (Runs Immediately) -->
+  <script>
+    (function() {
+      const msgEl = document.getElementById("adventureLoaderMsg");
+      const percentEl = document.getElementById("adventureLoaderPercent");
+      const barEl = document.getElementById("adventureProgressBar");
+      if (!msgEl || !percentEl || !barEl) return;
+
+      const messages = [
+        "🛡️ جاري التحقق من تصريح المحارب البرمجي...",
+        "⚡ شحن طاقة الـ XP وفتح بوابات العوالم...",
+        "🐍 استدعاء بيئة بايثون ومحرك الأكواد السحابي...",
+        "🏆 مزامنة مستواك وإنجازاتك في لوحة المتصدرين...",
+        "🚀 بوابتك جاهزة! انطلق نحو القمة والتحدي..."
+      ];
+
+      let msgIdx = 0;
+      let progress = 15;
+
+      const progTimer = setInterval(function() {
+        if (progress < 92) {
+          progress += Math.floor(Math.random() * 7) + 3;
+          if (progress > 92) progress = 92;
+          percentEl.textContent = progress + "%";
+          barEl.style.width = progress + "%";
+        }
+      }, 90);
+
+      const msgTimer = setInterval(function() {
+        msgIdx = (msgIdx + 1) % messages.length;
+        msgEl.style.opacity = "0";
+        msgEl.style.transform = "translateY(3px)";
+        setTimeout(function() {
+          msgEl.textContent = messages[msgIdx];
+          msgEl.style.opacity = "1";
+          msgEl.style.transform = "translateY(0)";
+        }, 160);
+      }, 700);
+
+      window.__finishAdventureLoader = function(onDone) {
+        clearInterval(progTimer);
+        clearInterval(msgTimer);
+        if (percentEl) percentEl.textContent = "100%";
+        if (barEl) barEl.style.width = "100%";
+        if (msgEl) msgEl.textContent = "✨ تم اكتمال التحميل بنجاح! مرحباً بك يا بطل 🚀";
+        const splash = document.getElementById("portalInitialLoader");
+        if (splash) {
+          splash.classList.add("adventure-splash-exit");
+          setTimeout(function() {
+            splash.remove();
+            if (onDone) onDone();
+          }, 320);
+        } else if (onDone) {
+          onDone();
+        }
+      };
+    })();
+  </script>
+
+  <!-- Root Mount Node -->
+  <div id="appRoot"></div>
 
   <!-- Toast Notification Container -->
   <div class="toast-container"></div>
@@ -70,25 +166,25 @@
     const root = document.getElementById("appRoot");
 
     function renderPortalFallback(message = "تعذر التحقق من الجلسة أو انتهت صلاحيتها.") {
-      if (!root) return;
-      root.innerHTML = `
-        <div class="portal-initial-loader">
-          <div class="portal-loader-card" style="border-color: rgba(239, 68, 68, 0.4);">
-            <div class="portal-loader-emblem-wrap">
-              <span style="font-size: 3rem; line-height: 1;">🔐</span>
-            </div>
-            <h3 class="portal-loader-title">اتحاد بشبابها - تسجيل الدخول</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
-              ${message}
-            </p>
-            <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
-              <a href="../index.html" class="btn btn-primary" style="padding: 0.6rem 1.25rem;">
-                <span>الانتقال لتسجيل الدخول 🚀</span>
-              </a>
-              <button id="portalRetryBtn" class="btn btn-secondary" style="padding: 0.6rem 1.25rem;">
-                <span>إعادة المحاولة 🔄</span>
-              </button>
-            </div>
+      const splash = document.getElementById("portalInitialLoader");
+      const target = splash || root;
+      if (!target) return;
+      target.innerHTML = `
+        <div class="portal-loader-card" style="border-color: rgba(239, 68, 68, 0.4);">
+          <div class="portal-loader-emblem-wrap">
+            <span style="font-size: 3rem; line-height: 1;">🔐</span>
+          </div>
+          <h3 class="portal-loader-title">اتحاد بشبابها - تسجيل الدخول</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+            ${message}
+          </p>
+          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <a href="../index.html" class="btn btn-primary" style="padding: 0.6rem 1.25rem;">
+              <span>الانتقال لتسجيل الدخول 🚀</span>
+            </a>
+            <button id="portalRetryBtn" class="btn btn-secondary" style="padding: 0.6rem 1.25rem;">
+              <span>إعادة المحاولة 🔄</span>
+            </button>
           </div>
         </div>
       `;
@@ -99,12 +195,12 @@
 
     // Safety Watchdog: Never allow infinite loading card to stay stuck on screen
     const watchdogTimer = setTimeout(() => {
-      const activeLoader = document.querySelector("#appRoot .portal-initial-loader");
+      const activeLoader = document.getElementById("portalInitialLoader") || document.querySelector(".portal-initial-loader");
       if (activeLoader) {
         console.warn("[Watchdog] Initial loader still present after 4s. Showing fallback action.");
         renderPortalFallback("استغرق التحقق وقتاً طويلاً. يرجى تسجيل الدخول مرة أخرى.");
       }
-    }, 4000);
+    }, 4500);
 
     try {
       // 1. Enforce Role Protection (fails safe after 2.8s max)
@@ -255,7 +351,12 @@
         LecturesController.loadStudentLectures("videoListContainer", student);
       }
 
-      // 5. In Background: Fetch Enriched Student Profile & Update UI without blocking
+      // 5. Smoothly transition out the Gamified Adventure Splash into Dashboard
+      if (typeof window.__finishAdventureLoader === "function") {
+        window.__finishAdventureLoader();
+      }
+
+      // 6. In Background: Fetch Enriched Student Profile & Update UI without blocking
       (async () => {
         try {
           let enrichedStudent = null;
