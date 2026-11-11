@@ -169,7 +169,8 @@ export const PythonAdventureController = {
             stars: { "world-1-level-1": 3, "world-1-level-2": 3 }
           },
           selectedWorldId: this._teacherActiveWorldId,
-          activeTrack: "all"
+          activeTrack: "all",
+          isTeacher: true
         });
         this.wireWorldMapEvents();
       }
@@ -400,7 +401,8 @@ export const PythonAdventureController = {
         containerElement.innerHTML = renderWorldMap({
           progress,
           selectedWorldId,
-          activeTrack: state.activeTrack || "all"
+          activeTrack: state.activeTrack || "all",
+          isTeacher: Boolean(student?.role === "teacher" || student?.role === "admin")
         });
         this.wireWorldMapEvents();
         break;

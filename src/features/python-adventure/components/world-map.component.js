@@ -13,7 +13,7 @@ import { PythonAdventureService } from "../python-adventure.service.js";
  * Renders the interactive World Map and Levels Drawer,
  * including both the 8 Concept Worlds and the 5 Problem Solving Level Worlds.
  */
-export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTrack = "all" }) {
+export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTrack = "all", isTeacher = false }) {
   const normProgress = PythonAdventureService.normalizeProgress(progress);
   const unlockedWorlds = new Set(normProgress?.unlockedWorlds || ["world-1"]);
   const completedChallenges = normProgress?.completedChallenges || {};
@@ -60,12 +60,16 @@ export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTr
             <h2 class="view-title">🗺️ خريطة عوالم بايثون وتحديات البرمجة</h2>
             <p class="view-subtitle">تدرج عبر عوالم التأسيس الثمانية ومسار تحديات البرمجة الخمسة لإتقان 25 مسألة برمجية باختبارات حقيقية.</p>
           </div>
-          <div>
+          ${
+            isTeacher
+              ? `<div>
             <button type="button" id="openLevelManagerModalBtn" class="btn btn-sm btn-primary flex items-center gap-2" style="background: linear-gradient(135deg, #10b981 0%, #0d9488 100%); border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 700; padding: 0.5rem 1rem;">
               <span>⚙️</span>
               <span>إدارة المستويات والترتيب</span>
             </button>
-          </div>
+          </div>`
+              : ""
+          }
         </div>
       </div>
 
