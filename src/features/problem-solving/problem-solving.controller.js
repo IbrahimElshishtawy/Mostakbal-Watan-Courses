@@ -2,7 +2,7 @@
 import { ProblemSolvingService } from "./problem-solving.service.js";
 import { renderProblemSolvingView } from "./components/problem-solving-view.component.js";
 import { renderProblemWorkspace } from "./components/problem-workspace.component.js";
-import { showToast } from "../../shared/utils/dom.utils.js";
+import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { setHtml } from "../../shared/utils/dom.utils.js";
 
 export const ProblemSolvingController = {

@@ -6,7 +6,8 @@ import {
   renderCodePreviewModal,
   SIGNATURE_CHALLENGES
 } from "./components/admin-problem-manager.component.js";
-import { setHtml, showToast } from "../../shared/utils/dom.utils.js";
+import { setHtml } from "../../shared/utils/dom.utils.js";
+import { showToast } from "../../shared/components/Toast/toast.component.js";
 
 export const AdminProblemController = {
   _container: null,

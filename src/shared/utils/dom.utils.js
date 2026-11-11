@@ -49,3 +49,14 @@ export function setHtml(element, htmlString) {
     element.innerHTML = htmlString;
   }
 }
+
+/**
+ * Safe toast notification helper bridge.
+ * Calls window.showToast if available, or logs safely.
+ */
+export function showToast(message, type = "info", duration = 3400) {
+  if (typeof window !== "undefined" && typeof window.showToast === "function") {
+    return window.showToast(message, type, duration);
+  }
+  console.log(`[Toast ${type}]`, message);
+}
