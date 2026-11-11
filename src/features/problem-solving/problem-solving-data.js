@@ -211,6 +211,60 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     ],
     starterCode: "score = int(input())\nif score >= 50:\n    print('Pass')\nelse:\n    print('Fail')\n"
   },
+  "prob-l1-stanford-pythagorean": {
+    id: "prob-l1-stanford-pythagorean",
+    title: "نظرية فيثاغورس (Stanford Pythagorean Theorem)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["variables", "input", "math", "stanford_cs106a"],
+    description: "مسألة كلاسيكية في منهج ستانفورد CS106A: اقرأ طولي ضلعي القائمة a و b في مثلث قائم الزاوية (كل رقم في سطر مستقل). احسب طول الوتر c = sqrt(a^2 + b^2) واطبع الناتج كعدد صحيح int.",
+    inputDescription: "سطران: السطر 1 يحتوي على a، والسطر 2 يحتوي على b.",
+    outputDescription: "اطبع عدداً صحيحاً يمثل طول الوتر.",
+    examples: [
+      { input: "3\n4", output: "5", explanation: "الجذر التربيعي لـ (9 + 16) هو 5." },
+      { input: "6\n8", output: "10", explanation: "الجذر التربيعي لـ (36 + 64) هو 10." }
+    ],
+    constraints: ["1 <= a, b <= 10^4"],
+    publicTestCases: [
+      { input: "3\n4", expectedOutput: "5", description: "مثلث 3 و 4 و 5 الشهير" },
+      { input: "6\n8", expectedOutput: "10", description: "مثلث 6 و 8 و 10" }
+    ],
+    hiddenTestCases: [
+      { input: "5\n12", expectedOutput: "13" },
+      { input: "9\n12", expectedOutput: "15" }
+    ],
+    starterCode: "import math\na = float(input())\nb = float(input())\nc = math.sqrt(a**2 + b**2)\nprint(int(c))\n"
+  },
+  "prob-l1-stanford-seconds": {
+    id: "prob-l1-stanford-seconds",
+    title: "محول الثواني إلى دقائق وثواني (Stanford Seconds Converter)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["variables", "arithmetic", "division", "stanford_cs106a"],
+    description: "مسألة ستانفورد لتحويل الوقت: استقبل عدداً صحيحاً total_seconds يمثل عدد الثواني الإجمالي. احسب عدد الدقائق والثواني المتبقية واطبع الناتج بالصيغة: f'{mins}m {secs}s'.",
+    inputDescription: "سطر واحد يحتوي على عدد صحيح يمثل الثواني.",
+    outputDescription: "اطبع بالصيغة: Xm Ys",
+    examples: [
+      { input: "125", output: "2m 5s", explanation: "125 ثانية تساوي دقيقتين و 5 ثوانٍ." },
+      { input: "60", output: "1m 0s", explanation: "60 ثانية تساوي دقيقة واحدة بالضبط." }
+    ],
+    constraints: ["0 <= total_seconds <= 10^6"],
+    publicTestCases: [
+      { input: "125", expectedOutput: "2m 5s", description: "تحويل 125 ثانية" },
+      { input: "60", expectedOutput: "1m 0s", description: "تحويل 60 ثانية" }
+    ],
+    hiddenTestCases: [
+      { input: "0", expectedOutput: "0m 0s" },
+      { input: "365", expectedOutput: "6m 5s" }
+    ],
+    starterCode: "s = int(input())\nmins = s // 60\nsecs = s % 60\nprint(f'{mins}m {secs}s')\n"
+  },
 
   // LEVEL 2: EASY
   "prob-l2-max-three": {
@@ -341,6 +395,59 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     ],
     starterCode: "s = input().lower()\nvowels = set('aeiou')\nprint(sum(1 for char in s if char in vowels))\n"
   },
+  "prob-l2-stanford-sentinel": {
+    id: "prob-l2-stanford-sentinel",
+    title: "المتوسط الحسابي بالحارس (Stanford Sentinel Average)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 60,
+    timeLimit: 3000,
+    skills: ["while_loops", "sentinel", "average", "stanford_cs106a"],
+    description: "مسألة الحارس (Sentinel Loop) الشهيرة في جامعة ستانفورد: اقرأ أعداداً صحيحة في أسطر متتالية حتى يُدخل المستخدم العدد -1 (علامة التوقف). احسب المتوسط الحسابي للأرقام كعدد صحيح مقرب int(average) واطبعه. (إذا لم يدخل أرقاماً اطبع 0).",
+    inputDescription: "أسطر متتالية تنتهي بـ -1.",
+    outputDescription: "اطبع عدداً صحيحاً واحداً يمثل المتوسط الحسابي.",
+    examples: [
+      { input: "10\n20\n30\n-1", output: "20", explanation: "المتوسط الحسابي لـ (10 + 20 + 30) / 3 = 20." },
+      { input: "5\n15\n-1", output: "10", explanation: "المتوسط الحسابي هو 10." }
+    ],
+    constraints: ["كل رقم >= 0 ما عدا -1"],
+    publicTestCases: [
+      { input: "10\n20\n30\n-1", expectedOutput: "20", description: "ثلاثة أرقام موجبة مع -1" },
+      { input: "5\n15\n-1", expectedOutput: "10", description: "رقمين مع -1" }
+    ],
+    hiddenTestCases: [
+      { input: "-1", expectedOutput: "0" },
+      { input: "100\n-1", expectedOutput: "100" }
+    ],
+    starterCode: "nums = []\nwhile True:\n    try:\n        x = int(input())\n        if x == -1:\n            break\n        nums.append(x)\n    except:\n        break\nprint(sum(nums) // len(nums) if nums else 0)\n"
+  },
+  "prob-l2-stanford-fizzbuzz": {
+    id: "prob-l2-stanford-fizzbuzz",
+    title: "تحدي فيزبز المطور (Stanford Extended FizzBuzz)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 60,
+    timeLimit: 3000,
+    skills: ["loops", "conditions", "modulo", "stanford_cs106a"],
+    description: "مسألة المقابلات الكلاسيكية في ستانفورد: استقبل عدداً صحيحاً n. اطبع في سطر واحد مفصولاً بمسافة الأعداد من 1 إلى n، مع استبدال مضاعفات 3 بـ 'Fizz'، ومضاعفات 5 بـ 'Buzz'، ومضاعفات 3 و 5 معاً بـ 'FizzBuzz'.",
+    inputDescription: "سطر واحد يحتوي على العدد الصحيح n.",
+    outputDescription: "اطبع المتتالية مفصولة بمسافة.",
+    examples: [
+      { input: "5", output: "1 2 Fizz 4 Buzz", explanation: "الأرقام من 1 إلى 5 مع استبدال 3 بـ Fizz و 5 بـ Buzz." }
+    ],
+    constraints: ["1 <= n <= 100"],
+    publicTestCases: [
+      { input: "5", expectedOutput: "1 2 Fizz 4 Buzz", description: "أول 5 أرقام" },
+      { input: "15", expectedOutput: "1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz", description: "أول 15 رقماً حتى مضاعف 15 المشترك" }
+    ],
+    hiddenTestCases: [
+      { input: "1", expectedOutput: "1" },
+      { input: "3", expectedOutput: "1 2 Fizz" }
+    ],
+    starterCode: "n = int(input())\nres = []\nfor i in range(1, n + 1):\n    if i % 15 == 0:\n        res.append('FizzBuzz')\n    elif i % 3 == 0:\n        res.append('Fizz')\n    elif i % 5 == 0:\n        res.append('Buzz')\n    else:\n        res.append(str(i))\nprint(' '.join(res))\n"
+  },
 
   // LEVEL 3: INTERMEDIATE
   "prob-l3-remove-duplicates": {
@@ -469,6 +576,59 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1 1\n7", expectedOutput: "7" }
     ],
     starterCode: "r, c = map(int, input().split())\nmatrix = [list(map(int, input().split())) for _ in range(r)]\nfor j in range(c):\n    col = [str(matrix[i][j]) for i in range(r)]\n    print(' '.join(col))\n"
+  },
+  "prob-l3-stanford-dna": {
+    id: "prob-l3-stanford-dna",
+    title: "النسخ التكميلي لسلاسل الحمض النووي (Stanford DNA Reverse Complement)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 90,
+    timeLimit: 3000,
+    skills: ["strings", "bioinformatics", "dictionaries", "stanford_cs106a"],
+    description: "مسألة المعلوماتية الحيوية الكلاسيكية في جامعة ستانفورد: استقبل سلسلة DNA مكونة من الحروف A, T, C, G. اعكس السلسلة بالكامل واستبدل كل قاعدة بنظيرتها التكميلية (A <-> T و C <-> G) واطبع السلسلة الناتجة.",
+    inputDescription: "سطر واحد يحتوي على سلسلة DNA.",
+    outputDescription: "اطبع السلسلة المعكوسة والمكملة.",
+    examples: [
+      { input: "ATCG", output: "CGAT", explanation: "معكوس ATCG هو GCTA ومكمله التناظري هو CGAT." },
+      { input: "AAAACCCGGT", output: "ACCGGGTTTT", explanation: "النسخ التكميلي المعكوس للسلسلة." }
+    ],
+    constraints: ["1 <= len(seq) <= 10^4"],
+    publicTestCases: [
+      { input: "ATCG", expectedOutput: "CGAT", description: "سلسلة أساسية ATCG" },
+      { input: "AAAACCCGGT", expectedOutput: "ACCGGGTTTT", description: "سلسلة مكررة" }
+    ],
+    hiddenTestCases: [
+      { input: "A", expectedOutput: "T" },
+      { input: "C", expectedOutput: "G" }
+    ],
+    starterCode: "seq = input().strip().upper()\ncomp = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}\nprint(''.join(comp.get(b, b) for b in reversed(seq)))\n"
+  },
+  "prob-l3-stanford-clean-list": {
+    id: "prob-l3-stanford-clean-list",
+    title: "التقاطع المرتب لقائمتين (Stanford Sorted List Intersection)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 90,
+    timeLimit: 3000,
+    skills: ["lists", "sets", "sorting", "stanford_cs106a"],
+    description: "مسألة القوائم الشهيرة في ستانفورد: السطر الأول يحتوي على القائمة الأولى مفصولة بمسافة، والسطر الثاني القائمة الثانية. استخرج العناصر المشتركة بين القائمتين واطبعها مرتبة تصاعدياً وبدون تكرار في سطر واحد مفصولة بمسافة.",
+    inputDescription: "سطران: القائمة 1 والقائمة 2.",
+    outputDescription: "اطبع الأرقام المشتركة مرتبة مفصولة بمسافة.",
+    examples: [
+      { input: "1 2 2 3 4\n2 2 4 6", output: "2 4", explanation: "الأرقام المشتركة بدون تكرار هي 2 و 4." }
+    ],
+    constraints: ["1 <= len(nums) <= 10^4"],
+    publicTestCases: [
+      { input: "1 2 2 3 4\n2 2 4 6", expectedOutput: "2 4", description: "تقاطع قائمتين بأرقام مكررة" },
+      { input: "5 10 15\n10 20 30", expectedOutput: "10", description: "عنصر مشترك واحد" }
+    ],
+    hiddenTestCases: [
+      { input: "1 2 3\n4 5 6", expectedOutput: "" },
+      { input: "7 8 9\n9 8 7", expectedOutput: "7 8 9" }
+    ],
+    starterCode: "l1 = set(map(int, input().split()))\nl2 = set(map(int, input().split()))\ncommon = sorted(l1.intersection(l2))\nprint(' '.join(map(str, common)))\n"
   },
 
   // LEVEL 4: ADVANCED
@@ -609,6 +769,60 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     ],
     starterCode: "line = input().strip()\nif not line:\n    print(0)\nelse:\n    nums = set(map(int, line.split()))\n    longest = 0\n    for x in nums:\n        if x - 1 not in nums:\n            curr = x\n            streak = 1\n            while curr + 1 in nums:\n                curr += 1\n                streak += 1\n            longest = max(longest, streak)\n    print(longest)\n"
   },
+  "prob-l4-stanford-pascal": {
+    id: "prob-l4-stanford-pascal",
+    title: "مثلث باسكال التوليدي (Stanford Pascal Triangle Row)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 120,
+    timeLimit: 2000,
+    skills: ["combinatorics", "recursion", "dynamic_programming", "stanford_cs106a"],
+    description: "مسألة الرياضيات التوافقية الشهيرة في ستانفورد: استقبل رقماً صحيحاً n (حيث n يبدأ من 0). قم بحساب وطباعة أرقام الصف رقم n في مثلث باسكال مفصولة بمسافة في سطر واحد.",
+    inputDescription: "سطر واحد يحتوي على العدد الصحيح n.",
+    outputDescription: "اطبع أرقام الصف مفصولة بمسافة.",
+    examples: [
+      { input: "3", output: "1 3 3 1", explanation: "الصف الثالث في مثلث باسكال هو 1 3 3 1." },
+      { input: "4", output: "1 4 6 4 1", explanation: "الصف الرابع هو 1 4 6 4 1." }
+    ],
+    constraints: ["0 <= n <= 30"],
+    publicTestCases: [
+      { input: "3", expectedOutput: "1 3 3 1", description: "الصف رقم 3" },
+      { input: "4", expectedOutput: "1 4 6 4 1", description: "الصف رقم 4" }
+    ],
+    hiddenTestCases: [
+      { input: "0", expectedOutput: "1" },
+      { input: "1", expectedOutput: "1 1" }
+    ],
+    starterCode: "n = int(input())\nrow = [1]\nfor _ in range(n):\n    row = [1] + [row[i] + row[i + 1] for i in range(len(row) - 1)] + [1]\nprint(' '.join(map(str, row)))\n"
+  },
+  "prob-l4-stanford-subsets": {
+    id: "prob-l4-stanford-subsets",
+    title: "توليد المجموعات الجزئية (Stanford Subsets Count)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 120,
+    timeLimit: 2000,
+    skills: ["math", "powers", "combinatorics", "stanford_cs106a"],
+    description: "مسألة التوليد الرياضي في ستانفورد: استقبل عدداً صحيحاً n يمثل عدد العناصر الفريدة. اطبع إجمالي عدد المجموعات الجزئية (Power Set Size) المحسوبة بالعلاقة 2^n.",
+    inputDescription: "سطر واحد يحتوي على العدد الصحيح n.",
+    outputDescription: "اطبع عدداً صحيحاً يمثل 2^n.",
+    examples: [
+      { input: "3", output: "8", explanation: "2^3 = 8 مجموعات جزئية." },
+      { input: "5", output: "32", explanation: "2^5 = 32 مجموعة جزئية." }
+    ],
+    constraints: ["0 <= n <= 60"],
+    publicTestCases: [
+      { input: "3", expectedOutput: "8", description: "مجموعة من 3 عناصر" },
+      { input: "5", expectedOutput: "32", description: "مجموعة من 5 عناصر" }
+    ],
+    hiddenTestCases: [
+      { input: "0", expectedOutput: "1" },
+      { input: "10", expectedOutput: "1024" }
+    ],
+    starterCode: "n = int(input())\nprint(2 ** n)\n"
+  },
 
   // LEVEL 5: CHALLENGE / EXPERT
   "prob-l5-two-sum-linear": {
@@ -736,5 +950,59 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1 3\nSET 5 50\nGET 5\nGET 6", expectedOutput: "50\n-1" }
     ],
     starterCode: "from collections import OrderedDict\ncap, q = map(int, input().split())\ncache = OrderedDict()\nfor _ in range(q):\n    parts = input().split()\n    op = parts[0]\n    if op == 'SET':\n        k, v = parts[1], parts[2]\n        if k in cache:\n            cache.move_to_end(k)\n        cache[k] = v\n        if len(cache) > cap:\n            cache.popitem(last=False)\n    elif op == 'GET':\n        k = parts[1]\n        if k in cache:\n            cache.move_to_end(k)\n            print(cache[k])\n        else:\n            print('-1')\n"
+  },
+  "prob-l5-stanford-matrix-spiral": {
+    id: "prob-l5-stanford-matrix-spiral",
+    title: "مصفوفة الحلزون الرياضية (Stanford Spiral Matrix Walk)",
+    level: 5,
+    difficulty: "expert",
+    points: 100,
+    baseXp: 250,
+    timeLimit: 2500,
+    skills: ["matrix", "simulation", "algorithms", "stanford_cs106a"],
+    description: "مسألة جامعة ستانفورد الكلاسيكية في الخوارزميات المتقدمة: السطر الأول يحتوي على عدد الصفوف r والأعمدة c. يليه r أسطر تمثل عناصر المصفوفة. اطبع عناصر المصفوفة بالكامل بالترتيب الحلزوني (Spiral Order) باتجاه عقارب الساعة في سطر واحد مفصولة بمسافة.",
+    inputDescription: "السطر 1: r c\nالأسطر التالية: عناصر المصفوفة",
+    outputDescription: "اطبع العناصر مفصولة بمسافة.",
+    examples: [
+      { input: "3 3\n1 2 3\n4 5 6\n7 8 9", output: "1 2 3 6 9 8 7 4 5", explanation: "المسار الحلزوني لمصفوفة 3x3." },
+      { input: "2 2\n1 2\n3 4", output: "1 2 4 3", explanation: "المسار الحلزوني لمصفوفة 2x2." }
+    ],
+    constraints: ["1 <= r, c <= 50"],
+    publicTestCases: [
+      { input: "3 3\n1 2 3\n4 5 6\n7 8 9", expectedOutput: "1 2 3 6 9 8 7 4 5", description: "مصفوفة مربعة 3x3" },
+      { input: "2 2\n1 2\n3 4", expectedOutput: "1 2 4 3", description: "مصفوفة مربعة 2x2" }
+    ],
+    hiddenTestCases: [
+      { input: "1 3\n10 20 30", expectedOutput: "10 20 30" },
+      { input: "3 1\n5\n6\n7", expectedOutput: "5 6 7" }
+    ],
+    starterCode: "r, c = map(int, input().split())\nmat = [list(map(int, input().split())) for _ in range(r)]\nres = []\ntop, bottom, left, right = 0, r - 1, 0, c - 1\nwhile top <= bottom and left <= right:\n    for j in range(left, right + 1):\n        res.append(mat[top][j])\n    top += 1\n    for i in range(top, bottom + 1):\n        res.append(mat[i][right])\n    right -= 1\n    if top <= bottom:\n        for j in range(right, left - 1, -1):\n            res.append(mat[bottom][j])\n        bottom -= 1\n    if left <= right:\n        for i in range(bottom, top - 1, -1):\n            res.append(mat[i][left])\n        left += 1\nprint(' '.join(map(str, res)))\n"
+  },
+  "prob-l5-stanford-median": {
+    id: "prob-l5-stanford-median",
+    title: "الوسيط لقائمتين مرتبتين (Stanford Median of Two Sorted Lists)",
+    level: 5,
+    difficulty: "expert",
+    points: 100,
+    baseXp: 250,
+    timeLimit: 2500,
+    skills: ["binary_search", "divide_and_conquer", "median", "stanford_cs106a"],
+    description: "مسألة الخوارزميات المتقدمة لجامعة ستانفورد: السطر الأول يحتوي على القائمة المرتبة nums1، والسطر الثاني القائمة المرتبة nums2. احسب الوسيط الحسابي (Median) لكافة العناصر بعد دمجها واطبع الوسيط بصيغة عدد عشري بدقة منزلة واحدة (مثال: 2.0 أو 2.5).",
+    inputDescription: "سطران: القائمة 1 والقائمة 2.",
+    outputDescription: "اطبع الوسيط الحسابي بصيغة عدد عشري.",
+    examples: [
+      { input: "1 3\n2", output: "2.0", explanation: "العناصر المدمجة [1, 2, 3] والوسيط هو 2.0." },
+      { input: "1 2\n3 4", output: "2.5", explanation: "العناصر المدمجة [1, 2, 3, 4] والوسيط هو (2 + 3) / 2 = 2.5." }
+    ],
+    constraints: ["1 <= len(nums1) + len(nums2) <= 10^5"],
+    publicTestCases: [
+      { input: "1 3\n2", expectedOutput: "2.0", description: "مجموع فردي للعناصر" },
+      { input: "1 2\n3 4", expectedOutput: "2.5", description: "مجموع زوجي للعناصر" }
+    ],
+    hiddenTestCases: [
+      { input: "0 0\n0 0", expectedOutput: "0.0" },
+      { input: "1\n", expectedOutput: "1.0" }
+    ],
+    starterCode: "line1 = input().strip()\nline2 = input().strip()\nl1 = list(map(int, line1.split())) if line1 else []\nl2 = list(map(int, line2.split())) if line2 else []\nmerged = sorted(l1 + l2)\nn = len(merged)\nif n % 2 == 1:\n    ans = float(merged[n // 2])\nelse:\n    ans = (merged[n // 2 - 1] + merged[n // 2]) / 2.0\nprint(f'{ans:.1f}')\n"
   }
 };

@@ -12,7 +12,7 @@ export const WORLDS_DATA = [
     concept: "الطباعة والعمليات الحسابية",
     description: "بداية رحلتك البرمجية: تعلم طباعة النصوص والعمليات الحسابية وصياغة الكود الأول.",
     color: "#10b981",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: null
   },
   {
@@ -24,7 +24,7 @@ export const WORLDS_DATA = [
     concept: "المتغيرات والأنواع وتنسيق f-strings",
     description: "اكتشف كيفية تخزين البيانات في الذاكرة والتحويل بين النصوص والأرقام.",
     color: "#3b82f6",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: "world-1"
   },
   {
@@ -36,7 +36,7 @@ export const WORLDS_DATA = [
     concept: "صنع القرارات if و elif و else",
     description: "اجعل برامجك ذكية تتخذ قرارات منطقية بناءً على شروط متعددة ومقارنات دقيقة.",
     color: "#8b5cf6",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: "world-2"
   },
   {
@@ -48,7 +48,7 @@ export const WORLDS_DATA = [
     concept: "حلقات التكرار for و while و range",
     description: "أتقن تكرار الأوامر الذكي بدون تكرار الكود، وتجنب فخ الحلقات اللانهائية.",
     color: "#f59e0b",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: "world-3"
   },
   {
@@ -60,7 +60,7 @@ export const WORLDS_DATA = [
     concept: "القوائم ومصفوفات البيانات والفهرسة",
     description: "تعلم تنظيم وتخزين مجموعات البيانات في قوائم ومعالجتها بالمرور والتصفية.",
     color: "#ec4899",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: "world-4"
   },
   {
@@ -72,7 +72,7 @@ export const WORLDS_DATA = [
     concept: "بناء الدوال def والقيم المرجعة return",
     description: "ابنِ آلات برمجية قابلة لإعادة الاستخدام تمرر لها مدخلات وتعيد نتائج حسابية.",
     color: "#06b6d4",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: "world-5"
   },
   {
@@ -84,7 +84,7 @@ export const WORLDS_DATA = [
     concept: "البرمجة كائنية التوجه Classes & Objects",
     description: "المستوى المتقدم: تصميم الفئات، دوال البناء __init__، وتفاعل الكائنات البرمجية.",
     color: "#ef4444",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: "world-6"
   },
   {
@@ -96,7 +96,7 @@ export const WORLDS_DATA = [
     concept: "المشروع الختامي الشامل وتتويج بطل بايثون",
     description: "التحدي النهائي: دمج كل ما تعلمته لبناء أنظمة برمجية مصغرة متكاملة.",
     color: "#eab308",
-    levelsCount: 4,
+    levelsCount: 5,
     requiredWorldId: "world-7"
   }
 ];
@@ -354,6 +354,41 @@ export const CHALLENGES_CLIENT_DATA = {
       "السطر الثاني: print(100 - 25 * 2)"
     ],
     unlocksWorldId: "world-2",
+    nextChallengeId: "world-1-level-5"
+  },
+
+  "world-1-level-5": {
+    id: "world-1-level-5",
+    worldId: "world-1",
+    worldTitle: "قرية بايثون",
+    levelNumber: 5,
+    title: "🏛️ مسألة ستانفورد: روبوت كاريل وبناء الأهرامات",
+    englishTitle: "Stanford CS106A: Karel's Pyramid Calculation",
+    subtitle: "تحدي حل المشكلات من جامعة ستانفورد",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 160,
+    skills: ["print", "arithmetic", "problem_solving", "stanford_cs106a"],
+    story: "في جامعة ستانفورد (Stanford CS106A)، يبدأ طلاب البرمجة بالتحكم في روبوت كاريل (Karel). اكتب برنامجاً يحسب ويطبع عدد الأحجار الكلية اللازمة لبناء هرم من 5 طوابق حيث يحتاج كل طابق إلى أعداد الأحجار: (1 + 2 + 3 + 4 + 5). اطبع الناتج النهائي فقط (الناتج هو 15).",
+    microLesson: {
+      concept: "منهج ستانفورد: التفكير الخوارزمي",
+      summary: "يتميز منهج جامعة ستانفورد بالربط بين العمليات الحسابية والمنطق التجريدي لحل المسائل.",
+      exampleCode: "total = 1 + 2 + 3 + 4 + 5\nprint(total)"
+    },
+    starterCode: "# مسألة جامعة ستانفورد (CS106A)\n# احسب واطبع مجموع الأحجار (1 + 2 + 3 + 4 + 5)\n",
+    requirements: [
+      "احسب مجموع الأرقام من 1 إلى 5",
+      "اطبع الناتج النهائي فقط: 15"
+    ],
+    expectedOutput: "15",
+    hints: [
+      "total = 1 + 2 + 3 + 4 + 5",
+      "print(total)"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "15", description: "حساب مجموع أحجار هرم ستانفورد" }
+    ],
+    unlocksWorldId: "world-2",
     nextChallengeId: "world-2-level-1"
   },
 
@@ -473,6 +508,41 @@ export const CHALLENGES_CLIENT_DATA = {
       "print(f'Final Price: {final_price}')"
     ],
     unlocksWorldId: "world-3",
+    nextChallengeId: "world-2-level-5"
+  },
+
+  "world-2-level-5": {
+    id: "world-2-level-5",
+    worldId: "world-2",
+    worldTitle: "وادي المتغيرات",
+    levelNumber: 5,
+    title: "🐶 مسألة ستانفورد: حاسبة سنين الكلاب بالسنين البشرية",
+    englishTitle: "Stanford CS106A: Dog Years Calculator",
+    subtitle: "تحدي حل المشكلات من جامعة ستانفورد",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["variables", "arithmetic", "f_strings", "stanford_cs106a"],
+    story: "مسألة شهيرة في منهج ستانفورد (Stanford CS106A): السنة الواحدة في عمر الكلب تعادل 7 سنوات بشرية. لديك المتغير dog_years = 3. احسب العمر البشري واطبع الناتج باستخدام f-string كما يلي: Human years: 21",
+    microLesson: {
+      concept: "منهج ستانفورد: العمليات والمتغيرات",
+      summary: "نخزن المعاملات في متغيرات ونستعمل f-string لدمج الأرقام في النصوص المطبوعة بدقة.",
+      exampleCode: "dog_years = 3\nhuman_years = dog_years * 7\nprint(f'Human years: {human_years}')"
+    },
+    starterCode: "# مسألة جامعة ستانفورد (CS106A)\ndog_years = 3\n# احسب واطبع العمر البشري بصيغة: Human years: 21\n",
+    requirements: [
+      "احسب العمر البشري = dog_years * 7",
+      "اطبع الناتج بصيغة: Human years: 21"
+    ],
+    expectedOutput: "Human years: 21",
+    hints: [
+      "human_years = dog_years * 7",
+      "print(f'Human years: {human_years}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Human years: 21", description: "حساب أعمار الكلاب بالسنين البشرية" }
+    ],
+    unlocksWorldId: "world-3",
     nextChallengeId: "world-3-level-1"
   },
 
@@ -590,6 +660,41 @@ export const CHALLENGES_CLIENT_DATA = {
     hints: [
       "if has_key and energy >= 50:",
       "    print('Cave Master Defeated')"
+    ],
+    unlocksWorldId: "world-4",
+    nextChallengeId: "world-3-level-5"
+  },
+
+  "world-3-level-5": {
+    id: "world-3-level-5",
+    worldId: "world-3",
+    worldTitle: "كهف الشروط",
+    levelNumber: 5,
+    title: "🎯 مسألة ستانفورد: أكاديمية خانسول للرياضيات الذهنية",
+    englishTitle: "Stanford CS106A: Khansole Academy Checker",
+    subtitle: "تحدي حل المشكلات من جامعة ستانفورد",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 210,
+    skills: ["conditions", "if_else", "comparison", "stanford_cs106a"],
+    story: "مسألة المقارنات الشهيرة في جامعة ستانفورد (Khansole Academy): لديك مسألة جمع num1 = 15 و num2 = 25 وإجابة الطالب answer = 40. اكتب شرط if: إذا كانت الإجابة صحيحة (تساوي مجموع الرقمين) اطبع 'Correct! Answer is 40' وإلا اطبع 'Incorrect!'.",
+    microLesson: {
+      concept: "منهج ستانفورد: اتخاذ القرار المنطقي",
+      summary: "نقارن إجابة المستخدم مع القيمة المحسوبة الصحيحة باستخدام عامل المساواة == مع التفريع الشرطي.",
+      exampleCode: "if answer == num1 + num2:\n    print(f'Correct! Answer is {answer}')"
+    },
+    starterCode: "# مسألة جامعة ستانفورد (CS106A)\nnum1 = 15\nnum2 = 25\nanswer = 40\n# افحص إذا كانت الإجابة صحيحة واطبع النتيجة\n",
+    requirements: [
+      "افحص ما إذا كان answer == num1 + num2",
+      "اطبع عند الصحة: Correct! Answer is 40"
+    ],
+    expectedOutput: "Correct! Answer is 40",
+    hints: [
+      "if answer == num1 + num2:",
+      "    print(f'Correct! Answer is {answer}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Correct! Answer is 40", description: "فحص إجابة أكاديمية خانسول" }
     ],
     unlocksWorldId: "world-4",
     nextChallengeId: "world-4-level-1"
@@ -714,6 +819,44 @@ export const CHALLENGES_CLIENT_DATA = {
       "ثم print('Monster Defeated!')"
     ],
     unlocksWorldId: "world-5",
+    nextChallengeId: "world-4-level-5"
+  },
+
+  "world-4-level-5": {
+    id: "world-4-level-5",
+    worldId: "world-4",
+    worldTitle: "غابة التكرار",
+    levelNumber: 5,
+    title: "⚡ مسألة ستانفورد: متسلسلة هيلستون الأسطورية",
+    englishTitle: "Stanford CS106A: Hailstone Sequence (Collatz 3n+1)",
+    subtitle: "تحدي حل المشكلات من جامعة ستانفورد",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 230,
+    skills: ["while_loops", "arithmetic", "collatz", "stanford_cs106a"],
+    story: "المسألة الخوارزمية الأشهر في جامعة ستانفورد: ابدأ بالعدد n = 6. طالما أن n != 1: إذا كان زوجياً يقسم على 2، وإذا كان فردياً يضرب في 3 ويضاف له 1. في كل خطوة زد عداد الخطوات steps بمقدار 1. اطبع عدد الخطوات النهائي فقط بصيغة: Steps: 8",
+    microLesson: {
+      concept: "منهج ستانفورد: متسلسلة هيلستون",
+      summary: "حلقة while مع شروط تكرارية ديناميكية تحسب عدد الخطوات اللازمة لهبوط الرقم حتى يصل إلى 1.",
+      exampleCode: "n = 6\nsteps = 0\nwhile n != 1:\n    if n % 2 == 0:\n        n //= 2\n    else:\n        n = 3 * n + 1\n    steps += 1\nprint(f'Steps: {steps}')"
+    },
+    starterCode: "# مسألة جامعة ستانفورد (CS106A)\nn = 6\nsteps = 0\n# اكتب حلقة التكرار واطبع عدد الخطوات النهائية بصيغة: Steps: 8\n",
+    requirements: [
+      "طبق خوارزمية هيلستون على n = 6",
+      "اطبع عدد الخطوات النهائي فقط: Steps: 8"
+    ],
+    expectedOutput: "Steps: 8",
+    hints: [
+      "while n != 1:",
+      "    if n % 2 == 0: n //= 2",
+      "    else: n = 3 * n + 1",
+      "    steps += 1",
+      "print(f'Steps: {steps}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Steps: 8", description: "حساب خطوات متسلسلة هيلستون للعدد 6" }
+    ],
+    unlocksWorldId: "world-5",
     nextChallengeId: "world-5-level-1"
   },
 
@@ -831,6 +974,41 @@ export const CHALLENGES_CLIENT_DATA = {
       "for s in scores:",
       "    if s >= 50: pass_count += 1",
       "print(pass_count)"
+    ],
+    unlocksWorldId: "world-6",
+    nextChallengeId: "world-5-level-5"
+  },
+
+  "world-5-level-5": {
+    id: "world-5-level-5",
+    worldId: "world-5",
+    worldTitle: "مدينة القوائم",
+    levelNumber: 5,
+    title: "🔤 مسألة ستانفورد: منقي الكلمات المتقدمة",
+    englishTitle: "Stanford CS106A: Word Filter (Length >= 4)",
+    subtitle: "تحدي حل المشكلات من جامعة ستانفورد",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 250,
+    skills: ["lists", "list_comprehension", "strings", "stanford_cs106a"],
+    story: "مسألة تصفية القوائم في جامعة ستانفورد (Stanford CS106A): لديك القائمة words = ['code', 'stanford', 'ai', 'python']. اكتب برنامجاً يستخرج فقط الكلمات التي يبلغ طولها 4 أحرف أو أكثر ويطبع القائمة المصفاة الناتجة.",
+    microLesson: {
+      concept: "منهج ستانفورد: تصفية القوائم",
+      summary: "نستخدم دالة len() لفحص طول كل نص داخل القائمة وإضافته إلى قائمة جديدة أو تصفيتها بالـ comprehension.",
+      exampleCode: "words = ['code', 'stanford', 'ai', 'python']\nfiltered = [w for w in words if len(w) >= 4]\nprint(filtered)"
+    },
+    starterCode: "# مسألة جامعة ستانفورد (CS106A)\nwords = ['code', 'stanford', 'ai', 'python']\n# استخرج واطبع الكلمات ذات الطول 4 أو أكثر\n",
+    requirements: [
+      "صفِ القائمة words لتشمل الكلمات التي len(w) >= 4",
+      "اطبع القائمة الناتجة: ['code', 'stanford', 'python']"
+    ],
+    expectedOutput: "['code', 'stanford', 'python']",
+    hints: [
+      "filtered = [w for w in words if len(w) >= 4]",
+      "print(filtered)"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "['code', 'stanford', 'python']", description: "تصفية الكلمات ذات الطول الأكبر من 3" }
     ],
     unlocksWorldId: "world-6",
     nextChallengeId: "world-6-level-1"
@@ -953,6 +1131,42 @@ export const CHALLENGES_CLIENT_DATA = {
       "def is_even(n): return n % 2 == 0",
       "print(is_even(10))",
       "print(is_even(7))"
+    ],
+    unlocksWorldId: "world-7",
+    nextChallengeId: "world-6-level-5"
+  },
+
+  "world-6-level-5": {
+    id: "world-6-level-5",
+    worldId: "world-6",
+    worldTitle: "مصنع الدوال",
+    levelNumber: 5,
+    title: "🔐 مسألة ستانفورد: تشفير قيصر للرسائل السرية",
+    englishTitle: "Stanford CS106A: Caesar Cipher Encoder",
+    subtitle: "تحدي حل المشكلات من جامعة ستانفورد",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 270,
+    skills: ["functions", "strings", "ord_chr", "stanford_cs106a"],
+    story: "مسألة التشفير الشهيرة في جامعة ستانفورد (Stanford CS106A): عرّف دالة caesar_cipher(text, shift) تأخذ نصاً صغيراً ومقدار إزاحة الحروف، وتقوم بإزاحة الحروف الأبجدية الصغيرة. استدعِ الدالة لتشفير النص 'abc' بإزاحة 2 واطبع الناتج المشفر: cde",
+    microLesson: {
+      concept: "منهج ستانفورد: دوال معالجة النصوص",
+      summary: "يمكن إزاحة الحروف باستخدام chr((ord(c) - ord('a') + shift) % 26 + ord('a')) أو ببناء دالة بسيطة للإزاحة.",
+      exampleCode: "def caesar_cipher(text, shift):\n    res = ''\n    for c in text:\n        res += chr((ord(c) - ord('a') + shift) % 26 + ord('a'))\n    return res\nprint(caesar_cipher('abc', 2))"
+    },
+    starterCode: "# مسألة جامعة ستانفورد (CS106A)\ndef caesar_cipher(text, shift):\n    # اكتب كود دالة التشفير هنا\n    pass\n\nprint(caesar_cipher('abc', 2))\n",
+    requirements: [
+      "عرّف دالة caesar_cipher(text, shift)",
+      "اطبع الناتج المشفر للكلمة 'abc' مع إزاحة 2: cde"
+    ],
+    expectedOutput: "cde",
+    hints: [
+      "def caesar_cipher(text, shift):",
+      "    return ''.join(chr((ord(c) - 97 + shift) % 26 + 97) for c in text)",
+      "print(caesar_cipher('abc', 2))"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "cde", description: "تشفير قيصر للنص abc بإزاحة 2" }
     ],
     unlocksWorldId: "world-7",
     nextChallengeId: "world-7-level-1"
@@ -1083,6 +1297,43 @@ export const CHALLENGES_CLIENT_DATA = {
       "        print(f'Dragon Health: {self.health}')",
       "d = Dragon()",
       "d.take_damage(30)"
+    ],
+    unlocksWorldId: "world-8",
+    nextChallengeId: "world-7-level-5"
+  },
+
+  "world-7-level-5": {
+    id: "world-7-level-5",
+    worldId: "world-7",
+    worldTitle: "قلعة الكائنات",
+    levelNumber: 5,
+    title: "💳 مسألة ستانفورد: فئة الحساب البنكي المعتمد",
+    englishTitle: "Stanford CS106A: BankAccount Class",
+    subtitle: "تحدي حل المشكلات من جامعة ستانفورد",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 310,
+    skills: ["oop", "classes", "methods", "state_management", "stanford_cs106a"],
+    story: "مشروع البرمجة كائنية التوجه الشهير في ستانفورد (Stanford CS106A): صمم فئة BankAccount تأخذ عند الإنشاء owner و balance. تحتوي على دالة deposit(amount) تزيد الرصيد، ودالة status() تطبع f'{self.owner} - Balance: {self.balance}'. أنشئ حساباً للمالك 'Stanford Student' برصيد 1000، ثم أودع 500، ثم استدعِ status() ليطبع: Stanford Student - Balance: 1500",
+    microLesson: {
+      concept: "منهج ستانفورد: تصميم الكائنات والبيانات المغلفة",
+      summary: "فئات بايثون تسمح بتغليف البيانات (Encapsulation) والتحكم في تعديل الرصيد بدوال آمنة.",
+      exampleCode: "class BankAccount:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self.balance = balance\n    def deposit(self, amount):\n        self.balance += amount\n    def status(self):\n        print(f'{self.owner} - Balance: {self.balance}')"
+    },
+    starterCode: "# مسألة جامعة ستانفورد (CS106A)\nclass BankAccount:\n    # اكتب كود الفئة هنا\n    pass\n\nacc = BankAccount('Stanford Student', 1000)\nacc.deposit(500)\nacc.status()\n",
+    requirements: [
+      "صمم class BankAccount مع دوال __init__ و deposit و status",
+      "أنشئ الحساب وأودع 500 واطبع: Stanford Student - Balance: 1500"
+    ],
+    expectedOutput: "Stanford Student - Balance: 1500",
+    hints: [
+      "class BankAccount:",
+      "    def __init__(self, owner, balance): self.owner = owner; self.balance = balance",
+      "    def deposit(self, amount): self.balance += amount",
+      "    def status(self): print(f'{self.owner} - Balance: {self.balance}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Stanford Student - Balance: 1500", description: "محاكاة الحساب البنكي والإيداع" }
     ],
     unlocksWorldId: "world-8",
     nextChallengeId: "world-8-level-1"
@@ -1226,6 +1477,42 @@ export const CHALLENGES_CLIENT_DATA = {
     ],
     testCases: [
       { input: "", expectedOutput: "Sara: 95\nOmar: 90\nAli: 85", description: "ترتيب الطلاب تنازلياً" }
+    ],
+    nextChallengeId: "world-8-level-5"
+  },
+
+  "world-8-level-5": {
+    id: "world-8-level-5",
+    worldId: "world-8",
+    worldTitle: "حلبة الأبطال",
+    levelNumber: 5,
+    title: "📊 مشروع ستانفورد الأكبر: محلل تكرار الكلمات والمفردات",
+    englishTitle: "Stanford CS106A Capstone: Word Frequency Counter",
+    subtitle: "تحدي حل المشكلات والمشاريع من جامعة ستانفورد",
+    difficulty: "boss",
+    type: "boss",
+    baseXp: 500,
+    maxScore: 10,
+    skills: ["dictionaries", "strings", "data_analysis", "stanford_cs106a"],
+    story: "المشروع الختامي الشهير لمعالجة البيانات الضخمة في جامعة ستانفورد (Stanford CS106A): لديك النص text = 'stanford python stanford coding'. قسّم النص إلى كلمات، واحسب عدد مرات تكرار كل كلمة داخل قاموس counts، ثم اطبع تكرار كلمة stanford بصيغة: stanford: 2",
+    microLesson: {
+      concept: "منهج ستانفورد: عد التكرارات باستخدام القواميس",
+      summary: "تقنية معالجة اللغات الطبيعية الأساسية: المرور على الكلمات، وإذا كانت الكلمة في القاموس نزيد عدادها، وإلا نبدأها بـ 1.",
+      exampleCode: "text = 'stanford python stanford coding'\ncounts = {}\nfor w in text.split():\n    counts[w] = counts.get(w, 0) + 1\nprint(f'stanford: {counts[\"stanford\"]}')"
+    },
+    starterCode: "# مشروع جامعة ستانفورد الختامي (CS106A)\ntext = 'stanford python stanford coding'\n# احسب تكرار الكلمات واطبع تكرار كلمة stanford\n",
+    requirements: [
+      "قسّم النص text إلى كلمات واحسب تكرارها بقاموس counts",
+      "اطبع تكرار كلمة stanford بصيغة: stanford: 2"
+    ],
+    expectedOutput: "stanford: 2",
+    hints: [
+      "counts = {}",
+      "for w in text.split(): counts[w] = counts.get(w, 0) + 1",
+      "print(f'stanford: {counts[\"stanford\"]}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "stanford: 2", description: "حساب تكرار المفردات في نص ستانفورد" }
     ],
     nextChallengeId: null
   },

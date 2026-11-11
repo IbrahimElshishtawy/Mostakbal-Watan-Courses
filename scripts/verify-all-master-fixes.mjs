@@ -178,16 +178,18 @@ assert(worlds.length === 8, `Curriculum contains 8 complete worlds (Found: ${wor
 
 const world8 = worlds.find(w => w.id === "world-8");
 assert(world8, "World 8 exists");
-assert(world8.levelsCount === 4, `World 8 has 4 levels (Found: ${world8.levelsCount})`);
+assert(world8.levelsCount === 5, `World 8 has 5 levels (Found: ${world8.levelsCount})`);
 
-// Verify all 4 levels of World 8 are registered
+// Verify all 5 levels of World 8 are registered
 assert(challenges["world-8-level-1"], "world-8-level-1 is registered");
 assert(challenges["world-8-level-2"], "world-8-level-2 is registered");
 assert(challenges["world-8-level-3"], "world-8-level-3 is registered");
 assert(challenges["world-8-level-4"], "world-8-level-4 (Final Capstone Project) is registered");
+assert(challenges["world-8-level-5"], "world-8-level-5 (Stanford CS106A Capstone) is registered");
 
 // Verify progression link
 assert(challenges["world-8-level-3"].nextChallengeId === "world-8-level-4", "world-8-level-3 properly links forward to world-8-level-4");
+assert(challenges["world-8-level-4"].nextChallengeId === "world-8-level-5", "world-8-level-4 properly links forward to world-8-level-5");
 
 // -------------------------------------------------------------
 // TEST SUITE 6: UI Structure & Mobile Optimization (Phase 09)
@@ -211,9 +213,9 @@ assert(evalModalCode.includes('id="evalPrevStudentBtn"'), "Evaluation modal has 
 assert(teacherHtml.includes('defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"'), "SheetJS script tag uses defer for non-blocking page load");
 
 // -------------------------------------------------------------
-// TEST SUITE 7: Curriculum Solvability Test (All 36 Challenges)
+// TEST SUITE 7: Curriculum Solvability Test (All 44 Challenges + 35 Stanford Problems)
 // -------------------------------------------------------------
-console.log("\n▶️ TEST SUITE 7: Curriculum Solvability Test (All 36 Challenges)");
+console.log("\n▶️ TEST SUITE 7: Curriculum Solvability Test (All 44 Challenges + 35 Stanford Problems)");
 
 let solvableCount = 0;
 const challengeKeys = Object.keys(challenges);
@@ -226,7 +228,13 @@ for (const key of challengeKeys) {
   solvableCount++;
 }
 
-assert(solvableCount === 36, `All 36 challenges verified with valid validation criteria`);
+assert(solvableCount === 44, `All 44 challenges verified with valid validation criteria (Found: ${solvableCount})`);
+
+// Verify Problem Solving Dataset
+const psDataMod = await import("../src/features/problem-solving/problem-solving-data.js");
+const psProblems = psDataMod.PROBLEM_SOLVING_CHALLENGES_DATA;
+const psCount = Object.keys(psProblems).length;
+assert(psCount === 35, `Problem solving suite contains 35 challenges including Stanford problems (Found: ${psCount})`);
 
 console.log("\n=======================================================");
 console.log(`🎉 ALL ${passedTests}/${totalTests} TESTS PASSED SUCCESSFULLY!`);
