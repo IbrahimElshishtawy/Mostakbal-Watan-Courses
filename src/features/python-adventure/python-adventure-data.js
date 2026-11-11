@@ -12,7 +12,7 @@ export const WORLDS_DATA = [
     concept: "الطباعة والعمليات الحسابية",
     description: "بداية رحلتك البرمجية: تعلم طباعة النصوص والعمليات الحسابية وصياغة الكود الأول.",
     color: "#10b981",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: null
   },
   {
@@ -24,7 +24,7 @@ export const WORLDS_DATA = [
     concept: "المتغيرات والأنواع وتنسيق f-strings",
     description: "اكتشف كيفية تخزين البيانات في الذاكرة والتحويل بين النصوص والأرقام.",
     color: "#3b82f6",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: "world-1"
   },
   {
@@ -36,7 +36,7 @@ export const WORLDS_DATA = [
     concept: "صنع القرارات if و elif و else",
     description: "اجعل برامجك ذكية تتخذ قرارات منطقية بناءً على شروط متعددة ومقارنات دقيقة.",
     color: "#8b5cf6",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: "world-2"
   },
   {
@@ -48,7 +48,7 @@ export const WORLDS_DATA = [
     concept: "حلقات التكرار for و while و range",
     description: "أتقن تكرار الأوامر الذكي بدون تكرار الكود، وتجنب فخ الحلقات اللانهائية.",
     color: "#f59e0b",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: "world-3"
   },
   {
@@ -60,7 +60,7 @@ export const WORLDS_DATA = [
     concept: "القوائم ومصفوفات البيانات والفهرسة",
     description: "تعلم تنظيم وتخزين مجموعات البيانات في قوائم ومعالجتها بالمرور والتصفية.",
     color: "#ec4899",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: "world-4"
   },
   {
@@ -72,7 +72,7 @@ export const WORLDS_DATA = [
     concept: "بناء الدوال def والقيم المرجعة return",
     description: "ابنِ آلات برمجية قابلة لإعادة الاستخدام تمرر لها مدخلات وتعيد نتائج حسابية.",
     color: "#06b6d4",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: "world-5"
   },
   {
@@ -84,7 +84,7 @@ export const WORLDS_DATA = [
     concept: "البرمجة كائنية التوجه Classes & Objects",
     description: "المستوى المتقدم: تصميم الفئات، دوال البناء __init__، وتفاعل الكائنات البرمجية.",
     color: "#ef4444",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: "world-6"
   },
   {
@@ -96,7 +96,7 @@ export const WORLDS_DATA = [
     concept: "المشروع الختامي الشامل وتتويج بطل بايثون",
     description: "التحدي النهائي: دمج كل ما تعلمته لبناء أنظمة برمجية مصغرة متكاملة.",
     color: "#eab308",
-    levelsCount: 5,
+    levelsCount: 8,
     requiredWorldId: "world-7"
   }
 ];
@@ -115,7 +115,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "انطلاقة قوية في حل المشكلات البرمجية: التعامل مع المتغيرات وقراءة المدخلات والعمليات الحسابية والشروط.",
     color: "#10b981",
     track: "problem-solving",
-    levelsCount: 5,
+    levelsCount: 10,
     pointsPerProblem: 10,
     requiredWorldId: null
   },
@@ -131,7 +131,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "مسائل تدريبية على اتخاذ القرارات وحلقات التكرار والتعامل المباشر مع النصوص والقوائم البسيطة.",
     color: "#3b82f6",
     track: "problem-solving",
-    levelsCount: 5,
+    levelsCount: 10,
     pointsPerProblem: 10,
     requiredWorldId: null
   },
@@ -147,7 +147,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "تحديات تجمع أكثر من مفهوم معاً: هياكل البيانات المترابطة، القواميس، الدوال، والبحث الذكي.",
     color: "#f59e0b",
     track: "problem-solving",
-    levelsCount: 5,
+    levelsCount: 10,
     pointsPerProblem: 25,
     requiredWorldId: null
   },
@@ -163,7 +163,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "مسائل خوارزمية وتفكير منطقي عميق: البحث الثنائي، الترتيب اليدوي، الاستدعاء الذاتي، واكتشاف الأنماط.",
     color: "#8b5cf6",
     track: "problem-solving",
-    levelsCount: 5,
+    levelsCount: 10,
     pointsPerProblem: 50,
     requiredWorldId: null
   },
@@ -179,7 +179,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "تحديات برمجية قوية مخصصة للنخبة، تركز على الكفاءة الزمنية والمكانية والحالات الحدية (Edge Cases).",
     color: "#ef4444",
     track: "problem-solving",
-    levelsCount: 5,
+    levelsCount: 10,
     pointsPerProblem: 100,
     requiredWorldId: null
   }
@@ -388,6 +388,112 @@ export const CHALLENGES_CLIENT_DATA = {
     testCases: [
       { input: "", expectedOutput: "15", description: "حساب مجموع أحجار هرم ستانفورد" }
     ],
+    nextChallengeId: "world-1-level-6"
+  },
+
+  "world-1-level-6": {
+    id: "world-1-level-6",
+    worldId: "world-1",
+    worldTitle: "قرية بايثون",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: حساب مساحة ومحيط المثلث القائم",
+    englishTitle: "Math Challenge: Right Triangle Area & Perimeter",
+    subtitle: "تطبيق القوانين الرياضية في بايثون",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 170,
+    skills: ["math", "arithmetic", "geometry"],
+    story: "في هذه المسألة الرياضية، لديك مثلث قائم أطوال أضلاعه: القاعدة base = 6، والارتفاع height = 8، والوتر hypotenuse = 10. احسب مساحته (نصف القاعدة في الارتفاع) ومحيطه (مجموع أطوال أضلاعه)، ثم اطبع السطر: 'Area: 24, Perimeter: 24'.",
+    microLesson: {
+      concept: "حساب المساحات والمحيطات الهندسية",
+      summary: "مساحة المثلث = (base * height) / 2 ومحيطه = base + height + hypotenuse.",
+      exampleCode: "base = 6\nheight = 8\nhyp = 10\narea = int((base * height) / 2)\nperim = base + height + hyp\nprint(f'Area: {area}, Perimeter: {perim}')"
+    },
+    starterCode: "# مسألة الرياضيات: المثلث القائم\nbase = 6\nheight = 8\nhyp = 10\n# احسب واطبع: Area: 24, Perimeter: 24\n",
+    requirements: [
+      "احسب المساحة = 24",
+      "احسب المحيط = 24",
+      "اطبع الناتج بالصيغة: Area: 24, Perimeter: 24"
+    ],
+    expectedOutput: "Area: 24, Perimeter: 24",
+    hints: [
+      "area = int((base * height) / 2)",
+      "perimeter = base + height + hyp",
+      "print(f'Area: {area}, Perimeter: {perimeter}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Area: 24, Perimeter: 24", description: "حساب مساحة ومحيط المثلث القائم" }
+    ],
+    nextChallengeId: "world-1-level-7"
+  },
+  "world-1-level-7": {
+    id: "world-1-level-7",
+    worldId: "world-1",
+    worldTitle: "قرية بايثون",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ: تبديل قيم متغيرين بعمليات حسابية",
+    englishTitle: "IQ Puzzle: Value Swap without Temporary Variable",
+    subtitle: "تحدي التفكير المنطقي والذكاء الرياضي",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["iq", "logic", "arithmetic", "problem_solving"],
+    story: "لغز ذكاء وتفكير منطقي: لديك المتغيران a = 15 و b = 25. المطلوب تبديل قيمتيهما ليصبح a = 25 و b = 15، ولكن دون استخدام متغير ثالث مؤقت! استخدم العمليات الحسابية الجمع والطرح للتبديل، ثم اطبع: 'a = 25, b = 15'.",
+    microLesson: {
+      concept: "التبديل الحسابي بدون ذاكرة إضافية",
+      summary: "باستخدام a = a + b ثم b = a - b ثم a = a - b تتبادل القيم بذكاء دون استهلاك أي متغير ثالث.",
+      exampleCode: "a = 15\nb = 25\na = a + b\nb = a - b\na = a - b\nprint(f'a = {a}, b = {b}')"
+    },
+    starterCode: "a = 15\nb = 25\n# قم بتبديل القيم حسابياً دون متغير ثالث واطبع الناتج\n",
+    requirements: [
+      "بدل قيم a و b ليصبح a = 25 و b = 15",
+      "اطبع الناتج: a = 25, b = 15"
+    ],
+    expectedOutput: "a = 25, b = 15",
+    hints: [
+      "a = a + b",
+      "b = a - b",
+      "a = a - b",
+      "print(f'a = {a}, b = {b}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "a = 25, b = 15", description: "تبديل القيم الحسابي المنطقي" }
+    ],
+    nextChallengeId: "world-1-level-8"
+  },
+  "world-1-level-8": {
+    id: "world-1-level-8",
+    worldId: "world-1",
+    worldTitle: "قرية بايثون",
+    levelNumber: 8,
+    title: "💼 مشكلة برمجية واقعية: حاسبة فاتورة السوبرماركت والضريبة",
+    englishTitle: "Real-world Problem: Supermarket Bill with VAT",
+    subtitle: "حل المشكلات والتفكير البرمجي التطبيقي",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["real_world", "problem_solving", "formatting"],
+    story: "مشكلة برمجية واقعية: اشترى عميل سلعاً بقيمة subtotal = 200 جنيهاً. حصل على خصم discount = 20 جنيهاً، والضريبة VAT بنسبة 14% تطبق على المبلغ بعد الخصم (180 * 0.14 = 25.2). احسب الإجمالي الكلي وقربه لأقرب عدد صحيح، واطبع: 'Final Bill: 205 EGP'.",
+    microLesson: {
+      concept: "التطبيقات التجارية والحسابات الواقعية",
+      summary: "في الأنظمة المحاسبية، يتم خصم الكوبونات أولاً ثم تطبيق الضرائب والرسوم للحصول على الإجمالي.",
+      exampleCode: "sub = 200\ndisc = 20\nafter = sub - disc\nvat = after * 0.14\ntotal = round(after + vat)\nprint(f'Final Bill: {total} EGP')"
+    },
+    starterCode: "subtotal = 200\ndiscount = 20\n# احسب الإجمالي واطبع: Final Bill: 205 EGP\n",
+    requirements: [
+      "احسب الإجمالي بعد الخصم وإضافة ضريبة 14%",
+      "قرب الإجمالي واطبع: Final Bill: 205 EGP"
+    ],
+    expectedOutput: "Final Bill: 205 EGP",
+    hints: [
+      "after_discount = subtotal - discount",
+      "vat = after_discount * 0.14",
+      "total = round(after_discount + vat)",
+      "print(f'Final Bill: {total} EGP')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Final Bill: 205 EGP", description: "حساب إجمالي الفاتورة والخصم والضريبة" }
+    ],
     unlocksWorldId: "world-2",
     nextChallengeId: "world-2-level-1"
   },
@@ -542,6 +648,107 @@ export const CHALLENGES_CLIENT_DATA = {
     testCases: [
       { input: "", expectedOutput: "Human years: 21", description: "حساب أعمار الكلاب بالسنين البشرية" }
     ],
+    nextChallengeId: "world-2-level-6"
+  },
+
+  "world-2-level-6": {
+    id: "world-2-level-6",
+    worldId: "world-2",
+    worldTitle: "وادي المتغيرات",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: حساب الفائدة المركبة السنوية",
+    englishTitle: "Math Challenge: Compound Interest Formula",
+    subtitle: "تطبيق المعادلات الأسية والمتغيرات المالية",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 170,
+    skills: ["math", "variables", "powers"],
+    story: "مسألة رياضية مالية: أودع مستثمر مبلغ principal = 1000 جنيهاً بمعدل عائد سنوي rate = 0.05 لمدة years = 2 سنوات. معادلة الفائدة المركبة هي A = P * (1 + r)^t. احسب المبلغ الإجمالي واطبعه برقمين عشريين بالصيغة: 'Total: 1102.50'.",
+    microLesson: {
+      concept: "المعادلات الأسية وتنسيق الأرقام العشرية",
+      summary: "استخدم عامل الأس ** واستخدم تنسيق f-string مثل {amount:.2f} لطباعة خانتين عشريتين.",
+      exampleCode: "p = 1000\nr = 0.05\nt = 2\na = p * ((1 + r) ** t)\nprint(f'Total: {a:.2f}')"
+    },
+    starterCode: "p = 1000\nr = 0.05\nt = 2\n# احسب واطبع: Total: 1102.50\n",
+    requirements: [
+      "طبق معادلة الفائدة المركبة",
+      "اطبع الناتج: Total: 1102.50"
+    ],
+    expectedOutput: "Total: 1102.50",
+    hints: [
+      "amount = p * ((1 + r) ** t)",
+      "print(f'Total: {amount:.2f}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Total: 1102.50", description: "حساب الفائدة المركبة السنوية" }
+    ],
+    nextChallengeId: "world-2-level-7"
+  },
+  "world-2-level-7": {
+    id: "world-2-level-7",
+    worldId: "world-2",
+    worldTitle: "وادي المتغيرات",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ: متتالية الأنماط الرياضية الخفية",
+    englishTitle: "IQ Puzzle: Quadratic Number Sequence Mystery",
+    subtitle: "تحدي اكتشاف الأنماط والتفكير الرياضي",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["iq", "logic", "sequences", "pattern_recognition"],
+    story: "لغز ذكاء رياضي: متتالية الأرقام هي: 2, 6, 12, 20, 30. اكتشف علماء الرياضيات أن كل حد n يحسب بالمعادلة n * (n + 1). اكتب برنامجاً يحسب الحد السادس لـ n = 6 (الناتج 42) ويطبع: 'Term 6: 42'.",
+    microLesson: {
+      concept: "اكتشاف العلاقات الرياضية بين الحدود",
+      summary: "المتتالية المربعة n*(n+1) تسمى أرقام المستطيلات (Oblong Numbers) وتمثل متتالية رياضية شهيرة في اختبارات IQ.",
+      exampleCode: "n = 6\nterm = n * (n + 1)\nprint(f'Term 6: {term}')"
+    },
+    starterCode: "n = 6\n# احسب الحد السادس واطبع: Term 6: 42\n",
+    requirements: [
+      "احسب الحد السادس n * (n + 1)",
+      "اطبع السطر: Term 6: 42"
+    ],
+    expectedOutput: "Term 6: 42",
+    hints: [
+      "term = n * (n + 1)",
+      "print(f'Term 6: {term}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Term 6: 42", description: "حساب الحد السادس في المتتالية" }
+    ],
+    nextChallengeId: "world-2-level-8"
+  },
+  "world-2-level-8": {
+    id: "world-2-level-8",
+    worldId: "world-2",
+    worldTitle: "وادي المتغيرات",
+    levelNumber: 8,
+    title: "💼 مشكلة برمجية واقعية: محول العملات وسعر الصرف البنكي",
+    englishTitle: "Real-world Problem: Currency Exchange & Bank Fee",
+    subtitle: "حل المشكلات والتطبيقات المالية للمتغيرات",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["real_world", "variables", "finance"],
+    story: "مشكلة برمجية بنكية: يرغب عميل في استبدال usd = 100 دولار إلى الجنيه المصري بسعر صرف rate = 50.5 مع خصم عمولة بنكية fee بنسبة 2% من المبلغ الإجمالي بالجنيه. احسب المبلغ الصافي النهائي واطبعه برقمين عشريين: 'Net EGP: 4949.00'.",
+    microLesson: {
+      concept: "العمليات الحسابية المتعددة للمتغيرات",
+      summary: "احسب المبلغ الإجمالي بالجنيه ثم اخصم العمولة للحصول على القيمة الصافية المستحقة.",
+      exampleCode: "usd = 100\nrate = 50.5\ngross = usd * rate\nfee = gross * 0.02\nnet = gross - fee\nprint(f'Net EGP: {net:.2f}')"
+    },
+    starterCode: "usd = 100\nrate = 50.5\n# احسب الصافي واطبع: Net EGP: 4949.00\n",
+    requirements: [
+      "احسب المبلغ الإجمالي بالجنيه واخصم عمولة 2%",
+      "اطبع الناتج: Net EGP: 4949.00"
+    ],
+    expectedOutput: "Net EGP: 4949.00",
+    hints: [
+      "gross = usd * rate",
+      "net = gross * 0.98",
+      "print(f'Net EGP: {net:.2f}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Net EGP: 4949.00", description: "تحويل العملات وحساب العمولة البنكية" }
+    ],
     unlocksWorldId: "world-3",
     nextChallengeId: "world-3-level-1"
   },
@@ -695,6 +902,107 @@ export const CHALLENGES_CLIENT_DATA = {
     ],
     testCases: [
       { input: "", expectedOutput: "Correct! Answer is 40", description: "فحص إجابة أكاديمية خانسول" }
+    ],
+    nextChallengeId: "world-3-level-6"
+  },
+
+  "world-3-level-6": {
+    id: "world-3-level-6",
+    worldId: "world-3",
+    worldTitle: "كهف الشروط",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: متباينة المثلث وتحديد نوعه",
+    englishTitle: "Math Challenge: Triangle Inequality & Classification",
+    subtitle: "الشروط المركبة والقوانين الهندسية",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 170,
+    skills: ["math", "conditions", "geometry"],
+    story: "مسألة رياضية: لديك أطوال الأضلاع a = 5 و b = 5 و c = 8. أولاً تحقق من متباينة المثلث (مجموع أي ضلعين أكبر من الضلع الثالث: a+b>c و a+c>b و b+c>a). إذا صحت، افحص: إذا تساوى ضلعان فقط فهو متساوي الساقين واطبع 'Isosceles Triangle'.",
+    microLesson: {
+      concept: "الشروط المركبة بواسطة and و or",
+      summary: "استخدم الشروط المتداخلة if/elif لفحص المتباينة أولاً ثم تصنيف أضلاع المثلث.",
+      exampleCode: "if a + b > c and a + c > b and b + c > a:\n    if a == b or b == c or a == c:\n        print('Isosceles Triangle')"
+    },
+    starterCode: "a = 5\nb = 5\nc = 8\n# افحص الشروط واطبع نوع المثلث\n",
+    requirements: [
+      "تأكد من صحة متباينة المثلث",
+      "اطبع: Isosceles Triangle"
+    ],
+    expectedOutput: "Isosceles Triangle",
+    hints: [
+      "if a + b > c and a + c > b and b + c > a:",
+      "    if a == b or b == c or a == c: print('Isosceles Triangle')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Isosceles Triangle", description: "فحص متباينة وتصنيف المثلث" }
+    ],
+    nextChallengeId: "world-3-level-7"
+  },
+  "world-3-level-7": {
+    id: "world-3-level-7",
+    worldId: "world-3",
+    worldTitle: "كهف الشروط",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ: معضلة حراس الصدق والكذب (Knights & Knaves)",
+    englishTitle: "IQ Puzzle: Boolean Guard Logic Deduction",
+    subtitle: "تحدي الذكاء المنطقي والاستنتاج البرمجي",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["iq", "logic", "booleans"],
+    story: "لغز ذكاء منطقي كلاسيكي: حارسان A و B. الحارس A يقول 'كلانا كاذب'. إذا كان A صادقاً فعبارته حقيقة مما يعني أنه كاذب (تناقض!). إذن الحارس A كاذب بالضرورة (False) والحارس B صادق (True). اكتب برنامجاً يعين guard_a = False و guard_b = True واطبع: 'Guard A: False, Guard B: True'.",
+    microLesson: {
+      concept: "الاستنتاج المنطقي والقيم البولينية",
+      summary: "في الجبر البوليني، التناقض يعني استحالة الفرضية الأولى، مما يقودنا للنتيجة الصحيحة.",
+      exampleCode: "guard_a = False\nguard_b = not guard_a\nprint(f'Guard A: {guard_a}, Guard B: {guard_b}')"
+    },
+    starterCode: "# لغز الذكاء: عين الحالتين واطبع النتيجة\n",
+    requirements: [
+      "عين guard_a = False و guard_b = True",
+      "اطبع: Guard A: False, Guard B: True"
+    ],
+    expectedOutput: "Guard A: False, Guard B: True",
+    hints: [
+      "guard_a = False",
+      "guard_b = True",
+      "print(f'Guard A: {guard_a}, Guard B: {guard_b}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Guard A: False, Guard B: True", description: "حل لغز الحراس البوليني" }
+    ],
+    nextChallengeId: "world-3-level-8"
+  },
+  "world-3-level-8": {
+    id: "world-3-level-8",
+    worldId: "world-3",
+    worldTitle: "كهف الشروط",
+    levelNumber: 8,
+    title: "💼 مشكلة برمجية واقعية: نظام كشف سرعة الرادار والغرامات الذكي",
+    englishTitle: "Real-world Problem: Smart Speed Radar & Fine System",
+    subtitle: "حل المشكلات المرورية والتطبيقية",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["real_world", "conditions", "logic"],
+    story: "مشكلة برمجية واقعية: رصد رادار ذكي سيارة تسير بسرعة speed = 135 كم/س على طريق حده الأقصى limit = 120 كم/س. إذا تجاوز السائق السرعة بأقل من 20 كم/س فالغرامة 300 جنيه. احسب مقدار التجاوز (15 كم/س) واطبع رسالة الغرامة: 'Over speed by 15 km/h: Fine 300 EGP'.",
+    microLesson: {
+      concept: "هندسة الشروط في الأنظمة المرورية والرقابية",
+      summary: "حساب الفارق ومقارنته بنطاقات متدرجة باستخدام if/elif لتحديد العقوبة بدقة.",
+      exampleCode: "speed = 135\nlimit = 120\nover = speed - limit\nif over < 20:\n    print(f'Over speed by {over} km/h: Fine 300 EGP')"
+    },
+    starterCode: "speed = 135\nlimit = 120\n# احسب التجاوز واطبع الغرامة\n",
+    requirements: [
+      "احسب التجاوز = speed - limit",
+      "اطبع السطر: Over speed by 15 km/h: Fine 300 EGP"
+    ],
+    expectedOutput: "Over speed by 15 km/h: Fine 300 EGP",
+    hints: [
+      "over = speed - limit",
+      "print(f'Over speed by {over} km/h: Fine 300 EGP')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Over speed by 15 km/h: Fine 300 EGP", description: "حساب غرامة الرادار الذكي" }
     ],
     unlocksWorldId: "world-4",
     nextChallengeId: "world-4-level-1"
@@ -856,6 +1164,106 @@ export const CHALLENGES_CLIENT_DATA = {
     testCases: [
       { input: "", expectedOutput: "Steps: 8", description: "حساب خطوات متسلسلة هيلستون للعدد 6" }
     ],
+    nextChallengeId: "world-4-level-6"
+  },
+
+  "world-4-level-6": {
+    id: "world-4-level-6",
+    worldId: "world-4",
+    worldTitle: "غابة التكرار",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: مجموع مربعات الأعداد الفردية التراكمي",
+    englishTitle: "Math Challenge: Sum of Odd Squares Accumulator",
+    subtitle: "حلقات التكرار والمتسلسلات الرياضية",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 170,
+    skills: ["math", "loops", "range"],
+    story: "مسألة رياضية: باستخدام حلقة for و range، احسب مجموع مربعات الأعداد الفردية المحصورة بين 1 و 9 (أي: 1^2 + 3^2 + 5^2 + 7^2 + 9^2 = 1 + 9 + 25 + 49 + 81 = 165). اطبع الناتج بالصيغة: 'Sum of odd squares: 165'.",
+    microLesson: {
+      concept: "التكرار بخطوة محددة step في range",
+      summary: "الدالة range(1, 10, 2) تمر على الأعداد الفردية فقط: 1، 3، 5، 7، 9.",
+      exampleCode: "total = 0\nfor x in range(1, 10, 2):\n    total += x ** 2\nprint(f'Sum of odd squares: {total}')"
+    },
+    starterCode: "# احسب مجموع مربعات الأعداد الفردية من 1 إلى 9\ntotal = 0\n# اكتب الحلقة واطبع: Sum of odd squares: 165\n",
+    requirements: [
+      "استخدم حلقة for لحساب مجموع المربعات الفردية",
+      "اطبع السطر: Sum of odd squares: 165"
+    ],
+    expectedOutput: "Sum of odd squares: 165",
+    hints: [
+      "for i in range(1, 10, 2): total += i ** 2",
+      "print(f'Sum of odd squares: {total}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Sum of odd squares: 165", description: "حساب متسلسلة مربعات الأعداد الفردية" }
+    ],
+    nextChallengeId: "world-4-level-7"
+  },
+  "world-4-level-7": {
+    id: "world-4-level-7",
+    worldId: "world-4",
+    worldTitle: "غابة التكرار",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ: متتالية الخطوات الصاعدة والنازلة (Collatz Steps)",
+    englishTitle: "IQ Puzzle: Hailstone Steps to Reach One",
+    subtitle: "تحدي التفكير الخوارزمي وحلقات while",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["iq", "logic", "while_loop", "algorithms"],
+    story: "لغز ذكاء خوارزمي: حدسية كولاتز (Collatz Conjecture): ابدأ بالرقم n = 12. إذا كان زوجياً اقسمه على 2، وإذا كان فردياً اضربه في 3 واجمع 1. كرر العملية حتى تصل إلى 1، واحسب عدد الخطوات اللازمة. اطبع عدد الخطوات: 'Steps: 9'.",
+    microLesson: {
+      concept: "حلقات while المشروطة وحساب الخطوات",
+      summary: "تستمر الحلقة while n != 1 في التنفيذ طالما لم يصل الرقم إلى 1، مع زيادة العداد steps في كل خطوة.",
+      exampleCode: "n = 12\nsteps = 0\nwhile n != 1:\n    n = n // 2 if n % 2 == 0 else 3 * n + 1\n    steps += 1\nprint(f'Steps: {steps}')"
+    },
+    starterCode: "n = 12\nsteps = 0\n# احسب خطوات الوصول للرقم 1 واطبع: Steps: 9\n",
+    requirements: [
+      "طبق قاعدة كولاتز حتى n == 1",
+      "اطبع الناتج: Steps: 9"
+    ],
+    expectedOutput: "Steps: 9",
+    hints: [
+      "while n != 1: if n % 2 == 0: n = n // 2 else: n = 3 * n + 1; steps += 1",
+      "print(f'Steps: {steps}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Steps: 9", description: "حساب خطوات متتالية كولاتز للرقم 12" }
+    ],
+    nextChallengeId: "world-4-level-8"
+  },
+  "world-4-level-8": {
+    id: "world-4-level-8",
+    worldId: "world-4",
+    worldTitle: "غابة التكرار",
+    levelNumber: 8,
+    title: "💼 مشكلة برمجية واقعية: محاكي تنزيل ملفات السيرفر وشريط التقدم",
+    englishTitle: "Real-world Problem: File Download Chunks Simulator",
+    subtitle: "حل المشكلات التكرارية ومحاكاة الشبكات",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["real_world", "loops", "simulation"],
+    story: "مشكلة برمجية واقعية: ملف كبير بحجم total = 100 ميجابايت يتم تنزيله من الخادم السحابي بدفعات chunk = 25 ميجابايت في كل لفة تكرارية بحلقة while. عند اكتمال التنزيل واستهلاك كافة الأجزاء، اطبع رسالة إتمام التنزيل: 'Download Complete: 100%'.",
+    microLesson: {
+      concept: "محاكاة معالجة التدفقات والشبكات",
+      summary: "تستخدم حلقة while لمعالجة أجزاء البيانات (Chunks) حتى الوصول إلى الحجم الإجمالي.",
+      exampleCode: "total = 100\nchunk = 25\ndownloaded = 0\nwhile downloaded < total:\n    downloaded += chunk\nprint(f'Download Complete: {int((downloaded/total)*100)}%')"
+    },
+    starterCode: "total = 100\nchunk = 25\ndownloaded = 0\n# كرر التنزيل واطبع: Download Complete: 100%\n",
+    requirements: [
+      "حدث downloaded حتى تصل إلى total",
+      "اطبع: Download Complete: 100%"
+    ],
+    expectedOutput: "Download Complete: 100%",
+    hints: [
+      "while downloaded < total: downloaded += chunk",
+      "print('Download Complete: 100%')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Download Complete: 100%", description: "محاكاة اكتمال تنزيل الملف" }
+    ],
     unlocksWorldId: "world-5",
     nextChallengeId: "world-5-level-1"
   },
@@ -1009,6 +1417,108 @@ export const CHALLENGES_CLIENT_DATA = {
     ],
     testCases: [
       { input: "", expectedOutput: "['code', 'stanford', 'python']", description: "تصفية الكلمات ذات الطول الأكبر من 3" }
+    ],
+    nextChallengeId: "world-5-level-6"
+  },
+
+  "world-5-level-6": {
+    id: "world-5-level-6",
+    worldId: "world-5",
+    worldTitle: "مدينة القوائم",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: حساب التباين الإحصائي لمجموعة بيانات",
+    englishTitle: "Math Challenge: Statistical Variance of a List",
+    subtitle: "القوائم والعمليات الإحصائية الرياضية",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 170,
+    skills: ["math", "lists", "statistics"],
+    story: "مسألة رياضية إحصائية: لديك درجات الطلاب في قائمة: data = [10, 20, 30, 40, 50]. المتوسط الحسابي هو sum(data) / len(data) = 30. التباين هو مجموع مربعات انحراف القيم عن المتوسط مقسوماً على عدد العناصر. احسب التباين واطبعه برقمين عشريين: 'Variance: 200.00'.",
+    microLesson: {
+      concept: "حساب المقاييس الإحصائية على القوائم",
+      summary: "احسب المتوسط أولاً، ثم اجمع مربعات الفروق (x - mean)^2 واقسمها على طول القائمة.",
+      exampleCode: "data = [10, 20, 30, 40, 50]\nmean = sum(data) / len(data)\nvar = sum((x - mean)**2 for x in data) / len(data)\nprint(f'Variance: {var:.2f}')"
+    },
+    starterCode: "data = [10, 20, 30, 40, 50]\n# احسب التباين واطبع: Variance: 200.00\n",
+    requirements: [
+      "احسب التباين الإحصائي للقائمة data",
+      "اطبع السطر: Variance: 200.00"
+    ],
+    expectedOutput: "Variance: 200.00",
+    hints: [
+      "mean = sum(data) / len(data)",
+      "var = sum((x - mean) ** 2 for x in data) / len(data)",
+      "print(f'Variance: {var:.2f}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Variance: 200.00", description: "حساب التباين الإحصائي" }
+    ],
+    nextChallengeId: "world-5-level-7"
+  },
+  "world-5-level-7": {
+    id: "world-5-level-7",
+    worldId: "world-5",
+    worldTitle: "مدينة القوائم",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ: كاشف الرقم المفقود في المصفوفة المشوشة",
+    englishTitle: "IQ Puzzle: Missing Number Detection with Gauss Formula",
+    subtitle: "تحدي الذكاء وسرعة البديهة في القوائم",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["iq", "logic", "lists", "math"],
+    story: "لغز ذكاء واختبارات الشركات العالمية: قائمة تحتوي على الأرقام من 1 إلى 10 سقط منها رقم واحد: nums = [1, 2, 3, 4, 6, 7, 8, 9, 10]. استخدم متسلسلة غاوس (10 * 11 // 2 = 55) واطرح منها مجموع عناصر القائمة لاكتشاف الرقم المفقود واطبع: 'Missing: 5'.",
+    microLesson: {
+      concept: "خوارزمية المجموع التراكمي لغاوص O(N)",
+      summary: "بدلاً من البحث المتكرر O(N^2)، معادلة غاوس n*(n+1)//2 تكتشف العنصر المفقود في خطوة واحدة فائقة السرعة.",
+      exampleCode: "nums = [1, 2, 3, 4, 6, 7, 8, 9, 10]\nexpected = 10 * 11 // 2\nmissing = expected - sum(nums)\nprint(f'Missing: {missing}')"
+    },
+    starterCode: "nums = [1, 2, 3, 4, 6, 7, 8, 9, 10]\n# اكتشف الرقم المفقود واطبع: Missing: 5\n",
+    requirements: [
+      "اكتشف الرقم المفقود بالمعادلة الرياضية",
+      "اطبع السطر: Missing: 5"
+    ],
+    expectedOutput: "Missing: 5",
+    hints: [
+      "missing = (10 * 11 // 2) - sum(nums)",
+      "print(f'Missing: {missing}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Missing: 5", description: "اكتشاف الرقم المفقود في القائمة" }
+    ],
+    nextChallengeId: "world-5-level-8"
+  },
+  "world-5-level-8": {
+    id: "world-5-level-8",
+    worldId: "world-5",
+    worldTitle: "مدينة القوائم",
+    levelNumber: 8,
+    title: "💼 مشكلة برمجية واقعية: إزالة العناصر المكررة مع الحفاظ على الترتيب",
+    englishTitle: "Real-world Problem: Ordered Deduplication Engine",
+    subtitle: "حل المشكلات ومعالجة البيانات المتكررة",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["real_world", "lists", "data_cleaning"],
+    story: "مشكلة برمجية واقعية: في نظام فواتير، تكررت معرفات الطلبات: orders = [101, 102, 101, 103, 102, 104]. أنشئ قائمة جديدة تحتوي على العناصر الفريدة مع الحفاظ التام على ترتيب أول ظهور لكل عنصر، واطبع القائمة الناتجة: '[101, 102, 103, 104]'.",
+    microLesson: {
+      concept: "تنظيف البيانات مع الحفاظ على الترتيب",
+      summary: "المرور على القائمة وإضافة العنصر فقط إذا لم يكن موجوداً مسبقاً يضمن تنقية البيانات مع الحفاظ على ترتيبها الزمني.",
+      exampleCode: "orders = [101, 102, 101, 103, 102, 104]\nunique = []\nfor x in orders:\n    if x not in unique: unique.append(x)\nprint(unique)"
+    },
+    starterCode: "orders = [101, 102, 101, 103, 102, 104]\n# استخرج العناصر الفريدة بالترتيب واطبعها\n",
+    requirements: [
+      "أنشئ قائمة فريدة تحافظ على الترتيب الأصلي",
+      "اطبع الناتج: [101, 102, 103, 104]"
+    ],
+    expectedOutput: "[101, 102, 103, 104]",
+    hints: [
+      "unique = []",
+      "for x in orders: if x not in unique: unique.append(x)",
+      "print(unique)"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "[101, 102, 103, 104]", description: "إزالة التكرار مع الحفاظ على الترتيب" }
     ],
     unlocksWorldId: "world-6",
     nextChallengeId: "world-6-level-1"
@@ -1167,6 +1677,107 @@ export const CHALLENGES_CLIENT_DATA = {
     ],
     testCases: [
       { input: "", expectedOutput: "cde", description: "تشفير قيصر للنص abc بإزاحة 2" }
+    ],
+    nextChallengeId: "world-6-level-6"
+  },
+
+  "world-6-level-6": {
+    id: "world-6-level-6",
+    worldId: "world-6",
+    worldTitle: "مصنع الدوال",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: دالة التحليل إلى العوامل الأولية",
+    englishTitle: "Math Challenge: Prime Factorization Function",
+    subtitle: "الدوال والرياضيات النظرية المتقدمة",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 170,
+    skills: ["math", "functions", "prime_numbers"],
+    story: "مسألة رياضية: عرف دالة prime_factors(n) تستقبل عدداً صحيحاً وتعيد قائمة بجميع عوامله الأولية. طبق الدالة على الرقم 60 (عوامله هي 2 و 2 و 3 و 5 لأن 2*2*3*5 = 60)، واطبع: 'Factors of 60: [2, 2, 3, 5]'.",
+    microLesson: {
+      concept: "التحليل الأولي عبر القسمة المتتالية",
+      summary: "تبدأ بقسمة n على d = 2 طالما يقبل القسمة، ثم تزيد d تدريجياً لجمع العوامل الأولية.",
+      exampleCode: "def prime_factors(n):\n    factors = []\n    d = 2\n    while d * d <= n:\n        while n % d == 0:\n            factors.append(d)\n            n //= d\n        d += 1\n    if n > 1: factors.append(n)\n    return factors\nprint(f'Factors of 60: {prime_factors(60)}')"
+    },
+    starterCode: "def prime_factors(n):\n    # اكتب كود الدالة هنا\n    pass\n\n# اطبع: Factors of 60: [2, 2, 3, 5]\n",
+    requirements: [
+      "عرف دالة prime_factors تعيد قائمة العوامل الأولية",
+      "اطبع السطر: Factors of 60: [2, 2, 3, 5]"
+    ],
+    expectedOutput: "Factors of 60: [2, 2, 3, 5]",
+    hints: [
+      "def prime_factors(n): factors = []; d = 2 ... return factors",
+      "print(f'Factors of 60: {prime_factors(60)}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Factors of 60: [2, 2, 3, 5]", description: "تحليل العدد 60 إلى عوامله الأولية" }
+    ],
+    nextChallengeId: "world-6-level-7"
+  },
+  "world-6-level-7": {
+    id: "world-6-level-7",
+    worldId: "world-6",
+    worldTitle: "مصنع الدوال",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ: كاشف الكلمات المتجانسة الحروف (Anagram Checker)",
+    englishTitle: "IQ Puzzle: Anagram Frequency Signature",
+    subtitle: "تحدي التفكير المنطقي ومعالجة النصوص بالدوال",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["iq", "logic", "strings", "functions"],
+    story: "لغز ذكاء النصوص واللغات: الكلمات المتجانسة (Anagrams) هي كلمات تتكون من نفس الحروف بالضبط بإعادة ترتيبها. اكتب دالة is_anagram(s1, s2) تفحص إذا كانت الكلمتان متجانستين. اختبر 'listen' و 'silent' واطبع: 'Anagram: True'.",
+    microLesson: {
+      concept: "مقارنة النصوص بالترتيب الأبجدي",
+      summary: "إذا كانت sorted(s1) == sorted(s2) فهذا يثبت فورياً أن الكلمتين لهما نفس عدد ونوع الحروف بدقة.",
+      exampleCode: "def is_anagram(s1, s2):\n    return sorted(s1) == sorted(s2)\nres = is_anagram('listen', 'silent')\nprint(f'Anagram: {res}')"
+    },
+    starterCode: "def is_anagram(s1, s2):\n    # افحص التجانس\n    pass\n\nres = is_anagram('listen', 'silent')\nprint(f'Anagram: {res}')\n",
+    requirements: [
+      "عرف دالة is_anagram لفحص التجانس اللغوي",
+      "اطبع السطر: Anagram: True"
+    ],
+    expectedOutput: "Anagram: True",
+    hints: [
+      "def is_anagram(s1, s2): return sorted(s1) == sorted(s2)",
+      "res = is_anagram('listen', 'silent')\nprint(f'Anagram: {res}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Anagram: True", description: "فحص تجانس حروفي الكلمتين" }
+    ],
+    nextChallengeId: "world-6-level-8"
+  },
+  "world-6-level-8": {
+    id: "world-6-level-8",
+    worldId: "world-6",
+    worldTitle: "مصنع الدوال",
+    levelNumber: 8,
+    title: "💼 مشكلة برمجية واقعية: محرك البحث واستخراج الكلمات الأكثر بحثاً",
+    englishTitle: "Real-world Problem: Search Trends Frequency Counter",
+    subtitle: "حل المشكلات الواقعية ومحركات البيانات",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["real_world", "functions", "dictionaries"],
+    story: "مشكلة برمجية واقعية من محركات البحث: لديك سجل استعلامات المستخدمين: queries = ['python', 'ai', 'python', 'django', 'python', 'ai']. اكتب دالة top_query(log) تحسب الكلمة الأكثر تكراراً وتطبع: 'Top Query: python (3 times)'.",
+    microLesson: {
+      concept: "حساب التكرارات واستخراج القيمة العظمى بالدوال",
+      summary: "استخدم القاموس لعد كل كلمة ثم استخدم دالة max(counts, key=counts.get) لاستخراج الكلمة الأكثر شعبية.",
+      exampleCode: "def top_query(log):\n    c = {}\n    for q in log: c[q] = c.get(q, 0) + 1\n    best = max(c, key=c.get)\n    return f'{best} ({c[best]} times)'"
+    },
+    starterCode: "queries = ['python', 'ai', 'python', 'django', 'python', 'ai']\ndef top_query(log):\n    # احسب الأكثر تكراراً\n    pass\n\nprint(f'Top Query: {top_query(queries)}')\n",
+    requirements: [
+      "عرف دالة top_query لاستخراج الكلمة الأكثر تكراراً",
+      "اطبع الناتج: Top Query: python (3 times)"
+    ],
+    expectedOutput: "Top Query: python (3 times)",
+    hints: [
+      "counts = {}; for q in log: counts[q] = counts.get(q, 0) + 1",
+      "best = max(counts, key=counts.get)",
+      "return f'{best} ({counts[best]} times)'"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Top Query: python (3 times)", description: "استخراج الكلمة الأكثر بحثاً" }
     ],
     unlocksWorldId: "world-7",
     nextChallengeId: "world-7-level-1"
@@ -1334,6 +1945,107 @@ export const CHALLENGES_CLIENT_DATA = {
     ],
     testCases: [
       { input: "", expectedOutput: "Stanford Student - Balance: 1500", description: "محاكاة الحساب البنكي والإيداع" }
+    ],
+    nextChallengeId: "world-7-level-6"
+  },
+
+  "world-7-level-6": {
+    id: "world-7-level-6",
+    worldId: "world-7",
+    worldTitle: "قلعة الكائنات",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: فئة المتجه الهندسي ثنائي الأبعاد (Vector2D Class)",
+    englishTitle: "Math Challenge: Vector2D Magnitude Calculator",
+    subtitle: "البرمجة كائنية التوجه والمتجهات الرياضية",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 170,
+    skills: ["math", "oop", "geometry", "vectors"],
+    story: "مسألة رياضية كائنية: صمم فئة باسم Vector2D تستقبل الإحداثيين x و y في دالة البناء __init__. أضف دالة كائنية magnitude(self) تحسب طول المتجه بالجذر التربيعي (x^2 + y^2)^0.5. أنشئ متجهاً v = Vector2D(3, 4) واطبع: 'Magnitude: 5.0'.",
+    microLesson: {
+      concept: "تمثيل الكائنات الرياضية والهندسية بـ OOP",
+      summary: "فئات OOP هي الطريقة القياسية لتمثيل المتجهات والنقاط الهندسية في محركات الألعاب وأنظمة المحاكاة الرياضية.",
+      exampleCode: "class Vector2D:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def magnitude(self):\n        return (self.x**2 + self.y**2)**0.5\nv = Vector2D(3, 4)\nprint(f'Magnitude: {v.magnitude()}')"
+    },
+    starterCode: "class Vector2D:\n    # عرف دالة __init__ ودالة magnitude\n    pass\n\nv = Vector2D(3, 4)\nprint(f'Magnitude: {v.magnitude()}')\n",
+    requirements: [
+      "عرف فئة Vector2D مع دالة magnitude()",
+      "اطبع السطر: Magnitude: 5.0"
+    ],
+    expectedOutput: "Magnitude: 5.0",
+    hints: [
+      "def magnitude(self): return (self.x ** 2 + self.y ** 2) ** 0.5",
+      "print(f'Magnitude: {v.magnitude()}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Magnitude: 5.0", description: "حساب معيار المتجه ثنائي الأبعاد" }
+    ],
+    nextChallengeId: "world-7-level-7"
+  },
+  "world-7-level-7": {
+    id: "world-7-level-7",
+    worldId: "world-7",
+    worldTitle: "قلعة الكائنات",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ: محاكي آلة بيع المشروبات الذكية (State Machine)",
+    englishTitle: "IQ Puzzle: Smart Vending Machine State OOP",
+    subtitle: "تحدي التفكير المنطقي وآلات الحالة OOP",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["iq", "logic", "oop", "state_machine"],
+    story: "لغز ذكاء الأنظمة المدمجة: صمم فئة VendingMachine بمتغير رصيد balance. أضف دالة buy(self, item, price) تفحص إذا كان الرصيد كافياً للمشروب؛ تخصم السعر وتعيد باقي النقود وتصفر الرصيد. العميل أدخل 20 جنيهاً واشترى 'Coffee' بسعر 15 جنيهاً. اطبع: 'Dispensed: Coffee, Change: 5 EGP'.",
+    microLesson: {
+      concept: "آلات الحالة البرمجية (State Machines)",
+      summary: "إدارة الحالة (State) داخل الكائنات البرمجية تمنع الأخطاء المنطقية وتضمن أمان المعاملات المالية.",
+      exampleCode: "class VendingMachine:\n    def __init__(self, balance):\n        self.balance = balance\n    def buy(self, item, price):\n        change = self.balance - price\n        return f'Dispensed: {item}, Change: {change} EGP'\nvm = VendingMachine(20)\nprint(vm.buy('Coffee', 15))"
+    },
+    starterCode: "class VendingMachine:\n    # اكتب كود الفئة هنا\n    pass\n\nvm = VendingMachine(20)\nprint(vm.buy('Coffee', 15))\n",
+    requirements: [
+      "صمم فئة VendingMachine مع دالة buy",
+      "اطبع: Dispensed: Coffee, Change: 5 EGP"
+    ],
+    expectedOutput: "Dispensed: Coffee, Change: 5 EGP",
+    hints: [
+      "class VendingMachine: def __init__(self, balance): self.balance = balance",
+      "def buy(self, item, price): change = self.balance - price; return f'Dispensed: {item}, Change: {change} EGP'"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Dispensed: Coffee, Change: 5 EGP", description: "محاكاة آلة بيع المشروبات الذكية" }
+    ],
+    nextChallengeId: "world-7-level-8"
+  },
+  "world-7-level-8": {
+    id: "world-7-level-8",
+    worldId: "world-7",
+    worldTitle: "قلعة الكائنات",
+    levelNumber: 8,
+    title: "💼 مشكلة برمجية واقعية: نظام إدارة المخازن والشحنات (Inventory System)",
+    englishTitle: "Real-world Problem: Warehouse Inventory OOP",
+    subtitle: "حل المشكلات التجارية وأنظمة الـ ERP",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["real_world", "oop", "inventory"],
+    story: "مشكلة برمجية واقعية من أنظمة إدارة المستودعات: صمم فئة Warehouse تدير قاموس المخزون stock. أضف دوال add(item, qty) و sell(item, qty) و get(item). كان لدى المستودع 20 جهاز 'Laptop'، تم بيع 8 واستلام 5. اطبع المخزون المتبقي: 'Laptop Stock: 17 units'.",
+    microLesson: {
+      concept: "بناء أنظمة إدارة الموارد OOP",
+      summary: "فصل إدارة المخزون في فئة مخصصة يسهل مراقبة الوارد والمنصرف ومنع البيع بالسالب في الأنظمة اللوجستية.",
+      exampleCode: "class Warehouse:\n    def __init__(self): self.stock = {}\n    def add(self, item, q): self.stock[item] = self.stock.get(item, 0) + q\n    def sell(self, item, q): self.stock[item] = self.stock.get(item, 0) - q\n    def get(self, item): return self.stock.get(item, 0)\nw = Warehouse()\nw.add('Laptop', 20); w.sell('Laptop', 8); w.add('Laptop', 5)\nstock = w.get('Laptop')\nprint(f'Laptop Stock: {stock} units')"
+    },
+    starterCode: "class Warehouse:\n    # صمم الفئة وطرق الإضافة والبيع\n    pass\n\nw = Warehouse()\nw.add('Laptop', 20)\nw.sell('Laptop', 8)\nw.add('Laptop', 5)\nstock = w.get('Laptop')\nprint(f'Laptop Stock: {stock} units')\n",
+    requirements: [
+      "عرف فئة Warehouse تدير حركة البضائع",
+      "اطبع السطر: Laptop Stock: 17 units"
+    ],
+    expectedOutput: "Laptop Stock: 17 units",
+    hints: [
+      "self.stock[item] = self.stock.get(item, 0) + qty",
+      "self.stock[item] -= qty",
+      "stock = w.get('Laptop')\nprint(f'Laptop Stock: {stock} units')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Laptop Stock: 17 units", description: "إدارة وتحديث مخزون المستودع" }
     ],
     unlocksWorldId: "world-8",
     nextChallengeId: "world-8-level-1"
@@ -1514,6 +2226,108 @@ export const CHALLENGES_CLIENT_DATA = {
     testCases: [
       { input: "", expectedOutput: "stanford: 2", description: "حساب تكرار المفردات في نص ستانفورد" }
     ],
+    nextChallengeId: "world-8-level-6"
+  },
+
+  "world-8-level-6": {
+    id: "world-8-level-6",
+    worldId: "world-8",
+    worldTitle: "حلبة الأبطال",
+    levelNumber: 6,
+    title: "📐 مسألة الرياضيات: محاكي حساب مساحة المنحنيات بطريقة شبه المنحرف",
+    englishTitle: "Math Challenge: Trapezoidal Numerical Integration",
+    subtitle: "الحسابات الرياضية والهندسية المتقدمة",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 180,
+    skills: ["math", "calculus", "algorithms"],
+    story: "مسألة رياضية متقدمة: احسب التكامل العددي للدالة f(x) = x^2 من x = 0 إلى x = 3 باستخدام قاعدة شبه المنحرف بفترات h = 1. المعادلة هي: Area = (h/2) * (f(0) + 2*f(1) + 2*f(2) + f(3)) = 0.5 * (0 + 2 + 8 + 9) = 9.5. اطبع السطر: 'Approx Integral: 9.5'.",
+    microLesson: {
+      concept: "التكامل العددي وقاعدة شبه المنحرف",
+      summary: "طريقة شبه المنحرف تقرب المساحة تحت المنحنى عن طريق تقسيمها إلى أشباه منحرفات وجمع مساحاتها.",
+      exampleCode: "def f(x): return x ** 2\nh = 1\nintegral = (h / 2) * (f(0) + 2 * f(1) + 2 * f(2) + f(3))\nprint(f'Approx Integral: {integral}')"
+    },
+    starterCode: "def f(x):\n    return x ** 2\n\n# احسب التكامل العددي بطريقة شبه المنحرف واطبع الناتج\n",
+    requirements: [
+      "طبق قاعدة شبه المنحرف للدالة f(x) = x^2 من 0 إلى 3",
+      "اطبع السطر: Approx Integral: 9.5"
+    ],
+    expectedOutput: "Approx Integral: 9.5",
+    hints: [
+      "integral = 0.5 * (f(0) + 2*f(1) + 2*f(2) + f(3))",
+      "print(f'Approx Integral: {integral}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Approx Integral: 9.5", description: "حساب التكامل العددي بطريقة شبه المنحرف" }
+    ],
+    nextChallengeId: "world-8-level-7"
+  },
+  "world-8-level-7": {
+    id: "world-8-level-7",
+    worldId: "world-8",
+    worldTitle: "حلبة الأبطال",
+    levelNumber: 7,
+    title: "🧠 لغز الذكاء و IQ الأكبر: فاحص صحة صفوف وأعمدة السودوكو",
+    englishTitle: "IQ Puzzle: Sudoku Grid Line Validity Engine",
+    subtitle: "تحدي الذكاء الخوارزمي والمجموعات البرمجية",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 200,
+    skills: ["iq", "logic", "sets", "sudoku"],
+    story: "لغز ذكاء خوارزمي: في لعبة السودوكو، يجب أن يحتوي كل صف على الأرقام من 1 إلى 9 دون أي تكرار ودون نقصان. لديك الصف row = [5, 3, 4, 6, 7, 8, 9, 1, 2]. اكتب خوارزمية باستخدام set تتحقق من أن طول الصف 9 ومجموعته مطابقة لمجموعة الأرقام من 1 إلى 9، واطبع: 'Sudoku Row Valid: True'.",
+    microLesson: {
+      concept: "استخدام المجموعات set للتحقق من الشمولية",
+      summary: "المقارنة set(row) == set(range(1, 10)) هي أسرع طريقة خوارزمية للتحقق من اكتمال عناصر السودوكو دون تكرار.",
+      exampleCode: "row = [5, 3, 4, 6, 7, 8, 9, 1, 2]\nis_valid = len(row) == 9 and set(row) == set(range(1, 10))\nprint(f'Sudoku Row Valid: {is_valid}')"
+    },
+    starterCode: "row = [5, 3, 4, 6, 7, 8, 9, 1, 2]\n# تحقق من صحة الصف واطبع: Sudoku Row Valid: True\n",
+    requirements: [
+      "تحقق من أن الصف يضم الأرقام 1-9 بدقة وبلا تكرار",
+      "اطبع السطر: Sudoku Row Valid: True"
+    ],
+    expectedOutput: "Sudoku Row Valid: True",
+    hints: [
+      "is_valid = len(row) == 9 and set(row) == set(range(1, 10))",
+      "print(f'Sudoku Row Valid: {is_valid}')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Sudoku Row Valid: True", description: "التحقق من صحة صف السودوكو" }
+    ],
+    nextChallengeId: "world-8-level-8"
+  },
+  "world-8-level-8": {
+    id: "world-8-level-8",
+    worldId: "world-8",
+    worldTitle: "حلبة الأبطال",
+    levelNumber: 8,
+    title: "💼 مشروع التخرج الأكبر: محلل رحلات الطيران ومعدل الالتزام بالمواعيد",
+    englishTitle: "Capstone: Flight On-Time Performance Analytics Engine",
+    subtitle: "مشروع التخرج البرمجي الشامل وتتويج بطل بايثون",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 250,
+    skills: ["capstone", "real_world", "analytics", "algorithms"],
+    story: "المشروع التطبيقي الأكبر: محرك تحليلات المطارات الذكية. لديك سجل رحلات الطيران flights = [{'id': 'EG101', 'delay': 0}, {'id': 'EG102', 'delay': 15}, {'id': 'EG103', 'delay': 0}, {'id': 'EG104', 'delay': 0}]. الرحلة تعتبر ملتزمة بالميعاد إذا كان تأخيرها 0 دقيقة. احسب نسبة الالتزام بالمواعيد مئوية واطبع: 'On-Time Rate: 75.0%'.",
+    microLesson: {
+      concept: "مشروع التخرج: تحليل وهندسة البيانات البرمجية",
+      summary: "دمج القواميس، القوائم، المرور التكراري، والحسابات الإحصائية لبناء تقارير الأداء اللوجستي الحقيقية.",
+      exampleCode: "flights = [{'id': 'EG101', 'delay': 0}, {'id': 'EG102', 'delay': 15}, {'id': 'EG103', 'delay': 0}, {'id': 'EG104', 'delay': 0}]\non_time = sum(1 for f in flights if f['delay'] == 0)\nrate = (on_time / len(flights)) * 100\nprint(f'On-Time Rate: {rate:.1f}%')"
+    },
+    starterCode: "flights = [\n    {'id': 'EG101', 'delay': 0},\n    {'id': 'EG102', 'delay': 15},\n    {'id': 'EG103', 'delay': 0},\n    {'id': 'EG104', 'delay': 0}\n]\n# احسب واطبع: On-Time Rate: 75.0%\n",
+    requirements: [
+      "احسب عدد الرحلات التي تأخيرها 0 مقسوماً على الإجمالي",
+      "اطبع النسبة المئوية: On-Time Rate: 75.0%"
+    ],
+    expectedOutput: "On-Time Rate: 75.0%",
+    hints: [
+      "on_time = sum(1 for f in flights if f['delay'] == 0)",
+      "rate = (on_time / len(flights)) * 100",
+      "print(f'On-Time Rate: {rate:.1f}%')"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "On-Time Rate: 75.0%", description: "تحليل معدل التزام رحلات الطيران بالمواعيد" }
+    ],
+    unlocksWorldId: null,
     nextChallengeId: null
   },
 

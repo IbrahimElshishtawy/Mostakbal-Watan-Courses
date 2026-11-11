@@ -1004,5 +1004,448 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1\n", expectedOutput: "1.0" }
     ],
     starterCode: "line1 = input().strip()\nline2 = input().strip()\nl1 = list(map(int, line1.split())) if line1 else []\nl2 = list(map(int, line2.split())) if line2 else []\nmerged = sorted(l1 + l2)\nn = len(merged)\nif n % 2 == 1:\n    ans = float(merged[n // 2])\nelse:\n    ans = (merged[n // 2 - 1] + merged[n // 2]) / 2.0\nprint(f'{ans:.1f}')\n"
+  },
+  // ==========================================
+  // LEVEL 1: MATH, IQ & REAL-WORLD CHALLENGES
+  // ==========================================
+  "prob-l1-math-circle-metrics": {
+    id: "prob-l1-math-circle-metrics",
+    title: "📐 مسألة رياضيات: مساحة ومحيط الدائرة (Circle Metrics)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["math", "geometry", "variables", "arithmetic"],
+    description: "اكتب برنامجاً بلغة بايثون يستقبل نصف قطر الدائرة r (عدد صحيح) ويحسب مساحة الدائرة ومحيطها بالاعتماد على الثابت التقريبي pi = 3.14159. اطبع الناتج في سطر واحد بالصيغة: 'Area: X.XX, Circumference: Y.YY' مقرباً لأقرب رقمين عشريين.",
+    inputDescription: "سطر واحد يحتوي على العدد الصحيح r (نصف القطر).",
+    outputDescription: "اطبع بالصيغة المحددة: Area: {area:.2f}, Circumference: {circ:.2f}",
+    examples: [
+      { input: "7", output: "Area: 153.94, Circumference: 43.98", explanation: "pi * 7^2 = 153.93791 -> 153.94 و 2 * pi * 7 = 43.98226 -> 43.98" },
+      { input: "10", output: "Area: 314.16, Circumference: 62.83", explanation: "pi * 100 = 314.159 -> 314.16" }
+    ],
+    constraints: ["1 <= r <= 1000"],
+    publicTestCases: [
+      { input: "7", expectedOutput: "Area: 153.94, Circumference: 43.98", description: "حساب مساحة ومحيط دائرة نصف قطرها 7" },
+      { input: "10", expectedOutput: "Area: 314.16, Circumference: 62.83", description: "حساب دائرة نصف قطرها 10" }
+    ],
+    hiddenTestCases: [
+      { input: "1", expectedOutput: "Area: 3.14, Circumference: 6.28" },
+      { input: "15", expectedOutput: "Area: 706.86, Circumference: 94.25" }
+    ],
+    starterCode: "# احسب مساحة ومحيط الدائرة\nr = int(input())\npi = 3.14159\narea = pi * (r ** 2)\ncirc = 2 * pi * r\nprint(f'Area: {area:.2f}, Circumference: {circ:.2f}')\n"
+  },
+
+  "prob-l1-iq-digit-sum": {
+    id: "prob-l1-iq-digit-sum",
+    title: "🧩 مسألة ذكاء: مجموع خانات الرقم وسر التناغم (Sum of Digits)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["iq", "logic", "strings", "arithmetic"],
+    description: "مسألة ذكاء ونمط رياضي لاختبار قدرة التفكير السريع: اكتب برنامجاً يستقبل عدداً صحيحاً موجباً n ويحسب مجموع أرقام خاناته (Digits Sum). مثلاً إذا كان العدد 942، فإن الناتج هو 9 + 4 + 2 = 15.",
+    inputDescription: "سطر واحد يحتوي على العدد الصحيح n.",
+    outputDescription: "اطبع عدداً صحيحاً واحداً يمثل مجموع الخانات.",
+    examples: [
+      { input: "942", output: "15", explanation: "9 + 4 + 2 = 15" },
+      { input: "105", output: "6", explanation: "1 + 0 + 5 = 6" }
+    ],
+    constraints: ["1 <= n <= 10^9"],
+    publicTestCases: [
+      { input: "942", expectedOutput: "15", description: "مجموع خانات 942" },
+      { input: "105", expectedOutput: "6", description: "مجموع خانات 105" }
+    ],
+    hiddenTestCases: [
+      { input: "7", expectedOutput: "7" },
+      { input: "9999", expectedOutput: "36" },
+      { input: "100000", expectedOutput: "1" }
+    ],
+    starterCode: "# احسب مجموع خانات العدد المدخل\ns = input().strip()\ntotal = sum(int(d) for d in s)\nprint(total)\n"
+  },
+
+  "prob-l1-real-parking-fee": {
+    id: "prob-l1-real-parking-fee",
+    title: "💼 مشكلة برمجية واقعية: حاسبة رسوم ساحة الانتظار الذكية (Smart Parking Fee Calculator)",
+    level: 1,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["real_world", "conditions", "arithmetic"],
+    description: "في مواقف السيارات الذكية بالمولات: الساعة الأولى دائماً تكلفتها 10 جنيهات. كل ساعة إضافية تكلفتها 5 جنيهات. وإذا تجاوزت فترة الانتظار 5 ساعات بالكامل، يُمنح العميل خصماً تشجيعياً قدره 10 جنيهات على الإجمالي النهائي. اكتب برنامجاً يستقبل عدد الساعات الصحيح h ويطبع: 'Total Fee: X EGP'.",
+    inputDescription: "عدد الساعات الصحيح h (h >= 1).",
+    outputDescription: "اطبع: Total Fee: {fee} EGP",
+    examples: [
+      { input: "3", output: "Total Fee: 20 EGP", explanation: "الساعة الأولى 10 + ساعتان إضافيتان (2*5=10) = 20 جنيه" },
+      { input: "6", output: "Total Fee: 25 EGP", explanation: "الأولى 10 + 5 ساعات (25) = 35 - 10 خصم = 25 جنيه" }
+    ],
+    constraints: ["1 <= h <= 24"],
+    publicTestCases: [
+      { input: "3", expectedOutput: "Total Fee: 20 EGP", description: "حساب رسوم 3 ساعات" },
+      { input: "6", expectedOutput: "Total Fee: 25 EGP", description: "حساب رسوم 6 ساعات وتطبيق الخصم" }
+    ],
+    hiddenTestCases: [
+      { input: "1", expectedOutput: "Total Fee: 10 EGP" },
+      { input: "5", expectedOutput: "Total Fee: 30 EGP" },
+      { input: "8", expectedOutput: "Total Fee: 35 EGP" }
+    ],
+    starterCode: "# احسب رسوم ساحة الانتظار الذكية\nh = int(input())\nfee = 10 + (h - 1) * 5\nif h > 5:\n    fee -= 10\nprint(f'Total Fee: {fee} EGP')\n"
+  },
+
+  // ==========================================
+  // LEVEL 2: MATH, IQ & REAL-WORLD CHALLENGES
+  // ==========================================
+  "prob-l2-math-gcd": {
+    id: "prob-l2-math-gcd",
+    title: "📐 مسألة رياضيات: القاسم المشترك الأكبر (GCD - Euclidean Algorithm)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["math", "loops", "euclidean"],
+    description: "اكتب برنامجاً بلغة بايثون يستقبل عددين صحيحين موجبين a و b في سطرين مستقلين، ويحسب القاسم المشترك الأكبر (GCD) لهما باستخدام حلقة التكرار أو خوارزمية إقليدس الشهيرة، ثم اطبع الناتج.",
+    inputDescription: "سطران: السطر الأول العدد a، والسطر الثاني العدد b.",
+    outputDescription: "اطبع القاسم المشترك الأكبر كعدد صحيح فردي.",
+    examples: [
+      { input: "48\n18", output: "6", explanation: "القاسم المشترك الأكبر لـ 48 و 18 هو 6" },
+      { input: "100\n25", output: "25", explanation: "القاسم المشترك الأكبر هو 25" }
+    ],
+    constraints: ["1 <= a, b <= 10^9"],
+    publicTestCases: [
+      { input: "48\n18", expectedOutput: "6", description: "حساب GCD للعددين 48 و 18" },
+      { input: "100\n25", expectedOutput: "25", description: "حساب GCD للعددين 100 و 25" }
+    ],
+    hiddenTestCases: [
+      { input: "17\n19", expectedOutput: "1" },
+      { input: "54\n24", expectedOutput: "6" },
+      { input: "270\n192", expectedOutput: "6" }
+    ],
+    starterCode: "import math\na = int(input())\nb = int(input())\nprint(math.gcd(a, b))\n"
+  },
+
+  "prob-l2-iq-missing-number": {
+    id: "prob-l2-iq-missing-number",
+    title: "🧩 مسألة ذكاء: الرقم المفقود في متسلسلة الأعداد (Missing Number in Series)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["iq", "logic", "arrays", "math"],
+    description: "لغز ذكاء كلاسيكي: لديك متسلسلة تحتوي على جميع الأعداد الصحيحة من 1 إلى n باستثناء رقم واحد مفقود. استقبل n في السطر الأول، ثم قائمة الأعداد المتبقية في السطر الثاني مفصولة بمسافات. حدد الرقم المفقود فوراً واطبعه.",
+    inputDescription: "السطر الأول: العدد الصحيح n. السطر الثاني: n-1 أعداد صحيحة مفصولة بمسافات.",
+    outputDescription: "اطبع العدد المفقود فقط.",
+    examples: [
+      { input: "5\n1 2 4 5", output: "3", explanation: "الرقم 3 هو الرقم الوحيد الناقص من 1 إلى 5" },
+      { input: "4\n2 3 4", output: "1", explanation: "الرقم 1 هو المفقود" }
+    ],
+    constraints: ["2 <= n <= 10^5"],
+    publicTestCases: [
+      { input: "5\n1 2 4 5", expectedOutput: "3", description: "العثور على الرقم الناقص 3" },
+      { input: "4\n2 3 4", expectedOutput: "1", description: "العثور على الرقم الناقص 1" }
+    ],
+    hiddenTestCases: [
+      { input: "6\n1 2 3 4 5", expectedOutput: "6" },
+      { input: "10\n1 2 3 4 5 6 7 8 10", expectedOutput: "9" }
+    ],
+    starterCode: "# حدد الرقم المفقود عبر مجموع المتسلسلة n*(n+1)//2\nn = int(input())\nnums = list(map(int, input().split()))\nexpected = n * (n + 1) // 2\nactual = sum(nums)\nprint(expected - actual)\n"
+  },
+
+  "prob-l2-real-tiered-discount": {
+    id: "prob-l2-real-tiered-discount",
+    title: "💼 مشكلة برمجية واقعية: محرك فواتير المتجر الإلكتروني (E-Commerce Tiered Discount Engine)",
+    level: 2,
+    difficulty: "easy",
+    points: 10,
+    baseXp: 50,
+    timeLimit: 3000,
+    skills: ["real_world", "lists", "conditions", "arithmetic"],
+    description: "في منصة تجارة إلكترونية، يستقبل البرنامج أسعار السلع في سلة العميل في سطر واحد مفصولة بمسافات. يحسب الإجمالي الفرعي (Subtotal): إذا كان أقل من 200 جنيه فلا يوجد خصم وتكلفة الشحن 30 جنيهاً. إذا كان من 200 إلى أقل من 500 يمنح خصم 10% وتكلفة الشحن 15 جنيهاً. إذا كان 500 فأكثر يمنح خصم 20% والشحن مجاني (0 جنيه). اطبع النتيجة: 'Subtotal: S, Discount: D, Final: F'.",
+    inputDescription: "سطر واحد يحتوي على أسعار السلع كأعداد صحيحة مفصولة بمسافات.",
+    outputDescription: "اطبع: Subtotal: {subtotal}, Discount: {discount:.1f}, Final: {final:.1f}",
+    examples: [
+      { input: "50 70 60", output: "Subtotal: 180, Discount: 0.0, Final: 210.0", explanation: "الإجمالي 180 < 200، الخصم 0 والشحن 30 -> النهائي 210.0" },
+      { input: "200 150", output: "Subtotal: 350, Discount: 35.0, Final: 330.0", explanation: "الإجمالي 350، الخصم 10% (35.0) والشحن 15 -> النهائي 330.0" }
+    ],
+    constraints: ["أسعار السلع أعداد صحيحة موجبة"],
+    publicTestCases: [
+      { input: "50 70 60", expectedOutput: "Subtotal: 180, Discount: 0.0, Final: 210.0", description: "شريحة أقل من 200" },
+      { input: "200 150", expectedOutput: "Subtotal: 350, Discount: 35.0, Final: 330.0", description: "شريحة الخصم 10%" }
+    ],
+    hiddenTestCases: [
+      { input: "600", expectedOutput: "Subtotal: 600, Discount: 120.0, Final: 480.0" },
+      { input: "100 100", expectedOutput: "Subtotal: 200, Discount: 20.0, Final: 195.0" }
+    ],
+    starterCode: "# محرك فواتير المتجر الإلكتروني\nprices = list(map(int, input().split()))\nsubtotal = sum(prices)\nif subtotal < 200:\n    disc = 0.0\n    ship = 30\nelif subtotal < 500:\n    disc = subtotal * 0.10\n    ship = 15\nelse:\n    disc = subtotal * 0.20\n    ship = 0\nfinal = subtotal - disc + ship\nprint(f'Subtotal: {subtotal}, Discount: {disc:.1f}, Final: {final:.1f}')\n"
+  },
+
+  // ==========================================
+  // LEVEL 3: MATH, IQ & REAL-WORLD CHALLENGES
+  // ==========================================
+  "prob-l3-math-prime-factors": {
+    id: "prob-l3-math-prime-factors",
+    title: "📐 مسألة رياضيات: التحليل إلى العوامل الأولية (Prime Factorization)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 75,
+    timeLimit: 3000,
+    skills: ["math", "algorithms", "factorization"],
+    description: "اكتب برنامجاً بلغة بايثون يستقبل عدداً صحيحاً n >= 2، ويقوم بتحليله إلى عوامله الأولية بالكامل، ثم اطبع هذه العوامل مرتبة تصاعدياً ومفصولة بمسافات.",
+    inputDescription: "سطر واحد يحتوي على العدد الصحيح n.",
+    outputDescription: "اطبع العوامل الأولية مفصولة بمسافات.",
+    examples: [
+      { input: "60", output: "2 2 3 5", explanation: "60 = 2 * 2 * 3 * 5" },
+      { input: "84", output: "2 2 3 7", explanation: "84 = 2 * 2 * 3 * 7" }
+    ],
+    constraints: ["2 <= n <= 10^7"],
+    publicTestCases: [
+      { input: "60", expectedOutput: "2 2 3 5", description: "تحليل العدد 60" },
+      { input: "84", expectedOutput: "2 2 3 7", description: "تحليل العدد 84" }
+    ],
+    hiddenTestCases: [
+      { input: "13", expectedOutput: "13" },
+      { input: "100", expectedOutput: "2 2 5 5" },
+      { input: "315", expectedOutput: "3 3 5 7" }
+    ],
+    starterCode: "# تحليل العدد إلى عوامله الأولية\nn = int(input())\nfactors = []\nd = 2\nwhile d * d <= n:\n    while n % d == 0:\n        factors.append(d)\n        n //= d\n    d += 1\nif n > 1:\n    factors.append(n)\nprint(' '.join(map(str, factors)))\n"
+  },
+
+  "prob-l3-iq-matrix-diagonal-difference": {
+    id: "prob-l3-iq-matrix-diagonal-difference",
+    title: "🧩 مسألة ذكاء: فارق قطري المصفوفة المربعة (Diagonal Absolute Difference)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 75,
+    timeLimit: 3000,
+    skills: ["iq", "logic", "matrices", "math"],
+    description: "تحدي ذكاء وتحليل هندسي: لديك مصفوفة مربعة بأبعاد n x n. المطلوب حساب القيمة المطلقة للفارق بين مجموع عناصر القطر الرئيسي ومجموع عناصر القطر الثانوي: |sum(primary) - sum(secondary)|.",
+    inputDescription: "السطر الأول: العدد الصحيح n. تليها n أسطر، كل سطر يحتوي على n أعداد صحيحة تمثل صفوف المصفوفة.",
+    outputDescription: "اطبع القيمة المطلقة للفارق كعدد صحيح فردي.",
+    examples: [
+      { input: "3\n11 2 4\n4 5 6\n10 8 -12", output: "15", explanation: "الرئيسي: 11 + 5 + (-12) = 4. الثانوي: 4 + 5 + 10 = 19. الفارق: |4 - 19| = 15" },
+      { input: "2\n1 2\n3 4", output: "0", explanation: "الرئيسي: 1 + 4 = 5. الثانوي: 2 + 3 = 5. |5 - 5| = 0" }
+    ],
+    constraints: ["1 <= n <= 100", "-1000 <= element <= 1000"],
+    publicTestCases: [
+      { input: "3\n11 2 4\n4 5 6\n10 8 -12", expectedOutput: "15", description: "فارق قطري مصفوفة 3x3" },
+      { input: "2\n1 2\n3 4", expectedOutput: "0", description: "فارق قطري مصفوفة 2x2" }
+    ],
+    hiddenTestCases: [
+      { input: "3\n1 2 3\n4 5 6\n9 8 9", expectedOutput: "2" },
+      { input: "1\n42", expectedOutput: "0" }
+    ],
+    starterCode: "# احسب الفارق المطلق بين قطري المصفوفة\nn = int(input())\nmat = [list(map(int, input().split())) for _ in range(n)]\nprimary = sum(mat[i][i] for i in range(n))\nsecondary = sum(mat[i][n - 1 - i] for i in range(n))\nprint(abs(primary - secondary))\n"
+  },
+
+  "prob-l3-real-word-frequency": {
+    id: "prob-l3-real-word-frequency",
+    title: "💼 مشكلة برمجية واقعية: محلل الكلمات الدلالية ومحرك البحث (Keyword Search Indexer)",
+    level: 3,
+    difficulty: "medium",
+    points: 25,
+    baseXp: 75,
+    timeLimit: 3000,
+    skills: ["real_world", "dictionaries", "strings", "sorting"],
+    description: "في محركات البحث وتحليل البيانات الضخمة، يُطلب استخراج أهم الكلمات الأكثر تكراراً بعد استبعاد كلمات التوقف (Stop Words). يستقبل البرنامج فقرة نصية في السطر الأول، وقائمة كلمات التوقف في السطر الثاني (مفصولة بمسافات). المطلوب استخراج أكثر كلمتين تكراراً (مع الترتيب التنازلي للتكرار، ثم الأبجدي في حالة التساوي) وطباعتهما بالصيغة: 'word1: count1, word2: count2'.",
+    inputDescription: "السطر الأول: نص المقال. السطر الثاني: كلمات التوقف المستبعدة مفصولة بمسافات.",
+    outputDescription: "اطبع السطر بالصيغة: {w1}: {c1}, {w2}: {c2}",
+    examples: [
+      { input: "python is great and python is fast and powerful\nis and", output: "python: 2, fast: 1", explanation: "بعد حذف is و and، الكلمات المتبقية: python(2) ثم fast(1) ترتيباً أبجدياً" },
+      { input: "data data science data code code test\ntest", output: "data: 3, code: 2", explanation: "data تكررت 3 مرات و code تكررت مرتين" }
+    ],
+    constraints: ["الكلمات تتكون من حروف صغيرة"],
+    publicTestCases: [
+      { input: "python is great and python is fast and powerful\nis and", expectedOutput: "python: 2, fast: 1", description: "استخراج الكلمات الأكثر تكراراً" },
+      { input: "data data science data code code test\ntest", expectedOutput: "data: 3, code: 2", description: "ترتيب الكلمات الأكثر تكراراً" }
+    ],
+    hiddenTestCases: [
+      { input: "a b c a b a\nx y", expectedOutput: "a: 3, b: 2" },
+      { input: "apple banana apple orange apple banana\npear", expectedOutput: "apple: 3, banana: 2" }
+    ],
+    starterCode: "# فهرسة وتحليل تكرار الكلمات الدلالية\ntext = input().split()\nstop_words = set(input().split())\ncounts = {}\nfor w in text:\n    if w not in stop_words:\n        counts[w] = counts.get(w, 0) + 1\nsorted_words = sorted(counts.items(), key=lambda x: (-x[1], x[0]))\nw1, c1 = sorted_words[0]\nw2, c2 = sorted_words[1]\nprint(f'{w1}: {c1}, {w2}: {c2}')\n"
+  },
+
+  // ==========================================
+  // LEVEL 4: MATH, IQ & REAL-WORLD CHALLENGES
+  // ==========================================
+  "prob-l4-math-collatz-conjecture": {
+    id: "prob-l4-math-collatz-conjecture",
+    title: "📐 مسألة رياضيات: متتالية كولاتز الأطول وعدد الخطوات (Collatz Conjecture Steps)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["math", "recursion", "loops", "number_theory"],
+    description: "حدسية كولاتز (معضلة 3n + 1 الشهيرة): لأي عدد صحيح موجب n، إذا كان زوجياً يقسم على 2، وإذا كان فردياً يضرب في 3 ويضاف إليه 1، وتكرر العملية حتى يصل إلى 1. اكتب برنامجاً يحسب عدد الخطوات للوصول إلى 1 وأقصى قيمة وصل إليها الرقم أثناء المتتالية، ثم اطبع: 'Steps: S, Max: M'.",
+    inputDescription: "سطر واحد يحتوي على العدد الصحيح n.",
+    outputDescription: "اطبع: Steps: {steps}, Max: {max_val}",
+    examples: [
+      { input: "6", output: "Steps: 8, Max: 16", explanation: "6->3->10->5->16->8->4->2->1 استغرقت 8 خطوات وأقصى قيمة هي 16" },
+      { input: "11", output: "Steps: 14, Max: 52", explanation: "11 استغرقت 14 خطوة وأقصى قيمة بلغت 52" }
+    ],
+    constraints: ["1 <= n <= 10^5"],
+    publicTestCases: [
+      { input: "6", expectedOutput: "Steps: 8, Max: 16", description: "متتالية كولاتز للعدد 6" },
+      { input: "11", expectedOutput: "Steps: 14, Max: 52", description: "متتالية كولاتز للعدد 11" }
+    ],
+    hiddenTestCases: [
+      { input: "1", expectedOutput: "Steps: 0, Max: 1" },
+      { input: "7", expectedOutput: "Steps: 16, Max: 52" },
+      { input: "27", expectedOutput: "Steps: 111, Max: 9232" }
+    ],
+    starterCode: "# متتالية كولاتز وحساب الخطوات والذروة\nn = int(input())\nsteps = 0\nmax_val = n\nwhile n != 1:\n    if n % 2 == 0:\n        n //= 2\n    else:\n        n = 3 * n + 1\n    steps += 1\n    if n > max_val:\n        max_val = n\nprint(f'Steps: {steps}, Max: {max_val}')\n"
+  },
+
+  "prob-l4-iq-tower-of-hanoi": {
+    id: "prob-l4-iq-tower-of-hanoi",
+    title: "🧩 مسألة ذكاء: لغز أبراج هانوي والتفكير العودي (Tower of Hanoi Move Counter)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["iq", "logic", "recursion", "divide_and_conquer"],
+    description: "لغز الذكاء الرياضي التاريخي 'أبراج هانوي': لديك 3 أعمدة (A و B و C) و n أقراص مرتبة على العمود A. المطلوب نقلها إلى العمود C باستخدام B كعمود مساعد دون وضع قرص أكبر فوق قرص أصغر. استقبل n، واطبع في السطر الأول إجمالي عدد الحركات الأقل (2^n - 1)، متبوعة بخطوات التحريك بالصيغة 'from -> to' في كل سطر.",
+    inputDescription: "العدد الصحيح n (عدد الأقراص).",
+    outputDescription: "السطر الأول: Total Moves: {moves}. ثم خطوات التحريك كل خطوة في سطر.",
+    examples: [
+      { input: "2", output: "Total Moves: 3\nA -> B\nA -> C\nB -> C", explanation: "أقل عدد حركات هو 3 حركات" },
+      { input: "3", output: "Total Moves: 7\nA -> C\nA -> B\nC -> B\nA -> C\nB -> A\nB -> C\nA -> C", explanation: "7 حركات لنقل 3 أقراص" }
+    ],
+    constraints: ["1 <= n <= 4"],
+    publicTestCases: [
+      { input: "2", expectedOutput: "Total Moves: 3\nA -> B\nA -> C\nB -> C", description: "حل أبراج هانوي لقرصين" },
+      { input: "3", expectedOutput: "Total Moves: 7\nA -> C\nA -> B\nC -> B\nA -> C\nB -> A\nB -> C\nA -> C", description: "حل أبراج هانوي لثلاثة أقراص" }
+    ],
+    hiddenTestCases: [
+      { input: "1", expectedOutput: "Total Moves: 1\nA -> C" },
+      { input: "4", expectedOutput: "Total Moves: 15\nA -> B\nA -> C\nB -> C\nA -> B\nC -> A\nC -> B\nA -> B\nA -> C\nB -> C\nB -> A\nC -> A\nB -> C\nA -> B\nA -> C\nB -> C" }
+    ],
+    starterCode: "# حل أبراج هانوي عودياً\ndef hanoi(n, src, dst, aux, moves):\n    if n == 1:\n        moves.append(f'{src} -> {dst}')\n        return\n    hanoi(n - 1, src, aux, dst, moves)\n    moves.append(f'{src} -> {dst}')\n    hanoi(n - 1, aux, dst, src, moves)\n\nn = int(input())\nmoves = []\nhanoi(n, 'A', 'C', 'B', moves)\nprint(f'Total Moves: {len(moves)}')\nfor m in moves:\n    print(m)\n"
+  },
+
+  "prob-l4-real-rate-limiter": {
+    id: "prob-l4-real-rate-limiter",
+    title: "💼 مشكلة برمجية واقعية: محاكي حماية الخوادم والحد من الطلبات (Sliding Window Rate Limiter)",
+    level: 4,
+    difficulty: "hard",
+    points: 50,
+    baseXp: 100,
+    timeLimit: 3000,
+    skills: ["real_world", "sliding_window", "queues", "algorithms"],
+    description: "في هندسة البرمجيات السحابية، تحمي منظومات Rate Limiter الخوادم من الضغط الزائد. الخوارزمية تسمح بحد أقصى K طلبات خلال نافذة زمنية مدتها W ثانية. لكل طلب قادم في وقت t، يتم فحص الطلبات السابقة المقبولة التي وقعت في الفترة [t - W + 1, t]: إذا كان عددها أقل من K يُقبل الطلب (ALLOWED)، وإذا كان K فأكثر يُرفض (BLOCKED). استقبل K و W في السطر الأول، وتوقيتات الطلبات في السطر الثاني مفصولة بمسافات، واطبع نتيجة كل طلب مفصولة بمسافات.",
+    inputDescription: "السطر الأول: K و W. السطر الثاني: قائمة التوقيتات كأعداد صحيحة مرتبة تصاعدياً.",
+    outputDescription: "اطبع قائمة الحالات (ALLOWED أو BLOCKED) مفصولة بمسافات.",
+    examples: [
+      { input: "3 10\n1 2 5 10 11", output: "ALLOWED ALLOWED ALLOWED BLOCKED ALLOWED", explanation: "عند 10 توجد 3 طلبات سابقة في نافذة 10 ثوان فيتم حجبه، وعند 11 يخرج الطلب 1 من النافذة فيسمح به" },
+      { input: "2 5\n1 2 3 7", output: "ALLOWED ALLOWED BLOCKED ALLOWED", explanation: "الطلب 3 محجوب لأن 1 و 2 استهلكا الحد الأقصى 2 في النافذة" }
+    ],
+    constraints: ["1 <= K <= 100", "1 <= W <= 1000"],
+    publicTestCases: [
+      { input: "3 10\n1 2 5 10 11", expectedOutput: "ALLOWED ALLOWED ALLOWED BLOCKED ALLOWED", description: "محاكاة Rate Limiter لنافذة 10 ثوان وحد 3 طلبات" },
+      { input: "2 5\n1 2 3 7", expectedOutput: "ALLOWED ALLOWED BLOCKED ALLOWED", description: "محاكاة Rate Limiter لنافذة 5 ثوان وحد طلبين" }
+    ],
+    hiddenTestCases: [
+      { input: "1 5\n1 2 6 7", expectedOutput: "ALLOWED BLOCKED ALLOWED BLOCKED" },
+      { input: "3 10\n1 2 3 4", expectedOutput: "ALLOWED ALLOWED ALLOWED BLOCKED" }
+    ],
+    starterCode: "# محاكي Rate Limiter بالنافذة المنزلقة\nK, W = map(int, input().split())\ntimestamps = list(map(int, input().split()))\nallowed_times = []\nresults = []\nfor t in timestamps:\n    # تصفية الطلبات المقبولة خارج النافذة [t - W + 1, t]\n    allowed_times = [at for at in allowed_times if at >= t - W + 1]\n    if len(allowed_times) < K:\n        results.append('ALLOWED')\n        allowed_times.append(t)\n    else:\n        results.append('BLOCKED')\nprint(' '.join(results))\n"
+  },
+
+  // ==========================================
+  // LEVEL 5: MATH, IQ & REAL-WORLD CHALLENGES
+  // ==========================================
+  "prob-l5-math-matrix-determinant": {
+    id: "prob-l5-math-matrix-determinant",
+    title: "📐 مسألة رياضيات: محدد المصفوفات المربعة وحساب كرامر (Matrix Determinant Engine)",
+    level: 5,
+    difficulty: "hard",
+    points: 100,
+    baseXp: 150,
+    timeLimit: 3000,
+    skills: ["math", "linear_algebra", "recursion", "matrices"],
+    description: "في الجبر الخطي والرسوميات الحاسوبية، محدد المصفوفة (Determinant) له أهمية قصوى. اكتب برنامجاً يستقبل بعد المصفوفة المربعة N في السطر الأول، تليها N أسطر تمثل عناصر المصفوفة، ويحسب المحدد بدقة بطريقة الاستدعاء الذاتي (Laplace expansion) ويطبع المحدد كعدد صحيح فردي.",
+    inputDescription: "السطر الأول: العدد الصحيح N (1 <= N <= 3). تليها N أسطر كل سطر يحتوي على N أعداد صحيحة.",
+    outputDescription: "اطبع قيمة المحدد كعدد صحيح فردي.",
+    examples: [
+      { input: "2\n1 2\n3 4", output: "-2", explanation: "1*4 - 2*3 = 4 - 6 = -2" },
+      { input: "3\n6 1 1\n4 -2 5\n2 8 7", output: "-306", explanation: "محدد مصفوفة 3x3 بحساب المرافقات = -306" }
+    ],
+    constraints: ["1 <= N <= 3", "-100 <= element <= 100"],
+    publicTestCases: [
+      { input: "2\n1 2\n3 4", expectedOutput: "-2", description: "محدد مصفوفة 2x2" },
+      { input: "3\n6 1 1\n4 -2 5\n2 8 7", expectedOutput: "-306", description: "محدد مصفوفة 3x3" }
+    ],
+    hiddenTestCases: [
+      { input: "1\n7", expectedOutput: "7" },
+      { input: "3\n1 2 3\n0 4 5\n0 0 6", expectedOutput: "24" },
+      { input: "2\n5 -3\n-2 4", expectedOutput: "14" }
+    ],
+    starterCode: "# حساب محدد المصفوفة عودياً\ndef get_det(mat):\n    n = len(mat)\n    if n == 1:\n        return mat[0][0]\n    if n == 2:\n        return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0]\n    det = 0\n    for c in range(n):\n        sub = [row[:c] + row[c+1:] for row in mat[1:]]\n        det += ((-1) ** c) * mat[0][c] * get_det(sub)\n    return det\n\nN = int(input())\nmat = [list(map(int, input().split())) for _ in range(N)]\nprint(get_det(mat))\n"
+  },
+
+  "prob-l5-iq-knight-shortest-path": {
+    id: "prob-l5-iq-knight-shortest-path",
+    title: "🧩 مسألة ذكاء: أقصر مسار لحصان الشطرنج (Knight Shortest Path on Chessboard)",
+    level: 5,
+    difficulty: "hard",
+    points: 100,
+    baseXp: 150,
+    timeLimit: 3000,
+    skills: ["iq", "logic", "bfs", "graphs", "shortest_path"],
+    description: "لغز حركة حصان الشطرنج الشهير (Knight's Tour & Shortest Path): الحصان يتحرك على شكل حرف L (مربعان في اتجاه ومربع في الاتجاه المتعامد). في رقعة شطرنج أبعادها 8x8 (الأعمدة من a إلى h، والصفوف من 1 إلى 8)، استقبل مربع البداية ومربع الهدف مفصولين بمسافة (مثال: 'a1 c2')، واحسب أقل عدد من النقلات للوصول إلى الهدف باستخدام خوارزمية BFS، واطبع: 'Shortest Path: {moves} moves'.",
+    inputDescription: "سطر واحد يحتوي على مربعين بنظام الشطرنج مثل a1 c2.",
+    outputDescription: "اطبع: Shortest Path: {moves} moves",
+    examples: [
+      { input: "a1 c2", output: "Shortest Path: 1 moves", explanation: "نقلة واحدة مباشرة على شكل حرف L" },
+      { input: "a1 h8", output: "Shortest Path: 6 moves", explanation: "أقصر مسار من زاوية الرقعة إلى الزاوية المقابلة هو 6 نقلات" }
+    ],
+    constraints: ["المربعات صالحة ضمن الرقعة 8x8"],
+    publicTestCases: [
+      { input: "a1 c2", expectedOutput: "Shortest Path: 1 moves", description: "أقصر مسار لنقلة واحدة مباشرة" },
+      { input: "a1 h8", expectedOutput: "Shortest Path: 6 moves", description: "أقصر مسار للزاوية المقابلة" }
+    ],
+    hiddenTestCases: [
+      { input: "b1 c3", expectedOutput: "Shortest Path: 1 moves" },
+      { input: "a1 a1", expectedOutput: "Shortest Path: 0 moves" },
+      { input: "e4 e6", expectedOutput: "Shortest Path: 2 moves" }
+    ],
+    starterCode: "from collections import deque\n\ndef parse_sq(sq):\n    return (ord(sq[0]) - ord('a'), int(sq[1]) - 1)\n\nstart_str, target_str = input().split()\ns = parse_sq(start_str)\nt = parse_sq(target_str)\n\nmoves = [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]\nvisited = {s}\nq = deque([(s[0], s[1], 0)])\nans = 0\n\nwhile q:\n    r, c, d = q.popleft()\n    if (r, c) == t:\n        ans = d\n        break\n    for dr, dc in moves:\n        nr, nc = r + dr, c + dc\n        if 0 <= nr < 8 and 0 <= nc < 8 and (nr, nc) not in visited:\n            visited.add((nr, nc))\n            q.append((nr, nc, d + 1))\n\nprint(f'Shortest Path: {ans} moves')\n"
+  },
+
+  "prob-l5-real-event-scheduler": {
+    id: "prob-l5-real-event-scheduler",
+    title: "💼 مشكلة برمجية واقعية: محرك جدولة قاعات الاجتماعات السحابية (Meeting Rooms Capacity Optimizer)",
+    level: 5,
+    difficulty: "hard",
+    points: 100,
+    baseXp: 150,
+    timeLimit: 3000,
+    skills: ["real_world", "greedy", "sorting", "interval_scheduling"],
+    description: "في أنظمة إدارة المكاتب الذكية وحجز الموارد السحابية، لديك قائمة بمواعيد اجتماعات مطلوب عقدها، كل اجتماع محدد بوقت البداية ووقت النهاية [start, end]. المطلوب تحديد أقل عدد من قاعات الاجتماعات اللازمة بحيث يمكن استضافة جميع الاجتماعات دون أي تداخل في القاعات. استقبل عدد الاجتماعات M في السطر الأول، تليها M أسطر تحتوي على start و end، واطبع: 'Minimum Rooms: {rooms}'.",
+    inputDescription: "السطر الأول: عدد الاجتماعات M. تليها M أسطر يحتوي كل منها على start و end كأعداد صحيحة.",
+    outputDescription: "اطبع: Minimum Rooms: {rooms}",
+    examples: [
+      { input: "3\n0 30\n5 10\n15 20", output: "Minimum Rooms: 2", explanation: "الاجتماع 0-30 يتداخل مع 5-10 و 15-20، لكن 5-10 و 15-20 لا يتداخلان معاً فنحتاج قاعتين فقط" },
+      { input: "3\n7 10\n2 4\n12 14", output: "Minimum Rooms: 1", explanation: "لا يوجد أي تداخل، قاعة واحدة تكفي" }
+    ],
+    constraints: ["1 <= M <= 10^4", "0 <= start < end <= 10^6"],
+    publicTestCases: [
+      { input: "3\n0 30\n5 10\n15 20", expectedOutput: "Minimum Rooms: 2", description: "حساب أقل قاعات لتداخل جزئي" },
+      { input: "3\n7 10\n2 4\n12 14", expectedOutput: "Minimum Rooms: 1", description: "اجتماعات بدون تداخل" }
+    ],
+    hiddenTestCases: [
+      { input: "4\n1 4\n2 5\n3 6\n4 7", expectedOutput: "Minimum Rooms: 3" },
+      { input: "1\n9 17", expectedOutput: "Minimum Rooms: 1" },
+      { input: "5\n1 10\n2 7\n3 19\n8 12\n10 20", expectedOutput: "Minimum Rooms: 4" }
+    ],
+    starterCode: "# تحسين وجدولة قاعات الاجتماعات السحابية\nimport heapq\nM = int(input())\nintervals = [list(map(int, input().split())) for _ in range(M)]\nintervals.sort(key=lambda x: x[0])\nrooms = []\nfor start, end in intervals:\n    if rooms and rooms[0] <= start:\n        heapq.heappop(rooms)\n    heapq.heappush(rooms, end)\nprint(f'Minimum Rooms: {len(rooms)}')\n"
   }
+
 };
