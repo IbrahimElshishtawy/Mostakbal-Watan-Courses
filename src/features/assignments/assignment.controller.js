@@ -1559,8 +1559,7 @@ if __name__ == "__main__":
           </tr>
         `;
       }).join("");
-        `;
-      }).join("");
+     
     }
 
     // 6. Student Performance & Speedy Evaluation Snapshot Drawer Bar (Bottom Section of Image 2.html)
