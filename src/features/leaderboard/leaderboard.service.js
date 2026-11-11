@@ -232,11 +232,11 @@ export const LeaderboardService = {
     });
 
     const getLevelTitle = (lvl) => {
-      if (lvl >= 5) return "خبير بايثون الأسطوري (Python Wizard) ✨";
-      if (lvl === 4) return "مهندس الخوارزميات (Algorithm Master) 🧠";
-      if (lvl === 3) return "صائد الاستثناءات (Bug Hunter) 🛡️";
+      if (lvl >= 5) return "خبير بايثون الأسطوري 🐍✨";
+      if (lvl === 4) return "مهندس الخوارزميات المتقدمة 🧠";
+      if (lvl === 3) return "صائد الثغرات البرمجية 🛡️";
       if (lvl === 2) return "مطور برمجيات واعد ⚡";
-      return "مبرمج صاعد 🥉";
+      return "مبرمج صاعد 🌟";
     };
 
     const maskPhone = (phone) => {

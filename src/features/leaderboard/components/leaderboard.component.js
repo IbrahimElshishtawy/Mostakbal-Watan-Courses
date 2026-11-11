@@ -134,7 +134,7 @@ export function renderLeaderboardView({
             <span class="particle p4">✨</span>
             <span class="particle p5">🔥</span>
           </div>
-          <span class="lb-podium-tag">قاعة الشرف الأكاديمية • TOP 3</span>
+          <span class="lb-podium-tag">قاعة الشرف الأكاديمية • <bdi>TOP 3</bdi> 🏆</span>
           <h2 class="lb-podium-title">
             <span>ثلاثي الصدارة لمسار هندسة البرمجيات وبايثون</span>
             <i class="fa-solid fa-crown text-amber-400 lb-header-crown"></i>
@@ -146,12 +146,14 @@ export function renderLeaderboardView({
           <!-- Rank 2: Silver (Right in RTL) -->
           <div class="lb-podium-card rank-silver" style="--card-delay: 0.15s;">
             <div class="podium-card-shine" aria-hidden="true"></div>
-            <div class="podium-crown-badge silver">
-              <span class="crown-inner-label">
-                <i class="fa-solid fa-medal"></i>
-                <small>المركز 2</small>
-                <span>فضي</span>
-              </span>
+            
+            <div class="podium-hero-crown silver" aria-hidden="true">
+              <span class="crown-icon-3d">🥈</span>
+            </div>
+            
+            <div class="podium-rank-tag silver">
+              <i class="fa-solid fa-medal"></i>
+              <span>المركز الثاني</span>
             </div>
 
             <div class="podium-avatar-box silver-glow">
@@ -161,7 +163,9 @@ export function renderLeaderboardView({
             </div>
 
             <h3 class="podium-user-name">${top2 ? escapeHtml(top2.studentName) : "في انتظار المنافس"}</h3>
-            <p class="podium-user-role">${top2 ? escapeHtml(top2.levelTitle || top2.role || "مبرمج واعد") : "المقعد متاح للتنافس"}</p>
+            <div class="podium-user-role-wrap">
+              <span class="podium-user-role-badge">${top2 ? escapeHtml(top2.levelTitle || "مطور واعد ⚡") : "المقعد متاح للتنافس"}</span>
+            </div>
 
             <div class="podium-xp-score-wrap silver-xp">
               <div class="xp-energy-bar">
@@ -174,16 +178,14 @@ export function renderLeaderboardView({
               </div>
             </div>
 
-            <div class="podium-mini-stats-grid font-mono">
-              <div class="podium-stat-pill">
-                <span class="stat-icon">📋</span>
-                <span>المهام: </span>
-                <strong>${top2 ? `${top2.tasksDone} منجز` : "0"}</strong>
+            <div class="podium-stats-container font-mono">
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono"><span class="stat-icon">📋</span> ${top2 ? `${top2.tasksDone} منجز` : "0"}</div>
+                <div class="stat-chip-lbl">المهام المنجزة</div>
               </div>
-              <div class="podium-stat-pill">
-                <span class="stat-icon">🎯</span>
-                <span>الدقة: </span>
-                <strong>${top2 ? top2.accuracy : "—"}</strong>
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono"><span class="stat-icon">🎯</span> ${top2 ? top2.accuracy : "—"}</div>
+                <div class="stat-chip-lbl">دقة الإجابات</div>
               </div>
             </div>
 
@@ -198,12 +200,13 @@ export function renderLeaderboardView({
             <div class="podium-card-shine" aria-hidden="true"></div>
             <div class="gold-halo-light" aria-hidden="true"></div>
 
-            <div class="podium-crown-badge gold floating-crown">
-              <span class="crown-inner-label">
-                <i class="fa-solid fa-crown text-amber-200"></i>
-                <small>المركز 1</small>
-                <span>الأول 👑</span>
-              </span>
+            <div class="podium-hero-crown gold floating-crown" aria-hidden="true">
+              <span class="crown-icon-3d">👑</span>
+            </div>
+
+            <div class="podium-rank-tag gold">
+              <i class="fa-solid fa-crown text-amber-300"></i>
+              <span>المركز الأول • البطل</span>
             </div>
 
             <div class="podium-avatar-box gold-glow">
@@ -213,7 +216,9 @@ export function renderLeaderboardView({
             </div>
 
             <h3 class="podium-user-name">${top1 ? escapeHtml(top1.studentName) : "في انتظار بطل الصدارة"}</h3>
-            <p class="podium-user-role">${top1 ? escapeHtml(top1.levelTitle || top1.role || "خبير بايثون الأسطوري") : "كن أول من يحصد المركز الأول"}</p>
+            <div class="podium-user-role-wrap">
+              <span class="podium-user-role-badge gold">${top1 ? escapeHtml(top1.levelTitle || "خبير بايثون الأسطوري 🐍") : "كن أول من يحصد الصدارة"}</span>
+            </div>
 
             <div class="podium-xp-score-wrap gold-xp">
               <div class="xp-energy-bar">
@@ -226,29 +231,26 @@ export function renderLeaderboardView({
               </div>
             </div>
 
-            <div class="podium-mini-stats-grid font-mono">
-              <div class="podium-stat-pill success">
-                <span class="stat-icon">📋</span>
-                <span>إنجاز المهام: </span>
-                <strong>${top1 ? `${top1.tasksDone} مكتمل` : "0"}</strong>
+            <div class="podium-stats-container font-mono">
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono text-emerald-400"><span class="stat-icon">📋</span> ${top1 ? `${top1.tasksDone} مكتمل` : "0"}</div>
+                <div class="stat-chip-lbl">إنجاز المهام</div>
               </div>
-              <div class="podium-stat-pill success">
-                <span class="stat-icon">🎓</span>
-                <span>المستوى: </span>
-                <strong>${top1 ? `مستوى ${top1.level}` : "1"}</strong>
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono text-cyan-400"><span class="stat-icon">🎓</span> ${top1 ? `مستوى ${top1.level}` : "1"}</div>
+                <div class="stat-chip-lbl">الرتبة البرمجية</div>
               </div>
-              <div class="podium-stat-pill streak">
-                <span class="stat-icon">🔥</span>
-                <span>تتابع: </span>
-                <strong>${top1 ? `${top1.streak} يوم` : "1 يوم"}</strong>
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono text-amber-400"><span class="stat-icon">🔥</span> ${top1 ? `${top1.streak} يوم` : "1 يوم"}</div>
+                <div class="stat-chip-lbl">أيام التتابع</div>
               </div>
-              <div class="podium-stat-pill verified">
-                <span class="stat-icon">⚡</span>
-                <strong>كود معتمد</strong>
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono text-emerald-400"><span class="stat-icon">🎯</span> ${top1 ? top1.accuracy : "98.5%"}</div>
+                <div class="stat-chip-lbl">دقة الإجابات</div>
               </div>
             </div>
 
-            <div class="podium-card-footer-badge text-amber-400 font-bold">
+            <div class="podium-card-footer-badge gold">
               <i class="fa-solid fa-award"></i>
               <span>${top1 ? (top1.badge || "بطل الدورة 🥇") : "شارة الصدارة 🥇"}</span>
             </div>
@@ -257,12 +259,14 @@ export function renderLeaderboardView({
           <!-- Rank 3: Bronze (Left in RTL) -->
           <div class="lb-podium-card rank-bronze" style="--card-delay: 0.25s;">
             <div class="podium-card-shine" aria-hidden="true"></div>
-            <div class="podium-crown-badge bronze">
-              <span class="crown-inner-label">
-                <i class="fa-solid fa-award"></i>
-                <small>المركز 3</small>
-                <span>برونزي</span>
-              </span>
+            
+            <div class="podium-hero-crown bronze" aria-hidden="true">
+              <span class="crown-icon-3d">🥉</span>
+            </div>
+
+            <div class="podium-rank-tag bronze">
+              <i class="fa-solid fa-award"></i>
+              <span>المركز الثالث</span>
             </div>
 
             <div class="podium-avatar-box bronze-glow">
@@ -272,7 +276,9 @@ export function renderLeaderboardView({
             </div>
 
             <h3 class="podium-user-name">${top3 ? escapeHtml(top3.studentName) : "في انتظار المنافس"}</h3>
-            <p class="podium-user-role">${top3 ? escapeHtml(top3.levelTitle || top3.role || "مبرمج واعد") : "المقعد متاح للتنافس"}</p>
+            <div class="podium-user-role-wrap">
+              <span class="podium-user-role-badge">${top3 ? escapeHtml(top3.levelTitle || "مبرمج واعد ⚡") : "المقعد متاح للتنافس"}</span>
+            </div>
 
             <div class="podium-xp-score-wrap bronze-xp">
               <div class="xp-energy-bar">
@@ -285,16 +291,14 @@ export function renderLeaderboardView({
               </div>
             </div>
 
-            <div class="podium-mini-stats-grid font-mono">
-              <div class="podium-stat-pill">
-                <span class="stat-icon">📋</span>
-                <span>المهام: </span>
-                <strong>${top3 ? `${top3.tasksDone} منجز` : "0"}</strong>
+            <div class="podium-stats-container font-mono">
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono"><span class="stat-icon">📋</span> ${top3 ? `${top3.tasksDone} منجز` : "0"}</div>
+                <div class="stat-chip-lbl">المهام المنجزة</div>
               </div>
-              <div class="podium-stat-pill">
-                <span class="stat-icon">🎯</span>
-                <span>الدقة: </span>
-                <strong>${top3 ? top3.accuracy : "—"}</strong>
+              <div class="podium-stat-chip">
+                <div class="stat-chip-val font-mono"><span class="stat-icon">🎯</span> ${top3 ? top3.accuracy : "—"}</div>
+                <div class="stat-chip-lbl">دقة الإجابات</div>
               </div>
             </div>
 
