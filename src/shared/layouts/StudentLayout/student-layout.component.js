@@ -269,6 +269,34 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
           </section>
         </main>
       </div>
+
+      <!-- Mobile App Bottom Navigation Bar -->
+      <nav class="student-mobile-bottom-nav" id="studentMobileBottomNav" aria-label="شريط التنقل السفلي للهاتف">
+        <button type="button" class="student-bottom-nav-item active" data-section="videos" title="الداتا والدروس">
+          <span class="nav-icon"><i class="fa-solid fa-book-open"></i></span>
+          <span class="nav-label">الدروس</span>
+        </button>
+
+        <button type="button" class="student-bottom-nav-item" data-section="tasks" title="التاسكات والواجبات">
+          <span class="nav-icon"><i class="fa-solid fa-list-check"></i></span>
+          <span class="nav-label">الواجبات</span>
+        </button>
+
+        <button type="button" class="student-bottom-nav-item nav-center-hero" data-section="python-adventure" title="مغامرة وتحديات بايثون">
+          <span class="nav-icon"><i class="fa-brands fa-python"></i></span>
+          <span class="nav-label">بايثون</span>
+        </button>
+
+        <button type="button" class="student-bottom-nav-item" data-section="exams" title="الامتحانات والتقييمات">
+          <span class="nav-icon"><i class="fa-solid fa-file-pen"></i></span>
+          <span class="nav-label">الامتحانات</span>
+        </button>
+
+        <button type="button" class="student-bottom-nav-item" data-section="profile" title="حسابي الشخصي">
+          <span class="nav-icon"><i class="fa-solid fa-user-graduate"></i></span>
+          <span class="nav-label">حسابي</span>
+        </button>
+      </nav>
     </div>
   `;
 
@@ -277,6 +305,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
   const overlay = document.getElementById("mobileOverlay");
   const toggleBtn = document.getElementById("mobileMenuToggle");
   const navItems = container.querySelectorAll(".sidebar-item[data-section]");
+  const mobileNavItems = container.querySelectorAll(".student-bottom-nav-item[data-section]");
   const topbarBreadcrumb = document.getElementById("topbarCurrentTab");
 
   const tabLabels = {
@@ -317,6 +346,11 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
       btn.classList.toggle("active", match);
     });
 
+    mobileNavItems.forEach((btn) => {
+      const match = btn.getAttribute("data-section") === sectionId;
+      btn.classList.toggle("active", match);
+    });
+
     const allSections = container.querySelectorAll(".tab-content");
     allSections.forEach((sec) => sec.classList.remove("active"));
 
@@ -336,6 +370,13 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
   }
 
   navItems.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const section = btn.getAttribute("data-section");
+      setActiveTab(section);
+    });
+  });
+
+  mobileNavItems.forEach((btn) => {
     btn.addEventListener("click", () => {
       const section = btn.getAttribute("data-section");
       setActiveTab(section);

@@ -197,6 +197,8 @@ assert(challenges["world-8-level-4"].nextChallengeId === "world-8-level-5", "wor
 console.log("\n▶️ TEST SUITE 6: UI Structure & Mobile Optimization (Phase 09)");
 
 const teacherLayoutCode = fs.readFileSync(path.join(projectRoot, "src/shared/layouts/TeacherLayout/teacher-layout.component.js"), "utf8");
+const studentLayoutCode = fs.readFileSync(path.join(projectRoot, "src/shared/layouts/StudentLayout/student-layout.component.js"), "utf8");
+const layoutsCss = fs.readFileSync(path.join(projectRoot, "src/styles/layouts.css"), "utf8");
 const teacherHtml = fs.readFileSync(path.join(projectRoot, "pages/teacher.html"), "utf8");
 const evalModalCode = fs.readFileSync(path.join(projectRoot, "src/features/assignments/components/assignment-evaluation-modal.component.js"), "utf8");
 
@@ -204,6 +206,12 @@ assert(teacherLayoutCode.includes('id="teacherTopbarLogoutBtn"'), "Teacher topba
 assert(teacherLayoutCode.includes('id="teacherMobileBottomNav"'), "Teacher layout has mobile bottom navigation bar");
 assert(teacherLayoutCode.includes('id="teacherMobileBottomLogoutBtn"'), "Teacher mobile bottom bar has mobile logout button");
 assert(teacherLayoutCode.includes('pb-24 lg:pb-8'), "Main work area has bottom clearance padding for mobile bottom bar");
+
+// Student mobile app bar
+assert(studentLayoutCode.includes('id="studentMobileBottomNav"'), "Student layout has mobile app bottom navigation bar");
+assert(studentLayoutCode.includes('class="student-bottom-nav-item nav-center-hero"'), "Student layout has elevated hero Python Adventure action button");
+assert(layoutsCss.includes('.student-mobile-bottom-nav'), "layouts.css defines student-mobile-bottom-nav styles");
+assert(layoutsCss.includes('calc(76px + env(safe-area-inset-bottom, 0px))'), "layouts.css provides responsive bottom clearance for student views");
 
 assert(evalModalCode.includes('id="evalRunCodeBtn"'), "Evaluation modal has automated code test button");
 assert(evalModalCode.includes('id="evalSaveAndNextBtn"'), "Evaluation modal has Save & Next Student button");

@@ -494,24 +494,36 @@
   display: none;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1.25rem;
-  background: var(--surface-primary);
-  border-bottom: 1px solid var(--border);
+  padding: 0.65rem 1rem;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: sticky;
   top: 0;
   z-index: 99;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .mobile-menu-btn {
-  background: none;
-  border: none;
-  color: var(--text-primary);
-  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.25rem;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.35rem 0.65rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover,
+.mobile-menu-btn:active {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: rgba(0, 242, 254, 0.3);
+  color: #00f2fe;
 }
 
 .mobile-overlay {
@@ -526,6 +538,132 @@
 }
 
 /* ========================================================
+   4.1 STUDENT MOBILE APP BOTTOM NAVIGATION BAR
+   ======================================================== */
+.student-mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.65);
+  z-index: 90;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.5rem;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  direction: rtl;
+}
+
+.student-bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 2px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  border-radius: 12px;
+}
+
+.student-bottom-nav-item .nav-icon {
+  font-size: 18px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.student-bottom-nav-item .nav-label {
+  font-size: 10.5px;
+  line-height: 1.2;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.student-bottom-nav-item:hover {
+  color: #f1f5f9;
+}
+
+.student-bottom-nav-item.active {
+  color: #00f2fe;
+}
+
+.student-bottom-nav-item.active .nav-icon {
+  transform: translateY(-2px) scale(1.12);
+  color: #00f2fe;
+  filter: drop-shadow(0 2px 8px rgba(0, 242, 254, 0.55));
+}
+
+.student-bottom-nav-item.active .nav-label {
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.student-bottom-nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  width: 16px;
+  height: 3px;
+  background: linear-gradient(90deg, #00f2fe, #4facfe);
+  border-radius: 3px;
+  box-shadow: 0 0 8px #00f2fe;
+}
+
+/* Center Highlighted Hero Item for Python Adventure */
+.student-bottom-nav-item.nav-center-hero {
+  position: relative;
+  top: -8px;
+}
+
+.student-bottom-nav-item.nav-center-hero .nav-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff !important;
+  font-size: 20px;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.25s ease;
+}
+
+.student-bottom-nav-item.nav-center-hero:hover .nav-icon {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.65);
+}
+
+.student-bottom-nav-item.nav-center-hero.active .nav-icon {
+  transform: scale(1.14);
+  background: linear-gradient(135deg, #00f2fe 0%, #059669 100%);
+  box-shadow: 0 6px 22px rgba(0, 242, 254, 0.6);
+  border-color: #ffffff;
+}
+
+.student-bottom-nav-item.nav-center-hero::after {
+  display: none;
+}
+
+/* ========================================================
    5. RESPONSIVE BREAKPOINTS
    ======================================================== */
 @media (max-width: 992px) {
@@ -534,6 +672,10 @@
   }
 
   .mobile-header {
+    display: flex;
+  }
+
+  .student-mobile-bottom-nav {
     display: flex;
   }
 
@@ -561,6 +703,7 @@
 
   .main-view {
     padding: var(--space-3) var(--space-2);
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   .page-title {
