@@ -212,8 +212,58 @@ export const PythonAdventureService = {
    * Local Authoritative Evaluator for fallback & offline testing.
    */
   async _localValidateAndScore({ challengeId, code, hintsUsed, attempts, currentProgress }) {
-    const challenge = CHALLENGES_CLIENT_DATA[challengeId];
-    if (!challenge) throw new Error("المهمة غير موجودة.");
+    let challenge = CHALLENGES_CLIENT_DATA[challengeId];
+    if (!challenge && typeof challengeId === "string" && challengeId.startsWith("daily-")) {
+      challenge = await this.getDailyChallenge(challengeId);
+    }
+    if (!challenge) {
+      challenge = this.getCustomLevels()?.[challengeId];
+    }
+    if (!challenge) {
+      throw new Error(`المهمة البرمجية (${challengeId}) غير موجودة أو انتهت صلاحيتها.`);
+    }
+
+    // 1. Authoritative code validation against expected output and requirements
+    const { runPythonCode } = await import("./python-adventure-runtime.js?v=3.5.3");
+    const runCheck = await runPythonCode(code);
+    if (runCheck.error) {
+      return {
+        success: true,
+        passed: false,
+        feedback: "الكود يحتوي على أخطاء برمجية تمنع تنفيذه بنجاح.",
+        errorDetails: runCheck.error,
+        testResults: { stdout: runCheck.output }
+      };
+    }
+
+    const cleanOutput = (runCheck.output || "").trim();
+
+    if (challenge.expectedOutput) {
+      const expected = String(challenge.expectedOutput).trim();
+      if (cleanOutput !== expected && !cleanOutput.includes(expected)) {
+        return {
+          success: true,
+          passed: false,
+          feedback: "النتيجة التي طبعها برنامجك غير متطابقة مع المطلوب في التحدي.",
+          errorDetails: `الناتج المتوقع: ${expected}\nالناتج المطبوع: ${cleanOutput || "(لا يوجد إخراج print)"}`,
+          testResults: { stdout: runCheck.output }
+        };
+      }
+    }
+
+    if (Array.isArray(challenge.outputIncludes)) {
+      for (const inc of challenge.outputIncludes) {
+        if (!cleanOutput.includes(inc)) {
+          return {
+            success: true,
+            passed: false,
+            feedback: `يجب أن يحتوي الناتج على العبارة: "${inc}"`,
+            errorDetails: `الناتج المطبوع: ${cleanOutput}`,
+            testResults: { stdout: runCheck.output }
+          };
+        }
+      }
+    }
 
     const today = new Date().toISOString().split("T")[0];
     const uid = auth.currentUser?.uid || currentProgress?.studentUid || "student_guest";
@@ -230,16 +280,16 @@ export const PythonAdventureService = {
     if (hintsUsed >= 4) starsEarned = 1;
     else if (hintsUsed > 0) starsEarned = 2;
 
-    const earnedBaseXp = Math.round(challenge.baseXp * xpMultiplier);
+    const earnedBaseXp = Math.round((challenge.baseXp || 100) * xpMultiplier);
 
     const previousRecord = existing.completedChallenges?.[challengeId];
     let actualXpAwarded = earnedBaseXp;
     if (previousRecord) {
       const prevStars = previousRecord.stars || 1;
       if (starsEarned > prevStars) {
-        actualXpAwarded = Math.round(challenge.baseXp * 0.4);
+        actualXpAwarded = Math.round((challenge.baseXp || 100) * 0.4);
       } else {
-        actualXpAwarded = Math.round(challenge.baseXp * 0.1);
+        actualXpAwarded = Math.round((challenge.baseXp || 100) * 0.1);
       }
       starsEarned = Math.max(starsEarned, prevStars);
     }
@@ -280,25 +330,36 @@ export const PythonAdventureService = {
         stars: starsEarned,
         attempts,
         hintsUsed,
+        score: 10,
+        maxScore: 10,
         xpAwarded: actualXpAwarded
       }
     };
+
+    const isDaily = challengeId.startsWith("daily-");
+    const newStreakCount = isDaily
+      ? (existing.stats?.dailyCompletedDate === today ? existing.streak?.count || 1 : (existing.streak?.count || 0) + 1)
+      : (existing.streak?.count || 1);
 
     const updated = {
       ...existing,
       xp: newTotalXp,
       level: newLevel,
-      currentWorldId: challenge.unlocksWorldId || challenge.worldId,
+      currentWorldId: challenge.unlocksWorldId || challenge.worldId || existing.currentWorldId || "world-1",
       currentLevelId: challenge.nextChallengeId || challengeId,
       stars: { ...(existing.stars || {}), [challengeId]: starsEarned },
       completedChallenges: completedMap,
       unlockedWorlds: Array.from(unlockedWorlds),
       unlockedChallenges: Array.from(unlockedChallenges),
       achievements: Array.from(currentAchievements),
+      streak: {
+        count: newStreakCount,
+        lastActiveDate: today
+      },
       stats: {
         totalCompleted: Object.keys(completedMap).length,
         totalRuns: (existing.stats?.totalRuns || 0) + 1,
-        dailyCompletedDate: challengeId.startsWith("daily-") ? today : (existing.stats?.dailyCompletedDate || null)
+        dailyCompletedDate: isDaily ? today : (existing.stats?.dailyCompletedDate || null)
       },
       updatedAt: new Date().toISOString()
     };
@@ -313,14 +374,34 @@ export const PythonAdventureService = {
           xp: newTotalXp,
           level: newLevel,
           challengesCompleted: Object.keys(completedMap).length,
+          streak: newStreakCount,
           updatedAt: new Date().toISOString()
         }, { merge: true });
+
+        // Record student submission in coding_submissions collection
+        const subDocId = `${uid}_${challengeId}_${Date.now()}`;
+        await setDoc(doc(db, "coding_submissions", subDocId), {
+          studentUid: uid,
+          challengeId,
+          code,
+          score: 10,
+          maxScore: 10,
+          passed: true,
+          hintsUsed,
+          attempts,
+          output: cleanOutput,
+          submittedAt: serverTimestamp()
+        });
       }
-    } catch (_) {}
+    } catch (saveErr) {
+      console.warn("Firestore remote sync warning (progress cached locally):", saveErr);
+    }
 
     return {
       success: true,
       passed: true,
+      score: 10,
+      maxScore: 10,
       earnedXp: actualXpAwarded,
       totalXp: newTotalXp,
       stars: starsEarned,
@@ -330,7 +411,8 @@ export const PythonAdventureService = {
       unlockedWorldId: challenge.unlocksWorldId || null,
       newlyUnlockedAchievements: newlyUnlockedAchievements.filter(Boolean),
       feedback: challenge.type === "boss" ? "🏆 تم هزيمة الزعيم واجتياز التحدي الأسطوري بنجاح!" : "🎉 أحسنت صنعاً! تم اجتياز المهمة بنجاح واستيعاب المفهوم البرمجي.",
-      skillsGained: challenge.skills || []
+      skillsGained: challenge.skills || [],
+      testResults: { stdout: cleanOutput }
     };
   },
 

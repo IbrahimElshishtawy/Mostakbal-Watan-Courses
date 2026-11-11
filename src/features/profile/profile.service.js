@@ -1,9 +1,11 @@
 // src/features/profile/profile.service.js
-import { auth } from "../../core/firebase.js";
+import { auth, db } from "../../core/firebase.js";
 import { updatePassword as fbUpdatePassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { StorageUtils } from "../../shared/utils/storage.utils.js";
-import { STORAGE_KEYS, THEMES, LANGUAGES } from "../../core/constants.js";
+import { STORAGE_KEYS, THEMES, LANGUAGES, COLLECTIONS } from "../../core/constants.js";
 import { normalizeError } from "../../core/errors.js";
+import { applyLanguageToDOM } from "../../shared/utils/i18n.js";
 
 export const ProfileService = {
   /**
@@ -38,13 +40,7 @@ export const ProfileService = {
    * Saves and applies language preference.
    */
   applyLanguage(lang) {
-    const targetLang = lang === LANGUAGES.EN ? LANGUAGES.EN : LANGUAGES.AR;
-    StorageUtils.set(STORAGE_KEYS.LANGUAGE, targetLang);
-    if (typeof document !== "undefined") {
-      document.documentElement.setAttribute("lang", targetLang);
-      document.documentElement.setAttribute("dir", targetLang === LANGUAGES.AR ? "rtl" : "ltr");
-    }
-    return targetLang;
+    return applyLanguageToDOM(lang);
   },
 
   /**
@@ -89,6 +85,65 @@ export const ProfileService = {
   savePreference(key, value) {
     StorageUtils.set(key, value);
     return value;
+  },
+
+  /**
+   * Authoritatively saves all preferences to Storage and Firestore user record.
+   */
+  async saveAllSettings(settings = {}) {
+    const targetLang = settings.language === LANGUAGES.EN ? LANGUAGES.EN : LANGUAGES.AR;
+    const targetTheme = settings.theme || this.getSettings().theme;
+    const targetFontScale = typeof settings.fontScale === "number" ? settings.fontScale : this.getSettings().fontScale;
+    const soundFx = settings.soundFx !== undefined ? Boolean(settings.soundFx) : true;
+    const clickSound = settings.clickSound !== undefined ? Boolean(settings.clickSound) : true;
+    const examAlerts = settings.examAlerts !== undefined ? Boolean(settings.examAlerts) : true;
+    const rankAlerts = settings.rankAlerts !== undefined ? Boolean(settings.rankAlerts) : true;
+    const lectureAlerts = settings.lectureAlerts !== undefined ? Boolean(settings.lectureAlerts) : true;
+
+    // 1. Save to local storage
+    StorageUtils.set(STORAGE_KEYS.LANGUAGE, targetLang);
+    StorageUtils.set(STORAGE_KEYS.THEME, targetTheme);
+    StorageUtils.set(STORAGE_KEYS.FONT_SCALE, targetFontScale);
+    StorageUtils.set("mw_pref_sound_fx", soundFx);
+    StorageUtils.set("mw_pref_click_sound", clickSound);
+    StorageUtils.set("mw_pref_exam_alerts", examAlerts);
+    StorageUtils.set("mw_pref_rank_alerts", rankAlerts);
+    StorageUtils.set("mw_pref_lecture_alerts", lectureAlerts);
+
+    // 2. Persist to Firestore if user is logged in
+    const user = auth.currentUser;
+    if (user && db) {
+      const userSettingsPayload = {
+        language: targetLang,
+        theme: targetTheme,
+        fontScale: targetFontScale,
+        soundFx,
+        clickSound,
+        updatedAt: serverTimestamp()
+      };
+
+      try {
+        // Save to student_gamification or users collection where authenticated user has write permission
+        await setDoc(doc(db, COLLECTIONS.STUDENT_GAMIFICATION, user.uid), {
+          studentUid: user.uid,
+          preferences: userSettingsPayload
+        }, { merge: true });
+      } catch (cloudErr) {
+        console.warn("Could not sync preferences to student_gamification, trying fallback:", cloudErr);
+      }
+    }
+
+    // 3. Apply changes visually to document
+    this.applyTheme(targetTheme);
+    this.applyLanguage(targetLang);
+    this.applyFontScale(targetFontScale);
+
+    return {
+      success: true,
+      language: targetLang,
+      theme: targetTheme,
+      fontScale: targetFontScale
+    };
   },
 
   /**

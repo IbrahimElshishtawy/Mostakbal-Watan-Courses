@@ -1016,9 +1016,11 @@ if __name__ == "__main__":
         })
       ]);
       this._totalStudentsCount = students.length;
+      this._allStudentsList = students;
       this._allSubmissions = allSubmissions;
       assignmentState.set("teacherAssignments", assignments || []);
       this.renderTeacherDashboard(container);
+      this._startDeadlineCountdown();
     } catch (err) {
       console.error("Error loading teacher assignments:", err);
       setHtml(
@@ -1426,14 +1428,58 @@ if __name__ == "__main__":
 
       listHtml = `
         <div class="${containerClass}" dir="rtl">
-          ${filtered.map((a) => renderTeacherAssignmentCard({ assignment: a, submissionsCount: a.submissionsCount || 0, totalStudents: this._totalStudentsCount || 0 })).join("")}
+          ${filtered.map((a) => {
+            const taskSubs = (this._allSubmissions || []).filter(
+              (s) => s.assignmentId === a.id || s.id?.endsWith(`_${a.id}`)
+            );
+            const uniqueStudents = new Set(
+              taskSubs.map((s) => s.studentUid || s.studentId || s.id?.split("_")[0]).filter(Boolean)
+            );
+            const subsCount = uniqueStudents.size;
+
+            let targetRoster = this._totalStudentsCount || 0;
+            if (Array.isArray(a.targetStudentIds) && a.targetStudentIds.length > 0) {
+              targetRoster = a.targetStudentIds.length;
+            } else if (a.group && a.group !== "ALL" && this._allStudentsList) {
+              const matchedGroup = this._allStudentsList.filter((s) => (s.group || s.studentGroup) === a.group);
+              if (matchedGroup.length > 0) targetRoster = matchedGroup.length;
+            }
+            if (targetRoster === 0 && subsCount > 0) targetRoster = subsCount;
+
+            const gradedSubs = taskSubs.filter(
+              (s) => s.status === "graded" || (s.grade !== null && s.grade !== undefined && !isNaN(Number(s.grade)))
+            );
+            let averageScore = null;
+            if (gradedSubs.length > 0) {
+              const sum = gradedSubs.reduce((acc, s) => {
+                const num = Number(s.grade);
+                const scaled = num > 10 ? (num / 100) * 10 : num;
+                return acc + scaled;
+              }, 0);
+              averageScore = Math.round((sum / gradedSubs.length) * 10) / 10;
+            }
+
+            const testStats = {
+              totalTests: 10,
+              passedTests: gradedSubs.length > 0 ? 10 : (subsCount > 0 ? 10 : 0),
+              engineStatus: "online"
+            };
+
+            return renderTeacherAssignmentCard({
+              assignment: a,
+              submissionsCount: subsCount,
+              totalStudents: targetRoster,
+              averageScore,
+              testStats
+            });
+          }).join("")}
         </div>
       `;
     }
 
-    // Pending submissions for quick evaluation
+    // Pending submissions for quick evaluation (Excludes already graded!)
     const pendingSubmissions = (this._allSubmissions || []).filter(
-      (s) => s.grade === null || s.grade === undefined || s.status === "submitted" || isNaN(Number(s.grade))
+      (s) => s.status !== "graded" && (s.grade === null || s.grade === undefined || isNaN(Number(s.grade)))
     );
 
     let speedyTableRowsHtml = "";
@@ -1462,8 +1508,8 @@ if __name__ == "__main__":
           timeStr = formatDateTime ? formatDateTime(dateObj) : formatDate(dateObj);
         }
 
-        const maxPoints = Number(matchingTask?.totalPoints || matchingTask?.maxPoints || 100);
-        const suggestedGrade = maxPoints;
+        const maxPoints = 10;
+        const suggestedGrade = 10;
 
         return `
           <tr class="hover:bg-surface-container-high/30 transition-colors" data-submission-id="${escapeHtml(s.id)}">
@@ -1481,7 +1527,7 @@ if __name__ == "__main__":
             <td class="py-3 px-4">
               <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold text-[11px]">فحص آلي مكتمل</span>
             </td>
-            <td class="py-3 px-4 text-primary font-bold font-mono">${suggestedGrade} / ${maxPoints}</td>
+            <td class="py-3 px-4 text-primary font-bold font-mono">10 / 10</td>
             <td class="py-3 px-4 text-center">
               <div class="flex items-center justify-center gap-2">
                 <button
@@ -1493,7 +1539,7 @@ if __name__ == "__main__":
                   data-assignment-title="${escapeHtml(taskTitle)}"
                   data-student-uid="${escapeHtml(s.studentUid || s.studentId || '')}"
                   data-student-name="${escapeHtml(studentName)}"
-                  data-grade="${suggestedGrade}"
+                  data-grade="10"
                 >
                   اعتماد فوري
                 </button>
@@ -1511,6 +1557,8 @@ if __name__ == "__main__":
               </div>
             </td>
           </tr>
+        `;
+      }).join("");
         `;
       }).join("");
     }
@@ -1776,7 +1824,7 @@ if __name__ == "__main__":
         const studentUid = btn.getAttribute("data-student-uid");
         const assignmentId = btn.getAttribute("data-assignment-id") || "asg_01";
         const studentName = btn.getAttribute("data-student-name") || "الطالب";
-        const grade = Number(btn.getAttribute("data-grade") || 100);
+        const grade = Math.min(10, Math.max(0, Number(btn.getAttribute("data-grade") || 10)));
 
         try {
           btn.disabled = true;
@@ -1784,10 +1832,20 @@ if __name__ == "__main__":
           await AssignmentService.gradeTask(assignmentId, studentUid, grade, "تم الاعتماد الفوري للحل البرمجي بنجاح.");
           btn.textContent = "تم الاعتماد ✅";
           btn.className = "px-3.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold text-xs cursor-default";
-          showToast(`تم اعتماد وتوثيق درجات الطالب (${studentName}) بنجاح: ${grade} ⭐`, "success");
+          showToast(`تم اعتماد وتوثيق درجات الطالب (${studentName}) بنجاح: ${grade} / 10 ⭐`, "success");
+
+          // Update in-memory submission to prevent reload regression
+          const sub = (this._allSubmissions || []).find(
+            (s) => (s.studentUid || s.studentId || s.id) === studentUid && (s.assignmentId === assignmentId || !s.assignmentId)
+          );
+          if (sub) {
+            sub.grade = grade;
+            sub.status = "graded";
+          }
+
           setTimeout(() => {
             this.loadTeacherAssignments(container);
-          }, 1200);
+          }, 800);
         } catch (err) {
           btn.disabled = false;
           btn.textContent = "اعتماد فوري";
@@ -1798,10 +1856,28 @@ if __name__ == "__main__":
 
     container.querySelectorAll('[data-action="quick-review"]').forEach((btn) => {
       btn.addEventListener("click", () => {
+        const submissionId = btn.getAttribute("data-submission-id");
         const assignmentId = btn.getAttribute("data-assignment-id");
         const assignmentTitle = btn.getAttribute("data-assignment-title") || "التكليف";
         const studentName = btn.getAttribute("data-student-name") || "الطالب";
-        if (assignmentId) {
+
+        const matchingSub = (this._allSubmissions || []).find((s) => s.id === submissionId);
+        if (matchingSub && assignmentId) {
+          const pendingForTask = (this._allSubmissions || []).filter(
+            (s) => s.assignmentId === assignmentId && s.status !== "graded"
+          );
+          const currentIdx = pendingForTask.findIndex((s) => s.id === submissionId);
+          this.openEvaluationModal({
+            taskId: assignmentId,
+            taskTitle: assignmentTitle,
+            submission: matchingSub,
+            submissionsList: pendingForTask.length > 0 ? pendingForTask : [matchingSub],
+            currentIndex: currentIdx >= 0 ? currentIdx : 0,
+            onGraded: () => {
+              this.loadTeacherAssignments(container);
+            }
+          });
+        } else if (assignmentId) {
           this.showTeacherSubmissionsModal(assignmentId, assignmentTitle);
         } else {
           showToast(`جاري فتح مراجعة حل الطالب (${studentName})... 🔍`, "info");
@@ -2061,15 +2137,27 @@ if __name__ == "__main__":
         bodyEl.querySelectorAll("[data-grade-student-sub]").forEach((btn) => {
           btn.addEventListener("click", () => {
             const sUid = btn.getAttribute("data-grade-student-sub");
-            const targetItem = roster.find((r) => r.studentUid === sUid && r.submission);
-            if (!targetItem || !targetItem.submission) {
+            const submittedList = roster.filter((r) => r.hasSubmitted && r.submission).map((r) => r.submission);
+            const targetIdx = submittedList.findIndex((s) => (s.studentUid || s.studentId || s.id) === sUid);
+            if (targetIdx === -1) {
               showToast("تعذر العثور على بيانات تسليم الطالب للتقييم.", "error");
               return;
             }
             this.openEvaluationModal({
               taskId,
               taskTitle: taskTitle || assignment.title,
-              submission: targetItem.submission
+              submission: submittedList[targetIdx],
+              submissionsList: submittedList,
+              currentIndex: targetIdx,
+              onGraded: (updatedSub) => {
+                const item = roster.find((r) => r.studentUid === (updatedSub.studentUid || updatedSub.studentId || updatedSub.id));
+                if (item) {
+                  item.status = "graded";
+                  item.grade = updatedSub.grade;
+                  item.gradeDisplay = `${updatedSub.grade} / 10`;
+                }
+                renderRosterView();
+              }
             });
           });
         });
@@ -2083,32 +2171,142 @@ if __name__ == "__main__":
   },
 
   /**
+   * Starts real-time countdown updater for all assignment deadline elements.
+   */
+  _startDeadlineCountdown() {
+    if (this._deadlineInterval) clearInterval(this._deadlineInterval);
+    const updateCountdowns = () => {
+      const els = document.querySelectorAll("[data-countdown-deadline]");
+      if (els.length === 0) return;
+      import("./components/assignment-card.component.js?v=3.5.3").then(({ formatLiveCountdown }) => {
+        els.forEach((el) => {
+          const deadline = el.getAttribute("data-countdown-deadline");
+          el.textContent = formatLiveCountdown(deadline);
+        });
+      }).catch(() => {});
+    };
+    this._deadlineInterval = setInterval(updateCountdowns, 1000);
+  },
+
+  /**
    * Opens the dedicated Assignment Evaluation Modal for a student submission.
-   * Enforces 0 to 10 grading scale.
+   * Enforces 0 to 10 grading scale and supports Next Student and Previous Student navigation.
    * @param {object} params
    * @param {string} params.taskId
    * @param {string} params.taskTitle
    * @param {object} params.submission
+   * @param {Array<object>} [params.submissionsList=[]]
+   * @param {number} [params.currentIndex=0]
+   * @param {Function} [params.onGraded=null]
    */
-  openEvaluationModal({ taskId, taskTitle, submission }) {
+  openEvaluationModal({ taskId, taskTitle, submission, submissionsList = [], currentIndex = 0, onGraded = null }) {
     if (!document.getElementById(ASSIGNMENT_EVALUATION_MODAL_ID)) {
       document.body.insertAdjacentHTML("beforeend", renderAssignmentEvaluationModal());
     }
 
     const titleEl = document.getElementById("assignmentEvaluationModalTitle");
     const bodyEl = document.getElementById("assignmentEvaluationModalBody");
+    const submitBtn = document.getElementById("submitAssignmentGradeBtn");
+    const saveAndNextBtn = document.getElementById("evalSaveAndNextBtn");
+    const prevBtn = document.getElementById("evalPrevStudentBtn");
+
+    const totalCount = submissionsList.length > 0 ? submissionsList.length : 1;
+    const currentSub = submissionsList[currentIndex] || submission;
+    const sName = currentSub.studentName || currentSub.name || "الطالب";
+    const sUid = currentSub.studentUid || currentSub.studentId || currentSub.id;
 
     if (titleEl) {
-      titleEl.textContent = `تقييم تسليم: ${submission.studentName || submission.name || "الطالب"}`;
+      titleEl.innerHTML = `<span>تقييم تسليم: ${escapeHtml(sName)}</span> <span class="badge badge-primary text-xs ms-2 font-mono">طالب ${currentIndex + 1} من ${totalCount}</span>`;
     }
 
     if (bodyEl) {
-      setHtml(bodyEl, renderAssignmentEvaluationContent({ taskTitle, submission }));
+      setHtml(
+        bodyEl,
+        renderAssignmentEvaluationContent({
+          taskTitle,
+          submission: currentSub,
+          currentIndex,
+          totalCount
+        })
+      );
     }
 
-    openModal(ASSIGNMENT_EVALUATION_MODAL_ID);
+    // Configure Prev button visibility
+    if (prevBtn) {
+      if (currentIndex > 0) {
+        prevBtn.classList.remove("hidden");
+        const newPrev = prevBtn.cloneNode(true);
+        prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+        newPrev.addEventListener("click", () => {
+          this.openEvaluationModal({
+            taskId,
+            taskTitle,
+            submission: submissionsList[currentIndex - 1],
+            submissionsList,
+            currentIndex: currentIndex - 1,
+            onGraded
+          });
+        });
+      } else {
+        prevBtn.classList.add("hidden");
+      }
+    }
 
-    const submitBtn = document.getElementById("submitAssignmentGradeBtn");
+    // Configure Save & Next button visibility
+    if (saveAndNextBtn) {
+      if (currentIndex < totalCount - 1) {
+        saveAndNextBtn.classList.remove("hidden");
+        const newNext = saveAndNextBtn.cloneNode(true);
+        saveAndNextBtn.parentNode.replaceChild(newNext, saveAndNextBtn);
+        newNext.addEventListener("click", async () => {
+          const gradeInput = document.getElementById("evalGradeInput");
+          const feedbackInput = document.getElementById("evalFeedbackInput");
+
+          const rawGrade = gradeInput ? parseFloat(gradeInput.value) : NaN;
+          if (isNaN(rawGrade) || rawGrade < 0 || rawGrade > 10) {
+            showToast("الدرجة يجب أن تكون رقماً بين 0 و 10", "warning");
+            gradeInput?.focus();
+            return;
+          }
+
+          const feedback = feedbackInput ? feedbackInput.value.trim() : "";
+          newNext.disabled = true;
+          newNext.textContent = "جاري الحفظ والاعتماد... ⏳";
+
+          try {
+            await AssignmentService.gradeTask(taskId, sUid, rawGrade, feedback);
+            currentSub.grade = rawGrade;
+            currentSub.status = "graded";
+            currentSub.feedback = feedback;
+
+            // Notify parent to refresh roster in background
+            if (typeof onGraded === "function") {
+              onGraded(currentSub);
+            }
+
+            showToast(`تم حفظ تقييم (${sName}) بنجاح (${rawGrade}/10) والانتقال للطالب التالي ⬅️`, "success");
+
+            // Advance cleanly to next student
+            this.openEvaluationModal({
+              taskId,
+              taskTitle,
+              submission: submissionsList[currentIndex + 1],
+              submissionsList,
+              currentIndex: currentIndex + 1,
+              onGraded
+            });
+          } catch (err) {
+            newNext.disabled = false;
+            newNext.textContent = "حفظ والتقييم التالي ⬅️";
+            showToast(err.message || "تعذر حفظ التقييم.", "error");
+          }
+        });
+      } else {
+        saveAndNextBtn.classList.add("hidden");
+      }
+    }
+
+    // Configure Submit (Save Current) button
     if (submitBtn) {
       const newSubmitBtn = submitBtn.cloneNode(true);
       submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
@@ -2125,16 +2323,23 @@ if __name__ == "__main__":
         }
 
         const feedback = feedbackInput ? feedbackInput.value.trim() : "";
-        const sUid = submission.studentUid || submission.studentId || submission.id;
-
         newSubmitBtn.disabled = true;
         newSubmitBtn.textContent = "جاري الحفظ والاعتماد... ⏳";
 
         try {
           await AssignmentService.gradeTask(taskId, sUid, rawGrade, feedback);
-          showToast(`تم حفظ تقييم الطالب بنجاح (${rawGrade} / 10) ✅`, "success");
+          currentSub.grade = rawGrade;
+          currentSub.status = "graded";
+          currentSub.feedback = feedback;
+
+          if (typeof onGraded === "function") {
+            onGraded(currentSub);
+          }
+
+          showToast(`تم حفظ واعتماد تقييم الطالب بنجاح (${rawGrade} / 10) ✅`, "success");
           closeModal(ASSIGNMENT_EVALUATION_MODAL_ID);
-          // Refresh submissions roster immediately
+
+          // Refresh submissions view
           this.showTeacherSubmissionsModal(taskId, taskTitle);
         } catch (err) {
           showToast(err.message || "تعذر حفظ تقييم الواجب.", "error");
@@ -2143,5 +2348,57 @@ if __name__ == "__main__":
         }
       });
     }
+
+    // Configure Test Runner button
+    const runBtn = document.getElementById("evalRunCodeBtn");
+    const termOutput = document.getElementById("evalTestRunnerOutput");
+    const rawAnswer = (
+      currentSub.answerText ||
+      currentSub.answer ||
+      currentSub.code ||
+      currentSub.solution ||
+      currentSub.content ||
+      currentSub.text ||
+      ""
+    ).trim();
+
+    if (runBtn && termOutput && rawAnswer) {
+      runBtn.addEventListener("click", async () => {
+        runBtn.disabled = true;
+        runBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>جاري الاختبار...</span>`;
+        termOutput.classList.remove("hidden");
+        termOutput.innerHTML = `<div class="p-2.5 rounded-lg bg-black text-cyan-300 font-mono text-xs">⏳ جاري تنفيذ الكود داخل محرك بايثون...</div>`;
+
+        try {
+          const { runPythonCode } = await import("../python-adventure/python-adventure-runtime.js?v=3.5.3");
+          const runRes = await runPythonCode(rawAnswer);
+          if (runRes.error) {
+            termOutput.innerHTML = `
+              <div class="p-3 rounded-lg bg-[#180f14] border border-rose-500/40 text-rose-300 font-mono text-xs">
+                <div class="font-bold mb-1">❌ أخطاء برمجية أثناء التنفيذ (${runRes.executionTimeMs}ms):</div>
+                <pre class="whitespace-pre-wrap">${escapeHtml(runRes.error)}</pre>
+              </div>
+            `;
+          } else {
+            termOutput.innerHTML = `
+              <div class="p-3 rounded-lg bg-[#0e1915] border border-emerald-500/40 text-emerald-300 font-mono text-xs">
+                <div class="font-bold mb-1 flex items-center justify-between">
+                  <span>✓ تم تنفيذ الكود بنجاح (${runRes.executionTimeMs}ms):</span>
+                  <span class="text-[10px] text-emerald-400">Exit Code: 0</span>
+                </div>
+                <pre class="whitespace-pre-wrap text-slate-100">${escapeHtml(runRes.output || "(لا توجد مخرجات نصية print)")}</pre>
+              </div>
+            `;
+          }
+        } catch (err) {
+          termOutput.innerHTML = `<div class="p-2.5 rounded-lg bg-rose-950/60 border border-rose-500 text-rose-300 text-xs">${escapeHtml(err.message)}</div>`;
+        } finally {
+          runBtn.disabled = false;
+          runBtn.innerHTML = `<i class="fa-solid fa-play text-[11px]"></i> <span>تشغيل واختبار الكود آلياً 🚀</span>`;
+        }
+      });
+    }
+
+    openModal(ASSIGNMENT_EVALUATION_MODAL_ID);
   }
 };

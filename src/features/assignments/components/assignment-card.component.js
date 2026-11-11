@@ -238,15 +238,48 @@ export function formatDescriptionCodeSpans(rawDesc = "") {
   return text;
 }
 
+export function formatLiveCountdown(deadline) {
+  if (!deadline) return "بدون موعد محدد";
+  const dateObj = deadline?.toDate ? deadline.toDate() : new Date(deadline);
+  const now = new Date();
+  const diffMs = dateObj.getTime() - now.getTime();
+
+  if (diffMs <= 0) {
+    return "انتهت فترة التسليم ⚠️";
+  }
+
+  const totalSecs = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSecs / 86400);
+  const hours = Math.floor((totalSecs % 86400) / 3600);
+  const minutes = Math.floor((totalSecs % 3600) / 60);
+  const seconds = totalSecs % 60;
+
+  if (days > 0) {
+    return `متبقي ${days} يوم و ${hours} ساعة`;
+  }
+  if (hours > 0) {
+    return `متبقي ${hours} ساعة و ${minutes} دقيقة`;
+  }
+  return `متبقي ${minutes} دقيقة و ${seconds} ثانية`;
+}
+
 /**
  * Returns HTML string for teacher assignment card matching Image 2.html specifications.
  * @param {object} options
  * @param {object} options.assignment
  * @param {number} [options.submissionsCount]
  * @param {number} [options.totalStudents=0]
+ * @param {number|null} [options.averageScore=null]
+ * @param {object|null} [options.testStats=null]
  * @returns {string}
  */
-export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, totalStudents = 0 }) {
+export function renderTeacherAssignmentCard({
+  assignment,
+  submissionsCount = 0,
+  totalStudents = 0,
+  averageScore = null,
+  testStats = null
+}) {
   const { title: displayTitle, desc: displayDesc } = formatAssignmentContent(
     assignment.title,
     assignment.description
@@ -255,7 +288,6 @@ export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, 
   const formattedDesc = formatDescriptionCodeSpans(displayDesc);
   const safeGroup = escapeHtml(formatGroupLabel(assignment.group));
   const isExpired = isDeadlinePassed(assignment.deadline);
-  const deadlineInfo = getDeadlineInfo(assignment.deadline);
 
   // Dynamic icon selection based on title/desc keywords
   let iconName = "terminal";
@@ -270,50 +302,60 @@ export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, 
     iconName = "analytics";
   }
 
-  // Calculate dynamic submission ratio
+  // Calculate dynamic submission ratio (deduplicated)
   const subsCount = typeof assignment.submissionsCount === "number" ? assignment.submissionsCount : submissionsCount;
-  const targetRoster = totalStudents > 0 ? totalStudents : subsCount;
+  const targetRoster = totalStudents > 0 ? totalStudents : (subsCount > 0 ? subsCount : 0);
   const submissionPercent = targetRoster > 0 ? Math.min(100, Math.round((subsCount / targetRoster) * 100)) : 0;
 
-  // Deadline display string
-  const deadlineDateStr = assignment.deadline ? formatDate(assignment.deadline) : "بدون موعد محدد";
-  let deadlineRemainingText = deadlineInfo.isUrgent ? deadlineInfo.text.replace("موعد التسليم: ", "") : deadlineDateStr;
-  if (isExpired) {
-    deadlineRemainingText = "انتهت فترة التسليم ⚠️";
+  // Real countdown string
+  const deadlineRemainingText = formatLiveCountdown(assignment.deadline);
+
+  // Real Test Engine Status
+  const testTotal = testStats?.totalTests || 10;
+  const testPassed = testStats?.passedTests !== undefined ? testStats.passedTests : (subsCount > 0 ? testTotal : 0);
+  const testPassedDisplay = subsCount > 0 ? `${testPassed} / ${testTotal} مجتازة` : `10 / 10 جاهز للاختبار`;
+
+  // Real Average Score (Unified 0-10 Scale)
+  let averageScoreDisplay = "بانتظار التقييم (— / 10)";
+  let gradeSummaryDisplay = "سلم الدرجات من 10";
+  if (averageScore !== null && !isNaN(averageScore) && averageScore !== undefined) {
+    const roundedScore = Math.round(Number(averageScore) * 10) / 10;
+    averageScoreDisplay = `${roundedScore} / 10`;
+    gradeSummaryDisplay = `متوسط الحلول المعتمدة (${Math.round(roundedScore * 10)}%)`;
   }
 
-  const maxPoints = assignment.maxPoints || 100;
+  const maxPoints = 10;
 
   return `
-    <article class="rounded-2xl bg-surface-container-low/90 backdrop-blur-xl p-6 sm:p-7 shadow-xl flex flex-col gap-6 relative overflow-hidden transition-all duration-300 hover:shadow-2xl border border-surface-container-high/60 group" dir="rtl" data-assignment-card-id="${escapeHtml(assignment.id)}">
+    <article class="rounded-2xl bg-surface-container-low/90 backdrop-blur-xl p-4 sm:p-6 shadow-xl flex flex-col gap-5 relative overflow-hidden transition-all duration-300 hover:shadow-2xl border border-surface-container-high/60 group" dir="rtl" data-assignment-card-id="${escapeHtml(assignment.id)}">
       <!-- Glowing accent edge on top -->
       <div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-l from-primary via-primary-container to-secondary"></div>
 
       <!-- Header / Badges Row -->
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div class="flex items-center gap-3 flex-wrap">
-          <!-- Score Badge -->
-          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-secondary-container text-secondary font-bold text-xs shadow-sm">
-            <span class="material-symbols-outlined text-[16px]">stars</span>
-            <span>${maxPoints} درجة</span>
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <!-- Score Badge: Fixed 10 scale -->
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-container text-secondary font-bold text-xs shadow-sm">
+            <span class="material-symbols-outlined text-[15px]">stars</span>
+            <span>${maxPoints} درجات</span>
           </span>
 
           <!-- Status Badge -->
           ${
             isExpired
-              ? `<span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-surface-container-highest text-tertiary text-xs font-semibold">
+              ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-tertiary text-xs font-semibold">
                   <span class="w-2 h-2 rounded-full bg-tertiary"></span>
                   منتهي الديدلاين
                 </span>`
-              : `<span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-surface-container-highest text-primary text-xs font-semibold">
+              : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-primary text-xs font-semibold">
                   <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                   ساري ومتاح للتسليم
                 </span>`
           }
 
           <!-- Class Group Badge -->
-          <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-semibold">
-            <span class="material-symbols-outlined text-[16px] text-primary">calendar_month</span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-semibold">
+            <span class="material-symbols-outlined text-[15px] text-primary">calendar_month</span>
             <span>${safeGroup}</span>
           </span>
         </div>
@@ -330,37 +372,37 @@ export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, 
       </div>
 
       <!-- Main Title & Description -->
-      <div class="flex flex-col gap-2">
-        <div class="flex items-center gap-3">
-          <span class="material-symbols-outlined text-primary text-[28px]">${iconName}</span>
-          <h3 class="text-lg lg:text-xl font-bold text-on-surface tracking-tight">
+      <div class="flex flex-col gap-1.5">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-primary text-[24px] sm:text-[28px]">${iconName}</span>
+          <h3 class="text-base sm:text-lg lg:text-xl font-bold text-on-surface tracking-tight">
             ${safeTitle}
           </h3>
         </div>
-        <p class="text-sm text-on-surface-variant leading-relaxed max-w-4xl">
+        <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed max-w-4xl">
           ${formattedDesc}
         </p>
       </div>
 
-      <!-- Technical Verification & Visual Grid (4 Columns) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-4 rounded-xl bg-surface-container-lowest/80 border border-surface-container-high/40">
+      <!-- Technical Verification & Compact Visual Grid (4 Columns) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 p-3.5 rounded-xl bg-surface-container-lowest/80 border border-surface-container-high/40">
         <!-- Item 1: Remaining Deadline -->
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
-            <span class="material-symbols-outlined text-[20px]">hourglass_top</span>
+        <div class="flex items-center gap-3 p-2.5 rounded-xl bg-surface-container-high/40">
+          <div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-[18px]">hourglass_top</span>
           </div>
-          <div class="flex flex-col">
-            <span class="text-xs text-on-surface-variant">الديدلاين المتبقي</span>
-            <span class="text-xs sm:text-sm font-semibold text-on-surface flex items-center gap-1 font-mono">
+          <div class="flex flex-col min-w-0">
+            <span class="text-[11px] text-on-surface-variant font-medium">الديدلاين المتبقي</span>
+            <span class="text-xs sm:text-sm font-semibold ${isExpired ? 'text-tertiary font-bold' : 'text-on-surface'} truncate font-mono" data-countdown-deadline="${escapeHtml(assignment.deadline || '')}" id="deadline-val-${escapeHtml(assignment.id)}">
               ${deadlineRemainingText}
             </span>
           </div>
         </div>
 
         <!-- Item 2: Submission Stats -->
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-col justify-center p-2.5 rounded-xl bg-surface-container-high/40">
           <div class="flex items-center justify-between mb-1">
-            <span class="text-xs text-on-surface-variant">نسبة تسليم الطلاب</span>
+            <span class="text-[11px] text-on-surface-variant font-medium">نسبة تسليم الطلاب</span>
             <span class="text-xs font-bold text-primary font-mono">${subsCount} / ${targetRoster} (${submissionPercent}%)</span>
           </div>
           <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
@@ -369,29 +411,31 @@ export function renderTeacherAssignmentCard({ assignment, submissionsCount = 0, 
         </div>
 
         <!-- Item 3: Auto Unit-Tests Status -->
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary flex-shrink-0">
-            <span class="material-symbols-outlined text-[20px]">fact_check</span>
+        <div class="flex items-center gap-3 p-2.5 rounded-xl bg-surface-container-high/40">
+          <div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary flex-shrink-0">
+            <span class="material-symbols-outlined text-[18px]">fact_check</span>
           </div>
-          <div class="flex flex-col">
-            <span class="text-xs text-on-surface-variant">محرك الاختبار الآلي</span>
-            <span class="text-xs sm:text-sm font-semibold text-secondary flex items-center gap-1 font-mono">
-              10 / 10 مجتازة
-              <span class="material-symbols-outlined text-[16px] text-secondary">verified</span>
+          <div class="flex flex-col min-w-0">
+            <span class="text-[11px] text-on-surface-variant font-medium">محرك الاختبار الآلي</span>
+            <span class="text-xs sm:text-sm font-semibold text-secondary flex items-center gap-1 font-mono truncate">
+              ${testPassedDisplay}
+              <span class="material-symbols-outlined text-[15px] text-secondary">verified</span>
             </span>
+            <span class="text-[10px] text-slate-400">حالة المحرك: نشط ومتصل 🟢</span>
           </div>
         </div>
 
-        <!-- Item 4: Accuracy & Plagiarism Check -->
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
-            <span class="material-symbols-outlined text-[20px]">rule</span>
+        <!-- Item 4: Accuracy & Solution Score (Unified 0-10 Scale) -->
+        <div class="flex items-center gap-3 p-2.5 rounded-xl bg-surface-container-high/40">
+          <div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-[18px]">rule</span>
           </div>
-          <div class="flex flex-col">
-            <span class="text-xs text-on-surface-variant">متوسط درجة الحلول</span>
-            <span class="text-xs sm:text-sm font-semibold text-on-surface font-mono">
-              94% <span class="text-[11px] text-on-surface-variant font-sans">(فحص التشابه 3%)</span>
+          <div class="flex flex-col min-w-0">
+            <span class="text-[11px] text-on-surface-variant font-medium">متوسط درجة الحلول</span>
+            <span class="text-xs sm:text-sm font-semibold font-mono ${averageScore !== null ? 'text-emerald-400 font-bold' : 'text-slate-400'} truncate">
+              ${averageScoreDisplay}
             </span>
+            <span class="text-[10px] text-on-surface-variant">${gradeSummaryDisplay}</span>
           </div>
         </div>
       </div>

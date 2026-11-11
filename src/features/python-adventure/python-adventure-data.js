@@ -96,7 +96,7 @@ export const WORLDS_DATA = [
     concept: "المشروع الختامي الشامل وتتويج بطل بايثون",
     description: "التحدي النهائي: دمج كل ما تعلمته لبناء أنظمة برمجية مصغرة متكاملة.",
     color: "#eab308",
-    levelsCount: 3,
+    levelsCount: 4,
     requiredWorldId: "world-7"
   }
 ];
@@ -1188,6 +1188,161 @@ export const CHALLENGES_CLIENT_DATA = {
       "h = Hero('Python Hero', 80)",
       "h.heal(20)",
       "h.status()"
+    ],
+    nextChallengeId: "world-8-level-4"
+  },
+  "world-8-level-4": {
+    id: "world-8-level-4",
+    worldId: "world-8",
+    worldTitle: "حلبة الأبطال",
+    levelNumber: 4,
+    title: "المشروع الختامي: خوارزمية ترتيب درجات الأكاديمية",
+    englishTitle: "Academy Data Sorting & Analytics Capstone",
+    subtitle: "مشروع مصغر: خوارزميات الترتيب والبحث ومعالجة البيانات",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 400,
+    maxScore: 10,
+    skills: ["algorithms", "sorting", "lists", "problem_solving"],
+    story: "في الأكاديمية المركزية، لديك قائمة نتائج طلاب students = [{'name': 'Ali', 'score': 85}, {'name': 'Sara', 'score': 95}, {'name': 'Omar', 'score': 90}]. رتب الطلاب تنازلياً حسب score واطبع كل طالب في سطر بالصيغة: f'{s[\"name\"]}: {s[\"score\"]}'.",
+    microLesson: {
+      concept: "ترتيب القواميس داخل القوائم",
+      summary: "يمكنك استخدام sorted مع دالة lambda لتحديد مفتاح الترتيب key=lambda x: x['score'] وتمرير reverse=True للترتيب التنازلي.",
+      exampleCode: "sorted_items = sorted(students, key=lambda s: s['score'], reverse=True)\nfor s in sorted_items:\n    print(f'{s[\"name\"]}: {s[\"score\"]}')"
+    },
+    starterCode: "students = [{'name': 'Ali', 'score': 85}, {'name': 'Sara', 'score': 95}, {'name': 'Omar', 'score': 90}]\n# رتب تنازلياً حسب score واطبع النتائج\n",
+    requirements: [
+      "رتب قائمة students تنازلياً حسب score",
+      "اطبع كل طالب في سطر:",
+      "Sara: 95",
+      "Omar: 90",
+      "Ali: 85"
+    ],
+    expectedOutput: "Sara: 95\nOmar: 90\nAli: 85",
+    hints: [
+      "sorted_students = sorted(students, key=lambda x: x['score'], reverse=True)",
+      "for s in sorted_students:",
+      "    print(f\"{s['name']}: {s['score']}\")"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "Sara: 95\nOmar: 90\nAli: 85", description: "ترتيب الطلاب تنازلياً" }
+    ],
+    nextChallengeId: null
+  },
+
+  // DAILY CHALLENGES POOL (Fully integrated & persistent)
+  "daily-loop-sum": {
+    id: "daily-loop-sum",
+    worldId: "daily",
+    worldTitle: "التحدي اليومي",
+    levelNumber: 1,
+    title: "تحدي جمع الأعداد الزوجية 🔥",
+    englishTitle: "Sum of Even Numbers",
+    subtitle: "تحدي الـ 24 ساعة",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 100,
+    maxScore: 10,
+    skills: ["loops", "range", "arithmetic"],
+    story: "اكتب برنامجاً بلغة بايثون يحسب مجموع الأعداد الزوجية من 1 إلى 20 واطبع الناتج النهائي فقط (الناتج هو 110).",
+    microLesson: {
+      concept: "جمع الأعداد الزوجية",
+      summary: "يمكنك استخدام for i in range(2, 21, 2) للمرور على الأعداد الزوجية فقط، وجمعها في متغير total.",
+      exampleCode: "total = sum(range(2, 21, 2))\nprint(total)"
+    },
+    starterCode: "total = 0\n# احسب واطبع مجموع الأعداد الزوجية من 1 إلى 20\n",
+    requirements: ["استخدم for loop مع range أو دالة sum", "اطبع الناتج النهائي فقط (110)"],
+    expectedOutput: "110",
+    hints: [
+      "for i in range(2, 21, 2): total += i",
+      "print(total)"
+    ],
+    testCases: [
+      { input: "", expectedOutput: "110", description: "حساب مجموع الأعداد الزوجية حتى 20" }
+    ],
+    nextChallengeId: null
+  },
+  "daily-string-reverse": {
+    id: "daily-string-reverse",
+    worldId: "daily",
+    worldTitle: "التحدي اليومي",
+    levelNumber: 2,
+    title: "عكس الكلمات البرمجية 🔄",
+    englishTitle: "Reverse String Challenge",
+    subtitle: "تحدي الـ 24 ساعة",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 100,
+    maxScore: 10,
+    skills: ["strings", "slicing", "loops"],
+    story: "لديك الكلمة word = 'Python'. اعكس ترتيب حروفها واطبع الكلمة المعكوسة (الناتج هو nohtyP).",
+    microLesson: {
+      concept: "عكس النصوص",
+      summary: "يمكنك استخدام تقنية التقطيع [::-1] أو دالة reversed لعكس النصوص بسهولة.",
+      exampleCode: "txt = 'ABC'\nprint(txt[::-1])"
+    },
+    starterCode: "word = 'Python'\n# اعكس الكلمة واطبع الناتج\n",
+    requirements: ["اعكس النص word", "اطبع الناتج المعكوس (nohtyP)"],
+    expectedOutput: "nohtyP",
+    hints: ["print(word[::-1])"],
+    testCases: [
+      { input: "", expectedOutput: "nohtyP", description: "عكس كلمة Python" }
+    ],
+    nextChallengeId: null
+  },
+  "daily-grade-calc": {
+    id: "daily-grade-calc",
+    worldId: "daily",
+    worldTitle: "التحدي اليومي",
+    levelNumber: 3,
+    title: "فاحص الدرجات السريع 🎯",
+    englishTitle: "Fast Grade Inspector",
+    subtitle: "تحدي الـ 24 ساعة",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 100,
+    maxScore: 10,
+    skills: ["conditions", "if-else"],
+    story: "عرف متغيراً score = 85. افحص إذا كان score >= 50 اطبع 'Pass' وإلا اطبع 'Fail'.",
+    microLesson: {
+      concept: "الشروط البسيطة",
+      summary: "استخدم if للفحص و else للحالة البديلة.",
+      exampleCode: "if score >= 50:\n    print('Pass')"
+    },
+    starterCode: "score = 85\n# افحص واطبع النتيجة\n",
+    requirements: ["عرف score = 85", "اطبع Pass إذا كان >= 50 وإلا Fail"],
+    expectedOutput: "Pass",
+    hints: ["if score >= 50: print('Pass')"],
+    testCases: [
+      { input: "", expectedOutput: "Pass", description: "فحص درجة 85" }
+    ],
+    nextChallengeId: null
+  },
+  "daily-dict-counter": {
+    id: "daily-dict-counter",
+    worldId: "daily",
+    worldTitle: "التحدي اليومي",
+    levelNumber: 4,
+    title: "معدل تكرار الكلمات 📊",
+    englishTitle: "Word Frequency Counter",
+    subtitle: "تحدي الـ 24 ساعة",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 100,
+    maxScore: 10,
+    skills: ["dictionaries", "strings", "loops"],
+    story: "لديك الكلمات items = ['code', 'python', 'code', 'fast']. أنشئ قاموساً يحسب تكرار كل كلمة واطبع القاموس النهائي.",
+    microLesson: {
+      concept: "حساب التكرار في القواميس",
+      summary: "يمكنك استخدام counts[item] = counts.get(item, 0) + 1 لحساب التكرار بدقة.",
+      exampleCode: "counts = {}\nfor x in items:\n    counts[x] = counts.get(x, 0) + 1\nprint(counts)"
+    },
+    starterCode: "items = ['code', 'python', 'code', 'fast']\ncounts = {}\n# احسب التكرار واطبع counts\n",
+    requirements: ["احسب تكرار كل عنصر في items داخل قاموس counts", "اطبع counts"],
+    expectedOutput: "{'code': 2, 'python': 1, 'fast': 1}",
+    hints: ["for x in items: counts[x] = counts.get(x, 0) + 1\nprint(counts)"],
+    testCases: [
+      { input: "", expectedOutput: "{'code': 2, 'python': 1, 'fast': 1}", description: "حساب تكرار العناصر" }
     ],
     nextChallengeId: null
   }

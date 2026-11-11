@@ -26,11 +26,28 @@ export function getSecondaryAuth() {
   return getAuth(secApp);
 }
 
+let _cachedStudents = null;
+let _cachedStudentsTimestamp = 0;
+const CACHE_TTL_MS = 60 * 1000; // 60 seconds TTL
+
 export const StudentsService = {
   /**
-   * Fetches all registered students (Teacher / Admin) deduplicated by phone/authUid.
+   * Invalidate student cache on data mutations.
    */
-  async getAllStudents() {
+  invalidateCache() {
+    _cachedStudents = null;
+    _cachedStudentsTimestamp = 0;
+  },
+
+  /**
+   * Fetches all registered students (Teacher / Admin) deduplicated by phone/authUid.
+   * Uses in-memory caching for snappy tab switching & lowered Firestore read costs.
+   */
+  async getAllStudents({ forceRefresh = false } = {}) {
+    if (!forceRefresh && _cachedStudents && Date.now() - _cachedStudentsTimestamp < CACHE_TTL_MS) {
+      return _cachedStudents;
+    }
+
     try {
       const snap = await getDocs(collection(db, COLLECTIONS.STUDENTS));
       const studentMap = new Map();
@@ -58,7 +75,9 @@ export const StudentsService = {
           });
         }
       });
-      return Array.from(studentMap.values());
+      _cachedStudents = Array.from(studentMap.values());
+      _cachedStudentsTimestamp = Date.now();
+      return _cachedStudents;
     } catch (err) {
       throw normalizeError(err);
     }
@@ -245,6 +264,8 @@ export const StudentsService = {
         }, { merge: true });
       } catch (_) {}
 
+      StudentsService.invalidateCache();
+
       return {
         success: true,
         studentUid,
@@ -297,6 +318,8 @@ export const StudentsService = {
         } catch (_) {}
       }
 
+      StudentsService.invalidateCache();
+
       return {
         success: true,
         message: "تم تعيين كلمة المرور بنجاح ✅"
@@ -312,9 +335,11 @@ export const StudentsService = {
   async deleteStudent(studentUid) {
     if (FEATURES.USE_CLOUD_FUNCTIONS) {
       try {
-        return await callApi("deleteStudent", {
+        const res = await callApi("deleteStudent", {
           studentUid
         });
+        StudentsService.invalidateCache();
+        return res;
       } catch (err) {
         console.warn("Cloud function deleteStudent unavailable, executing direct Firestore fallback:", err?.message || err);
       }
@@ -325,6 +350,8 @@ export const StudentsService = {
       try {
         await deleteDoc(doc(db, "users", studentUid));
       } catch (_) {}
+
+      StudentsService.invalidateCache();
 
       return {
         success: true,
@@ -350,6 +377,7 @@ export const StudentsService = {
           } catch (_) {}
         }
       }
+      StudentsService.invalidateCache();
     } catch (err) {
       throw normalizeError(err);
     }

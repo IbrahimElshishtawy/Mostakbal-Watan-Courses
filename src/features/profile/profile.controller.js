@@ -272,12 +272,16 @@ export const ProfileController = {
       });
     });
 
-    // 4. Language Selection
+    // 4. Language Selection (Tracks pending choice without premature visual shift)
+    let pendingLanguage = ProfileService.getSettings().language;
     container.querySelector("#platformLanguageSelect")?.addEventListener("change", (e) => {
-      const selected = e.target.value;
-      ProfileService.applyLanguage(selected);
-      profileState.set("language", selected);
-      showToast(`تم ضبط لغة المنصة: ${selected === "ar" ? "العربية" : "English"} 🌐`, "info");
+      pendingLanguage = e.target.value;
+      showToast(
+        pendingLanguage === "ar"
+          ? "تم اختيار اللغة العربية 🇪🇬 (اضغط حفظ التفضيلات لتثبيت التغيير)"
+          : "English selected 🇬🇧 (Click Save Preferences to apply)",
+        "info"
+      );
     });
 
     // 5. Sound FX Toggles & Test Button
@@ -382,13 +386,46 @@ export const ProfileController = {
       });
     });
 
-    // 11. Save All Confirmation Button
-    container.querySelector("#stSaveAllBtn")?.addEventListener("click", () => {
-      const soundEnabled = ProfileService.getSettings().soundFx;
-      if (soundEnabled) {
-        playSynthesizedChime(587, 880);
+    // 11. Save All Confirmation Button (Authoritative Cloud & Local Sync)
+    container.querySelector("#stSaveAllBtn")?.addEventListener("click", async (e) => {
+      const btn = e.currentTarget;
+      const originalHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>جاري الحفظ والمزامنة...</span>`;
+
+      try {
+        const soundToggle = container.querySelector("#stSoundFxToggle");
+        const clickToggle = container.querySelector("#stClickSoundToggle");
+        const examToggle = container.querySelector("#stExamAlertsToggle");
+        const rankToggle = container.querySelector("#stRankAlertsToggle");
+        const lectureToggle = container.querySelector("#stLectureAlertsToggle");
+
+        const result = await ProfileService.saveAllSettings({
+          language: pendingLanguage,
+          soundFx: soundToggle ? soundToggle.checked : true,
+          clickSound: clickToggle ? clickToggle.checked : true,
+          examAlerts: examToggle ? examToggle.checked : true,
+          rankAlerts: rankToggle ? rankToggle.checked : true,
+          lectureAlerts: lectureToggle ? lectureToggle.checked : true
+        });
+
+        if (result.soundFx) {
+          playSynthesizedChime(587, 880);
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+
+        showToast("تم حفظ وتثبيت كافة التفضيلات بنجاح في حسابك الأكاديمي 🚀", "success");
+
+        // Refresh settings view to reflect full translation
+        this.loadSettingsView(container);
+      } catch (saveErr) {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+        console.error("Save settings error:", saveErr);
+        showToast("حدث خطأ أثناء حفظ التفضيلات، يرجى إعادة المحاولة.", "error");
       }
-      showToast("تم حفظ وتثبيت كافة التفضيلات بنجاح في حسابك الأكاديمي 🚀", "success");
     });
   }
 };

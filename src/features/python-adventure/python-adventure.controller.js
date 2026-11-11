@@ -1121,8 +1121,12 @@ export const PythonAdventureController = {
 
     } catch (err) {
       console.error("Submission failed:", err);
-      adventureStore.setState({ isSubmitting: false }, { notify: false });
-      alert("حدث خطأ أثناء إرسال الحل. حاول مرة أخرى.");
+      adventureStore.setState({ isSubmitting: false, editorCode: code }, { notify: false });
+      this.showResultModal({
+        passed: false,
+        feedback: "حدث خطأ أثناء إرسال الحل للتحقق: " + (err.message || "يرجى المحاولة مرة أخرى."),
+        errorDetails: err.message || "تعذر التحقق من الحل. تم حفظ الكود في المحرر ويمكنك إعادة المحاولة فوراً."
+      });
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -1256,8 +1260,8 @@ export const PythonAdventureController = {
     });
 
     document.getElementById("startDailyChallengeBtn")?.addEventListener("click", () => {
-      // Launch daily challenge challenge
-      const dailyChallengeObj = {
+      // Launch daily challenge from authoritative challenges data
+      const dailyChallengeObj = CHALLENGES_CLIENT_DATA["daily-loop-sum"] || {
         id: "daily-loop-sum",
         worldTitle: "التحدي اليومي",
         levelNumber: 1,
@@ -1266,14 +1270,16 @@ export const PythonAdventureController = {
         difficulty: "medium",
         type: "write_code",
         baseXp: 100,
+        maxScore: 10,
         story: "اكتب برنامجاً بلغة بايثون يحسب مجموع الأعداد الزوجية من 1 إلى 20 واطبع الناتج النهائي فقط (الناتج هو 110).",
         microLesson: {
           concept: "جمع الأعداد الزوجية",
           summary: "يمكنك استخدام for i in range(2, 21, 2) للمرور على الأعداد الزوجية فقط، وجمعها في متغير total."
         },
         starterCode: "total = 0\n# احسب واطبع مجموع الأعداد الزوجية من 1 إلى 20\n",
-        requirements: ["استخدم for loop مع range", "اطبع الناتج النهائي فقط (110)"],
-        hints: ["for i in range(2, 21, 2): total += i", "print(total)"]
+        requirements: ["استخدم for loop مع range أو دالة sum", "اطبع الناتج النهائي فقط (110)"],
+        hints: ["for i in range(2, 21, 2): total += i", "print(total)"],
+        expectedOutput: "110"
       };
       this.showMissionModal(dailyChallengeObj, "story");
     });

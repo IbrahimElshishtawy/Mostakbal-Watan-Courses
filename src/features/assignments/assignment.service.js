@@ -75,7 +75,19 @@ export async function getAllAssignments() {
 export async function getAllSubmissions() {
   try {
     const snap = await getDocs(collection(db, COLLECTIONS.SUBMISSIONS));
-    const submissions = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    const submissions = snap.docs.map((d) => {
+      const data = d.data();
+      const hasGrade = data.grade !== null && data.grade !== undefined && !isNaN(Number(data.grade));
+      const normGrade = hasGrade ? normalizeAssignmentGrade(data.grade, 10) : null;
+      return {
+        id: d.id,
+        ...data,
+        grade: normGrade,
+        status: hasGrade || data.status === "graded" ? "graded" : (data.status || "submitted"),
+        maxPoints: 10,
+        maxScore: 10
+      };
+    });
     return submissions.sort((a, b) => {
       const timeA = a.submittedAt?.toDate?.() || new Date(a.submittedAt || a.createdAt || 0);
       const timeB = b.submittedAt?.toDate?.() || new Date(b.submittedAt || b.createdAt || 0);
@@ -383,15 +395,44 @@ export const AssignmentService = {
 
   /**
    * Teacher grades student assignment with resilient direct Firestore fallback.
+   * Enforces 0-10 scale and persists full audit record.
    */
   async gradeTask(assignmentId, studentUid, grade, feedback = "") {
+    const rawNum = Number(grade);
+    const validGrade = isNaN(rawNum)
+      ? 10
+      : (rawNum > 10 ? Math.round((rawNum / 100) * 100) / 10 : Math.min(10, Math.max(0, rawNum)));
+
+    const user = auth.currentUser;
+    const teacherId = user?.uid || "teacher";
+    const nowIso = new Date().toISOString();
+    const submissionId = `${studentUid}_${assignmentId}`;
+
+    const gradingUpdate = {
+      grade: validGrade,
+      score: validGrade,
+      maxScore: 10,
+      maxPoints: 10,
+      feedback: (feedback || "").trim(),
+      status: "graded",
+      evaluationStatus: "graded",
+      gradedBy: teacherId,
+      teacherId: teacherId,
+      studentId: studentUid,
+      studentUid: studentUid,
+      assignmentId: assignmentId,
+      submissionId: submissionId,
+      evaluationTimestamp: nowIso,
+      gradedAt: serverTimestamp()
+    };
+
     if (FEATURES.USE_CLOUD_FUNCTIONS) {
       try {
-        return await callApi("gradeAssignment", {
+        await callApi("gradeAssignment", {
           assignmentId,
           studentUid,
-          grade: Number(grade),
-          feedback
+          grade: validGrade,
+          feedback: gradingUpdate.feedback
         });
       } catch (apiErr) {
         console.warn("Cloud function gradeAssignment unavailable, executing direct Firestore fallback:", apiErr?.message || apiErr);
@@ -399,25 +440,18 @@ export const AssignmentService = {
     }
 
     try {
-      const user = auth.currentUser;
-      const gradingUpdate = {
-        grade: Number(grade),
-        feedback: (feedback || "").trim(),
-        gradedBy: user?.uid || "teacher",
-        gradedAt: serverTimestamp()
-      };
-
-      // 1. Update subcollection
+      // 1. Update subcollection: /assignments/{id}/submissions/{studentUid}
       const subDocRef = doc(db, COLLECTIONS.ASSIGNMENTS, assignmentId, COLLECTIONS.SUBMISSIONS, studentUid);
       await setDoc(subDocRef, gradingUpdate, { merge: true });
 
-      // 2. Update legacy doc
+      // 2. Update legacy top-level doc: /submissions/{studentUid}_{assignmentId}
       const legacyDocId = `${studentUid}_${assignmentId}`;
       await setDoc(doc(db, COLLECTIONS.SUBMISSIONS, legacyDocId), gradingUpdate, { merge: true });
 
       return {
         success: true,
-        message: "تم حفظ تقييم الواجب بنجاح ✅"
+        message: "تم حفظ تقييم الواجب بنجاح ✅",
+        grade: validGrade
       };
     } catch (fsErr) {
       throw normalizeError(fsErr);

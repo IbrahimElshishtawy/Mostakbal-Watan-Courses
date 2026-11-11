@@ -196,11 +196,33 @@ export const StudentsController = {
     });
   },
 
+  async _ensureXLSX() {
+    if (window.XLSX) return window.XLSX;
+    return new Promise((resolve) => {
+      const existing = document.querySelector('script[src*="xlsx"]');
+      if (existing) {
+        if (window.XLSX) return resolve(window.XLSX);
+        existing.addEventListener("load", () => resolve(window.XLSX));
+        existing.addEventListener("error", () => resolve(null));
+        setTimeout(() => resolve(window.XLSX || null), 3000);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+      script.async = true;
+      script.onload = () => resolve(window.XLSX);
+      script.onerror = () => resolve(null);
+      document.head.appendChild(script);
+      setTimeout(() => resolve(window.XLSX || null), 4000);
+    });
+  },
+
   /**
    * Exports student roster to Excel (.xlsx) with clean Arabic UTF-8 CSV fallback.
    */
-  exportStudentsExcel() {
+  async exportStudentsExcel() {
     try {
+      await this._ensureXLSX();
       const all = studentsState.get("students") || [];
       const groupFilter = studentsState.get("filterGroup") || "ALL";
       const search = (studentsState.get("searchQuery") || "").toLowerCase().trim();
@@ -309,6 +331,8 @@ export const StudentsController = {
       const file = e.target.files?.[0];
       if (input.parentNode) input.parentNode.removeChild(input);
       if (!file) return;
+
+      await this._ensureXLSX();
 
       if (!window.XLSX) {
         showToast("جاري تهيئة قارئ ملفات Excel... يرجى المحاولة بعد قليل", "info");

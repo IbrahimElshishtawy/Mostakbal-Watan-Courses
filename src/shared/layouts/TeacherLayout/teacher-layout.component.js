@@ -197,11 +197,17 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
               <span id="teacherTopbarUserEmail" class="text-[10px] text-slate-500 font-mono">teacher@shababha.edu.eg</span>
             </div>
           </div>
+
+          <!-- Prominent Logout Button in Header (Instantly accessible on Mobile & Desktop) -->
+          <button id="teacherTopbarLogoutBtn" type="button" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 text-xs font-bold transition-all cursor-pointer shadow-sm" title="تسجيل الخروج">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span class="hidden sm:inline">تسجيل الخروج</span>
+          </button>
         </div>
       </header>
 
-      <!-- Main Tab Content Area -->
-      <main class="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto" role="main">
+      <!-- Main Tab Content Area (Responsive padding with mobile bottom nav clearance) -->
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 space-y-6 overflow-y-auto" role="main">
         <section id="sec-data" class="tab-content active" aria-labelledby="tab-btn-data">
           <div id="teacherDataContainer"></div>
         </section>
@@ -230,11 +236,36 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
           <div id="teacherSettingsContainer"></div>
         </section>
       </main>
+
+      <!-- Mobile Bottom Navigation Bar (Compact & Accessible) -->
+      <nav id="teacherMobileBottomNav" class="fixed bottom-0 right-0 left-0 bg-[#0f1420]/95 backdrop-blur-lg border-t border-[#1e2a3f] z-30 flex items-center justify-around px-2 py-2 lg:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+        <button type="button" class="mobile-bottom-nav-item flex flex-col items-center gap-1 py-1 px-2 rounded-lg text-slate-400 hover:text-white transition-all text-[11px] font-semibold cursor-pointer" data-section="data">
+          <i class="fa-solid fa-book-open text-sm"></i>
+          <span>الدروس</span>
+        </button>
+        <button type="button" class="mobile-bottom-nav-item flex flex-col items-center gap-1 py-1 px-2 rounded-lg text-slate-400 hover:text-white transition-all text-[11px] font-semibold cursor-pointer" data-section="assignments">
+          <i class="fa-solid fa-code text-sm"></i>
+          <span>الواجبات</span>
+        </button>
+        <button type="button" class="mobile-bottom-nav-item flex flex-col items-center gap-1 py-1 px-2 rounded-lg text-slate-400 hover:text-white transition-all text-[11px] font-semibold cursor-pointer" data-section="students">
+          <i class="fa-solid fa-users text-sm"></i>
+          <span>الطلاب</span>
+        </button>
+        <button type="button" class="mobile-bottom-nav-item flex flex-col items-center gap-1 py-1 px-2 rounded-lg text-slate-400 hover:text-white transition-all text-[11px] font-semibold cursor-pointer" data-section="python-adventure">
+          <i class="fa-brands fa-python text-sm text-emerald-400"></i>
+          <span>بايثون</span>
+        </button>
+        <button type="button" class="mobile-bottom-nav-item flex flex-col items-center gap-1 py-1 px-2 rounded-lg text-rose-400 hover:text-rose-300 transition-all text-[11px] font-semibold cursor-pointer" id="teacherMobileBottomLogoutBtn" title="تسجيل الخروج">
+          <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+          <span>خروج</span>
+        </button>
+      </nav>
     </div>
   `;
 
   const sidebar = document.getElementById("teacherSidebar");
   const navItems = container.querySelectorAll(".admin-nav-item[data-section]");
+  const mobileNavItems = container.querySelectorAll("#teacherMobileBottomNav [data-section]");
   const topbarBreadcrumb = document.getElementById("teacherTopbarCurrentTab");
 
   const tabLabels = {
@@ -257,6 +288,15 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
         btn.className = `admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-right ${activeNavClasses}`;
       } else {
         btn.className = `admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-right ${inactiveNavClasses}`;
+      }
+    });
+
+    mobileNavItems.forEach((btn) => {
+      const match = btn.getAttribute("data-section") === sectionId;
+      if (match) {
+        btn.className = "mobile-bottom-nav-item flex flex-col items-center gap-1 py-1 px-2.5 rounded-lg text-accent-cyan bg-accent-cyan/10 font-bold transition-all text-[11px] cursor-pointer shadow-sm";
+      } else {
+        btn.className = "mobile-bottom-nav-item flex flex-col items-center gap-1 py-1 px-2 rounded-lg text-slate-400 hover:text-white transition-all text-[11px] font-medium cursor-pointer";
       }
     });
 
@@ -305,15 +345,27 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
     });
   });
 
+  mobileNavItems.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const section = btn.getAttribute("data-section");
+      setActiveTab(section);
+      closeMobileSidebar();
+    });
+  });
+
   document.getElementById("mobileTeacherOpenBtn")?.addEventListener("click", openMobileSidebar);
   document.getElementById("mobileTeacherMenuToggle")?.addEventListener("click", closeMobileSidebar);
   backdrop?.addEventListener("click", closeMobileSidebar);
 
-  document.getElementById("teacherLogoutBtn")?.addEventListener("click", () => {
+  const handleLogout = () => {
     if (typeof onLogout === "function") {
       onLogout();
     }
-  });
+  };
+
+  document.getElementById("teacherLogoutBtn")?.addEventListener("click", handleLogout);
+  document.getElementById("teacherTopbarLogoutBtn")?.addEventListener("click", handleLogout);
+  document.getElementById("teacherMobileBottomLogoutBtn")?.addEventListener("click", handleLogout);
 
   // Automatically sync live student count and exams count from Firestore
   const updateStudentBadge = (count) => {
