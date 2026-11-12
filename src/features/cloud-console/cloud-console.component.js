@@ -268,6 +268,7 @@ export function renderCloudConsoleView({ initialCode = "" } = {}) {
               spellcheck="false"
               autocapitalize="off"
               autocomplete="off"
+              autocorrect="off"
               placeholder="# اكتب كود بايثون هنا وجرب تشغيله... 🐍&#10;# يمكنك كتابة أي كود أو الاستعانة بالأوامر السريعة بالأسفل والنماذج الجاهزة."
               aria-label="محرر كود بايثون"
             >${defaultCode}</textarea>

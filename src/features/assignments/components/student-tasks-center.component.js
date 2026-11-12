@@ -463,6 +463,7 @@ export function renderStudentTasksCenter({
                           spellcheck="false"
                           autocapitalize="off"
                           autocomplete="off"
+                          autocorrect="off"
                           placeholder="# اكتب كود الحل بلغة بايثون هنا..."
                           aria-label="محرر كود بايثون"
                         >${escapeHtml(initialEditorCode)}</textarea>

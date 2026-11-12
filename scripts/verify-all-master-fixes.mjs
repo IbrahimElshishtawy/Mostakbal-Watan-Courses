@@ -269,6 +269,33 @@ for (const [id, prob] of Object.entries(psProblems)) {
   assert(Array.isArray(prob.hiddenTestCases) && prob.hiddenTestCases.length > 0, `Problem '${id}' has hidden test cases`);
 }
 
+// -------------------------------------------------------------
+// TEST SUITE 8: Python Mobile Keyboard Sanitizer & Auto-Normalizer
+// -------------------------------------------------------------
+console.log("\n▶️ TEST SUITE 8: Python Mobile Keyboard Sanitizer & Auto-Normalizer");
+
+const { detectAndSanitizePythonCode, sanitizePythonCode } = await import("../src/shared/utils/python-sanitizer.js");
+
+const testSnippet1 = "total = 750\nif 500 < total ≤ 1000:\n    Finalprice = total × 0.9\nelif total > 1000:\n    Finalprice = total ÷ 1.15 − 50";
+const res1 = detectAndSanitizePythonCode(testSnippet1);
+assert(res1.hasChanges === true, "detectAndSanitizePythonCode detects changes for mobile typography");
+assert(res1.sanitizedCode.includes("total <= 1000"), "≤ is successfully converted to <=");
+assert(res1.sanitizedCode.includes("total * 0.9"), "× is successfully converted to *");
+assert(res1.sanitizedCode.includes("total / 1.15"), "÷ is successfully converted to /");
+assert(res1.sanitizedCode.includes("- 50"), "− (minus sign) is successfully converted to -");
+assert(res1.corrections.length >= 4, `At least 4 corrections logged (${res1.corrections.length})`);
+
+const testSnippetQuotes = 'print(“Hello World”) and print(‘Python’) and a ≠ b and x ≥ y';
+const res2 = detectAndSanitizePythonCode(testSnippetQuotes);
+assert(res2.sanitizedCode.includes('print("Hello World")'), 'Smart double quotes “” converted to ""');
+assert(res2.sanitizedCode.includes("print('Python')"), "Smart single quotes ‘’ converted to ''");
+assert(res2.sanitizedCode.includes("a != b"), "≠ is converted to !=");
+assert(res2.sanitizedCode.includes("x >= y"), "≥ is converted to >=");
+
+// Ensure Python3 can execute the sanitized code directly
+const executionResult = execSync(`python3 -c "${res1.sanitizedCode.replace(/"/g, '\\"')}\nprint('Sanitized Execution Success')"`, { encoding: "utf8" }).trim();
+assert(executionResult.includes("Sanitized Execution Success"), "Sanitized code executes cleanly in standard Python3 engine without SyntaxError");
+
 console.log("\n=======================================================");
 console.log(`🎉 ALL ${passedTests}/${totalTests} TESTS PASSED SUCCESSFULLY!`);
 console.log("=======================================================\n");

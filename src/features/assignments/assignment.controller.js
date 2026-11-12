@@ -43,6 +43,7 @@ import { triggerPrintReport } from "../exams/components/exam-report.component.js
 import { renderAssignmentPrintableReport } from "./components/assignment-report.component.js";
 import { normalizeAssignmentGrade, formatAssignmentGradeDisplay } from "./assignment.service.js?v=3.5.3";
 import { runPythonCode, ensurePythonRuntime } from "../python-adventure/python-adventure-runtime.js";
+import { detectAndSanitizePythonCode } from "../../shared/utils/python-sanitizer.js";
 
 // Internal debounce helper
 function debounce(fn, delay = 250) {
@@ -455,6 +456,17 @@ if __name__ == "__main__":
       }
       if (stdoutEl) stdoutEl.textContent = "";
       if (execTimeText) execTimeText.textContent = "جاري تشغيل كود بايثون في البيئة السحابية...";
+
+      const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(code);
+      if (hasChanges) {
+        code = sanitizedCode;
+        if (editor) editor.value = sanitizedCode;
+        showToast(
+          `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
+          "info",
+          4000
+        );
+      }
 
       try {
         let outputBuffer = "";

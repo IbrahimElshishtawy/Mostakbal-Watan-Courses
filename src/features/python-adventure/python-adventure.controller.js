@@ -2,6 +2,7 @@
 import { adventureStore } from "./python-adventure.state.js";
 import { PythonAdventureService } from "./python-adventure.service.js";
 import { runPythonCode } from "./python-adventure-runtime.js";
+import { detectAndSanitizePythonCode } from "../../shared/utils/python-sanitizer.js";
 import { CHALLENGES_CLIENT_DATA, WORLDS_DATA } from "./python-adventure-data.js";
 import { escapeHtml } from "../../shared/utils/dom.utils.js";
 
@@ -973,7 +974,18 @@ export const PythonAdventureController = {
     if (state.isRunning || state.isSubmitting) return;
 
     const textareaEl = document.getElementById("pyCodeTextarea");
-    const code = textareaEl ? textareaEl.value : state.editorCode;
+    let code = textareaEl ? textareaEl.value : state.editorCode;
+
+    const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(code);
+    if (hasChanges) {
+      code = sanitizedCode;
+      if (textareaEl) textareaEl.value = sanitizedCode;
+      showToast(
+        `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
+        "info",
+        4000
+      );
+    }
 
     // Increment attempts on every code execution attempt
     const newAttempts = (state.attemptsCount || 1) + 1;
@@ -1064,7 +1076,18 @@ export const PythonAdventureController = {
     if (state.isSubmitting || !state.activeChallenge) return;
 
     const textareaEl = document.getElementById("pyCodeTextarea");
-    const code = textareaEl ? textareaEl.value : state.editorCode;
+    let code = textareaEl ? textareaEl.value : state.editorCode;
+
+    const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(code);
+    if (hasChanges) {
+      code = sanitizedCode;
+      if (textareaEl) textareaEl.value = sanitizedCode;
+      showToast(
+        `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
+        "info",
+        4000
+      );
+    }
 
     adventureStore.setState({ isSubmitting: true }, { notify: false });
     const submitBtn = document.getElementById("pySubmitBtn");

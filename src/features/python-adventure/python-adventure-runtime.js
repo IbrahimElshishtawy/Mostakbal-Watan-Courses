@@ -1,4 +1,7 @@
 // src/features/python-adventure/python-adventure-runtime.js
+import { sanitizePythonCode, detectAndSanitizePythonCode } from "../../shared/utils/python-sanitizer.js";
+
+export { sanitizePythonCode, detectAndSanitizePythonCode };
 
 let skulptLoadingPromise = null;
 
@@ -102,12 +105,7 @@ export async function runPythonCode(pythonCode, { timeoutMs = 3500, onOutput = n
   });
 
   try {
-    const sanitizedCode = (pythonCode || "")
-      .replace(/[≤⩽]/g, "<=")
-      .replace(/[≥⩾]/g, ">=")
-      .replace(/≠/g, "!=")
-      .replace(/[“”]/g, '"')
-      .replace(/[‘’]/g, "'");
+    const sanitizedCode = sanitizePythonCode(pythonCode);
 
     const promise = window.Sk.misceval.asyncToPromise(() => {
       return window.Sk.importMainWithBody("<stdin>", false, sanitizedCode, true);

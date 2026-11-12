@@ -4,6 +4,7 @@ import { renderProblemSolvingView } from "./components/problem-solving-view.comp
 import { renderProblemWorkspace } from "./components/problem-workspace.component.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { setHtml } from "../../shared/utils/dom.utils.js";
+import { detectAndSanitizePythonCode } from "../../shared/utils/python-sanitizer.js";
 
 export const ProblemSolvingController = {
   _container: null,
@@ -285,6 +286,18 @@ export const ProblemSolvingController = {
   async runPublicTests() {
     if (!this._currentProblem || this._isRunning) return;
 
+    const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(this._userCode);
+    if (hasChanges) {
+      this._userCode = sanitizedCode;
+      const codeArea = document.getElementById("psCodeTextarea");
+      if (codeArea) codeArea.value = sanitizedCode;
+      showToast(
+        `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
+        "info",
+        4000
+      );
+    }
+
     this._isRunning = true;
     this._submissionResult = null;
     this._problemAttempts = (this._problemAttempts || 1) + 1;
@@ -332,6 +345,18 @@ export const ProblemSolvingController = {
    */
   async submitSolution() {
     if (!this._currentProblem || this._isSubmitting) return;
+
+    const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(this._userCode);
+    if (hasChanges) {
+      this._userCode = sanitizedCode;
+      const codeArea = document.getElementById("psCodeTextarea");
+      if (codeArea) codeArea.value = sanitizedCode;
+      showToast(
+        `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
+        "info",
+        4000
+      );
+    }
 
     const code = (this._userCode || "").trim();
     if (!code) {

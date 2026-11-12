@@ -2,6 +2,8 @@
 
 import { renderCloudConsoleView, CLOUD_CONSOLE_TEMPLATES } from "./cloud-console.component.js";
 import { runPythonCode, ensurePythonRuntime } from "../python-adventure/python-adventure-runtime.js";
+import { detectAndSanitizePythonCode, sanitizePythonCode } from "../../shared/utils/python-sanitizer.js";
+import { showToast } from "../../shared/components/Toast/toast.component.js";
 
 const DRAFT_STORAGE_KEY = "cloud_console_draft_code";
 let currentFontSize = 14;
@@ -239,13 +241,20 @@ export const CloudConsoleController = {
       stdout.textContent = "";
 
       try {
-        // Sanitize unicode math symbols commonly inserted by mobile keyboards (≤, ⩾, ≠, smart quotes)
-        const sanitizedCode = code
-          .replace(/[≤⩽]/g, "<=")
-          .replace(/[≥⩾]/g, ">=")
-          .replace(/≠/g, "!=")
-          .replace(/[“”]/g, '"')
-          .replace(/[‘’]/g, "'");
+        const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(code);
+        if (hasChanges) {
+          editor.value = sanitizedCode;
+          this.updateLineNumbers(container);
+          this.updateStats(container);
+          this.updateAssistantStatus(container);
+          localStorage.setItem(DRAFT_STORAGE_KEY, sanitizedCode);
+
+          showToast(
+            `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
+            "info",
+            4000
+          );
+        }
 
         const result = await runPythonCode(sanitizedCode, {
           timeoutMs: 15000,
@@ -519,21 +528,16 @@ export const CloudConsoleController = {
         };
       }
 
-      // Mobile math comparison symbols: ≤, ⩽, ≥, ⩾, ≠
-      const mathSymbolsRegex = /[≤⩽≥⩾≠]/;
+      // Mobile math & typography symbols: ≤, ⩽, ≥, ⩾, ≠, ×, ÷, −
+      const mathSymbolsRegex = /[≤⩽≥⩾≠×÷−–—]/;
       if (mathSymbolsRegex.test(codePart)) {
         return {
           status: "issue",
           type: "math_symbols",
           line: i + 1,
-          message: `السطر ${i + 1}: تم استخدام رمز مقارنة رياضي غير مدعوم في بايثون (مثل '≤' أو '≠'). استخدم '<=' أو '!=' بدلاً منه.`,
+          message: `السطر ${i + 1}: تم استخدام رمز رياضي من كيبورد الموبايل (مثل '≤' أو '×' أو '−'). اضغط إصلاح تلقائي لتحويلها لرموز بايثون (*, <=, -).`,
           fix: () => {
-            const replacer = (text) =>
-              text
-                .replace(/[≤⩽]/g, "<=")
-                .replace(/[≥⩾]/g, ">=")
-                .replace(/≠/g, "!=");
-            return lines.map((l, idx) => (idx === i ? replacer(l) : l)).join("\n");
+            return lines.map((l, idx) => (idx === i ? sanitizePythonCode(l) : l)).join("\n");
           }
         };
       }
