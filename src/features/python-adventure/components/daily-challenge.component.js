@@ -1,13 +1,26 @@
 // src/features/python-adventure/components/daily-challenge.component.js
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
+import { getDailyChallengeDateKey } from "../python-adventure-data.js";
 
 /**
  * Renders the Daily Challenge Screen with a professional, gamified design.
  */
 export function renderDailyChallenge({ daily, progress }) {
   const streak = progress?.streak?.count || 1;
-  const today = new Date().toISOString().split("T")[0];
+  const today = getDailyChallengeDateKey();
   const isDoneToday = progress?.stats?.dailyCompletedDate === today;
+
+  // Difficulty badge & topic styling
+  const diff = daily?.difficulty || "medium";
+  const diffClass = diff === "hard" ? "difficulty-hard" : diff === "easy" ? "difficulty-easy" : "difficulty-medium";
+  const diffLabel = diff === "hard" ? "⚡ المستوى: متقدم" : diff === "easy" ? "⚡ المستوى: سهل" : "⚡ المستوى: متوسط";
+
+  const topicLabel = daily?.skills && daily.skills.length > 0
+    ? `🐍 بايثون: ${daily.skills.join(" • ")}`
+    : (daily?.englishTitle ? `🐍 Python: ${daily.englishTitle}` : "🐍 تحدي بايثون المتقدم");
+
+  const expectedOutputText = daily?.expectedOutput != null ? String(daily.expectedOutput) : "—";
+  const proTip = daily?.microLesson?.summary || daily?.hints?.[0] || "اقرأ متطلبات التحدي ونظم شروطك لتسليم حل نموذجي.";
 
   // Days of the week in Arabic (Starting from Saturday as index 0)
   const weekDays = [
@@ -35,7 +48,7 @@ export function renderDailyChallenge({ daily, progress }) {
 
   const requirements = daily?.requirements && daily.requirements.length > 0
     ? daily.requirements
-    : ["استخدم for loop مع range", "اطبع الناتج النهائي فقط (110)"];
+    : ["اكتب كود بايثون المطلوب", "اطبع المخرجات المطابقة بدقة"];
 
   return `
     <div class="adventure-daily-wrapper">
@@ -95,8 +108,8 @@ export function renderDailyChallenge({ daily, progress }) {
             <!-- Hero Top Meta & Badges -->
             <div class="quest-hero-top">
               <div class="quest-tags-wrap">
-                <span class="quest-tag difficulty-medium">⚡ المستوى: متوسط</span>
-                <span class="quest-tag topic-tag">🐍 بايثون: الحلقات والمدى (Loops)</span>
+                <span class="quest-tag ${diffClass}">${escapeHtml(diffLabel)}</span>
+                <span class="quest-tag topic-tag">${escapeHtml(topicLabel)}</span>
                 <span class="quest-tag time-tag">⏱️ 3 - 5 دقائق</span>
               </div>
               <div class="quest-rewards-ribbon">
@@ -118,8 +131,8 @@ export function renderDailyChallenge({ daily, progress }) {
                   <span class="flame-emoji">🔥</span>
                 </div>
                 <div class="quest-title-text">
-                  <h2 class="quest-heading">${escapeHtml(daily?.title || "تحدي جمع الأعداد الزوجية 🔥")}</h2>
-                  <p class="quest-subtext">تحدي الـ 24 ساعة لترسيخ التفكير الخوارزمي وبناء العادات البرمجية</p>
+                  <h2 class="quest-heading">${escapeHtml(daily?.title || "التحدي اليومي المتجدد")}</h2>
+                  <p class="quest-subtext">${escapeHtml(daily?.subtitle || "تحدي الـ 24 ساعة لترسيخ التفكير الخوارزمي وبناء العادات البرمجية")}</p>
                 </div>
               </div>
 
@@ -130,7 +143,7 @@ export function renderDailyChallenge({ daily, progress }) {
                   <span>نص المهمة البرمجية:</span>
                 </div>
                 <p class="statement-desc">
-                  ${escapeHtml(daily?.description || "اكتب برنامجاً بلغة بايثون يحسب مجموع الأعداد الزوجية من 1 إلى 20 واطبع الناتج النهائي فقط (الناتج هو 110).")}
+                  ${escapeHtml(daily?.story || daily?.description || "")}
                 </p>
               </div>
 
@@ -140,7 +153,7 @@ export function renderDailyChallenge({ daily, progress }) {
                   <span>🖥️ المخرجات المستهدفة في الطرفية (Expected Terminal Output):</span>
                 </div>
                 <div class="output-spec-code">
-                  <code>&gt;&gt; 110</code>
+                  <code>&gt;&gt; ${escapeHtml(expectedOutputText)}</code>
                 </div>
               </div>
 
@@ -164,7 +177,7 @@ export function renderDailyChallenge({ daily, progress }) {
                 <div class="pro-tip-icon">💡</div>
                 <div class="pro-tip-content">
                   <strong>تلميح برمجي ذكي:</strong>
-                  <p>يمكنك استخدام خاصية الخطوة <code>step</code> في دالة <code>range(2, 21, 2)</code> للمرور مباشرة على الأعداد الزوجية وجمعها في متغير تراكمي دون الحاجة لفحص كل عدد بشرط <code>if</code>.</p>
+                  <p>${escapeHtml(proTip)}</p>
                 </div>
               </div>
             </div>

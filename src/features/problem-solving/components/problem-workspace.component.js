@@ -4,7 +4,16 @@ import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 /**
  * Renders the responsive code editor workspace for a Python coding problem.
  */
-export function renderProblemWorkspace({ problem, userCode = "", testResults = null, submissionResult = null, isRunning = false, isSubmitting = false, activeTab = "description" }) {
+export function renderProblemWorkspace({
+  problem,
+  userCode = "",
+  testResults = null,
+  submissionResult = null,
+  isRunning = false,
+  isSubmitting = false,
+  activeTab = "description",
+  attempts = 1
+}) {
   const codeToDisplay = userCode || "";
   const publicCases = problem.publicTestCases || [];
   const examples = problem.examples || [];
@@ -259,6 +268,10 @@ export function renderProblemWorkspace({ problem, userCode = "", testResults = n
               >
                 <span>${isSubmitting ? "جاري الاعتماد السحابي... ⏳" : "تسليم الحل النهائي 🚀"}</span>
               </button>
+
+              <div class="ps-attempts-indicator d-flex items-center">
+                <span class="text-xs text-muted font-bold" id="psProblemAttemptsCount">المحاولات: ${attempts || 1}</span>
+              </div>
             </div>
 
             <div class="ps-editor-hint">

@@ -1199,6 +1199,21 @@
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
 }
 
+.challenge-status-indicator,
+.ps-attempts-indicator {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill, 9999px);
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+}
+
 /* Terminal Console */
 .py-terminal-card {
   background: #090d13;
@@ -4449,7 +4464,7 @@ pre.ps-mini-pre {
   margin-top: 6px;
   color: #f87171;
   font-size: 0.78rem;
-}
+
   direction: ltr;
   text-align: left;
 }
@@ -6941,6 +6956,4 @@ pre.ps-mini-pre {
     justify-content: center;
   }
 }
-
-
 

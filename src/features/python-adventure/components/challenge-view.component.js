@@ -105,7 +105,7 @@ export function renderChallengeView({
             </div>
 
             <div class="challenge-status-indicator">
-              <span class="text-xs text-muted">المحاولات: ${attempts}</span>
+              <span class="text-xs text-muted font-bold" id="pyChallengeAttemptsCount">المحاولات: ${attempts}</span>
             </div>
           </div>
 

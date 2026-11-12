@@ -175,6 +175,7 @@ export const ProblemSolvingController = {
       this._testResults = null;
       this._submissionResult = null;
       this._workspaceTab = "description";
+      this._problemAttempts = 1;
 
       this.renderWorkspace();
     } catch (err) {
@@ -199,7 +200,8 @@ export const ProblemSolvingController = {
         submissionResult: this._submissionResult,
         isRunning: this._isRunning,
         isSubmitting: this._isSubmitting,
-        activeTab: this._workspaceTab
+        activeTab: this._workspaceTab,
+        attempts: this._problemAttempts || 1
       })
     );
 
@@ -285,6 +287,7 @@ export const ProblemSolvingController = {
 
     this._isRunning = true;
     this._submissionResult = null;
+    this._problemAttempts = (this._problemAttempts || 1) + 1;
     this.renderWorkspace();
 
     try {
@@ -337,6 +340,7 @@ export const ProblemSolvingController = {
     }
 
     this._isSubmitting = true;
+    this._problemAttempts = (this._problemAttempts || 1) + 1;
     this.renderWorkspace();
 
     try {
@@ -344,7 +348,7 @@ export const ProblemSolvingController = {
         problemId: this._currentProblem.id,
         code: this._userCode,
         hintsUsed: 0,
-        attempts: 1
+        attempts: this._problemAttempts
       });
 
       this._submissionResult = result;

@@ -2446,5 +2446,126 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "{'code': 2, 'python': 1, 'fast': 1}", description: "حساب تكرار العناصر" }
     ],
     nextChallengeId: null
+  },
+  "daily-palindrome": {
+    id: "daily-palindrome",
+    worldId: "daily",
+    worldTitle: "التحدي اليومي",
+    levelNumber: 5,
+    title: "فاحص الكلمات المتناظرة (Palindrome) 🪞",
+    englishTitle: "Palindrome Word Checker",
+    subtitle: "تحدي الـ 24 ساعة",
+    difficulty: "medium",
+    type: "write_code",
+    baseXp: 100,
+    maxScore: 10,
+    skills: ["strings", "slicing", "conditions"],
+    story: "اكتب برنامجاً يفحص إذا كانت الكلمة word = 'radar' متناظرة (تقرأ من اليمين كالشمال). إذا كانت متناظرة اطبع 'Palindrome' وإلا اطبع 'Not Palindrome'.",
+    microLesson: {
+      concept: "فحص الكلمات المتناظرة",
+      summary: "الكلمة المتناظرة هي التي تتطابق تماماً مع معكوسها word == word[::-1].",
+      exampleCode: "w = 'level'\nprint('Palindrome' if w == w[::-1] else 'Not Palindrome')"
+    },
+    starterCode: "word = 'radar'\n# افحص هل الكلمة متناظرة واطبع النتيجة\n",
+    requirements: ["افحص إذا كانت word متناظرة", "اطبع Palindrome إذا كانت متناظرة وإلا Not Palindrome"],
+    expectedOutput: "Palindrome",
+    hints: ["if word == word[::-1]: print('Palindrome')\nelse: print('Not Palindrome')"],
+    testCases: [
+      { input: "", expectedOutput: "Palindrome", description: "فحص كلمة radar المتناظرة" }
+    ],
+    nextChallengeId: null
+  },
+  "daily-list-max": {
+    id: "daily-list-max",
+    worldId: "daily",
+    worldTitle: "التحدي اليومي",
+    levelNumber: 6,
+    title: "صائد القيمة العظمى في القوائم ⚡",
+    englishTitle: "List Maximum Finder",
+    subtitle: "تحدي الـ 24 ساعة",
+    difficulty: "easy",
+    type: "write_code",
+    baseXp: 100,
+    maxScore: 10,
+    skills: ["lists", "functions", "builtins"],
+    story: "لديك القائمة numbers = [14, 88, 42, 99, 23, 75]. اوجد أكبر عدد في القائمة واطبع قيمته (99).",
+    microLesson: {
+      concept: "إيجاد أكبر قيمة في قائمة",
+      summary: "يمكنك استخدام دالة max(numbers) المدمجة أو حلقة for لمقارنة العناصر وتحديث أكبر رقم.",
+      exampleCode: "nums = [10, 50, 30]\nprint(max(nums))"
+    },
+    starterCode: "numbers = [14, 88, 42, 99, 23, 75]\n# اوجد واطبع أكبر رقم في القائمة\n",
+    requirements: ["اوجد أكبر قيمة في numbers", "اطبع الناتج النهائي فقط (99)"],
+    expectedOutput: "99",
+    hints: ["print(max(numbers))"],
+    testCases: [
+      { input: "", expectedOutput: "99", description: "استخراج القيمة العظمى من القائمة" }
+    ],
+    nextChallengeId: null
+  },
+  "daily-prime-check": {
+    id: "daily-prime-check",
+    worldId: "daily",
+    worldTitle: "التحدي اليومي",
+    levelNumber: 7,
+    title: "مختبر الأعداد الأولية 🔢",
+    englishTitle: "Prime Number Inspector",
+    subtitle: "تحدي الـ 24 ساعة",
+    difficulty: "hard",
+    type: "write_code",
+    baseXp: 100,
+    maxScore: 10,
+    skills: ["math", "loops", "conditions"],
+    story: "عرف متغيراً n = 17. افحص إذا كان العدد أولي (يقبل القسمة على 1 ونفسه فقط). إذا كان أولياً اطبع 'Prime' وإلا اطبع 'Not Prime'.",
+    microLesson: {
+      concept: "فحص العدد الأولي",
+      summary: "العدد الأولي أكبر من 1 ولا يقبل القسمة على أي عدد من 2 إلى n - 1 (أو الجذر التربيعي له).",
+      exampleCode: "n = 17\nis_p = n > 1 and all(n % i != 0 for i in range(2, int(n**0.5) + 1))\nprint('Prime' if is_p else 'Not Prime')"
+    },
+    starterCode: "n = 17\n# افحص إذا كان n أولياً واطبع الناتج\n",
+    requirements: ["افحص n = 17", "اطبع Prime إذا كان أولياً وإلا Not Prime"],
+    expectedOutput: "Prime",
+    hints: ["استخدم for loop من 2 حتى int(n**0.5) + 1 وافحص n % i == 0"],
+    testCases: [
+      { input: "", expectedOutput: "Prime", description: "فحص العدد 17" }
+    ],
+    nextChallengeId: null
   }
 };
+
+/**
+ * 7-Day Rotating Pool for Daily Challenges.
+ * Ordered so Nov 11 corresponds to daily-loop-sum, and Nov 12 (today) rotates to daily-string-reverse.
+ */
+export const DAILY_CHALLENGES_POOL = [
+  "daily-string-reverse", // Index 0 -> Nov 12, 2026 (Today)
+  "daily-grade-calc",     // Index 1 -> Nov 13, 2026
+  "daily-dict-counter",   // Index 2 -> Nov 14, 2026
+  "daily-palindrome",     // Index 3 -> Nov 15, 2026
+  "daily-list-max",       // Index 4 -> Nov 16, 2026
+  "daily-prime-check",    // Index 5 -> Nov 17, 2026
+  "daily-loop-sum"        // Index 6 -> Nov 11, 2026
+];
+
+/**
+ * Returns deterministic YYYY-MM-DD date key in local time.
+ */
+export function getDailyChallengeDateKey(date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * Deterministically retrieves today's active Daily Challenge based on calendar date.
+ */
+export function getTodayDailyChallenge(date = new Date()) {
+  const startEpoch = new Date(2026, 0, 1).getTime();
+  const currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+  const dayNumber = Math.floor((currentDay - startEpoch) / (24 * 60 * 60 * 1000));
+  const poolIndex = ((dayNumber % DAILY_CHALLENGES_POOL.length) + DAILY_CHALLENGES_POOL.length) % DAILY_CHALLENGES_POOL.length;
+  const challengeId = DAILY_CHALLENGES_POOL[poolIndex];
+  return CHALLENGES_CLIENT_DATA[challengeId] || CHALLENGES_CLIENT_DATA["daily-loop-sum"];
+}
+

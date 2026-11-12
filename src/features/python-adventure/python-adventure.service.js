@@ -4,7 +4,14 @@ import { db, auth } from "../../core/firebase.js";
 import { doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { COLLECTIONS, STORAGE_KEYS, FEATURES } from "../../core/constants.js";
 import { normalizeError } from "../../core/errors.js";
-import { CHALLENGES_CLIENT_DATA, WORLDS_DATA, ACHIEVEMENTS_DATA } from "./python-adventure-data.js";
+import {
+  CHALLENGES_CLIENT_DATA,
+  WORLDS_DATA,
+  ACHIEVEMENTS_DATA,
+  DAILY_CHALLENGES_POOL,
+  getDailyChallengeDateKey,
+  getTodayDailyChallenge
+} from "./python-adventure-data.js";
 
 const LOCAL_STORAGE_KEY = "python_adventure_local_progress";
 const CUSTOM_LEVELS_STORAGE_KEY = "python_adventure_custom_levels";
@@ -265,7 +272,7 @@ export const PythonAdventureService = {
       }
     }
 
-    const today = new Date().toISOString().split("T")[0];
+    const today = getDailyChallengeDateKey();
     const uid = auth.currentUser?.uid || currentProgress?.studentUid || "student_guest";
     const existing = currentProgress || (await this.getStudentProgress(uid));
 
@@ -417,25 +424,53 @@ export const PythonAdventureService = {
   },
 
   /**
-   * Fetches daily challenge.
+   * Deterministically retrieves today's active Daily Challenge.
    */
-  async getDailyChallenge() {
+  getTodayDailyChallenge(date = new Date()) {
+    return getTodayDailyChallenge(date);
+  },
+
+  /**
+   * Fetches daily challenge (dynamically rotated by date).
+   */
+  async getDailyChallenge(challengeId) {
+    if (challengeId && CHALLENGES_CLIENT_DATA[challengeId]) {
+      return CHALLENGES_CLIENT_DATA[challengeId];
+    }
     if (FEATURES.USE_CLOUD_FUNCTIONS) {
       try {
         const data = await callApi("getDailyChallenge");
+        if (data && data.id && CHALLENGES_CLIENT_DATA[data.id]) {
+          return CHALLENGES_CLIENT_DATA[data.id];
+        }
         if (data && data.id) return data;
       } catch (_) {}
     }
 
-    return {
-      id: "daily-loop-sum",
-      title: "تحدي جمع الأعداد الزوجية 🔥",
-      description: "اكتب برنامجاً يحسب مجموع الأعداد الزوجية من 1 إلى 20 واطبع الناتج.",
-      baseXp: 100,
-      starterCode: "# احسب مجموع الأعداد الزوجية من 1 إلى 20 واطبع الناتج (110)\n",
-      requirements: ["استخدم for loop مع range", "اطبع الناتج النهائي فقط (110)"],
-      expectedOutput: "110"
-    };
+    return this.getTodayDailyChallenge();
+  },
+
+  /**
+   * Records code execution run in student progress stats.
+   */
+  async recordRun(studentId, challengeId) {
+    if (!studentId) return;
+    try {
+      const progress = await this.getStudentProgress(studentId);
+      const currentRuns = progress.stats?.totalRuns || 0;
+      const updatedRuns = currentRuns + 1;
+      const updatedProgress = {
+        ...progress,
+        stats: {
+          ...(progress.stats || {}),
+          totalRuns: updatedRuns
+        }
+      };
+      await this.saveStudentProgress(studentId, updatedProgress);
+      return updatedRuns;
+    } catch (err) {
+      console.warn("recordRun tracking error:", err);
+    }
   },
 
   /**

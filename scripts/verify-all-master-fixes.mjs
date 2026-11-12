@@ -43,6 +43,19 @@ assert(challenges["daily-loop-sum"], "Daily Challenge 'daily-loop-sum' exists in
 assert(challenges["daily-string-reverse"], "Daily Challenge 'daily-string-reverse' exists in CHALLENGES_CLIENT_DATA");
 assert(challenges["daily-grade-calc"], "Daily Challenge 'daily-grade-calc' exists in CHALLENGES_CLIENT_DATA");
 assert(challenges["daily-dict-counter"], "Daily Challenge 'daily-dict-counter' exists in CHALLENGES_CLIENT_DATA");
+assert(challenges["daily-palindrome"], "Daily Challenge 'daily-palindrome' exists in CHALLENGES_CLIENT_DATA");
+assert(challenges["daily-list-max"], "Daily Challenge 'daily-list-max' exists in CHALLENGES_CLIENT_DATA");
+assert(challenges["daily-prime-check"], "Daily Challenge 'daily-prime-check' exists in CHALLENGES_CLIENT_DATA");
+
+// Test deterministic daily rotation by date
+const { getTodayDailyChallenge, DAILY_CHALLENGES_POOL } = adventureDataMod;
+assert(Array.isArray(DAILY_CHALLENGES_POOL) && DAILY_CHALLENGES_POOL.length >= 7, "DAILY_CHALLENGES_POOL contains at least 7 challenges");
+const nov11 = new Date(2026, 10, 11, 23, 50, 0);
+const nov12 = new Date(2026, 10, 12, 0, 10, 0);
+const nov13 = new Date(2026, 10, 13, 0, 10, 0);
+assert(getTodayDailyChallenge(nov11).id === "daily-loop-sum", "Nov 11 before midnight selects daily-loop-sum");
+assert(getTodayDailyChallenge(nov12).id === "daily-string-reverse", "Nov 12 after midnight immediately rotates to daily-string-reverse");
+assert(getTodayDailyChallenge(nov13).id === "daily-grade-calc", "Nov 13 rotates to daily-grade-calc");
 
 // Execute daily-loop-sum solution with Python 3
 const loopSumSolution = `
@@ -238,7 +251,7 @@ for (const key of challengeKeys) {
   solvableCount++;
 }
 
-assert(solvableCount === 68, `All 68 challenges verified with valid validation criteria (Found: ${solvableCount})`);
+assert(solvableCount === 71, `All 71 challenges (64 adventure + 7 daily rotating) verified with valid validation criteria (Found: ${solvableCount})`);
 
 // Verify Problem Solving Dataset
 const psDataMod = await import("../src/features/problem-solving/problem-solving-data.js");

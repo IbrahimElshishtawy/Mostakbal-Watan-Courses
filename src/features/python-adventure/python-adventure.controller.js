@@ -436,17 +436,15 @@ export const PythonAdventureController = {
         this.wireAchievementsEvents();
         break;
 
-      case "daily":
+      case "daily": {
+        const todayDaily = PythonAdventureService.getTodayDailyChallenge();
         containerElement.innerHTML = renderDailyChallenge({
-          daily: {
-            title: "تحدي جمع الأعداد الزوجية 🔥",
-            description: "اكتب برنامجاً يحسب مجموع الأعداد الزوجية من 1 إلى 20 واطبع الناتج (110).",
-            requirements: ["استخدم for loop مع range", "اطبع الناتج النهائي فقط (110)"]
-          },
+          daily: todayDaily,
           progress
         });
         this.wireDailyEvents();
         break;
+      }
 
       case "profile":
         containerElement.innerHTML = renderProfileStats({ student, progress });
@@ -972,7 +970,30 @@ export const PythonAdventureController = {
     const textareaEl = document.getElementById("pyCodeTextarea");
     const code = textareaEl ? textareaEl.value : state.editorCode;
 
-    adventureStore.setState({ isRunning: true, terminalError: null }, { notify: false });
+    // Increment attempts on every code execution attempt
+    const newAttempts = (state.attemptsCount || 1) + 1;
+
+    adventureStore.setState({
+      isRunning: true,
+      terminalError: null,
+      attemptsCount: newAttempts
+    }, { notify: false });
+
+    // Instantly update attempts counter badge in DOM
+    const attemptsEl = document.getElementById("pyChallengeAttemptsCount");
+    if (attemptsEl) {
+      attemptsEl.textContent = `المحاولات: ${newAttempts}`;
+    }
+
+    // Refresh progressive hints card (unlocks solution if newAttempts >= 3)
+    this.updateHintsCardInChallengeView();
+
+    // Async record execution in student stats
+    const studentId = state.student?.uid || state.student?.id;
+    if (studentId) {
+      PythonAdventureService.recordRun(studentId, state.activeChallenge?.id);
+    }
+
     const runBtn = document.getElementById("pyRunBtn");
     if (runBtn) {
       runBtn.disabled = true;
@@ -1059,13 +1080,20 @@ export const PythonAdventureController = {
             <div class="terminal-error">${escapeHtml(runCheck.error)}</div>
           `;
         }
+        const newAttempts = (state.attemptsCount || 1) + 1;
         adventureStore.setState({
           editorCode: code,
           terminalError: runCheck.error,
           terminalOutput: runCheck.output,
           isSubmitting: false,
-          attemptsCount: state.attemptsCount + 1
+          attemptsCount: newAttempts
         }, { notify: false });
+
+        const attemptsEl = document.getElementById("pyChallengeAttemptsCount");
+        if (attemptsEl) {
+          attemptsEl.textContent = `المحاولات: ${newAttempts}`;
+        }
+        this.updateHintsCardInChallengeView();
 
         this.showResultModal({
           passed: false,
@@ -1109,10 +1137,17 @@ export const PythonAdventureController = {
         if (terminalEl && result.testResults?.stdout) {
           terminalEl.innerHTML = `<div class="terminal-stdout">${escapeHtml(result.testResults.stdout)}</div>`;
         }
+        const newAttempts = (state.attemptsCount || 1) + 1;
         adventureStore.setState({
-          attemptsCount: state.attemptsCount + 1,
+          attemptsCount: newAttempts,
           terminalOutput: result.testResults?.stdout || state.terminalOutput
         }, { notify: false });
+
+        const attemptsEl = document.getElementById("pyChallengeAttemptsCount");
+        if (attemptsEl) {
+          attemptsEl.textContent = `المحاولات: ${newAttempts}`;
+        }
+        this.updateHintsCardInChallengeView();
 
         this.showResultModal({
           passed: false,
@@ -1248,6 +1283,17 @@ export const PythonAdventureController = {
           this._dailyTimerInterval = null;
         }
       }
+
+      // If midnight struck while viewing daily challenge, seamlessly reload today's rotated challenge!
+      if (diffMs <= 1000 && !this._dailyTransitionTriggered) {
+        this._dailyTransitionTriggered = true;
+        setTimeout(() => {
+          this._dailyTransitionTriggered = false;
+          if (adventureStore.getState().activeView === "daily") {
+            this.renderCurrentView(adventureStore.getState());
+          }
+        }, 1200);
+      }
     };
 
     updateTimer();
@@ -1262,27 +1308,8 @@ export const PythonAdventureController = {
     });
 
     document.getElementById("startDailyChallengeBtn")?.addEventListener("click", () => {
-      // Launch daily challenge from authoritative challenges data
-      const dailyChallengeObj = CHALLENGES_CLIENT_DATA["daily-loop-sum"] || {
-        id: "daily-loop-sum",
-        worldTitle: "التحدي اليومي",
-        levelNumber: 1,
-        title: "تحدي جمع الأعداد الزوجية 🔥",
-        subtitle: "تحدي الـ 24 ساعة",
-        difficulty: "medium",
-        type: "write_code",
-        baseXp: 100,
-        maxScore: 10,
-        story: "اكتب برنامجاً بلغة بايثون يحسب مجموع الأعداد الزوجية من 1 إلى 20 واطبع الناتج النهائي فقط (الناتج هو 110).",
-        microLesson: {
-          concept: "جمع الأعداد الزوجية",
-          summary: "يمكنك استخدام for i in range(2, 21, 2) للمرور على الأعداد الزوجية فقط، وجمعها في متغير total."
-        },
-        starterCode: "total = 0\n# احسب واطبع مجموع الأعداد الزوجية من 1 إلى 20\n",
-        requirements: ["استخدم for loop مع range أو دالة sum", "اطبع الناتج النهائي فقط (110)"],
-        hints: ["for i in range(2, 21, 2): total += i", "print(total)"],
-        expectedOutput: "110"
-      };
+      // Launch today's dynamic daily challenge
+      const dailyChallengeObj = PythonAdventureService.getTodayDailyChallenge();
       this.showMissionModal(dailyChallengeObj, "story");
     });
   },
