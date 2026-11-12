@@ -296,7 +296,7 @@ export const PythonAdventureService = {
       if (starsEarned > prevStars) {
         actualXpAwarded = Math.round((challenge.baseXp || 100) * 0.4);
       } else {
-        actualXpAwarded = Math.round((challenge.baseXp || 100) * 0.1);
+        actualXpAwarded = 0; // Zero repeat XP prevents infinite level grinding
       }
       starsEarned = Math.max(starsEarned, prevStars);
     }
@@ -344,9 +344,19 @@ export const PythonAdventureService = {
     };
 
     const isDaily = challengeId.startsWith("daily-");
-    const newStreakCount = isDaily
-      ? (existing.stats?.dailyCompletedDate === today ? existing.streak?.count || 1 : (existing.streak?.count || 0) + 1)
-      : (existing.streak?.count || 1);
+    const lastActive = existing.streak?.lastActiveDate || "";
+    let newStreakCount = existing.streak?.count || 1;
+
+    if (lastActive && lastActive !== today) {
+      const lastDate = new Date(lastActive);
+      const curDate = new Date(today);
+      const diffDays = Math.round((curDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+      if (diffDays === 1) {
+        newStreakCount += 1;
+      } else if (diffDays > 1) {
+        newStreakCount = 1;
+      }
+    }
 
     const updated = {
       ...existing,

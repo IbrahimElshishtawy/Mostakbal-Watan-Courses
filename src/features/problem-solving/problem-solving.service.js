@@ -189,6 +189,7 @@ export const ProblemSolvingService = {
     // Get problem definition
     const p = PROBLEM_SOLVING_CHALLENGES_DATA[problemId] || {};
     const points = p.points || 10;
+    const earnedXp = points * 5;
 
     const submissionDoc = {
       id: submissionId,
@@ -200,17 +201,88 @@ export const ProblemSolvingService = {
       submittedAt: new Date().toISOString()
     };
 
+    let totalXp = earnedXp;
+    let newLevel = 1;
+
     if (db && uid !== "student_guest") {
       try {
         await setDoc(doc(db, CODING_SUBMISSIONS_COLLECTION, submissionId), submissionDoc);
       } catch (_) {}
+
+      try {
+        const progRef = doc(db, COLLECTIONS.PYTHON_ADVENTURE_PROGRESS, uid);
+        const progSnap = await getDoc(progRef);
+        let currentProgress = progSnap.exists() ? progSnap.data() : {
+          studentUid: uid,
+          xp: 0,
+          level: 1,
+          completedChallenges: {},
+          unlockedWorlds: ["world-1", "ps-level-1"],
+          unlockedChallenges: ["world-1-level-1"],
+          stats: { totalCompleted: 0, totalRuns: 0 }
+        };
+
+        const existingCompleted = currentProgress.completedChallenges || {};
+        const isAlreadyCompleted = !!existingCompleted[problemId];
+        const xpToAdd = isAlreadyCompleted ? 0 : earnedXp;
+
+        const updatedCompleted = {
+          ...existingCompleted,
+          [problemId]: {
+            completedAt: new Date().toISOString(),
+            stars: 3,
+            attempts,
+            hintsUsed,
+            score: points,
+            maxScore: points,
+            xpAwarded: xpToAdd
+          }
+        };
+
+        totalXp = (currentProgress.xp || 0) + xpToAdd;
+        newLevel = Math.max(1, Math.floor(totalXp / 250) + 1);
+
+        const updatedProgress = {
+          ...currentProgress,
+          xp: totalXp,
+          level: newLevel,
+          completedChallenges: updatedCompleted,
+          stats: {
+            ...(currentProgress.stats || {}),
+            totalCompleted: Object.keys(updatedCompleted).length,
+            totalRuns: ((currentProgress.stats?.totalRuns) || 0) + 1
+          },
+          updatedAt: new Date().toISOString()
+        };
+
+        await setDoc(progRef, updatedProgress, { merge: true });
+
+        // Update student_gamification
+        await setDoc(doc(db, "student_gamification", uid), {
+          studentUid: uid,
+          competitionPoints: totalXp,
+          xp: totalXp,
+          level: newLevel,
+          challengesCompleted: Object.keys(updatedCompleted).length,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+
+        // Sync with local memory cache in PythonAdventureService
+        try {
+          const { PythonAdventureService } = await import("../python-adventure/python-adventure.service.js");
+          PythonAdventureService._saveLocalCache(uid, updatedProgress);
+        } catch (_) {}
+
+      } catch (syncErr) {
+        console.warn("Problem-solving progress sync error:", syncErr);
+      }
     }
 
     return {
       success: true,
       passed: true,
-      earnedXp: points * 5,
-      totalXp: points * 5,
+      earnedXp,
+      totalXp,
       stars: 3,
       competitionPointsAwarded: points,
       totalCompetitionPoints: points,
