@@ -2,6 +2,7 @@
 import { escapeHtml } from "../../utils/dom.utils.js";
 import { renderAvatar } from "../../components/Avatar/avatar.component.js";
 import { renderBadge } from "../../components/Badge/badge.component.js";
+import { showConfirmDialog } from "../../components/ConfirmDialog/confirm-dialog.component.js";
 
 /**
  * Mounts the complete modern Student Application Shell Layout into a root container.
@@ -387,6 +388,25 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
     if (typeof onLogout === "function") {
       onLogout();
     }
+  });
+
+  document.getElementById("topbarHelpBtn")?.addEventListener("click", () => {
+    showConfirmDialog({
+      title: "دليل الطالب والمنصة الذكية 🎓",
+      message: `مرحباً بك في منصة اتحاد بشبابها الأكاديمية!
+      
+📌 أهم إرشادات الاستخدام:
+1. الداتا والدروس: تجد فيها تسجيلات المحاضرات، السلايدات، ومصادر الكود المباشرة.
+2. مغامرة بايثون: تحديات برمجية تفاعلية تتدرج عبر 8 عوالم ومسار حل المشكلات وتمنحك نقاط XP وأوسمة.
+3. الامتحانات والواجبات: تأكد من تسليم التكليفات قبل انتهاء الوقت المحدد (الديدلاين).
+4. الغياب والحضور: متابعة نسبة حضورك الرسمية وسجل الجلسات المعتمدة (الحد الأدنى 75%).
+5. لوحة المتصدرين: ترتيب تنافسي عادل لحظي يعتمد على دقة كودك ومجموع إنجازاتك.
+
+👨‍🏫 المشرف الأكاديمي: م/ إبراهيم الششتتاوي`,
+      confirmText: "فهمت الدليل ✓",
+      cancelText: "إغلاق",
+      variant: "primary"
+    });
   });
 
   return {

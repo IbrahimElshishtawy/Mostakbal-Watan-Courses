@@ -191,6 +191,12 @@ export const LeaderboardService = {
         Number(gam.currentStreak || 1)
       );
 
+      const runs = Math.max(
+        Number(adv.stats?.totalRuns || 0),
+        Number(gam.totalRuns || 0),
+        solved
+      );
+
       const isCurrent = Boolean(
         (uid && (itemUid === uid || key === uid)) ||
         (targetPhone && itemPhone && targetPhone === itemPhone) ||
@@ -206,6 +212,7 @@ export const LeaderboardService = {
         xp: points,
         level: lvl,
         challengesCompleted: solved,
+        totalRuns: runs,
         currentStreak: streak,
         isCurrentUser: isCurrent
       });
@@ -222,10 +229,12 @@ export const LeaderboardService = {
       }
     }
 
-    // Sort deterministically: highest points first, then highest level, then streak
+    // Sort deterministically: highest points first, then most challenges solved, then highest level, then streak
     filteredProfiles.sort((a, b) => {
       const pDiff = b.competitionPoints - a.competitionPoints;
       if (pDiff !== 0) return pDiff;
+      const cDiff = (b.challengesCompleted || 0) - (a.challengesCompleted || 0);
+      if (cDiff !== 0) return cDiff;
       const lDiff = b.level - a.level;
       if (lDiff !== 0) return lDiff;
       return b.currentStreak - a.currentStreak;
@@ -273,6 +282,14 @@ export const LeaderboardService = {
         badgeType = "gold-subtle";
       }
 
+      const sSolved = p.challengesCompleted || 0;
+      const sRuns = p.totalRuns || sSolved;
+      let calculatedAccuracy = "100%";
+      if (sRuns > 0 && sSolved > 0) {
+        const accNum = Math.min(100, Math.round((sSolved / Math.max(sSolved, sRuns)) * 100));
+        calculatedAccuracy = `${accNum}%`;
+      }
+
       const entry = {
         rank,
         studentUid: p.studentUid,
@@ -287,7 +304,7 @@ export const LeaderboardService = {
         solvedCount: p.challengesCompleted,
         tasksDone: p.challengesCompleted,
         tasksTotal: Math.max(10, p.challengesCompleted),
-        accuracy: points > 0 ? "98.5%" : "100%",
+        accuracy: calculatedAccuracy,
         streak: p.currentStreak,
         levelTitle: getLevelTitle(p.level),
         badge,

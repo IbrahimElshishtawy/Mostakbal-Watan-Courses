@@ -245,7 +245,7 @@ export function renderLeaderboardView({
                 <div class="stat-chip-lbl">أيام التتابع</div>
               </div>
               <div class="podium-stat-chip">
-                <div class="stat-chip-val font-mono text-emerald-400"><span class="stat-icon">🎯</span> ${top1 ? top1.accuracy : "98.5%"}</div>
+                <div class="stat-chip-val font-mono text-emerald-400"><span class="stat-icon">🎯</span> ${top1 ? top1.accuracy : "100%"}</div>
                 <div class="stat-chip-lbl">دقة الإجابات</div>
               </div>
             </div>

@@ -213,6 +213,38 @@ export function applyLanguageToDOM(lang = getCurrentLanguage()) {
       }
     });
 
+    // Translate core sidebar navigation & portal shell dynamically
+    const isEn = targetLang === LANGUAGES.EN;
+    const navMap = {
+      videos: isEn ? "Lectures & Lessons" : "الداتا والدروس",
+      exams: isEn ? "Exams & Tests" : "الامتحانات والتقييمات",
+      tasks: isEn ? "Tasks & Assignments" : "التاسكات والواجبات",
+      attendance: isEn ? "Attendance & Sessions" : "الغياب والحضور",
+      "python-adventure": isEn ? "Python Adventure" : "مغامرة بايثون",
+      leaderboard: isEn ? "Leaderboard" : "لوحة المتصدرين",
+      "cloud-console": isEn ? "Cloud IDE Console" : "الكونسول السحابي",
+      profile: isEn ? "My Profile" : "حسابي الشخصي",
+      settings: isEn ? "Settings & Theme" : "الإعدادات والمظهر"
+    };
+
+    document.querySelectorAll(".sidebar-item[data-section]").forEach((btn) => {
+      const sec = btn.getAttribute("data-section");
+      const sideText = btn.querySelector(".side-text");
+      if (sideText && navMap[sec]) {
+        sideText.textContent = navMap[sec];
+      }
+    });
+
+    const logoutSpan = document.querySelector("#sidebarLogoutBtn span:last-child");
+    if (logoutSpan) {
+      logoutSpan.textContent = isEn ? "Sign Out" : "تسجيل الخروج";
+    }
+
+    const helpBtn = document.getElementById("topbarHelpBtn");
+    if (helpBtn) {
+      helpBtn.title = isEn ? "Student Guide" : "دليل الطالب";
+    }
+
     // Notify listeners
     window.dispatchEvent(new CustomEvent("mw:languageChanged", { detail: { lang: targetLang } }));
   }

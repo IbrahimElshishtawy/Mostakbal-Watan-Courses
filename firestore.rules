@@ -203,10 +203,10 @@ service cloud.firestore {
     // 13. NOTIFICATIONS (In-App Alerts & Activity Triggers)
     // ========================================================
     match /notifications/{notificationId} {
-      // Student can read their own notifications
-      allow read: if isStaff() || (isAuthenticated() && resource.data.recipientUid == request.auth.uid);
+      // Student can read their own notifications as well as broadcast announcements (ALL/all)
+      allow read: if isStaff() || (isAuthenticated() && (resource.data.recipientUid in ['ALL', 'all'] || resource.data.recipientUid == request.auth.uid));
       // Student can update their own notification read status
-      allow update: if isStaff() || (isAuthenticated() && resource.data.recipientUid == request.auth.uid);
+      allow update: if isStaff() || (isAuthenticated() && (resource.data.recipientUid in ['ALL', 'all'] || resource.data.recipientUid == request.auth.uid));
       allow create, delete: if isStaff();
     }
 

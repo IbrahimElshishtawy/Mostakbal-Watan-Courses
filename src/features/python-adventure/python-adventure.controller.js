@@ -476,8 +476,13 @@ export const PythonAdventureController = {
 
 
     // 7. Top Header Controls
-    document.getElementById("adv5NotificationBtn")?.addEventListener("click", () => {
-      showToast("لديك تحدٍ رئيسي بانتظارك في قرية بايثون: تحدي 05 Boss ⚔️", "info");
+    document.getElementById("adv5NotificationBtn")?.addEventListener("click", async () => {
+      try {
+        const { NotificationsController } = await import("../notifications/notifications.controller.js");
+        NotificationsController.openNotificationsModal();
+      } catch (_) {
+        showToast("جاري فتح مركز الإشعارات الأكاديمية... 🔔", "info");
+      }
     });
 
     document.getElementById("adv5HelpBtn")?.addEventListener("click", () => {

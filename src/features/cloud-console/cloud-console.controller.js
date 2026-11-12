@@ -239,8 +239,16 @@ export const CloudConsoleController = {
       stdout.textContent = "";
 
       try {
-        const result = await runPythonCode(code, {
-          timeoutMs: 5000,
+        // Sanitize unicode math symbols commonly inserted by mobile keyboards (≤, ⩾, ≠, smart quotes)
+        const sanitizedCode = code
+          .replace(/[≤⩽]/g, "<=")
+          .replace(/[≥⩾]/g, ">=")
+          .replace(/≠/g, "!=")
+          .replace(/[“”]/g, '"')
+          .replace(/[‘’]/g, "'");
+
+        const result = await runPythonCode(sanitizedCode, {
+          timeoutMs: 15000,
           onOutput: (stream) => {
             stdout.textContent = stream;
             const termScreen = container.querySelector("#consoleTerminalScreen");
@@ -510,6 +518,25 @@ export const CloudConsoleController = {
           }
         };
       }
+
+      // Mobile math comparison symbols: ≤, ⩽, ≥, ⩾, ≠
+      const mathSymbolsRegex = /[≤⩽≥⩾≠]/;
+      if (mathSymbolsRegex.test(codePart)) {
+        return {
+          status: "issue",
+          type: "math_symbols",
+          line: i + 1,
+          message: `السطر ${i + 1}: تم استخدام رمز مقارنة رياضي غير مدعوم في بايثون (مثل '≤' أو '≠'). استخدم '<=' أو '!=' بدلاً منه.`,
+          fix: () => {
+            const replacer = (text) =>
+              text
+                .replace(/[≤⩽]/g, "<=")
+                .replace(/[≥⩾]/g, ">=")
+                .replace(/≠/g, "!=");
+            return lines.map((l, idx) => (idx === i ? replacer(l) : l)).join("\n");
+          }
+        };
+      }
     }
 
     // 2. Missing colon ':' on compound statements
@@ -755,10 +782,10 @@ export const CloudConsoleController = {
     let desc = "حدث خطأ أثناء محاولة تنفيذ الكود البرمجي.";
     let hint = "راجع تفاصيل الخطأ واستخدم زر الذهاب للسطر لمعاينته في المحرر.";
 
-    if (str.includes("SyntaxError") || str.includes("ParseError")) {
-      type = "خطأ في الصياغة والقواعد (SyntaxError)";
-      desc = "الصياغة البرمجية لهذا السطر غير صحيحة وفق قواعد لغة بايثون.";
-      hint = "تأكد من إغلاق كافة الأقواس وعلامات التنصيص، ووجود نقطتي النهاية ':' بعد جمل الشروط والدوال.";
+    if (str.includes("SyntaxError") || str.includes("ParseError") || str.includes("bad token") || str.includes("TokenError")) {
+      type = "خطأ في الصياغة ورموز غير مدعومة (SyntaxError / ParseError)";
+      desc = "الصياغة البرمجية لهذا السطر غير صحيحة، أو تم استخدام رمز غير مدعوم في بايثون (مثل كتابة '≤' بدلاً من '<=' أو '≠' بدلاً من '!=').";
+      hint = "في بايثون، استخدم علامات المقارنة العادية: '<=' و '>=' و '!='، وتأكد من إغلاق كافة الأقواس وعلامات التنصيص والنقطتين ':'";
     } else if (str.includes("NameError")) {
       const nameMatch = str.match(/name '(\w+)' is not defined/i);
       const varName = nameMatch ? nameMatch[1] : "المتغير";

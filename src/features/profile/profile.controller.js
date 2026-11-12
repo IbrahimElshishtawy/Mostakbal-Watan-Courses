@@ -135,10 +135,19 @@ export const ProfileController = {
     });
 
     // 2. View Enrollment Certificate Dialog
-    container.querySelector("#pfBtnViewCert")?.addEventListener("click", () => {
+    container.querySelector("#pfBtnViewCert")?.addEventListener("click", async () => {
+      let attendanceRateText = "100%";
+      try {
+        const { AttendanceService } = await import("../attendance/attendance.service.js");
+        const attData = await AttendanceService.getStudentAttendance(student);
+        if (attData && typeof attData.attendanceRate === "number") {
+          attendanceRateText = `${Math.round(attData.attendanceRate)}%`;
+        }
+      } catch (_) {}
+
       showConfirmDialog({
         title: "شهادة القيد الرقمية الرسمية 📄",
-        message: `يشهد اتحاد بشبابها بأن الطالب: ${name}\nمقيد رسمياً في البرنامج التدريبي المتقدم لهندسة بايثون والذكاء الاصطناعي لموسم 2026/2027 بنسبة حضور 98% وتراكمي +A.\n\nكود التوثيق الأكاديمي: UBY-CERT-8842-VERIFIED`,
+        message: `يشهد اتحاد بشبابها بأن الطالب: ${name}\nمقيد رسمياً في البرنامج التدريبي المتقدم لهندسة بايثون والذكاء الاصطناعي لموسم 2026/2027 بنسبة حضور ${attendanceRateText} وتراكمي +A.\n\nكود التوثيق الأكاديمي: UBY-CERT-8842-VERIFIED`,
         confirmText: "طباعة الشهادة 🖨️",
         cancelText: "إغلاق",
         variant: "primary"
@@ -272,15 +281,23 @@ export const ProfileController = {
       });
     });
 
-    // 4. Language Selection (Tracks pending choice without premature visual shift)
+    // 4. Language Selection with Live Application
     let pendingLanguage = ProfileService.getSettings().language;
     container.querySelector("#platformLanguageSelect")?.addEventListener("change", (e) => {
       pendingLanguage = e.target.value;
+      ProfileService.applyLanguage(pendingLanguage);
+
+      // Update summary pill
+      const langPill = container.querySelector(".st-summary-pill i.fa-language")?.parentElement?.querySelector("strong");
+      if (langPill) {
+        langPill.textContent = pendingLanguage === "ar" ? "العربية" : "English";
+      }
+
       showToast(
         pendingLanguage === "ar"
-          ? "تم اختيار اللغة العربية 🇪🇬 (اضغط حفظ التفضيلات لتثبيت التغيير)"
-          : "English selected 🇬🇧 (Click Save Preferences to apply)",
-        "info"
+          ? "تم تحويل لغة العرض إلى العربية 🇪🇬"
+          : "Switched display language to English 🇬🇧",
+        "success"
       );
     });
 

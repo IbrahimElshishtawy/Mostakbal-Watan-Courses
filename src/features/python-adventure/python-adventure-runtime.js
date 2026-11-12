@@ -102,8 +102,15 @@ export async function runPythonCode(pythonCode, { timeoutMs = 3500, onOutput = n
   });
 
   try {
+    const sanitizedCode = (pythonCode || "")
+      .replace(/[≤⩽]/g, "<=")
+      .replace(/[≥⩾]/g, ">=")
+      .replace(/≠/g, "!=")
+      .replace(/[“”]/g, '"')
+      .replace(/[‘’]/g, "'");
+
     const promise = window.Sk.misceval.asyncToPromise(() => {
-      return window.Sk.importMainWithBody("<stdin>", false, pythonCode, true);
+      return window.Sk.importMainWithBody("<stdin>", false, sanitizedCode, true);
     });
 
     // Enforce strict client-side timeout promise race
@@ -149,8 +156,8 @@ function cleanPythonErrorMessage(errStr) {
   let lineMatch = errStr.match(/on line (\d+)/i) || errStr.match(/line (\d+)/i);
   const lineInfo = lineMatch ? ` (السطر ${lineMatch[1]})` : "";
 
-  if (errStr.includes("SyntaxError")) {
-    return `❌ خطأ في صياغة الكود SyntaxError${lineInfo}: تأكد من إغلاق الأقواس أو علامات التنصيص أو النقطتين :`;
+  if (errStr.includes("SyntaxError") || errStr.includes("ParseError") || errStr.includes("bad token") || errStr.includes("TokenError")) {
+    return `❌ خطأ في صياغة الكود أو رمز غير مدعوم Syntax/ParseError${lineInfo}: تأكد من استخدام رموز المقارنة القياسية (مثل <= بدلاً من ≤) وإغلاق الأقواس وعلامات التنصيص والنقطتين :`;
   }
   if (errStr.includes("NameError")) {
     return `❌ خطأ في اسم المتغير أو الدالة NameError${lineInfo}: تم استخدام اسم لم يتم تعريفه مسبقاً.`;

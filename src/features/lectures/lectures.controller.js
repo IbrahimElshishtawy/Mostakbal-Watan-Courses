@@ -785,9 +785,9 @@ export const LecturesController = {
     } else {
       listHtml = `
         <div class="student-lessons-grid">
-          ${filtered.map((lec) => {
+          ${filtered.map((lec, idx) => {
             const isWatched = watchedIds.has(lec.id) || (lec.videoId && watchedIds.has(lec.videoId));
-            return renderStudentLessonCard({ lesson: lec, isWatched });
+            return renderStudentLessonCard({ lesson: lec, isWatched, index: idx });
           }).join("")}
         </div>
       `;

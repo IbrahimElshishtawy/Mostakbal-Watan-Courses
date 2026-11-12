@@ -1,6 +1,7 @@
 // src/features/python-adventure/components/adventure-home.component.js
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
-import { WORLDS_DATA } from "../python-adventure-data.js";
+import { WORLDS_DATA, ACHIEVEMENTS_DATA } from "../python-adventure-data.js";
+import { PythonAdventureService } from "../python-adventure.service.js";
 
 /**
  * Renders the Python Adventure Student Experience Home matching Image 5.png.
@@ -12,24 +13,44 @@ import { WORLDS_DATA } from "../python-adventure-data.js";
  * @returns {string} HTML markup
  */
 export function renderAdventureHome({ student, progress, onContinue, onNavigate }) {
-  const studentName = student?.studentName || student?.name || "إبراهيم خالد";
+  const studentName = student?.studentName || student?.name || "بطل بايثون";
   const safeName = escapeHtml(studentName);
   const studentGroup = escapeHtml(student?.studentGroup || student?.group || "مسار بايثون وهندسة النظم");
 
-  // Progression metrics with defaults matching Image 5.png
-  const xp = progress?.xp ?? 350;
+  // Real Dynamic Progression Metrics
+  const norm = PythonAdventureService.normalizeProgress(progress);
+  const xp = norm?.xp ?? 0;
+  const level = norm?.level ?? (xp > 0 ? Math.floor(xp / 250) + 1 : 1);
+  const currentLevelXp = xp % 250;
   const targetXp = 250;
-  const currentLevelXp = 180;
-  const remainingXp = 70;
-  const streak = progress?.streak?.count ?? 3;
-  const totalStars = progress?.stars ? Object.values(progress.stars).reduce((a, b) => a + b, 0) : 12;
-  const unlockedBadges = 3;
-  const totalBadges = 8;
-  const currentWorldName = "قرية بايثون";
-  const completedMissions = 4;
-  const totalMissions = 5;
-  const accuracy = progress?.accuracy ?? 96;
-  const totalCodeMissions = 8;
+  const remainingXp = 250 - currentLevelXp;
+  const levelProgressPercent = Math.min(100, Math.max(0, Math.round((currentLevelXp / targetXp) * 100)));
+
+  const streak = norm?.streak?.count ?? 1;
+  const totalStars = norm?.stars ? Object.values(norm.stars).reduce((a, b) => a + b, 0) : 0;
+  const unlockedBadges = Array.isArray(norm?.achievements) ? norm.achievements.length : 0;
+  const totalBadges = ACHIEVEMENTS_DATA.length || 12;
+
+  const completedMap = norm?.completedChallenges || {};
+  const totalCodeMissions = Object.keys(completedMap).length;
+  const totalRuns = norm?.stats?.totalRuns || totalCodeMissions;
+  const accuracy = (totalRuns > 0 && totalCodeMissions > 0)
+    ? Math.min(100, Math.round((totalCodeMissions / Math.max(totalCodeMissions, totalRuns)) * 100))
+    : 100;
+
+  const unlockedWorlds = Array.isArray(norm?.unlockedWorlds) ? norm.unlockedWorlds : ["world-1"];
+
+  // Find current active world
+  let currentWorldId = norm?.currentWorldId || "world-1";
+  let curWorldObj = WORLDS_DATA.find((w) => w.id === currentWorldId) || WORLDS_DATA[0];
+  const curWorldChallenges = PythonAdventureService.getWorldChallenges(curWorldObj.id);
+  const curWorldCompleted = curWorldChallenges.filter((c) => completedMap[c.id]).length;
+  const curWorldTotal = curWorldChallenges.length || curWorldObj.levelsCount || 8;
+  const currentWorldName = curWorldObj.title;
+
+  // 6. World Progress Road (مسار العوالم الثمانية)
+  const unlockedWorldsCount = WORLDS_DATA.filter((w) => unlockedWorlds.includes(w.id)).length;
+  const roadFillPercent = Math.min(100, Math.max(12.5, Math.round((unlockedWorldsCount / 8) * 100)));
 
   return `
     <div class="adventure-image5-container" dir="rtl">
@@ -80,16 +101,16 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
 
       <!-- Status & Progression Bar (5 Metric Cards Grid) -->
       <section class="adv5-metrics-grid" data-purpose="progression-kpis">
-        <!-- Card 1: الرتبة والمستوى (Level 1: Python Novice) -->
+        <!-- Card 1: الرتبة والمستوى -->
         <div class="adv5-metric-card cyan-tint">
           <div class="adv5-metric-header">
-            <span class="adv5-level-pill font-mono">Level 1</span>
+            <span class="adv5-level-pill font-mono">Level ${level}</span>
             <span class="adv5-metric-xp-ratio font-mono">${currentLevelXp} / ${targetXp} XP</span>
           </div>
           <div class="adv5-metric-body">
             <div class="adv5-metric-info">
-              <h3 class="adv5-metric-title">مبتدئ بايثون</h3>
-              <p class="adv5-metric-subtitle">الرتبة الحالية • Python Novice</p>
+              <h3 class="adv5-metric-title">رتبة المحارب ${level}</h3>
+              <p class="adv5-metric-subtitle">الرصيد الإجمالي: ${xp.toLocaleString()} XP</p>
             </div>
             <div class="adv5-metric-icon-box text-cyan-400 bg-cyan-500/10 border-cyan-500/20">
               <i class="fa-solid fa-award"></i>
@@ -97,11 +118,11 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
           </div>
           <div class="adv5-metric-progress">
             <div class="adv5-metric-bar">
-              <div class="adv5-metric-fill" style="width: 72%;"></div>
+              <div class="adv5-metric-fill" style="width: ${levelProgressPercent}%;"></div>
             </div>
             <div class="adv5-metric-progress-footer font-mono">
               <span>متبقي ${remainingXp} XP</span>
-              <span>التقدم نحو Level 2: Apprentice</span>
+              <span>التقدم نحو المستوى ${level + 1}</span>
             </div>
           </div>
         </div>
@@ -147,11 +168,11 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
             </div>
           </div>
           <div class="adv5-metric-body-stacked">
-            <h2 class="adv5-metric-huge text-white">${currentWorldName}</h2>
+            <h2 class="adv5-metric-huge text-white">${escapeHtml(currentWorldName)}</h2>
             <p class="adv5-metric-note text-slate-400">
-              <span>عالم 1 • البدايات</span>
+              <span>عالم ${curWorldObj.number} • ${escapeHtml(curWorldObj.concept || "التأسيس")}</span>
               <span class="adv5-dot-sep">•</span>
-              <span class="font-mono">${completedMissions} / ${totalMissions} مكتملة</span>
+              <span class="font-mono">${curWorldCompleted} / ${curWorldTotal} مكتملة</span>
             </p>
           </div>
         </div>
@@ -299,80 +320,50 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
           </div>
           <div class="adv5-road-slider-wrap font-mono">
             <div class="adv5-road-slider-bar">
-              <div class="adv5-road-slider-fill" style="width: 12.5%;"></div>
+              <div class="adv5-road-slider-fill" style="width: ${roadFillPercent}%;"></div>
             </div>
-            <span>العالم 1 من 8</span>
+            <span>العالم ${Math.max(1, unlockedWorldsCount)} من 8</span>
           </div>
         </div>
 
         <div class="adv5-road-nodes-grid">
-          <!-- Node 1: قرية بايثون (Active / Open) -->
-          <div class="adv5-road-node active" data-world-node="world-1">
-            <div class="adv5-node-bubble cyan">1</div>
-            <h4 class="adv5-node-name">قرية بايثون</h4>
-            <span class="adv5-node-sub status-open font-mono">مفتوح (4/5)</span>
-          </div>
+          ${WORLDS_DATA.map((w, wIdx) => {
+            const wChallenges = PythonAdventureService.getWorldChallenges(w.id);
+            const wSolved = wChallenges.filter((c) => completedMap[c.id]).length;
+            const wTotal = wChallenges.length || w.levelsCount || 8;
+            const isCompleted = wTotal > 0 && wSolved >= wTotal;
+            const isUnlocked = unlockedWorlds.includes(w.id) || isCompleted;
 
-          <!-- Node 2: غابة الشروط -->
-          <div class="adv5-road-node next" data-world-node="world-2">
-            <div class="adv5-node-bubble dark font-mono">2</div>
-            <h4 class="adv5-node-name">غابة الشروط</h4>
-            <span class="adv5-node-sub text-slate-400">المرحلة التالية</span>
-          </div>
+            let statusText = "مقفل";
+            let statusClass = "text-slate-500";
+            let nodeClass = "locked";
+            let bubbleContent = '<i class="fa-solid fa-lock"></i>';
 
-          <!-- Node 3: كهف الحلقات (Locked) -->
-          <div class="adv5-road-node locked" data-world-node="world-3">
-            <div class="adv5-node-bubble lock">
-              <i class="fa-solid fa-lock"></i>
-            </div>
-            <h4 class="adv5-node-name">كهف الحلقات</h4>
-            <span class="adv5-node-sub text-slate-500">مقفل</span>
-          </div>
+            if (isCompleted) {
+              statusText = `مكتمل (${wSolved}/${wTotal})`;
+              statusClass = "text-emerald-400 font-mono";
+              nodeClass = "active completed";
+              bubbleContent = `✓`;
+            } else if (isUnlocked) {
+              statusText = `مفتوح (${wSolved}/${wTotal})`;
+              statusClass = "status-open font-mono text-cyan-400";
+              nodeClass = "active";
+              bubbleContent = `${w.number}`;
+            } else if (wIdx === 1 || (wIdx > 0 && unlockedWorlds.includes(WORLDS_DATA[wIdx - 1]?.id))) {
+              statusText = "المرحلة التالية";
+              statusClass = "text-slate-400";
+              nodeClass = "next";
+              bubbleContent = `${w.number}`;
+            }
 
-          <!-- Node 4: قلعة الدوال (Locked) -->
-          <div class="adv5-road-node locked" data-world-node="world-4">
-            <div class="adv5-node-bubble lock">
-              <i class="fa-solid fa-lock"></i>
-            </div>
-            <h4 class="adv5-node-name">قلعة الدوال</h4>
-            <span class="adv5-node-sub text-slate-500">مقفل</span>
-          </div>
-
-          <!-- Node 5: محيط المصفوفات (Locked) -->
-          <div class="adv5-road-node locked" data-world-node="world-5">
-            <div class="adv5-node-bubble lock">
-              <i class="fa-solid fa-lock"></i>
-            </div>
-            <h4 class="adv5-node-name">محيط المصفوفات</h4>
-            <span class="adv5-node-sub text-slate-500">مقفل</span>
-          </div>
-
-          <!-- Node 6: برج الكائنات OOP (Locked) -->
-          <div class="adv5-road-node locked" data-world-node="world-6">
-            <div class="adv5-node-bubble lock">
-              <i class="fa-solid fa-lock"></i>
-            </div>
-            <h4 class="adv5-node-name">برج الكائنات OOP</h4>
-            <span class="adv5-node-sub text-slate-500">مقفل</span>
-          </div>
-
-          <!-- Node 7: وادي الذكاء AI (Locked) -->
-          <div class="adv5-road-node locked" data-world-node="world-7">
-            <div class="adv5-node-bubble lock">
-              <i class="fa-solid fa-lock"></i>
-            </div>
-            <h4 class="adv5-node-name">وادي الذكاء AI</h4>
-            <span class="adv5-node-sub text-slate-500">مقفل</span>
-          </div>
-
-          <!-- Node 8: حلبة النهائي (Project) -->
-          <div class="adv5-road-node finish" data-world-node="world-8">
-            <div class="adv5-node-bubble trophy">
-              <i class="fa-solid fa-award text-amber-400"></i>
-            </div>
-            <h4 class="adv5-node-name">حلبة النهائي</h4>
-            <span class="adv5-node-sub text-amber-400/80">المشروع التخرج</span>
-          </div>
+            return `
+              <div class="adv5-road-node ${nodeClass}" data-world-node="${w.id}" role="button" tabindex="${isUnlocked ? '0' : '-1'}">
+                <div class="adv5-node-bubble ${isCompleted ? 'cyan font-bold' : isUnlocked ? 'cyan' : 'dark font-mono'}">${bubbleContent}</div>
+                <h4 class="adv5-node-name">${escapeHtml(w.title)}</h4>
+                <span class="adv5-node-sub ${statusClass}">${statusText}</span>
+              </div>
+            `;
+          }).join("")}
         </div>
       </section>
     </div>
