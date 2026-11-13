@@ -1,5 +1,6 @@
 // src/features/leaderboard/leaderboard.controller.js
 import { LeaderboardService } from "./leaderboard.service.js";
+import { LeaderboardAudioService } from "./leaderboard-audio.service.js";
 import { renderLeaderboardView } from "./components/leaderboard.component.js";
 import { setHtml } from "../../shared/utils/dom.utils.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
@@ -27,6 +28,7 @@ export const LeaderboardController = {
    */
   async loadLeaderboard(scope = "group") {
     if (!this._container) return;
+    LeaderboardAudioService.stopAnnouncement();
     this._currentScope = scope;
 
     setHtml(
@@ -109,6 +111,57 @@ export const LeaderboardController = {
           this._currentScope = newScope;
           showToast(`تم تبديل العرض إلى: ${e.currentTarget.innerText.trim()}`, "info");
           this.loadLeaderboard(newScope);
+        }
+      });
+    });
+
+    // 1.5. Action Audio Announcement Button & Visualizer
+    const actionAudioBtn = this._container.querySelector("#lbActionAudioBtn");
+    const audioWaveBars = this._container.querySelector("#lbAudioWaveBars");
+    const audioText = this._container.querySelector("#lbAudioText");
+    const audioIcon = this._container.querySelector("#lbAudioIcon");
+
+    const resetAudioUI = () => {
+      actionAudioBtn?.classList.remove("is-playing");
+      audioWaveBars?.classList.add("d-none");
+      if (audioText) audioText.textContent = "بث إعلان وتتويج الأبطال (Action Audio) 🔊";
+      if (audioIcon) audioIcon.textContent = "⚡";
+      this._container.querySelectorAll(".lb-podium-card").forEach((card) => {
+        card.classList.remove("action-focused");
+      });
+    };
+
+    actionAudioBtn?.addEventListener("click", () => {
+      if (LeaderboardAudioService.isAnnouncing()) {
+        LeaderboardAudioService.stopAnnouncement();
+        resetAudioUI();
+        showToast("تم إيقاف البث الصوتي ⏹️", "info");
+        return;
+      }
+
+      const top1 = this._data?.topStudents?.[0] || null;
+      const top2 = this._data?.topStudents?.[1] || null;
+
+      actionAudioBtn.classList.add("is-playing");
+      audioWaveBars?.classList.remove("d-none");
+      if (audioText) audioText.textContent = "إيقاف البث الإذاعي ⏹️";
+      if (audioIcon) audioIcon.textContent = "🎙️";
+
+      LeaderboardAudioService.announceTopChampions({
+        top1,
+        top2,
+        onStart: () => {
+          showToast("⚡ جاري بث تتويج الأبطال صوتياً بنظام أكشن...", "info");
+        },
+        onFocusRank: (rank) => {
+          this._container.querySelectorAll(".lb-podium-card").forEach((c) => c.classList.remove("action-focused"));
+          if (rank > 0) {
+            const card = this._container.querySelector(`.lb-podium-card[data-podium-rank="${rank}"]`);
+            card?.classList.add("action-focused");
+          }
+        },
+        onEnd: () => {
+          resetAudioUI();
         }
       });
     });

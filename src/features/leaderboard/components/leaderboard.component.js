@@ -1,5 +1,6 @@
 // src/features/leaderboard/components/leaderboard.component.js
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
+import { getHonoraryEngineerTitle, getChallengeHonorTitle } from "../leaderboard-audio.service.js";
 
 /**
  * Renders the Leaderboard View dynamically bound to live Firestore data.
@@ -32,6 +33,15 @@ export function renderLeaderboardView({
   const top1 = topStudents[0] || null;
   const top2 = topStudents[1] || null;
   const top3 = topStudents[2] || null;
+
+  const title1 = top1 ? getHonoraryEngineerTitle(top1.studentName) : "المهندس";
+  const challengeTitle1 = top1 ? getChallengeHonorTitle(top1, 1) : "بطل التحديات الأول 👑 | خبير بايثون الأسطوري 🐍";
+
+  const title2 = top2 ? getHonoraryEngineerTitle(top2.studentName) : "المهندس";
+  const challengeTitle2 = top2 ? getChallengeHonorTitle(top2, 2) : "وصيف البطولة 🥈 | مهندس الخوارزميات المتقدمة 🧠";
+
+  const title3 = top3 ? getHonoraryEngineerTitle(top3.studentName) : "المهندس";
+  const challengeTitle3 = top3 ? getChallengeHonorTitle(top3, 3) : "فارس التحديات 🥉 | صائد الثغرات البرمجية 🛡️";
 
   // Motivation Calculation
   let motivationText = "أنت في صدارة الترتيب الأكاديمي! حافظ على هذا المستوى المتميز 🏆";
@@ -140,11 +150,28 @@ export function renderLeaderboardView({
             <i class="fa-solid fa-crown text-amber-400 lb-header-crown"></i>
           </h2>
           <p class="lb-podium-subtitle text-slate-400 text-xs mt-1">فرسان القمة أصحاب أعلى معدلات الإنجاز وتجميع نقاط الخبرة البرمجية</p>
+
+          <!-- Action Audio Broadcast Bar (Voice & SFX) -->
+          <div class="lb-action-broadcast-wrap">
+            <button type="button" class="lb-action-audio-btn" id="lbActionAudioBtn" title="بث إعلان وتتويج الأبطال صوتياً بنظام أكشن">
+              <span class="btn-action-glow"></span>
+              <span class="audio-btn-icon" id="lbAudioIcon">⚡</span>
+              <span class="audio-btn-text" id="lbAudioText">بث إعلان وتتويج الأبطال (Action Audio) 🔊</span>
+              <div class="audio-wave-bars d-none" id="lbAudioWaveBars">
+                <span class="bar b1"></span>
+                <span class="bar b2"></span>
+                <span class="bar b3"></span>
+                <span class="bar b4"></span>
+                <span class="bar b5"></span>
+              </div>
+            </button>
+            <span class="lb-action-hint">مؤثرات صوتية حماسية وإذاعة رسمية بالصوت لأبطال المركز الأول والثاني 🎙️</span>
+          </div>
         </div>
 
         <div class="lb-podium-grid">
           <!-- Rank 2: Silver (Right in RTL) -->
-          <div class="lb-podium-card rank-silver" style="--card-delay: 0.15s;">
+          <div class="lb-podium-card rank-silver" data-podium-rank="2" style="--card-delay: 0.15s;">
             <div class="podium-card-shine" aria-hidden="true"></div>
             
             <div class="podium-hero-crown silver" aria-hidden="true">
@@ -162,9 +189,11 @@ export function renderLeaderboardView({
               <span class="podium-avatar-rank-pill silver">#2</span>
             </div>
 
-            <h3 class="podium-user-name">${top2 ? escapeHtml(top2.studentName) : "في انتظار المنافس"}</h3>
+            <h3 class="podium-user-name">
+              ${top2 ? `<span class="honorary-eng-badge silver">${title2}</span> ${escapeHtml(top2.studentName)}` : "في انتظار المنافس"}
+            </h3>
             <div class="podium-user-role-wrap">
-              <span class="podium-user-role-badge">${top2 ? escapeHtml(top2.levelTitle || "مطور واعد ⚡") : "المقعد متاح للتنافس"}</span>
+              <span class="podium-user-role-badge silver">${top2 ? escapeHtml(challengeTitle2) : "المقعد متاح للتنافس"}</span>
             </div>
 
             <div class="podium-xp-score-wrap silver-xp">
@@ -196,7 +225,7 @@ export function renderLeaderboardView({
           </div>
 
           <!-- Rank 1: Gold (Center & Elevated) -->
-          <div class="lb-podium-card rank-gold" style="--card-delay: 0.35s;">
+          <div class="lb-podium-card rank-gold" data-podium-rank="1" style="--card-delay: 0.35s;">
             <div class="podium-card-shine" aria-hidden="true"></div>
             <div class="gold-halo-light" aria-hidden="true"></div>
 
@@ -215,9 +244,11 @@ export function renderLeaderboardView({
               <span class="podium-avatar-rank-pill gold">#1 🏆</span>
             </div>
 
-            <h3 class="podium-user-name">${top1 ? escapeHtml(top1.studentName) : "في انتظار بطل الصدارة"}</h3>
+            <h3 class="podium-user-name">
+              ${top1 ? `<span class="honorary-eng-badge gold">${title1}</span> ${escapeHtml(top1.studentName)}` : "في انتظار بطل الصدارة"}
+            </h3>
             <div class="podium-user-role-wrap">
-              <span class="podium-user-role-badge gold">${top1 ? escapeHtml(top1.levelTitle || "خبير بايثون الأسطوري 🐍") : "كن أول من يحصد الصدارة"}</span>
+              <span class="podium-user-role-badge gold">${top1 ? escapeHtml(challengeTitle1) : "كن أول من يحصد الصدارة"}</span>
             </div>
 
             <div class="podium-xp-score-wrap gold-xp">
@@ -257,7 +288,7 @@ export function renderLeaderboardView({
           </div>
 
           <!-- Rank 3: Bronze (Left in RTL) -->
-          <div class="lb-podium-card rank-bronze" style="--card-delay: 0.25s;">
+          <div class="lb-podium-card rank-bronze" data-podium-rank="3" style="--card-delay: 0.25s;">
             <div class="podium-card-shine" aria-hidden="true"></div>
             
             <div class="podium-hero-crown bronze" aria-hidden="true">
@@ -275,9 +306,11 @@ export function renderLeaderboardView({
               <span class="podium-avatar-rank-pill bronze">#3</span>
             </div>
 
-            <h3 class="podium-user-name">${top3 ? escapeHtml(top3.studentName) : "في انتظار المنافس"}</h3>
+            <h3 class="podium-user-name">
+              ${top3 ? `<span class="honorary-eng-badge bronze">${title3}</span> ${escapeHtml(top3.studentName)}` : "في انتظار المنافس"}
+            </h3>
             <div class="podium-user-role-wrap">
-              <span class="podium-user-role-badge">${top3 ? escapeHtml(top3.levelTitle || "مبرمج واعد ⚡") : "المقعد متاح للتنافس"}</span>
+              <span class="podium-user-role-badge bronze">${top3 ? escapeHtml(challengeTitle3) : "المقعد متاح للتنافس"}</span>
             </div>
 
             <div class="podium-xp-score-wrap bronze-xp">
@@ -319,7 +352,10 @@ export function renderLeaderboardView({
 
           <div class="lb-standing-identity">
             <div class="lb-standing-name-row">
-              <h3 class="lb-standing-name">${safeStudentName}</h3>
+              <h3 class="lb-standing-name">
+                <span class="engineer-title-badge cyan">${getHonoraryEngineerTitle(currentUser.studentName)}</span>
+                ${safeStudentName}
+              </h3>
               <span class="lb-you-badge">أنت (حسابك الشخصي)</span>
             </div>
             <p class="lb-standing-motivation">
@@ -404,6 +440,7 @@ export function renderLeaderboardView({
                       <td>
                         <div class="student-table-cell">
                           <h4 class="student-table-name">
+                            <span class="engineer-title-badge ${rankColorClass}">${getHonoraryEngineerTitle(st.studentName)}</span>
                             ${escapeHtml(st.studentName)}
                             ${isMe ? '<span class="lb-you-badge">أنت</span>' : ''}
                           </h4>

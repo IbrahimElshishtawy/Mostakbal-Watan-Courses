@@ -1501,3 +1501,196 @@
     overflow-x: auto;
   }
 }
+
+
+/* ========================================================
+   Action Audio Announcement & Honorary Engineer Design System
+   ======================================================== */
+
+.lb-action-broadcast-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1.25rem;
+  z-index: 10;
+  position: relative;
+}
+
+.lb-action-audio-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 1.85rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(14, 165, 233, 0.28) 50%, rgba(168, 85, 247, 0.22) 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.45);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-family: 'Cairo', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(245, 158, 11, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.lb-action-audio-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 0 8px 30px rgba(14, 165, 233, 0.35), 0 0 25px rgba(245, 158, 11, 0.4);
+}
+
+.lb-action-audio-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.lb-action-audio-btn.is-playing {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(245, 158, 11, 0.35) 100%);
+  border-color: rgba(239, 68, 68, 0.7);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.4), 0 0 50px rgba(245, 158, 11, 0.3);
+  animation: actionPulseGlow 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes actionPulseGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.35), 0 0 40px rgba(14, 165, 233, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 35px rgba(245, 158, 11, 0.6), 0 0 60px rgba(239, 68, 68, 0.4);
+  }
+}
+
+.audio-btn-icon {
+  font-size: 1.15rem;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.7));
+}
+
+.audio-wave-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+  margin-right: 4px;
+}
+
+.audio-wave-bars .bar {
+  width: 3.5px;
+  background: linear-gradient(to top, #38bdf8, #fbbf24);
+  border-radius: 2px;
+  height: 4px;
+  animation: barEqualizer 0.7s infinite alternate ease-in-out;
+}
+
+.audio-wave-bars .bar.b1 { animation-delay: 0.1s; height: 6px; }
+.audio-wave-bars .bar.b2 { animation-delay: 0.25s; height: 12px; }
+.audio-wave-bars .bar.b3 { animation-delay: 0.05s; height: 16px; }
+.audio-wave-bars .bar.b4 { animation-delay: 0.35s; height: 10px; }
+.audio-wave-bars .bar.b5 { animation-delay: 0.2s; height: 8px; }
+
+@keyframes barEqualizer {
+  0% { height: 4px; }
+  100% { height: 18px; }
+}
+
+.lb-action-hint {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  letter-spacing: 0.2px;
+}
+
+/* Honorary Engineering Badges */
+.honorary-eng-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  vertical-align: middle;
+  margin-left: 6px;
+  letter-spacing: 0.3px;
+}
+
+.honorary-eng-badge.gold {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.15));
+  color: #fde047;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+
+.honorary-eng-badge.silver {
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.25), rgba(100, 116, 139, 0.15));
+  color: #f1f5f9;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow: 0 0 10px rgba(148, 163, 184, 0.2);
+}
+
+.honorary-eng-badge.bronze {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.25), rgba(180, 83, 9, 0.15));
+  color: #fdba74;
+  border: 1px solid rgba(217, 119, 6, 0.5);
+}
+
+/* Table Engineer Tag */
+.engineer-title-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.engineer-title-badge.gold {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.engineer-title-badge.silver {
+  background: rgba(148, 163, 184, 0.18);
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.engineer-title-badge.bronze {
+  background: rgba(217, 119, 6, 0.18);
+  color: #fdba74;
+  border-color: rgba(217, 119, 6, 0.35);
+}
+
+.engineer-title-badge.cyan {
+  background: rgba(14, 165, 233, 0.18);
+  color: #38bdf8;
+  border-color: rgba(14, 165, 233, 0.35);
+}
+
+/* Action Focused State on Podium Cards during Broadcast */
+.lb-podium-card.action-focused {
+  transform: translateY(-16px) scale(1.04) !important;
+  z-index: 25 !important;
+  box-shadow: 0 0 45px rgba(245, 158, 11, 0.7), 0 0 80px rgba(56, 189, 248, 0.4) !important;
+  border-color: rgba(245, 158, 11, 0.9) !important;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.lb-podium-card.rank-silver.action-focused {
+  box-shadow: 0 0 45px rgba(56, 189, 248, 0.7), 0 0 80px rgba(148, 163, 184, 0.5) !important;
+  border-color: rgba(56, 189, 248, 0.9) !important;
+}
+
+.lb-podium-card.action-focused .podium-hero-crown {
+  animation: actionCrownBounce 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes actionCrownBounce {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-8px) scale(1.15); }
+}
