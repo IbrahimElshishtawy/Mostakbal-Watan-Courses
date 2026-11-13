@@ -191,6 +191,71 @@ export const ProblemSolvingService = {
     const points = p.points || 10;
     const earnedXp = points * 5;
 
+    // 1. Check for empty code or only comments
+    const nonComment = (code || "")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#"));
+
+    if (nonComment.length === 0) {
+      return {
+        success: false,
+        passed: false,
+        feedback: "لم يتم كتابة أي كود برمجي لتسليمه! يرجى كتابة حل المسألة أولاً."
+      };
+    }
+
+    // 2. Validate against ALL test cases (public + hidden)
+    const allTestCases = [
+      ...(p.publicTestCases || []),
+      ...(p.hiddenTestCases || [])
+    ];
+
+    if (allTestCases.length > 0) {
+      try {
+        const { runPythonCode, ensurePythonRuntime } = await import("../python-adventure/python-adventure-runtime.js");
+        await ensurePythonRuntime();
+
+        for (let i = 0; i < allTestCases.length; i++) {
+          const tc = allTestCases[i];
+          const rawInput = String(tc.input ?? "").replace(/\r\n/g, "\n");
+          const inputLines = rawInput.length > 0 ? rawInput.split("\n") : [];
+          let inputIdx = 0;
+
+          const res = await runPythonCode(code, {
+            timeoutMs: 4000,
+            onInput: () => (inputIdx < inputLines.length ? inputLines[inputIdx++] : "")
+          });
+
+          const expected = String(tc.expectedOutput ?? "").replace(/\r\n/g, "\n").trim();
+          const actual = String(res.output ?? "").replace(/\r\n/g, "\n").trim();
+
+          if (res.error) {
+            return {
+              success: false,
+              passed: false,
+              feedback: `فشل الكود أثناء فحص الحالات (حالة رقم ${i + 1}): ${res.error}`
+            };
+          }
+
+          if (actual !== expected) {
+            return {
+              success: false,
+              passed: false,
+              feedback: `لم يجتز الحل جميع الحالات. فشل في حالة اختبار: المتوقع كان "${expected}" ولكن الناتج الفعلي كان "${actual || "(فارغ)"}".`
+            };
+          }
+        }
+      } catch (testErr) {
+        console.error("Test execution error in submitSolution:", testErr);
+        return {
+          success: false,
+          passed: false,
+          feedback: `حدث خطأ أثناء فحص الكود: ${testErr.message || testErr}`
+        };
+      }
+    }
+
     const submissionDoc = {
       id: submissionId,
       studentUid: uid,

@@ -5,6 +5,7 @@ import { renderProblemWorkspace } from "./components/problem-workspace.component
 import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { setHtml } from "../../shared/utils/dom.utils.js";
 import { detectAndSanitizePythonCode } from "../../shared/utils/python-sanitizer.js";
+import { runPythonCode, ensurePythonRuntime } from "../python-adventure/python-adventure-runtime.js";
 
 export const ProblemSolvingController = {
   _container: null,
@@ -298,30 +299,83 @@ export const ProblemSolvingController = {
       );
     }
 
+    const codeToRun = (this._userCode || "").trim();
+    const nonCommentLines = codeToRun
+      .split("\n")
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#"));
+
+    const publicCases = this._currentProblem.publicTestCases || [];
+
+    // If editor has no code or only comments
+    if (nonCommentLines.length === 0) {
+      const publicResults = publicCases.map((tc, idx) => ({
+        caseNumber: idx + 1,
+        description: tc.description || `حالة الاختبار ${idx + 1}`,
+        input: tc.input,
+        expected: String(tc.expectedOutput ?? "").trim(),
+        actual: "(لم يتم كتابة أي كود بعد)",
+        passed: false,
+        error: "المحرر فارغ! اكتب كود بايثون لحل المسألة أولاً."
+      }));
+
+      this._testResults = {
+        publicResults,
+        passedCount: 0,
+        totalCount: publicCases.length
+      };
+
+      showToast("المحرر فارغ! اكتب كود بايثون لحل المسألة قبل تشغيل الاختبارات ⚠️", "warning");
+      this.renderWorkspace();
+      return;
+    }
+
     this._isRunning = true;
     this._submissionResult = null;
     this._problemAttempts = (this._problemAttempts || 1) + 1;
     this.renderWorkspace();
 
     try {
-      // Simulate/execute public test cases against code
-      const publicCases = this._currentProblem.publicTestCases || [];
+      await ensurePythonRuntime();
       const publicResults = [];
       let passedCount = 0;
 
       for (let i = 0; i < publicCases.length; i++) {
         const tc = publicCases[i];
-        // Client-side quick syntax / basic output evaluation
-        const expected = String(tc.expectedOutput || "").trim();
+        const expected = String(tc.expectedOutput ?? "").replace(/\r\n/g, "\n").trim();
+
+        // Feed input lines sequentially to Python's input()
+        const rawInput = String(tc.input ?? "").replace(/\r\n/g, "\n");
+        const inputLines = rawInput.length > 0 ? rawInput.split("\n") : [];
+        let inputIdx = 0;
+
+        const res = await runPythonCode(codeToRun, {
+          timeoutMs: 4000,
+          onInput: () => {
+            if (inputIdx < inputLines.length) {
+              return inputLines[inputIdx++];
+            }
+            return "";
+          }
+        });
+
+        const actual = String(res.output ?? "").replace(/\r\n/g, "\n").trim();
+        const hasError = !!res.error;
+        const passed = !hasError && (actual === expected);
+
+        if (passed) {
+          passedCount++;
+        }
+
         publicResults.push({
           caseNumber: i + 1,
           description: tc.description || `حالة الاختبار ${i + 1}`,
           input: tc.input,
-          expected: expected,
-          actual: expected, // Visual preview verified by authoritative server
-          passed: true
+          expected,
+          actual: hasError ? res.error : (actual || "(لا توجد مخرجات)"),
+          passed,
+          error: hasError ? res.error : null
         });
-        passedCount++;
       }
 
       this._testResults = {
@@ -330,7 +384,11 @@ export const ProblemSolvingController = {
         totalCount: publicCases.length
       };
 
-      showToast("تم فحص الحالات العامة بنجاح! جاهز للتسليم 🚀", "success");
+      if (passedCount === publicCases.length && publicCases.length > 0) {
+        showToast("جميع الحالات العامة اجتازت بنجاح! جاهز للتسليم 🚀", "success");
+      } else {
+        showToast(`اجتاز ${passedCount} من أصل ${publicCases.length} من الحالات. راجع ملخص الاختبارات.`, "warning");
+      }
     } catch (err) {
       console.error("Run tests error:", err);
       showToast(err.message || "حدث خطأ أثناء فحص الحالات العامة.", "error");
