@@ -1,8 +1,8 @@
 // src/features/leaderboard/leaderboard-audio.service.js
 /**
  * Leaderboard Action Audio & Speech Announcement Service
- * Delivers dynamic Arabic voice broadcast for Top 1 & Top 2 champions
- * with cinematic Web Audio API sound effects and honorary titles.
+ * Delivers dynamic Arabic voice broadcast for Top 1, Top 2, and Top 3 champions
+ * with cinematic Web Audio API sound effects, trailer booms, fanfares, and honorary titles.
  */
 
 /**
@@ -62,13 +62,13 @@ export function getHonoraryEngineerTitle(fullName) {
  */
 export function getChallengeHonorTitle(student, rank) {
   if (rank === 1) {
-    return "بطل التحديات الأول 👑 | خبير بايثون الأسطوري 🐍";
+    return "بطل التحديات الأول 👑 • خبير بايثون الأسطوري 🐍";
   }
   if (rank === 2) {
-    return "وصيف البطولة 🥈 | مهندس الخوارزميات المتقدمة 🧠";
+    return "وصيف البطولة 🥈 • مهندس الخوارزميات المتقدمة 🧠";
   }
   if (rank === 3) {
-    return "فارس التحديات 🥉 | صائد الثغرات البرمجية 🛡️";
+    return "فارس التحديات 🥉 • صائد الثغرات البرمجية 🛡️";
   }
   return student?.levelTitle || "مطور برمجيات واعد ⚡";
 }
@@ -100,50 +100,49 @@ class LeaderboardAudioServiceClass {
   }
 
   /**
-   * Plays a majestic Action Brass Fanfare chords using native Web Audio oscillators
+   * Plays a cinematic trailer whoosh transition using noise & sweeping filter
    */
-  playActionFanfare() {
+  playCinematicWhoosh() {
     const ctx = this._getAudioContext();
     if (!ctx) return;
 
-    const now = ctx.currentTime;
-    // Heroic brass chords: G3, C4, E4, G4, C5, E5
-    const notes = [196.00, 261.63, 329.63, 392.00, 523.25, 659.25];
+    try {
+      const bufferSize = ctx.sampleRate * 0.45;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+      }
 
-    notes.forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
       const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(250, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(3200, ctx.currentTime + 0.2);
+      filter.frequency.exponentialRampToValueAtTime(450, ctx.currentTime + 0.45);
+      filter.Q.setValueAtTime(2.5, ctx.currentTime);
 
-      // Rich brass timbre
-      osc.type = idx % 2 === 0 ? "sawtooth" : "triangle";
-      osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
 
-      // Low pass filter for warm trumpet presence
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(1200, now);
-      filter.frequency.exponentialRampToValueAtTime(3200, now + 0.15);
-      filter.frequency.exponentialRampToValueAtTime(800, now + 1.2);
-
-      // Attack - Decay - Sustain - Release Envelope
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.exponentialRampToValueAtTime(0.12, now + 0.08 + idx * 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.06, now + 0.4);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
-
-      osc.connect(filter);
+      noise.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
 
-      osc.start(now + idx * 0.04);
-      osc.stop(now + 1.45);
-    });
+      noise.start(ctx.currentTime);
+    } catch {
+      // Fallback silent
+    }
   }
 
   /**
    * Plays a cinematic action impact boom / sub-bass hit
    */
-  playCinematicImpact() {
+  playCinematicBoom() {
     const ctx = this._getAudioContext();
     if (!ctx) return;
 
@@ -151,19 +150,69 @@ class LeaderboardAudioServiceClass {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    // Pitch drop for dramatic action impact
+    // Pitch drop for dramatic action impact (Hans Zimmer style)
     osc.type = "sine";
-    osc.frequency.setValueAtTime(160, now);
-    osc.frequency.exponentialRampToValueAtTime(38, now + 0.35);
+    osc.frequency.setValueAtTime(175, now);
+    osc.frequency.exponentialRampToValueAtTime(32, now + 0.45);
 
-    gain.gain.setValueAtTime(0.28, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.85);
+    osc.stop(now + 0.95);
+  }
+
+  /**
+   * Plays majestic Action Fanfares tailored by rank level
+   * @param {number} rank - 1 for Gold, 2 for Silver, 3 for Bronze
+   */
+  playCinematicFanfare(rank = 1) {
+    const ctx = this._getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    // Rank 1: Royal triumphant multi-octave fanfare
+    // Rank 2: Bright ascending trumpet chords
+    // Rank 3: Heroic brass warrior chords
+    let notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99]; // Default Gold
+    if (rank === 2) {
+      notes = [220.00, 277.18, 329.63, 440.00, 554.37]; // Silver A-major
+    } else if (rank === 3) {
+      notes = [196.00, 246.94, 293.66, 392.00, 493.88]; // Bronze G-major
+    }
+
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      // Rich brass harmonic blend
+      osc.type = idx % 2 === 0 ? "sawtooth" : "triangle";
+      osc.frequency.setValueAtTime(freq, now + idx * 0.035);
+
+      // Warm trumpet brass filter
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(1200, now);
+      filter.frequency.exponentialRampToValueAtTime(3400, now + 0.12);
+      filter.frequency.exponentialRampToValueAtTime(850, now + 1.2);
+
+      // Brass envelope
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.exponentialRampToValueAtTime(0.12, now + 0.07 + idx * 0.035);
+      gain.gain.exponentialRampToValueAtTime(0.05, now + 0.4);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.35);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + idx * 0.035);
+      osc.stop(now + 1.4);
+    });
   }
 
   /**
@@ -181,27 +230,36 @@ class LeaderboardAudioServiceClass {
       const gain = ctx.createGain();
 
       osc.type = "sine";
-      osc.frequency.setValueAtTime(f, now + i * 0.08);
+      osc.frequency.setValueAtTime(f, now + i * 0.07);
 
-      gain.gain.setValueAtTime(0.001, now + i * 0.08);
-      gain.gain.exponentialRampToValueAtTime(0.15, now + i * 0.08 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.6);
+      gain.gain.setValueAtTime(0.001, now + i * 0.07);
+      gain.gain.exponentialRampToValueAtTime(0.14, now + i * 0.07 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.07 + 0.6);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
 
-      osc.start(now + i * 0.08);
-      osc.stop(now + i * 0.08 + 0.65);
+      osc.start(now + i * 0.07);
+      osc.stop(now + i * 0.07 + 0.65);
     });
   }
 
   /**
    * Launches celebratory multi-color confetti explosion on the screen
+   * @param {number} rank - target rank color emphasis (1 gold, 2 silver, 3 bronze, null all)
    */
-  triggerConfetti() {
+  triggerConfetti(rank = 1) {
     const container = document.querySelector(".lb-podium-wrapper") || document.body;
-    const count = 35;
-    const colors = ["#f59e0b", "#38bdf8", "#ec4899", "#10b981", "#e2e8f0", "#a855f7"];
+    const count = 40;
+
+    let colors = ["#f59e0b", "#38bdf8", "#ec4899", "#10b981", "#e2e8f0", "#a855f7"];
+    if (rank === 1) {
+      colors = ["#ffd700", "#f59e0b", "#fbbf24", "#fef08a", "#ffffff"];
+    } else if (rank === 2) {
+      colors = ["#cbd5e1", "#38bdf8", "#94a3b8", "#f1f5f9", "#0ea5e9"];
+    } else if (rank === 3) {
+      colors = ["#d97706", "#f59e0b", "#b45309", "#fed7aa", "#fcd34d"];
+    }
 
     for (let i = 0; i < count; i++) {
       const particle = document.createElement("div");
@@ -209,12 +267,12 @@ class LeaderboardAudioServiceClass {
       const bg = colors[Math.floor(Math.random() * colors.length)];
       const size = Math.floor(Math.random() * 8) + 6;
       const left = Math.floor(Math.random() * 80) + 10;
-      const xVel = (Math.random() - 0.5) * 300;
+      const xVel = (Math.random() - 0.5) * 320;
       const rot = Math.floor(Math.random() * 720) - 360;
 
       particle.style.cssText = `
         position: absolute;
-        top: 20%;
+        top: 25%;
         left: ${left}%;
         width: ${size}px;
         height: ${size * (Math.random() > 0.5 ? 1.6 : 1)}px;
@@ -230,7 +288,7 @@ class LeaderboardAudioServiceClass {
       container.appendChild(particle);
 
       requestAnimationFrame(() => {
-        particle.style.transform = `translate3d(${xVel}px, ${Math.random() * 260 + 120}px, 0) rotate(${rot}deg)`;
+        particle.style.transform = `translate3d(${xVel}px, ${Math.random() * 280 + 130}px, 0) rotate(${rot}deg)`;
         particle.style.opacity = "0";
       });
 
@@ -269,17 +327,19 @@ class LeaderboardAudioServiceClass {
   }
 
   /**
-   * Formulates and broadcasts the Action Voice Announcement for Top 1 and Top 2
+   * Formulates and broadcasts the Cinematic Action Voice Announcement for Top 1, Top 2, and Top 3
    * @param {object} params
    * @param {object} params.top1 - Top 1 student entry
    * @param {object} params.top2 - Top 2 student entry
+   * @param {object} params.top3 - Top 3 student entry
    * @param {function} params.onStart - Callback when speech starts
    * @param {function} params.onEnd - Callback when speech finishes or canceled
-   * @param {function} params.onFocusRank - Callback with (rank) to highlight podium cards
+   * @param {function} params.onFocusRank - Callback with (rank) to highlight podium cards (1, 2, 3, or -1 for all)
    */
   async announceTopChampions({
     top1 = null,
     top2 = null,
+    top3 = null,
     onStart = () => {},
     onEnd = () => {},
     onFocusRank = () => {}
@@ -299,56 +359,77 @@ class LeaderboardAudioServiceClass {
     this._isAnnouncing = true;
     onStart();
 
-    // 1. Initial Action Fanfare & Confetti
-    this.playCinematicImpact();
-    this.playActionFanfare();
+    // 1. Initial Cinematic Trailer Boom & Whoosh
+    this.playCinematicBoom();
+    this.playCinematicWhoosh();
     this.triggerConfetti();
 
-    // Prepare student data
+    // Prepare student 1 data
     const name1 = top1?.studentName || "بطل الدورة";
     const title1 = getHonoraryEngineerTitle(name1);
     const challengeRole1 = "خبير بايثون الأسطوري وبطل التحديات الأول";
     const xp1 = top1?.xp ? `${top1.xp.toLocaleString()} نقطة` : "";
 
+    // Prepare student 2 data
     const name2 = top2?.studentName || "وصيف البطولة";
     const title2 = getHonoraryEngineerTitle(name2);
     const challengeRole2 = "مهندس الخوارزميات المتقدمة ووصيف البطولة";
     const xp2 = top2?.xp ? `${top2.xp.toLocaleString()} نقطة` : "";
 
-    // Arabic Action Broadcast Script
+    // Prepare student 3 data
+    const name3 = top3?.studentName || "فارس التحديات";
+    const title3 = getHonoraryEngineerTitle(name3);
+    const challengeRole3 = "فارس التحديات وصائد الثغرات البرمجية";
+    const xp3 = top3?.xp ? `${top3.xp.toLocaleString()} نقطة` : "";
+
+    // Arabic Cinematic Action Script (Rank 1 -> Rank 2 -> Rank 3 -> Grand Finale)
     const speechSegments = [
       {
-        text: `أهلاً بكم في قاعة الشرف وتتويج الأبطال!`,
+        text: `استعدوا للحظة الحسم! نعلن الآن التتويج السينمائي لثلاثي قمة هندسة البرمجيات وبايثون في منصة اتحاد بشبابها!`,
         action: () => {
           onFocusRank(0);
+          this.playCinematicWhoosh();
         },
         delayAfter: 350
       },
       {
-        text: `في المركز الأول وبطل الصدارة: ${title1} ${name1}! ${challengeRole1} برصيد ${xp1}!`,
+        text: `في المركز الأول وبطل الصدارة الأسطوري بلا منازع: ${title1} ${name1}! ${challengeRole1} برصيد كاسح: ${xp1}!`,
         action: () => {
           onFocusRank(1);
-          this.playCinematicImpact();
+          this.playCinematicBoom();
+          this.playCinematicFanfare(1);
           this.playVictoryArpeggio();
-          this.triggerConfetti();
+          this.triggerConfetti(1);
         },
-        delayAfter: 500
+        delayAfter: 480
       },
       {
-        text: `وفي المركز الثاني ووصيف البطولة: ${title2} ${name2}! ${challengeRole2} برصيد ${xp2}!`,
+        text: `وفي المركز الثاني ووصيف البطولة الفولاذي: ${title2} ${name2}! ${challengeRole2} برصيد: ${xp2}!`,
         action: () => {
           onFocusRank(2);
-          this.playActionFanfare();
-          this.triggerConfetti();
+          this.playCinematicWhoosh();
+          this.playCinematicFanfare(2);
+          this.triggerConfetti(2);
+        },
+        delayAfter: 450
+      },
+      {
+        text: `وفي المركز الثالث وفارس التحديات البرمجية: ${title3} ${name3}! ${challengeRole3} برصيد: ${xp3}!`,
+        action: () => {
+          onFocusRank(3);
+          this.playCinematicWhoosh();
+          this.playCinematicFanfare(3);
+          this.triggerConfetti(3);
         },
         delayAfter: 400
       },
       {
-        text: `تحية فخر وإجلال لمهندسي المستقبل في منصة اتحاد بشبابها! عاااش يا أبطال!`,
+        text: `تحية فخر وإجلال لثلاثي الصدارة ومهندسي المستقبل! أنتم فخر الأكاديمية والوطن! عاااش يا أبطال!`,
         action: () => {
-          onFocusRank(0);
+          onFocusRank(-1); // Celebrate all three cards
           this.playVictoryArpeggio();
-          this.playActionFanfare();
+          this.playCinematicBoom();
+          this.playCinematicFanfare(1);
           this.triggerConfetti();
         },
         delayAfter: 200

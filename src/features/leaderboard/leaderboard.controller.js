@@ -141,23 +141,28 @@ export const LeaderboardController = {
 
       const top1 = this._data?.topStudents?.[0] || null;
       const top2 = this._data?.topStudents?.[1] || null;
+      const top3 = this._data?.topStudents?.[2] || null;
 
       actionAudioBtn.classList.add("is-playing");
       audioWaveBars?.classList.remove("d-none");
-      if (audioText) audioText.textContent = "إيقاف البث الإذاعي ⏹️";
-      if (audioIcon) audioIcon.textContent = "🎙️";
+      if (audioText) audioText.textContent = "إيقاف البث السينمائي ⏹️";
+      if (audioIcon) audioIcon.textContent = "🎬";
 
       LeaderboardAudioService.announceTopChampions({
         top1,
         top2,
+        top3,
         onStart: () => {
-          showToast("⚡ جاري بث تتويج الأبطال صوتياً بنظام أكشن...", "info");
+          showToast("⚡ جاري البث السينمائي لتتويج ثلاثي صدارة الأبطال...", "info");
         },
         onFocusRank: (rank) => {
           this._container.querySelectorAll(".lb-podium-card").forEach((c) => c.classList.remove("action-focused"));
           if (rank > 0) {
             const card = this._container.querySelector(`.lb-podium-card[data-podium-rank="${rank}"]`);
             card?.classList.add("action-focused");
+          } else if (rank === -1) {
+            // All 3 champions celebrate simultaneously
+            this._container.querySelectorAll(".lb-podium-card").forEach((c) => c.classList.add("action-focused"));
           }
         },
         onEnd: () => {
