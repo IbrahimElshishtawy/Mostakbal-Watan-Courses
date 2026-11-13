@@ -129,7 +129,7 @@ export const PythonAdventureService = {
     }
 
     // 2. Cascade across all 8 concept worlds sequentially
-    for (let wNum = 1; wNum <= 8; wNum++) {
+    for (let wNum = 1; wNum <= WORLDS_DATA.length; wNum++) {
       const curWorldId = `world-${wNum}`;
       const nextWorldId = `world-${wNum + 1}`;
       const curChallenges = this.getWorldChallenges(curWorldId);
@@ -148,7 +148,7 @@ export const PythonAdventureService = {
 
       // If all challenges in this world are completed, unlock next world and its first challenge!
       if (curChallenges.length > 0 && curChallenges.every((c) => !!completed[c.id])) {
-        if (wNum < 8) {
+        if (wNum < WORLDS_DATA.length) {
           unlockedWorlds.add(nextWorldId);
           const nextChallenges = this.getWorldChallenges(nextWorldId);
           if (nextChallenges.length > 0) {
@@ -157,6 +157,21 @@ export const PythonAdventureService = {
         }
       }
     }
+
+    // 3. Guarantee full and fair XP calculation from all completed challenges (Self-Healing)
+    let trueXpSum = 0;
+    for (const [chId, rec] of Object.entries(completed)) {
+      const chData = CHALLENGES_CLIENT_DATA[chId];
+      const baseVal = chData ? (chData.baseXp || 100) : (rec.score || 10) * 5;
+      const awarded = Math.max(rec.xpAwarded || 0, baseVal);
+      trueXpSum += awarded;
+    }
+    const finalXp = Math.max(progress.xp || 0, trueXpSum);
+    const finalLevel = Math.max(1, Math.floor(finalXp / 250) + 1);
+    progress.xp = finalXp;
+    progress.level = finalLevel;
+    if (!progress.stats) progress.stats = {};
+    progress.stats.totalCompleted = Object.keys(completed).length;
 
     return {
       ...progress,

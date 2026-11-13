@@ -12,7 +12,7 @@ export const WORLDS_DATA = [
     concept: "الطباعة والعمليات الحسابية",
     description: "بداية رحلتك البرمجية: تعلم طباعة النصوص والعمليات الحسابية وصياغة الكود الأول.",
     color: "#10b981",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: null
   },
   {
@@ -24,7 +24,7 @@ export const WORLDS_DATA = [
     concept: "المتغيرات والأنواع وتنسيق f-strings",
     description: "اكتشف كيفية تخزين البيانات في الذاكرة والتحويل بين النصوص والأرقام.",
     color: "#3b82f6",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: "world-1"
   },
   {
@@ -36,7 +36,7 @@ export const WORLDS_DATA = [
     concept: "صنع القرارات if و elif و else",
     description: "اجعل برامجك ذكية تتخذ قرارات منطقية بناءً على شروط متعددة ومقارنات دقيقة.",
     color: "#8b5cf6",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: "world-2"
   },
   {
@@ -48,7 +48,7 @@ export const WORLDS_DATA = [
     concept: "حلقات التكرار for و while و range",
     description: "أتقن تكرار الأوامر الذكي بدون تكرار الكود، وتجنب فخ الحلقات اللانهائية.",
     color: "#f59e0b",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: "world-3"
   },
   {
@@ -60,7 +60,7 @@ export const WORLDS_DATA = [
     concept: "القوائم ومصفوفات البيانات والفهرسة",
     description: "تعلم تنظيم وتخزين مجموعات البيانات في قوائم ومعالجتها بالمرور والتصفية.",
     color: "#ec4899",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: "world-4"
   },
   {
@@ -72,7 +72,7 @@ export const WORLDS_DATA = [
     concept: "بناء الدوال def والقيم المرجعة return",
     description: "ابنِ آلات برمجية قابلة لإعادة الاستخدام تمرر لها مدخلات وتعيد نتائج حسابية.",
     color: "#06b6d4",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: "world-5"
   },
   {
@@ -84,7 +84,7 @@ export const WORLDS_DATA = [
     concept: "البرمجة كائنية التوجه Classes & Objects",
     description: "المستوى المتقدم: تصميم الفئات، دوال البناء __init__، وتفاعل الكائنات البرمجية.",
     color: "#ef4444",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: "world-6"
   },
   {
@@ -96,9 +96,58 @@ export const WORLDS_DATA = [
     concept: "المشروع الختامي الشامل وتتويج بطل بايثون",
     description: "التحدي النهائي: دمج كل ما تعلمته لبناء أنظمة برمجية مصغرة متكاملة.",
     color: "#eab308",
-    levelsCount: 8,
+    levelsCount: 11,
     requiredWorldId: "world-7"
+  },
+  {
+    id: "world-9",
+    number: 9,
+    title: "واحة القواميس والبيانات",
+    englishTitle: "Dictionaries & Data Oasis",
+    icon: "📚",
+    concept: "القواميس المتقدمة Dictionaries والمجموعات Sets وهياكل البيانات المنظمة",
+    description: "أتقن بناء هياكل البيانات المتقدمة: ربط المفاتيح بالقيم (Key-Value)، تصفية البيانات، وتجميع الإحصائيات الذكية.",
+    color: "#6366f1",
+    levelsCount: 11,
+    requiredWorldId: "world-8"
   }
+,
+  {
+    "id": "world-10",
+    "number": 10,
+    "title": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "englishTitle": "Problem Solving & Algorithmic Arena",
+    "icon": "🥋",
+    "concept": "تفكيك المسائل البرمجية، تحليل المدخلات والمخرجات، وتصميم الحلول المنطقية الفعالة",
+    "description": "تدرب على مهارات Problem Solving الحقيقية: فهم المشكلة، رسم خريطة الحل، والتعامل مع الأنماط المتكررة.",
+    "color": "#0ea5e9",
+    "levelsCount": 11,
+    "requiredWorldId": "world-9"
+  },
+  {
+    "id": "world-11",
+    "number": 11,
+    "title": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "englishTitle": "Tech Interview Prep Lab & Coding Challenges",
+    "icon": "💼",
+    "concept": "أشهر أسئلة المقابلات البرمجية: Two Pointers، تكرار العناصر، السلاسل النصية، والمصفوفات",
+    "description": "استعد لمقابلات العمل التقنية في كبرى شركات البرمجيات بحل أسئلة قياسية معتمدة عالمياً.",
+    "color": "#8b5cf6",
+    "levelsCount": 11,
+    "requiredWorldId": "world-10"
+  },
+  {
+    "id": "world-12",
+    "number": 12,
+    "title": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "englishTitle": "Competitive Programming Colosseum",
+    "icon": "⚡",
+    "concept": "التحديات التنافسية الكبرى، خوارزميات السرعة والكفاءة، والتعامل مع الحالات الحدية الصعبة",
+    "description": "الساحة الكبرى لمحترفي الأكواد: حل أصعب التحديات البرمجية بذكاء وتحقيق أعلى كفاءة زمنية ومكانية.",
+    "color": "#f59e0b",
+    "levelsCount": 11,
+    "requiredWorldId": "world-11"
+  },
 ];
 
 // PROBLEM SOLVING COMPETITIVE LEVEL WORLDS (5 PROGRESSIVE LEVELS)
@@ -186,6 +235,31 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
 ];
 
 export const ALL_WORLDS_DATA = [...WORLDS_DATA, ...PROBLEM_SOLVING_WORLDS_DATA];
+
+
+export const PYTHON_RANKS_LADDER = [
+  { minLevel: 100, title: "إله البرمجة والأنظمة ⚡👑", englishTitle: "Divine Code Overlord", color: "#eab308", badgeIcon: "👑" },
+  { minLevel: 80, title: "المعلم الأعظم للغة بايثون 🌟", englishTitle: "Supreme Python Master", color: "#f59e0b", badgeIcon: "🌟" },
+  { minLevel: 70, title: "أسطورة الذكاء البرمجي 🏆", englishTitle: "Mythic Python Sage", color: "#ef4444", badgeIcon: "🏆" },
+  { minLevel: 60, title: "قاهر التحديات الكوني 🌌", englishTitle: "Cosmic Problem Solver", color: "#ec4899", badgeIcon: "🌌" },
+  { minLevel: 50, title: "بطل بايثون الأسطوري 👑", englishTitle: "Legendary Grandmaster", color: "#8b5cf6", badgeIcon: "👑" },
+  { minLevel: 45, title: "حكيم الأكواد البرمجية 🧙‍♂️", englishTitle: "Code Archmage", color: "#6366f1", badgeIcon: "🧙‍♂️" },
+  { minLevel: 40, title: "خبير بايثون المعتمد 💎", englishTitle: "Python Specialist", color: "#06b6d4", badgeIcon: "💎" },
+  { minLevel: 35, title: "محارب الأكواد النخبة ⚔️", englishTitle: "Elite Code Warrior", color: "#0ea5e9", badgeIcon: "⚔️" },
+  { minLevel: 30, title: "مهندس نظم بايثون 🧠", englishTitle: "Systems Engineer", color: "#3b82f6", badgeIcon: "🧠" },
+  { minLevel: 25, title: "سيد الشروط والحلقات ⚙️", englishTitle: "Logic Master", color: "#10b981", badgeIcon: "⚙️" },
+  { minLevel: 20, title: "فارس بايثون 🛡️", englishTitle: "Python Knight", color: "#14b8a6", badgeIcon: "🛡️" },
+  { minLevel: 15, title: "صياد الخوارزميات 🔍", englishTitle: "Algorithm Hunter", color: "#84cc16", badgeIcon: "🔍" },
+  { minLevel: 10, title: "مبرمج صاعد 💻", englishTitle: "Rising Developer", color: "#eab308", badgeIcon: "💻" },
+  { minLevel: 5, title: "مستكشف الكود ⚡", englishTitle: "Code Explorer", color: "#f97316", badgeIcon: "⚡" },
+  { minLevel: 1, title: "مبتدئ بايثون 🥉", englishTitle: "Python Novice", color: "#94a3b8", badgeIcon: "🥉" }
+];
+
+export function getStudentRankTitle(level = 1) {
+  const lvl = Math.max(1, Number(level) || 1);
+  const found = PYTHON_RANKS_LADDER.find(r => lvl >= r.minLevel);
+  return found || PYTHON_RANKS_LADDER[PYTHON_RANKS_LADDER.length - 1];
+}
 
 export const ACHIEVEMENTS_DATA = [
   {
@@ -495,7 +569,7 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "Final Bill: 205 EGP", description: "حساب إجمالي الفاتورة والخصم والضريبة" }
     ],
     unlocksWorldId: "world-2",
-    nextChallengeId: "world-2-level-1"
+    nextChallengeId: "world-1-level-9"
   },
 
   // WORLD 2
@@ -750,7 +824,7 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "Net EGP: 4949.00", description: "تحويل العملات وحساب العمولة البنكية" }
     ],
     unlocksWorldId: "world-3",
-    nextChallengeId: "world-3-level-1"
+    nextChallengeId: "world-2-level-9"
   },
 
   // WORLD 3
@@ -1005,7 +1079,7 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "Over speed by 15 km/h: Fine 300 EGP", description: "حساب غرامة الرادار الذكي" }
     ],
     unlocksWorldId: "world-4",
-    nextChallengeId: "world-4-level-1"
+    nextChallengeId: "world-3-level-9"
   },
 
   // WORLD 4
@@ -1265,7 +1339,7 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "Download Complete: 100%", description: "محاكاة اكتمال تنزيل الملف" }
     ],
     unlocksWorldId: "world-5",
-    nextChallengeId: "world-5-level-1"
+    nextChallengeId: "world-4-level-9"
   },
 
   // WORLD 5
@@ -1521,7 +1595,7 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "[101, 102, 103, 104]", description: "إزالة التكرار مع الحفاظ على الترتيب" }
     ],
     unlocksWorldId: "world-6",
-    nextChallengeId: "world-6-level-1"
+    nextChallengeId: "world-5-level-9"
   },
 
   // WORLD 6
@@ -1780,7 +1854,7 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "Top Query: python (3 times)", description: "استخراج الكلمة الأكثر بحثاً" }
     ],
     unlocksWorldId: "world-7",
-    nextChallengeId: "world-7-level-1"
+    nextChallengeId: "world-6-level-9"
   },
 
   // WORLD 7
@@ -2048,7 +2122,7 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "Laptop Stock: 17 units", description: "إدارة وتحديث مخزون المستودع" }
     ],
     unlocksWorldId: "world-8",
-    nextChallengeId: "world-8-level-1"
+    nextChallengeId: "world-7-level-9"
   },
 
   // WORLD 8
@@ -2328,8 +2402,3318 @@ export const CHALLENGES_CLIENT_DATA = {
       { input: "", expectedOutput: "On-Time Rate: 75.0%", description: "تحليل معدل التزام رحلات الطيران بالمواعيد" }
     ],
     unlocksWorldId: null,
-    nextChallengeId: null
+    nextChallengeId: "world-8-level-9"
   },
+
+  // ==========================================
+  // EXPANDED ADVANCED LEVELS (WORLDS 1-9 & BONUS)
+  // ==========================================
+  "world-1-level-9": {
+    "id": "world-1-level-9",
+    "worldId": "world-1",
+    "worldTitle": "قرية بايثون",
+    "levelNumber": 9,
+    "title": "📊 حساب متوسط درجات الطالب والنسبة المئوية",
+    "englishTitle": "Student Average & Percentage Calculation",
+    "subtitle": "العمليات الحسابية وتنسيق الأرقام العشرية",
+    "difficulty": "easy",
+    "type": "write_code",
+    "baseXp": 180,
+    "skills": [
+        "arithmetic",
+        "variables",
+        "float_formatting"
+    ],
+    "story": "لديك درجات ثلاثة اختبارات: math = 85 و science = 90 و english = 95. احسب المتوسط الحسابي واطبعه بدقة منزلة عشرية واحدة بصيغة: 'Average: 90.0'.",
+    "microLesson": {
+        "concept": "حساب المتوسط وتنسيق الأرقام العشرية في بايثون",
+        "summary": "المتوسط الحسابي هو مجموع القيم مقسوماً على عددها. يمكنك تنسيق الناتج لمنزلة عشرية واحدة باستخدام f-string مع :.1f.",
+        "exampleCode": "a = 10\nb = 20\navg = (a + b) / 2\nprint(f'Average: {avg:.1f}')"
+    },
+    "starterCode": "math = 85\nscience = 90\nenglish = 95\n\n# احسب المتوسط الحسابي واطبعه بصيغة: Average: 90.0\n",
+    "requirements": [
+        "احسب مجموع الدرجات الثلاث واقسم على 3",
+        "اطبع الناتج بدقة منزلة عشرية واحدة بالصيغة المطلوبة تماماً"
+    ],
+    "expectedOutput": "Average: 90.0",
+    "hints": [
+        "فكرة الحل: اجمع المتغيرات الثلاثة داخل قوسين ثم اقسم على عددها 3.",
+        "للتنسيق العشري الدقيق: استخدم داخل الـ f-string الصيغة {avg:.1f} للحصول على منزلة عشرية واحدة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Average: 90.0",
+            "description": "حساب متوسط درجات 85 و 90 و 95"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-1-level-10"
+},
+
+  "world-1-level-10": {
+    "id": "world-1-level-10",
+    "worldId": "world-1",
+    "worldTitle": "قرية بايثون",
+    "levelNumber": 10,
+    "title": "💱 تحويل العملات وسعر الصرف البنكي المعتمد",
+    "englishTitle": "Bank Currency Exchange Calculator",
+    "subtitle": "المتغيرات والعمليات الحسابية في المعاملات المالية",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "variables",
+        "division",
+        "fstrings"
+    ],
+    "story": "عميل في البنك يمتلك مبلغ egp = 7500 جنيهاً، ويريد تحويله إلى دولارات أمريكية علماً بأن سعر صرف الدولار هو usd_rate = 50.0. احسب المبلغ بالدولار واطبعه بصيغة: 'Exchange: 150.0 USD'.",
+    "microLesson": {
+        "concept": "التحويلات المالية وقسمة الأعداد",
+        "summary": "لتحويل العملة المحلية إلى عملة أجنبية، نقسم المبلغ الإجمالي على سعر الصرف.",
+        "exampleCode": "total_egp = 5000\nrate = 50.0\nusd = total_egp / rate\nprint(f'Converted: {usd:.1f} USD')"
+    },
+    "starterCode": "egp = 7500\nusd_rate = 50.0\n\n# احسب المبلغ بالدولار واطبعه بالصيغة: Exchange: 150.0 USD\n",
+    "requirements": [
+        "اقسم مبلغ الجنيهات على سعر الصرف للحصول على الدولارات",
+        "اطبع الناتج بصيغة: Exchange: 150.0 USD"
+    ],
+    "expectedOutput": "Exchange: 150.0 USD",
+    "hints": [
+        "فكرة الحل: المعادلة الحسابية هي قسمة egp على usd_rate.",
+        "اطبع الناتج باستخدام f-string مع كتابة USD في النهاية."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Exchange: 150.0 USD",
+            "description": "تحويل 7500 جنيه بسعر صرف 50.0"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-1-level-11"
+},
+
+  "world-1-level-11": {
+    "id": "world-1-level-11",
+    "worldId": "world-1",
+    "worldTitle": "قرية بايثون",
+    "levelNumber": 11,
+    "title": "👑 زعيم القرية: حاسبة استهلاك الوقود واقتصادية السيارة",
+    "englishTitle": "Mini-Boss: Smart Fuel Economy Calculator",
+    "subtitle": "تطبيق واقعي متكامل يجمع العمليات والتنسيق الرياضي",
+    "difficulty": "medium",
+    "type": "boss",
+    "baseXp": 220,
+    "skills": [
+        "arithmetic",
+        "real_world",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: قطعت سيارة مسافة distance_km = 450 كيلومتراً، واستهلكت liters = 36 لتراً من البنزين. احسب معدل استهلاك الوقود لكل 100 كيلومتر وفق المعادلة: rate = (liters / distance_km) * 100. اطبع النتيجة بصيغة: 'Fuel Economy: 8.0 L/100km'.",
+    "microLesson": {
+        "concept": "حساب النسب والمعدلات المركبة",
+        "summary": "لحساب المعدل لكل 100 وحدة، نقسم الكمية المستهلكة على المسافة ثم نضرب الناتج في 100.",
+        "exampleCode": "liters = 20\nkm = 200\nrate = (liters / km) * 100\nprint(f'Economy: {rate:.1f} L/100km')"
+    },
+    "starterCode": "distance_km = 450\nliters = 36\n\n# طبق معادلة معدل الاستهلاك واطبع الناتج: Fuel Economy: 8.0 L/100km\n",
+    "requirements": [
+        "طبق معادلة استهلاك الوقود بدقة",
+        "اطبع النتيجة مطابقة تماماً: Fuel Economy: 8.0 L/100km"
+    ],
+    "expectedOutput": "Fuel Economy: 8.0 L/100km",
+    "hints": [
+        "فكرة الحل: استخدم المعادلة (liters / distance_km) * 100.",
+        "تأكد من ضبط الناتج لمنزلة عشرية واحدة :.1f متبوعاً بـ L/100km."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Fuel Economy: 8.0 L/100km",
+            "description": "حساب استهلاك 36 لتراً على مسافة 450 كم"
+        }
+    ],
+    "unlocksWorldId": "world-2",
+    "nextChallengeId": "world-2-level-1"
+},
+
+  "world-2-level-9": {
+    "id": "world-2-level-9",
+    "worldId": "world-2",
+    "worldTitle": "وادي الشروط والقرارات",
+    "levelNumber": 9,
+    "title": "🩺 فاحص مؤشر كتلة الجسم الطبي (BMI Status)",
+    "englishTitle": "Medical BMI Status Classifier",
+    "subtitle": "الشروط المركبة والمقارنات الرقمية المتعددة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "conditions",
+        "elif",
+        "comparison"
+    ],
+    "story": "لديك شخص وزنه weight = 72 كجم وطوله height = 1.75 متراً. احسب مؤشر كتلة الجسم bmi = weight / (height ** 2). إذا كان bmi أقل من 18.5 فهو 'Underweight'، وإذا كان بين 18.5 و 25 فهو 'Normal Weight'، وخلاف ذلك 'Overweight'. اطبع النتيجة بصيغة: 'BMI Status: Normal Weight'.",
+    "microLesson": {
+        "concept": "تصنيف المدى الرقمي باستخدام if و elif",
+        "summary": "يمكنك التحقق من وقوع قيمة في نطاق معين باستخدام الشروط المتسلسلة مثل 18.5 <= bmi < 25.",
+        "exampleCode": "val = 22\nif val < 18.5:\n    status = 'Low'\nelif val < 25:\n    status = 'Normal'\nelse:\n    status = 'High'"
+    },
+    "starterCode": "weight = 72\nheight = 1.75\n\n# احسب bmi وحدد التصنيف واطبع: BMI Status: Normal Weight\n",
+    "requirements": [
+        "احسب مؤشر bmi بقسمة الوزن على مربع الطول",
+        "استخدم الشروط لتحديد الحالة واطبع: BMI Status: Normal Weight"
+    ],
+    "expectedOutput": "BMI Status: Normal Weight",
+    "hints": [
+        "فكرة الحل: احسب bmi أولاً، ثم استخدم if و elif لفحص النطاقات.",
+        "للقيم المعطاة (72 و 1.75) يكون الناتج 23.51 وهو يقع في نطاق Normal Weight."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "BMI Status: Normal Weight",
+            "description": "فحص مؤشر كتلة الجسم لشخص وزنه 72 وطوله 1.75"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-2-level-10"
+},
+
+  "world-2-level-10": {
+    "id": "world-2-level-10",
+    "worldId": "world-2",
+    "worldTitle": "وادي الشروط والقرارات",
+    "levelNumber": 10,
+    "title": "🚗 نظام فحص استحقاق رخصة القيادة الذكي",
+    "englishTitle": "Smart Driver License Eligibility Checker",
+    "subtitle": "المعاملات المنطقية and و or والشروط الثنائية",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "logical_operators",
+        "and",
+        "conditions"
+    ],
+    "story": "متقدم للحصول على رخصة قيادة عمره age = 19 واجتاز اختبار فحص النظر eyesight_passed = True. يشترط لمنح الرخصة أن يكون العمر 18 فما فوق واجتياز اختبار النظر معاً. إذا تحقق الشرطان اطبع: 'Driver License: Approved'، وإلا اطبع: 'Driver License: Rejected'.",
+    "microLesson": {
+        "concept": "دمج الشروط بالمعامل المنطقي and",
+        "summary": "المعامل and يتطلب تحقق جميع الشروط معاً ليعطي نتيجة True.",
+        "exampleCode": "age = 20\npassed = True\nif age >= 18 and passed:\n    print('Status: Approved')"
+    },
+    "starterCode": "age = 19\neyesight_passed = True\n\n# تحقق من استحقاق الرخصة واطبع الناتج المطلوب\n",
+    "requirements": [
+        "تحقق من أن age >= 18 و eyesight_passed هو True",
+        "اطبع بصيغة دقيقة: Driver License: Approved"
+    ],
+    "expectedOutput": "Driver License: Approved",
+    "hints": [
+        "فكرة الحل: استخدم if مع المعامل and بين شرط العمر وشرط فحص النظر.",
+        "اطبع الناتج المطابق للحالة الصحيحة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Driver License: Approved",
+            "description": "التحقق من سن 19 وفحص نظر مجتاز"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-2-level-11"
+},
+
+  "world-2-level-11": {
+    "id": "world-2-level-11",
+    "worldId": "world-2",
+    "worldTitle": "وادي الشروط والقرارات",
+    "levelNumber": 11,
+    "title": "👑 زعيم الوادي: نظام تسعير تذاكر قطار تالجو السريع",
+    "englishTitle": "Mini-Boss: Talgo Train Dynamic Pricing Engine",
+    "subtitle": "شروط متداخلة وحسابات مالية متباينة",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 230,
+    "skills": [
+        "nested_conditions",
+        "real_world",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: سعر التذكرة الأساسي base_price = 300. الراكب طالب passenger_type = 'student' ويستحق خصم 20% على الأساسي. اختار درجة أولى seat_class = 'first' وتتطلب إضافة رسم إضافي قدره 50 جنيهاً بعد احتساب الخصم. احسب السعر النهائي (300 * 0.8 + 50 = 290.0) واطبع: 'Talgo Ticket: 290.0 EGP'.",
+    "microLesson": {
+        "concept": "الشروط المتتالية وتحديث المتغيرات",
+        "summary": "في أنظمة الحجز، يتم حساب الخصم أولاً على السعر الأساسي بناءً على نوع الراكب، ثم إضافة رسوم الدرجة.",
+        "exampleCode": "price = 200\nif is_student:\n    price *= 0.8\nif is_vip:\n    price += 30"
+    },
+    "starterCode": "base_price = 300\npassenger_type = 'student'\nseat_class = 'first'\n\n# احسب السعر النهائي بعد الخصم والرسوم واطبع: Talgo Ticket: 290.0 EGP\n",
+    "requirements": [
+        "خصم 20% من السعر الأساسي للطلاب",
+        "إضافة 50 جنيهاً لركاب الدرجة الأولى",
+        "اطبع النتيجة بصيغة: Talgo Ticket: 290.0 EGP"
+    ],
+    "expectedOutput": "Talgo Ticket: 290.0 EGP",
+    "hints": [
+        "فكرة الحل: اضرب السعر الأساسي في 0.8 إذا كان طالب، ثم أضف 50 إذا كانت الدرجة first.",
+        "اطبع الناتج مع .1f لضمان ظهور 290.0 متبوعة بـ EGP."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Talgo Ticket: 290.0 EGP",
+            "description": "حساب تذكرة طالب درجة أولى على تالجو"
+        }
+    ],
+    "unlocksWorldId": "world-3",
+    "nextChallengeId": "world-3-level-1"
+},
+
+  "world-3-level-9": {
+    "id": "world-3-level-9",
+    "worldId": "world-3",
+    "worldTitle": "غابة التكرار والحلقات",
+    "levelNumber": 9,
+    "title": "🔢 مجموع مضاعفات العدد 7 في نطاق محدد",
+    "englishTitle": "Sum of Multiples of 7 in Range",
+    "subtitle": "حلقات التكرار مع خطوة القفز وتراكم القيم",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "for_loops",
+        "range",
+        "accumulator"
+    ],
+    "story": "اكتب برنامجاً يجمع جميع مضاعفات العدد 7 المحصورة بين 1 و 50 (أي 7, 14, 21, 28, 35, 42, 49). احسب المجموع التراكمي واطبعه بصيغة: 'Sum of Multiples: 196'.",
+    "microLesson": {
+        "concept": "حلقة for مع خطوة القفز Step في range",
+        "summary": "يمكنك المرور على مضاعفات عدد باستخدام range(start, end, step)، حيث تكون خطوة القفز مساوية للعدد نفسه.",
+        "exampleCode": "total = 0\nfor n in range(5, 30, 5):\n    total += n\nprint(f'Sum: {total}')"
+    },
+    "starterCode": "# اجمع مضاعفات العدد 7 بين 1 و 50 واطبع المجموع: Sum of Multiples: 196\n",
+    "requirements": [
+        "استخدم حلقة تكرار للمرور على مضاعفات 7 الأقل من 50",
+        "اجمع المضاعفات واطبع الناتج: Sum of Multiples: 196"
+    ],
+    "expectedOutput": "Sum of Multiples: 196",
+    "hints": [
+        "فكرة الحل: ابدأ متغير المجموع بقيمة 0، ثم استخدم range(7, 50, 7) وأضف كل رقم للمجموع.",
+        "اطبع النتيجة النهائية بعد انتهاء الحلقة بصيغة f-string."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Sum of Multiples: 196",
+            "description": "جمع مضاعفات 7 حتى 50"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-3-level-10"
+},
+
+  "world-3-level-10": {
+    "id": "world-3-level-10",
+    "worldId": "world-3",
+    "worldTitle": "غابة التكرار والحلقات",
+    "levelNumber": 10,
+    "title": "📈 محاكاة الفائدة المركبة السنوية بحلقة While",
+    "englishTitle": "Compound Interest Growth with While Loop",
+    "subtitle": "حلقات while وتكرار العمليات حتى تحقق هدف معين",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "while_loops",
+        "compound_growth",
+        "math"
+    ],
+    "story": "مستثمر أودع مبلغ balance = 1000 جنيهاً في مشروع بعائد سنوي مركب قدره 10% (أي balance *= 1.10 في نهاية كل سنة). احسب عدد السنوات اللازمة ليتجاوز الرصيد 1500 جنيهاً باستخدام حلقة while. اطبع النتيجة بصيغة: 'Years to Target: 5'.",
+    "microLesson": {
+        "concept": "حلقة while التكرارية المشروطة",
+        "summary": "تستمر حلقة while في العمل طالما أن الشرط صحيح (مثلاً while balance <= target)، ونزيد عداد السنوات مع كل دورة.",
+        "exampleCode": "val = 100\nyears = 0\nwhile val < 200:\n    val *= 1.2\n    years += 1"
+    },
+    "starterCode": "balance = 1000\ntarget = 1500\nyears = 0\n\n# استخدم while لحساب السنوات اللازمة لتجاوز الهدف واطبع: Years to Target: 5\n",
+    "requirements": [
+        "استمر في تكرار العملية طالما balance <= target",
+        "في كل دورة اضرب balance في 1.10 وزد years بواحد",
+        "اطبع الناتج: Years to Target: 5"
+    ],
+    "expectedOutput": "Years to Target: 5",
+    "hints": [
+        "فكرة الحل: شرط حلقة while هو balance <= target.",
+        "في نهاية الحلقة سيكون الرصيد تجاوز 1500 بعد 5 سنوات بالضبط."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Years to Target: 5",
+            "description": "حساب سنوات نمو 1000 لتجاوز 1500 بنسبة 10%"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-3-level-11"
+},
+
+  "world-3-level-11": {
+    "id": "world-3-level-11",
+    "worldId": "world-3",
+    "worldTitle": "غابة التكرار والحلقات",
+    "levelNumber": 11,
+    "title": "👑 زعيم الغابة: خوارزمية فحص الأرقام الأولية (Prime Test)",
+    "englishTitle": "Mini-Boss: Prime Number Verification Algorithm",
+    "subtitle": "الخوارزميات الرياضية وحلقات الفحص مع أعلام الصحة Flag",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 230,
+    "skills": [
+        "loops",
+        "prime_numbers",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: افحص ما إذا كان العدد n = 29 عدداً أولياً (Prime) أم لا. العدد الأولي يقبل القسمة فقط على نفسه وعلى 1. اختبر الأعداد من 2 إلى n - 1، واطبع: 'Prime Check: 29 is Prime'.",
+    "microLesson": {
+        "concept": "فحص الأولية بالأعلام المنطقية (Boolean Flag)",
+        "summary": "نبدأ بافتراض أن العدد أولي is_prime = True، ثم نمر بحلقة على القواسم المحتملة. إذا وجدنا قاسماً يقبل القسمة بدون باقٍ نغير العلم إلى False.",
+        "exampleCode": "is_prime = True\nfor i in range(2, num):\n    if num % i == 0:\n        is_prime = False\n        break"
+    },
+    "starterCode": "n = 29\n\n# افحص هل n عدد أولي واطبع: Prime Check: 29 is Prime\n",
+    "requirements": [
+        "افحص قواسم العدد من 2 وحتى n - 1",
+        "اطبع النتيجة بصيغة: Prime Check: 29 is Prime"
+    ],
+    "expectedOutput": "Prime Check: 29 is Prime",
+    "hints": [
+        "فكرة الحل: افترض is_prime = True، واختبر باقي القسمة n % i == 0.",
+        "نظراً لأن 29 عدد أولي لا يقبل القسمة، اطبع الصيغة المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Prime Check: 29 is Prime",
+            "description": "فحص أولية العدد 29"
+        }
+    ],
+    "unlocksWorldId": "world-4",
+    "nextChallengeId": "world-4-level-1"
+},
+
+  "world-4-level-9": {
+    "id": "world-4-level-9",
+    "worldId": "world-4",
+    "worldTitle": "كهف النصوص والكلمات",
+    "levelNumber": 9,
+    "title": "📱 منسق أرقام الهواتف المصرية الذكي (Phone Formatter)",
+    "englishTitle": "Egyptian Phone Number Formatter",
+    "subtitle": "تقطيع النصوص String Slicing وإعادة التركيب",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "strings",
+        "slicing",
+        "formatting"
+    ],
+    "story": "لديك رقم هاتف خام phone = '01018275881'. قم بتقطيعه وإعادة تنسيقه ليظهر برمز الدولة والمسافات الفاصلة بصيغة: 'Formatted Phone: (+20) 010-1827-5881'.",
+    "microLesson": {
+        "concept": "تقطيع النصوص بالأقواس المعقوفة [start:end]",
+        "summary": "يمكنك استخراج أجزاء محددة من النص عبر تحديد مؤشرات البداية والنهاية، ثم دمجها مع رموز أخرى في f-string.",
+        "exampleCode": "p = '01234567890'\npart1 = p[0:3]\npart2 = p[3:7]\npart3 = p[7:]"
+    },
+    "starterCode": "phone = '01018275881'\n\n# نسق رقم الهاتف واطبع: Formatted Phone: (+20) 010-1827-5881\n",
+    "requirements": [
+        "استخرج أول 3 أرقام (010)، ثم الـ 4 التالية (1827)، ثم الـ 4 الأخيرة (5881)",
+        "اطبع بصيغة: Formatted Phone: (+20) 010-1827-5881"
+    ],
+    "expectedOutput": "Formatted Phone: (+20) 010-1827-5881",
+    "hints": [
+        "فكرة الحل: استخدم phone[0:3] و phone[3:7] و phone[7:].",
+        "ادمج الأجزاء داخل f-string مع رمز الدولة (+20)."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Formatted Phone: (+20) 010-1827-5881",
+            "description": "تنسيق رقم 01018275881"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-4-level-10"
+},
+
+  "world-4-level-10": {
+    "id": "world-4-level-10",
+    "worldId": "world-4",
+    "worldTitle": "كهف النصوص والكلمات",
+    "levelNumber": 10,
+    "title": "🔁 فاحص الكلمات المتناظرة المنعكسة (Palindrome)",
+    "englishTitle": "Palindrome String Verifier",
+    "subtitle": "عكس النصوص بخطوة سالبة [::-1] والمقارنة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "strings",
+        "reversing",
+        "palindrome"
+    ],
+    "story": "افحص ما إذا كانت الكلمة word = 'madam' كلمة متناظرة (Palindrome) تقرأ من اليمين كقراءتها من اليسار. قارن الكلمة بمعكوسها واطبع النتيجة بصيغة: 'Palindrome: madam is True'.",
+    "microLesson": {
+        "concept": "عكس النصوص في بايثون بخطوة [::-1]",
+        "summary": "الخطوة -1 في التقطيع تعكس ترتيب حروف النص بالكامل. وإذا تساوى النص مع معكوسه يكون متناظراً.",
+        "exampleCode": "w = 'radar'\nis_pal = (w == w[::-1])\nprint(f'Is Palindrome: {is_pal}')"
+    },
+    "starterCode": "word = 'madam'\n\n# افحص هل الكلمة متناظرة واطبع: Palindrome: madam is True\n",
+    "requirements": [
+        "اعكس الكلمة وقارنها بالأصل",
+        "اطبع الناتج: Palindrome: madam is True"
+    ],
+    "expectedOutput": "Palindrome: madam is True",
+    "hints": [
+        "فكرة الحل: استخدم word == word[::-1] للحصول على القيمة المنطقية.",
+        "اطبع النتيجة بالصيغة المطلوبة باستخدام f-string."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Palindrome: madam is True",
+            "description": "فحص تناظر كلمة madam"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-4-level-11"
+},
+
+  "world-4-level-11": {
+    "id": "world-4-level-11",
+    "worldId": "world-4",
+    "worldTitle": "كهف النصوص والكلمات",
+    "levelNumber": 11,
+    "title": "👑 زعيم الكهف: مستخرج ومحلل النطاق من البريد الإلكتروني",
+    "englishTitle": "Mini-Boss: Email Domain Extractor & Normalizer",
+    "subtitle": "طرق النصوص split و upper ومعالجة البيانات النصية",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 230,
+    "skills": [
+        "strings",
+        "split",
+        "upper",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: لديك عنوان بريد إلكتروني email = 'student@shababha.gov.eg'. استخرج اسم النطاق الذي يلي رمز '@' ثم حول جميع حروفه إلى أحرف كبيرة (UPPERCASE). اطبع الناتج بصيغة: 'Domain: SHABABHA.GOV.EG'.",
+    "microLesson": {
+        "concept": "تقسيم النصوص بالدالة split() وتحويل الحالة",
+        "summary": "تقوم الدالة email.split('@') بتقسيم النص إلى جزأين: اسم المستخدم في الفهرس [0] والنطاق في الفهرس [1]. والدالة .upper() تحول الحروف لكبيرة.",
+        "exampleCode": "em = 'user@example.com'\ndom = em.split('@')[1].upper()\nprint(f'Domain: {dom}')"
+    },
+    "starterCode": "email = 'student@shababha.gov.eg'\n\n# استخرج النطاق وحوله لحروف كبيرة واطبع: Domain: SHABABHA.GOV.EG\n",
+    "requirements": [
+        "استخرج الجزء بعد علامة @ باستخدام split",
+        "حول النطاق إلى حروف كبيرة واطبع: Domain: SHABABHA.GOV.EG"
+    ],
+    "expectedOutput": "Domain: SHABABHA.GOV.EG",
+    "hints": [
+        "فكرة الحل: استخدم email.split('@')[1] للوصول للنطاق، ثم طبق دالة .upper().",
+        "ادمج النتيجة في جملة الطباعة المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Domain: SHABABHA.GOV.EG",
+            "description": "استخراج نطاق student@shababha.gov.eg بحروف كبيرة"
+        }
+    ],
+    "unlocksWorldId": "world-5",
+    "nextChallengeId": "world-5-level-1"
+},
+
+  "world-5-level-9": {
+    "id": "world-5-level-9",
+    "worldId": "world-5",
+    "worldTitle": "مملكة القوائم والمصفوفات",
+    "levelNumber": 9,
+    "title": "✨ استبعاد العناصر المكررة والترتيب التصاعدي",
+    "englishTitle": "Remove Duplicates and Ascending Sort",
+    "subtitle": "التحويل بين المجموعات والقوائم ودوال الترتيب",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "lists",
+        "sets",
+        "sorted"
+    ],
+    "story": "لديك قائمة أرقام غير مرتبة وبها عناصر مكررة nums = [15, 3, 9, 3, 21, 15, 7]. استبعد العناصر المكررة ورتب الأرقام تصاعدياً في قائمة جديدة. اطبع القائمة بصيغة: 'Sorted Unique: [3, 7, 9, 15, 21]'.",
+    "microLesson": {
+        "concept": "استبعاد التكرار والترتيب بالدالة sorted()",
+        "summary": "تحويل القائمة إلى set يستبعد التكرارات تلقائياً، وتمريرها إلى الدالة sorted() يرجع قائمة مرتبة تصاعدياً.",
+        "exampleCode": "raw = [5, 2, 5, 1, 2]\nres = sorted(list(set(raw)))\nprint(f'Result: {res}')"
+    },
+    "starterCode": "nums = [15, 3, 9, 3, 21, 15, 7]\n\n# أنشئ قائمة بدون تكرار مرتبة واطبع: Sorted Unique: [3, 7, 9, 15, 21]\n",
+    "requirements": [
+        "استبعد التكرارات ورتب الأرقام من الأصغر للأكبر",
+        "اطبع القائمة بصيغة: Sorted Unique: [3, 7, 9, 15, 21]"
+    ],
+    "expectedOutput": "Sorted Unique: [3, 7, 9, 15, 21]",
+    "hints": [
+        "فكرة الحل: استخدم sorted(set(nums)) لإنتاج القائمة المطلوبة في خطوة واحدة.",
+        "اطبع الناتج مباشرة مع البادئة Sorted Unique:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Sorted Unique: [3, 7, 9, 15, 21]",
+            "description": "ترتيب واستبعاد مكررات [15, 3, 9, 3, 21, 15, 7]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-5-level-10"
+},
+
+  "world-5-level-10": {
+    "id": "world-5-level-10",
+    "worldId": "world-5",
+    "worldTitle": "مملكة القوائم والمصفوفات",
+    "levelNumber": 10,
+    "title": "📊 تصفية المبيعات المرتفعة بقوائم الاستيعاب (List Comprehension)",
+    "englishTitle": "Filter High Sales with List Comprehension",
+    "subtitle": "التصفية السريعة والذكية للقوائم بأسلوب بايثون الأنيق",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "list_comprehension",
+        "filtering",
+        "lists"
+    ],
+    "story": "لديك قائمة مبيعات المنتجات sales = [120, 45, 230, 80, 310, 95]. استخرج فقط أرقام المبيعات التي تتجاوز 100 في قائمة جديدة باستخدام List Comprehension. اطبع الناتج بصيغة: 'Top Sales: [120, 230, 310]'.",
+    "microLesson": {
+        "concept": "بناء القوائم بأسلوب List Comprehension",
+        "summary": "يوفر بايثون صياغة مدمجة لتصفية القوائم: [x for x in list if condition].",
+        "exampleCode": "data = [20, 60, 30, 80]\nhigh = [x for x in data if x > 50]\nprint(f'High: {high}')"
+    },
+    "starterCode": "sales = [120, 45, 230, 80, 310, 95]\n\n# استخرج القيم الأكبر من 100 واطبع: Top Sales: [120, 230, 310]\n",
+    "requirements": [
+        "استخرج القيم التي تحقق x > 100",
+        "اطبع القائمة بصيغة: Top Sales: [120, 230, 310]"
+    ],
+    "expectedOutput": "Top Sales: [120, 230, 310]",
+    "hints": [
+        "فكرة الحل: استخدم الصيغة [s for s in sales if s > 100].",
+        "اطبع القائمة الناتجة بجوار Top Sales:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Top Sales: [120, 230, 310]",
+            "description": "تصفية الأرقام الأكبر من 100 من قائمة المبيعات"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-5-level-11"
+},
+
+  "world-5-level-11": {
+    "id": "world-5-level-11",
+    "worldId": "world-5",
+    "worldTitle": "مملكة القوائم والمصفوفات",
+    "levelNumber": 11,
+    "title": "👑 زعيم المملكة: دمج سجلات الطلاب والدرجات (Zip Engine)",
+    "englishTitle": "Mini-Boss: Student Roster Zip & Multi-line Display",
+    "subtitle": "دمج القوائم المتناظرة والدوران المشترك",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 230,
+    "skills": [
+        "zip",
+        "lists",
+        "loops",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: لديك قائمة بأسماء الطلاب names = ['Ali', 'Sara', 'Omar'] وقائمة بدرجاتهم المقابلة scores = [92, 98, 88]. ادمج القائمتين واطبع كل طالب ودرجته في سطر مستقل بصيغة:\nAli: 92\nSara: 98\nOmar: 88",
+    "microLesson": {
+        "concept": "الدمج المتزامن للدوال باستخدام zip()",
+        "summary": "تسمح الدالة zip(list1, list2) بالمرور على عنصرين متناظرين معاً في نفس الدورة الحلقية.",
+        "exampleCode": "keys = ['A', 'B']\nvals = [1, 2]\nfor k, v in zip(keys, vals):\n    print(f'{k}: {v}')"
+    },
+    "starterCode": "names = ['Ali', 'Sara', 'Omar']\nscores = [92, 98, 88]\n\n# ادمج القائمتين واطبع كل اسم ودرجته في سطر مستقل\n",
+    "requirements": [
+        "استخدم دالة zip أو حلقة تكرار للمرور على الأسماء والدرجات معاً",
+        "اطبع كل سجل في سطر بصيغة: الاسم: الدرجة"
+    ],
+    "expectedOutput": "Ali: 92\nSara: 98\nOmar: 88",
+    "hints": [
+        "فكرة الحل: استخدم for name, score in zip(names, scores): ثم اطبع print(f'{name}: {score}').",
+        "تأكد من عدم ترك مسافات غير مطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Ali: 92\nSara: 98\nOmar: 88",
+            "description": "دمج وطباعة أسماء ودرجات 3 طلاب"
+        }
+    ],
+    "unlocksWorldId": "world-6",
+    "nextChallengeId": "world-6-level-1"
+},
+
+  "world-6-level-9": {
+    "id": "world-6-level-9",
+    "worldId": "world-6",
+    "worldTitle": "قلعة الدوال والموديولات",
+    "levelNumber": 9,
+    "title": "📐 دالة حساب مساحة ومحيط الدائرة الدقيقة",
+    "englishTitle": "Precise Circle Metrics Function",
+    "subtitle": "الدوال التي تعيد قيماً متعددة وحسابات نصف القطر",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "functions",
+        "return_multiple",
+        "math"
+    ],
+    "story": "اكتب دالة باسم circle_metrics(r) تأخذ نصف القطر r = 7 وتحسب المساحة area = 3.14 * r * r والمحيط circ = 2 * 3.14 * r بدقة منزلتين عشريتين. استدع الدالة واطبع الناتج بصيغة: 'Area: 153.86, Circumference: 43.96'.",
+    "microLesson": {
+        "concept": "إرجاع قيم متعددة من الدالة (Tuples)",
+        "summary": "يمكن للدالة في بايثون إرجاع أكثر من قيمة مفصولة بفواصل return val1, val2 وتستقبلها في متغيرين.",
+        "exampleCode": "def calc(x):\n    return x*2, x*3\ndbl, trp = calc(5)"
+    },
+    "starterCode": "# عرف دالة circle_metrics(r) واستدعها لنصف قطر 7 واطبع الناتج المطلوب\n",
+    "requirements": [
+        "عرف الدالة واستخدم 3.14 لقيمة pi",
+        "احسب المساحة والمحيط بدقة منزلتين عشريتين واطبع: Area: 153.86, Circumference: 43.96"
+    ],
+    "expectedOutput": "Area: 153.86, Circumference: 43.96",
+    "hints": [
+        "فكرة الحل: احسب area = round(3.14 * r * r, 2) و circ = round(2 * 3.14 * r, 2).",
+        "أرجع القيمتين أو اطبعهما بصيغة f-string المطلوبة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Area: 153.86, Circumference: 43.96",
+            "description": "حساب مساحة ومحيط دائرة نصف قطرها 7"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-6-level-10"
+},
+
+  "world-6-level-10": {
+    "id": "world-6-level-10",
+    "worldId": "world-6",
+    "worldTitle": "قلعة الدوال والموديولات",
+    "levelNumber": 10,
+    "title": "⚡ التصفية بالدوال المجهولة Lambda والتطبيق السريع",
+    "englishTitle": "Lambda Functions and Filter Mechanism",
+    "subtitle": "الدوال المجهولة في سطر واحد ودالة filter",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "lambda",
+        "filter",
+        "functions"
+    ],
+    "story": "لديك قائمة أرقام data = [12, 17, 24, 33, 40, 55]. استخدم دالة lambda مجهولة لاستخراج الأرقام الزوجية فقط في قائمة مرتبة بنفس الترتيب. اطبع الناتج بصيغة: 'Evens: [12, 24, 40]'.",
+    "microLesson": {
+        "concept": "دوال Lambda السريعة المجهولة",
+        "summary": "تتيح lambda كتابة دالة مصغرة في سطر واحد بدون اسم مثل lambda x: x % 2 == 0.",
+        "exampleCode": "nums = [1, 2, 3, 4]\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)"
+    },
+    "starterCode": "data = [12, 17, 24, 33, 40, 55]\n\n# استخرج الأرقام الزوجية واطبع: Evens: [12, 24, 40]\n",
+    "requirements": [
+        "استخرج الأرقام التي تقبل القسمة على 2 بدون باقٍ",
+        "اطبع القائمة بصيغة: Evens: [12, 24, 40]"
+    ],
+    "expectedOutput": "Evens: [12, 24, 40]",
+    "hints": [
+        "فكرة الحل: استخدم list(filter(lambda x: x % 2 == 0, data)) أو List Comprehension بشرط الزوجية.",
+        "اطبع الناتج بجوار كلمة Evens:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Evens: [12, 24, 40]",
+            "description": "استخراج الأرقام الزوجية من [12, 17, 24, 33, 40, 55]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-6-level-11"
+},
+
+  "world-6-level-11": {
+    "id": "world-6-level-11",
+    "worldId": "world-6",
+    "worldTitle": "قلعة الدوال والموديولات",
+    "levelNumber": 11,
+    "title": "👑 زعيم القلعة: مولد الأرقام التسلسلية المشفرة (Token Generator)",
+    "englishTitle": "Mini-Boss: Serial Token Generator Function",
+    "subtitle": "الدوال ذات المعاملات الافتراضية والدقة الرقمية zfill",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 230,
+    "skills": [
+        "functions",
+        "zfill",
+        "string_formatting",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: اكتب دالة باسم generate_token(prefix, num) تستقبل بادئة نصية ورقم تسلسلي، وترجع نصاً مشفراً يبدأ بالبادئة متبوعة بشرطة ثم الرقم مكملاً بأصفار على اليسار ليكون طوله 5 خانات (باستخدام zfill أو :05d). استدع الدالة للقيم prefix = 'EGY' و num = 42 واطبع: 'Token: EGY-00042'.",
+    "microLesson": {
+        "concept": "إكمال الخانات بالأصفار باستخدام zfill و :05d",
+        "summary": "يمكن إكمال الأرقام بأصفار على اليسار إما عبر الدالة str(num).zfill(5) أو عبر التنسيق الرقمي f'{num:05d}'.",
+        "exampleCode": "n = 7\ntoken = f'ID-{n:04d}'\nprint(token)"
+    },
+    "starterCode": "# عرف الدالة واستدعها للقيم EGY و 42 واطبع الناتج المطلوب: Token: EGY-00042\n",
+    "requirements": [
+        "عرف الدالة generate_token(prefix, num) لترجع النص المطلوب",
+        "اطبع الناتج الدقيق: Token: EGY-00042"
+    ],
+    "expectedOutput": "Token: EGY-00042",
+    "hints": [
+        "فكرة الحل: داخل الدالة، استخدم return f'{prefix}-{num:05d}'.",
+        "استدع الدالة مع 'EGY' و 42 واطبع النتيجة بصيغة Token: ..."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Token: EGY-00042",
+            "description": "توليد الرمز التسلسلي لـ EGY و 42"
+        }
+    ],
+    "unlocksWorldId": "world-7",
+    "nextChallengeId": "world-7-level-1"
+},
+
+  "world-7-level-9": {
+    "id": "world-7-level-9",
+    "worldId": "world-7",
+    "worldTitle": "برج الخوارزميات والبحث",
+    "levelNumber": 9,
+    "title": "🔍 خوارزمية البحث الخطي مع إرجاع موقع الفهرس",
+    "englishTitle": "Linear Search Algorithm with Index Reporting",
+    "subtitle": "استكشاف القوائم وخوارزميات البحث التتابعي",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "linear_search",
+        "algorithms",
+        "loops"
+    ],
+    "story": "لديك قائمة عناصر arr = [10, 25, 33, 42, 58, 67] وعنصر هدف target = 42. نفذ خوارزمية بحث خطي للمرور على عناصر القائمة وتحديد موقع الفهرس (Index) للهدف. اطبع الناتج بصيغة: 'Found at Index: 3'.",
+    "microLesson": {
+        "concept": "خوارزمية البحث الخطي (Linear Search)",
+        "summary": "تمر الخوارزمية على العناصر واحداً تلو الآخر باستخدام enumerate(arr) لمقارنة كل عنصر بالهدف حتى تجده وترجع موقعه.",
+        "exampleCode": "items = [5, 12, 9]\ntarget = 12\nfor idx, val in enumerate(items):\n    if val == target:\n        print(f'Index: {idx}')"
+    },
+    "starterCode": "arr = [10, 25, 33, 42, 58, 67]\ntarget = 42\n\n# ابحث عن target واطبع موقعه: Found at Index: 3\n",
+    "requirements": [
+        "ابحث عن الرقم 42 وحدد موقعه في القائمة",
+        "اطبع بصيغة دقيقة: Found at Index: 3"
+    ],
+    "expectedOutput": "Found at Index: 3",
+    "hints": [
+        "فكرة الحل: استخدم for i, num in enumerate(arr): وعندما يتساوى num مع target اطبع f'Found at Index: {i}'.",
+        "يمكنك استخدام arr.index(target) أيضاً للتأكد."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Found at Index: 3",
+            "description": "البحث عن 42 في [10, 25, 33, 42, 58, 67]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-7-level-10"
+},
+
+  "world-7-level-10": {
+    "id": "world-7-level-10",
+    "worldId": "world-7",
+    "worldTitle": "برج الخوارزميات والبحث",
+    "levelNumber": 10,
+    "title": "🔄 خوارزمية الفرز الفقاعي اليدوي (Bubble Sort Step)",
+    "englishTitle": "Bubble Sort Algorithm Step Implementation",
+    "subtitle": "خوارزميات الترتيب ومقارنة وتبديل العناصر المتجاورة",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 210,
+    "skills": [
+        "bubble_sort",
+        "algorithms",
+        "swapping"
+    ],
+    "story": "لديك قائمة أرقام غير مرتبة arr = [64, 34, 25, 12, 22]. نفذ خوارزمية الفرز الفقاعي (Bubble Sort) بمقارنة كل عنصرين متجاورين وتبديلهما إن كان الأول أكبر من الثاني حتى تصبح القائمة مرتبة تصاعدياً. اطبع الناتج بصيغة: 'Sorted Array: [12, 22, 25, 34, 64]'.",
+    "microLesson": {
+        "concept": "خوارزمية الترتيب الفقاعي (Bubble Sort)",
+        "summary": "تعتمد الخوارزمية على حلقتين متداخلتين للمرور على القائمة وتبديل أي عنصرين غير مرتبين a[j], a[j+1] = a[j+1], a[j].",
+        "exampleCode": "n = len(a)\nfor i in range(n):\n    for j in range(0, n - i - 1):\n        if a[j] > a[j + 1]:\n            a[j], a[j + 1] = a[j + 1], a[j]"
+    },
+    "starterCode": "arr = [64, 34, 25, 12, 22]\n\n# طبق خوارزمية الترتيب واطبع: Sorted Array: [12, 22, 25, 34, 64]\n",
+    "requirements": [
+        "رتب القائمة ترتيباً تصاعدياً صحيحاً",
+        "اطبع القائمة المرتبة بصيغة: Sorted Array: [12, 22, 25, 34, 64]"
+    ],
+    "expectedOutput": "Sorted Array: [12, 22, 25, 34, 64]",
+    "hints": [
+        "فكرة الحل: نفذ الحلقتين المتداخلتين للفرز الفقاعي أو استخدم الترتيب لتأكيد الناتج النهائي.",
+        "اطبع القائمة مطابقة للصيغة المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Sorted Array: [12, 22, 25, 34, 64]",
+            "description": "ترتيب القائمة [64, 34, 25, 12, 22] بالفرز الفقاعي"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-7-level-11"
+},
+
+  "world-7-level-11": {
+    "id": "world-7-level-11",
+    "worldId": "world-7",
+    "worldTitle": "برج الخوارزميات والبحث",
+    "levelNumber": 11,
+    "title": "👑 زعيم البرج: خوارزمية متتالية فيبوناتشي التراكمية",
+    "englishTitle": "Mini-Boss: Fibonacci Sequence Generator",
+    "subtitle": "الأنماط الرياضية وتوليد السلاسل الخوارزمية التراكمية",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 240,
+    "skills": [
+        "fibonacci",
+        "algorithms",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: اكتب خوارزمية لتوليد أول 8 أرقام من متتالية فيبوناتشي الشهيرة (تبدأ بالرقمين 0 و 1، وكل رقم تالٍ هو حاصل جمع الرقمين السابقين له: 0, 1, 1, 2, 3, 5, 8, 13). خزن الأرقام في قائمة واطبعها بصيغة: 'Fibonacci: [0, 1, 1, 2, 3, 5, 8, 13]'.",
+    "microLesson": {
+        "concept": "متتالية فيبوناتشي (Fibonacci Sequence)",
+        "summary": "تبدأ المتتالية بـ [0, 1]. وفي كل خطوة جديدة نحسب العنصر الجديد بجمع آخر عنصرين fib[-1] + fib[-2] ونضيفه للقائمة.",
+        "exampleCode": "fib = [0, 1]\nfor _ in range(6):\n    fib.append(fib[-1] + fib[-2])\nprint(fib)"
+    },
+    "starterCode": "# ولد أول 8 أرقام من متتالية فيبوناتشي واطبع: Fibonacci: [0, 1, 1, 2, 3, 5, 8, 13]\n",
+    "requirements": [
+        "ابدأ بالقائمة [0, 1] وأضف 6 عناصر تالية",
+        "اطبع القائمة بصيغة: Fibonacci: [0, 1, 1, 2, 3, 5, 8, 13]"
+    ],
+    "expectedOutput": "Fibonacci: [0, 1, 1, 2, 3, 5, 8, 13]",
+    "hints": [
+        "فكرة الحل: أنشئ قائمة fib = [0, 1]، ثم كرر 6 مرات إضافة fib[-1] + fib[-2].",
+        "اطبع الناتج النهائي باستخدام f-string مسبوقاً بـ Fibonacci:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Fibonacci: [0, 1, 1, 2, 3, 5, 8, 13]",
+            "description": "توليد أول 8 أرقام من فيبوناتشي"
+        }
+    ],
+    "unlocksWorldId": "world-8",
+    "nextChallengeId": "world-8-level-1"
+},
+
+  "world-8-level-9": {
+    "id": "world-8-level-9",
+    "worldId": "world-8",
+    "worldTitle": "عرش البايثوني الخارق",
+    "levelNumber": 9,
+    "title": "🛡️ المعالجة الآمنة للاستثناءات البرمجية (Safe ZeroDivision)",
+    "englishTitle": "Safe Exception Handling for ZeroDivisionError",
+    "subtitle": "بناء أكواد آمنة تتحمل الأخطاء بكتل try-except",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "exceptions",
+        "try_except",
+        "robustness"
+    ],
+    "story": "اكتب كتلة try-except لمحاولة قسمة numerator = 100 على denominator = 0. عند اعتراض خطأ القسمة على الصفر ZeroDivisionError التقط الخطأ واطبع رسالة آمنة بصيغة: 'Safe Div: Cannot divide by zero!'.",
+    "microLesson": {
+        "concept": "معالجة الأخطاء بـ try و except",
+        "summary": "تمنع كتل try-except انهيار البرنامج عند حدوث خطأ غير متوقع، وتسمح بالتعامل معه بمرونة.",
+        "exampleCode": "try:\n    res = 10 / 0\nexcept ZeroDivisionError:\n    print('Safe!')"
+    },
+    "starterCode": "numerator = 100\ndenominator = 0\n\n# استخدم try-except لالتقاط الخطأ وطباعة: Safe Div: Cannot divide by zero!\n",
+    "requirements": [
+        "ضع عملية القسمة داخل كتلة try",
+        "التقط خطأ ZeroDivisionError واطبع: Safe Div: Cannot divide by zero!"
+    ],
+    "expectedOutput": "Safe Div: Cannot divide by zero!",
+    "hints": [
+        "فكرة الحل: اكتب try: result = numerator / denominator ثم except ZeroDivisionError: print('Safe Div: Cannot divide by zero!').",
+        "تأكد من مطابقة نص الرسالة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Safe Div: Cannot divide by zero!",
+            "description": "التقاط خطأ قسمة 100 على صفر بأمان"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-8-level-10"
+},
+
+  "world-8-level-10": {
+    "id": "world-8-level-10",
+    "worldId": "world-8",
+    "worldTitle": "عرش البايثوني الخارق",
+    "levelNumber": 10,
+    "title": "📜 محلل سجلات الخوادم واستخراج الأخطاء (Log Parser)",
+    "englishTitle": "Server Log Parser & Error Extractor",
+    "subtitle": "معالجة النصوص المنظمة واستخراج البيانات الحساسة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 210,
+    "skills": [
+        "parsing",
+        "strings",
+        "filtering"
+    ],
+    "story": "لديك نص سجلات نظام log = 'INFO:ServerStarted|WARN:HighMemory|ERROR:DbTimeout|INFO:Ready'. قم بتقسيم السجلات واستخراج السجلات التي تبدأ بـ 'ERROR:' فقط في قائمة جديدة. اطبع الناتج بصيغة: \"Errors Found: ['ERROR:DbTimeout']\".",
+    "microLesson": {
+        "concept": "تحليل نصوص السجلات (Parsing)",
+        "summary": "يتم تقسيم السجلات عبر علامة الفصل split('|') ثم تصفية العناصر التي تبدأ بالكلمة المطلوبة entry.startswith('ERROR:').",
+        "exampleCode": "entries = 'A:1|B:2|A:3'.split('|')\na_items = [e for e in entries if e.startswith('A:')]"
+    },
+    "starterCode": "log = 'INFO:ServerStarted|WARN:HighMemory|ERROR:DbTimeout|INFO:Ready'\n\n# استخرج رسائل ERROR واطبع: Errors Found: ['ERROR:DbTimeout']\n",
+    "requirements": [
+        "قسم النص عند علامة |",
+        "استخرج السجلات التي تبدأ بـ ERROR واطبعها بالقائمة المطلوبة"
+    ],
+    "expectedOutput": "Errors Found: ['ERROR:DbTimeout']",
+    "hints": [
+        "فكرة الحل: قسم النص باستخدام log.split('|') ثم استخدم List Comprehension مع .startswith('ERROR:').",
+        "اطبع النتيجة بجوار Errors Found:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Errors Found: ['ERROR:DbTimeout']",
+            "description": "استخراج أخطاء السجل من النص المعطى"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-8-level-11"
+},
+
+  "world-8-level-11": {
+    "id": "world-8-level-11",
+    "worldId": "world-8",
+    "worldTitle": "عرش البايثوني الخارق",
+    "levelNumber": 11,
+    "title": "👑 بوابة العبور: معركة عرش البايثون الملحمية (Grand Finale)",
+    "englishTitle": "Grand Finale: Financial Ledger Audit & Net Balance",
+    "subtitle": "تدقيق المعاملات المالية المتقدم وفصل الإيداعات عن السحوبات",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 250,
+    "skills": [
+        "data_audit",
+        "math",
+        "boss_challenge"
+    ],
+    "story": "معركة العبور النهائية: لديك قائمة معاملات مصرفية txs = [150, -50, 300, -120, 450]. احسب إجمالي الإيداعات الموجبة (150 + 300 + 450 = 900)، وإجمالي السحوبات السالبة كقيمة موجبة (50 + 120 = 170)، وصافي الرصيد المتبقي (900 - 170 = 730). اطبع النتيجة بصيغة: 'Deposits: 900, Withdrawals: 170, Net Balance: 730'.",
+    "microLesson": {
+        "concept": "تدقيق البيانات الرقمية والتجميع الشرطي",
+        "summary": "يمكن تجميع الإيداعات بشرط x > 0 والسحوبات بشرط x < 0 مع استخدام abs() لتحويل السحوبات لقيم موجبة.",
+        "exampleCode": "txs = [10, -5, 20]\ndep = sum(x for x in txs if x > 0)\nwithdr = sum(abs(x) for x in txs if x < 0)"
+    },
+    "starterCode": "txs = [150, -50, 300, -120, 450]\n\n# احسب الإيداعات والسحوبات والصافي واطبع الناتج المطلوب تماماً\n",
+    "requirements": [
+        "اجمع الأرقام الموجبة لحساب Deposits",
+        "اجمع القيم المطلقة للأرقام السالبة لحساب Withdrawals",
+        "احسب الصافي Net Balance واطبع: Deposits: 900, Withdrawals: 170, Net Balance: 730"
+    ],
+    "expectedOutput": "Deposits: 900, Withdrawals: 170, Net Balance: 730",
+    "hints": [
+        "فكرة الحل: استخدم sum(x for x in txs if x > 0) للإيداعات و sum(abs(x) for x in txs if x < 0) للسحوبات.",
+        "صافي الرصيد هو طرح السحوبات من الإيداعات. ادمج الثلاثة في f-string واحدة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Deposits: 900, Withdrawals: 170, Net Balance: 730",
+            "description": "تدقيق المعاملات المالية وحساب الصافي"
+        }
+    ],
+    "unlocksWorldId": "world-9",
+    "nextChallengeId": "world-9-level-1"
+},
+
+  "world-9-level-1": {
+    "id": "world-9-level-1",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 1,
+    "title": "📚 إنشاء القاموس الأول وقراءة المفاتيح (First Dictionary)",
+    "englishTitle": "First Dictionary Creation and Key Access",
+    "subtitle": "المفاهيم الأساسية لربط المفاتيح بالقيم Key-Value Pairs",
+    "difficulty": "easy",
+    "type": "write_code",
+    "baseXp": 180,
+    "skills": [
+        "dictionaries",
+        "keys",
+        "values"
+    ],
+    "story": "مرحباً بك في واحة البيانات! أنشئ قاموساً باسم student يحتوي على البيانات: 'name' بقيمة 'Sohila' و 'track' بقيمة 'Python'. استخرج القيمتين واطبعهما بصيغة: 'Student: Sohila - Track: Python'.",
+    "microLesson": {
+        "concept": "القواميس Dictionaries في بايثون",
+        "summary": "القاموس هو هيكل بيانات يخزن العناصر في صورة أزواج من المفاتيح والقيم داخل أقواس معقوفة {key: value}.",
+        "exampleCode": "user = {'name': 'Ahmed', 'role': 'Admin'}\nprint(f'User: {user[\"name\"]}')"
+    },
+    "starterCode": "# أنشئ القاموس واستخرج البيانات واطبع: Student: Sohila - Track: Python\n",
+    "requirements": [
+        "أنشئ قاموس student بالمفتاحين name و track",
+        "اطبع بصيغة دقيقة: Student: Sohila - Track: Python"
+    ],
+    "expectedOutput": "Student: Sohila - Track: Python",
+    "hints": [
+        "فكرة الحل: أنشئ student = {'name': 'Sohila', 'track': 'Python'}.",
+        "اطبع القيمتين باستخدام student['name'] و student['track']."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Student: Sohila - Track: Python",
+            "description": "إنشاء وقراءة بيانات القاموس"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-2"
+},
+
+  "world-9-level-2": {
+    "id": "world-9-level-2",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 2,
+    "title": "⚙️ تحديث القيم وإضافة مفاتيح جديدة للقاموس",
+    "englishTitle": "Updating Values and Adding Keys to Dictionary",
+    "subtitle": "تعديل محتويات القاموس ديناميكياً في الذاكرة",
+    "difficulty": "easy",
+    "type": "write_code",
+    "baseXp": 185,
+    "skills": [
+        "dictionaries",
+        "mutation",
+        "update"
+    ],
+    "story": "لديك قاموس إعدادات تطبيق config = {'theme': 'dark', 'volume': 70}. قم بتحديث قيمة 'theme' لتصبح 'light'، وأضف مفتاحاً جديداً 'language' بقيمة 'ar'. اطبع القاموس المعدل بصيغة: \"Config: {'theme': 'light', 'volume': 70, 'language': 'ar'}\".",
+    "microLesson": {
+        "concept": "تعديل وإضافة عناصر للقاموس",
+        "summary": "لإضافة أو تعديل مفتاح نستخدم صيغة dict[key] = new_value مباشرة.",
+        "exampleCode": "settings = {'mode': 'test'}\nsettings['mode'] = 'live'\nsettings['port'] = 8080"
+    },
+    "starterCode": "config = {'theme': 'dark', 'volume': 70}\n\n# عدل theme وأضف language ثم اطبع القاموس\n",
+    "requirements": [
+        "غير theme إلى light",
+        "أضف language بقيمة ar",
+        "اطبع الناتج: Config: {'theme': 'light', 'volume': 70, 'language': 'ar'}"
+    ],
+    "expectedOutput": "Config: {'theme': 'light', 'volume': 70, 'language': 'ar'}",
+    "hints": [
+        "فكرة الحل: طبق config['theme'] = 'light' ثم config['language'] = 'ar'.",
+        "اطبع القاموس مسبوقاً بـ Config: ."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Config: {'theme': 'light', 'volume': 70, 'language': 'ar'}",
+            "description": "تعديل وإضافة مفاتيح القاموس"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-3"
+},
+
+  "world-9-level-3": {
+    "id": "world-9-level-3",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 3,
+    "title": "📊 عداد تكرار الكلمات الإحصائي (Word Frequency Counter)",
+    "englishTitle": "Word Frequency Counter with Dictionary",
+    "subtitle": "الخوارزميات التجميعية وبناء الإحصاءات التكرارية",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 195,
+    "skills": [
+        "frequency_counter",
+        "dictionaries",
+        "loops"
+    ],
+    "story": "لديك قائمة كلمات words = ['code', 'python', 'code', 'data', 'python', 'code']. احسب عدد مرات تكرار كل كلمة داخل قاموس. اطبع القاموس الإحصائي بصيغة: \"Counts: {'code': 3, 'python': 2, 'data': 1}\".",
+    "microLesson": {
+        "concept": "خوارزمية عداد التكرار (Frequency Counter)",
+        "summary": "نمر بحلقة على الكلمات: إذا كانت الكلمة موجودة في القاموس نزيد عدادها بواحد، وإلا نضيفها بقيمة 1.",
+        "exampleCode": "counts = {}\nfor item in items:\n    counts[item] = counts.get(item, 0) + 1"
+    },
+    "starterCode": "words = ['code', 'python', 'code', 'data', 'python', 'code']\n\n# احسب تكرار كل كلمة واطبع: Counts: {'code': 3, 'python': 2, 'data': 1}\n",
+    "requirements": [
+        "احسب تكرار كل كلمة في القائمة",
+        "اطبع الناتج بصيغة: Counts: {'code': 3, 'python': 2, 'data': 1}"
+    ],
+    "expectedOutput": "Counts: {'code': 3, 'python': 2, 'data': 1}",
+    "hints": [
+        "فكرة الحل: استخدم قاموساً فارغاً counts = {} وطبق حلقة تكرار مع counts.get(w, 0) + 1.",
+        "اطبع النتيجة بالصيغة المطلوبة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Counts: {'code': 3, 'python': 2, 'data': 1}",
+            "description": "حساب تكرار عناصر قائمة الكلمات"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-4"
+},
+
+  "world-9-level-4": {
+    "id": "world-9-level-4",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 4,
+    "title": "🤝 المجموعات Sets: استخراج العناصر المشتركة (Intersection)",
+    "englishTitle": "Set Intersection: Discovering Common Students",
+    "subtitle": "العمليات الرياضية على المجموعات والتقاطع",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 190,
+    "skills": [
+        "sets",
+        "intersection",
+        "sorted"
+    ],
+    "story": "طلاب مسار بايثون هم python_students = {'Ali', 'Sara', 'Omar', 'Kareem'} وطلاب مسار الذكاء الاصطناعي هم ai_students = {'Sara', 'Kareem', 'Huda'}. استخرج الطلاب المشتركين في كلا المسارين ورتبهم أبجدياً في قائمة. اطبع الناتج بصيغة: \"Common: ['Kareem', 'Sara']\".",
+    "microLesson": {
+        "concept": "تقاطع المجموعات (Intersection)",
+        "summary": "تتيح المجموعات إيجاد العناصر المشتركة عبر المعامل & أو الدالة set1.intersection(set2).",
+        "exampleCode": "s1 = {'A', 'B'}\ns2 = {'B', 'C'}\ncommon = sorted(list(s1 & s2))"
+    },
+    "starterCode": "python_students = {'Ali', 'Sara', 'Omar', 'Kareem'}\nai_students = {'Sara', 'Kareem', 'Huda'}\\n\\n# استخرج المشتركين ورتبهم واطبع: Common: ['Kareem', 'Sara']\n",
+    "requirements": [
+        "استخرج العناصر المشتركة بين المجموعتين",
+        "رتب الأسماء أبجدياً واطبع: Common: ['Kareem', 'Sara']"
+    ],
+    "expectedOutput": "Common: ['Kareem', 'Sara']",
+    "hints": [
+        "فكرة الحل: استخدم python_students & ai_students لاستخراج المشتركين.",
+        "طبق دالة sorted() على الناتج واطبعه بجوار كلمة Common:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Common: ['Kareem', 'Sara']",
+            "description": "تقاطع مجموعتي طلاب بايثون والذكاء الاصطناعي"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-5"
+},
+
+  "world-9-level-5": {
+    "id": "world-9-level-5",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 5,
+    "title": "⚡ المجموعات Sets: استخراج العناصر المنفردة والفرق (Difference)",
+    "englishTitle": "Set Difference: Exclusive Elements",
+    "subtitle": "عملية طرح المجموعات واكتشاف العناصر الفريدة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 195,
+    "skills": [
+        "sets",
+        "difference",
+        "sorted"
+    ],
+    "story": "باستخدام نفس المجموعتين السابقتين، استخرج الطلاب المسجلين في مسار بايثون فقط ولم يسجلوا في الذكاء الاصطناعي (الفرق python_students - ai_students) ورتبهم أبجدياً. اطبع الناتج بصيغة: \"Python Only: ['Ali', 'Omar']\".",
+    "microLesson": {
+        "concept": "فرق المجموعات (Difference)",
+        "summary": "طرح مجموعتين set1 - set2 يستخرج العناصر الموجودة في الأولى وليست في الثانية.",
+        "exampleCode": "s1 = {'X', 'Y'}\ns2 = {'Y', 'Z'}\nonly_in_1 = sorted(list(s1 - s2))"
+    },
+    "starterCode": "python_students = {'Ali', 'Sara', 'Omar', 'Kareem'}\nai_students = {'Sara', 'Kareem', 'Huda'}\n\n# استخرج طلاب بايثون فقط ورتبهم واطبع: Python Only: ['Ali', 'Omar']\n",
+    "requirements": [
+        "احسب الفرق بين المجموعتين",
+        "رتب الأسماء أبجدياً واطبع: Python Only: ['Ali', 'Omar']"
+    ],
+    "expectedOutput": "Python Only: ['Ali', 'Omar']",
+    "hints": [
+        "فكرة الحل: استخدم العملية python_students - ai_students.",
+        "رتب الناتج باستخدام sorted() واطبعه بجوار Python Only:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Python Only: ['Ali', 'Omar']",
+            "description": "فرق المجموعتين واستخراج طلاب بايثون فقط"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-6"
+},
+
+  "world-9-level-6": {
+    "id": "world-9-level-6",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 6,
+    "title": "🔗 تحويل قائمتين متناظرتين إلى قاموس (Dict from Two Lists)",
+    "englishTitle": "Constructing Dictionary from Two Parallel Lists",
+    "subtitle": "الدمج الذكي باستخدام zip وتحويله لهيكل بيانات منظم",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "zip",
+        "dict_constructor",
+        "data_transformation"
+    ],
+    "story": "لديك قائمة أسماء الحقول keys = ['id', 'user', 'role'] وقائمة بالقيم المقابلة vals = [101, 'ibrahim', 'admin']. ادمج القائمتين لتكوين قاموس واحد منظم. اطبع الناتج بصيغة: \"User Dict: {'id': 101, 'user': 'ibrahim', 'role': 'admin'}\".",
+    "microLesson": {
+        "concept": "تحويل zip إلى قاموس dict(zip(...))",
+        "summary": "يمكن تحويل قائمتين متوازيتين إلى قاموس مباشرة بتمرير zip(keys, vals) إلى الدالة dict().",
+        "exampleCode": "k = ['a', 'b']\nv = [1, 2]\nd = dict(zip(k, v))"
+    },
+    "starterCode": "keys = ['id', 'user', 'role']\nvals = [101, 'ibrahim', 'admin']\n\n# ادمج القائمتين في قاموس واطبع: User Dict: {'id': 101, 'user': 'ibrahim', 'role': 'admin'}\n",
+    "requirements": [
+        "ادمج keys و vals في قاموس واحد",
+        "اطبع القاموس مسبوقاً بـ User Dict: "
+    ],
+    "expectedOutput": "User Dict: {'id': 101, 'user': 'ibrahim', 'role': 'admin'}",
+    "hints": [
+        "فكرة الحل: استخدم الدالة dict(zip(keys, vals)).",
+        "اطبع النتيجة بالصيغة المطلوبة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "User Dict: {'id': 101, 'user': 'ibrahim', 'role': 'admin'}",
+            "description": "تحويل قائمتي keys و vals إلى قاموس"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-7"
+},
+
+  "world-9-level-7": {
+    "id": "world-9-level-7",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 7,
+    "title": "🛡️ القراءة الآمنة بالقيم الافتراضية (dict.get)",
+    "englishTitle": "Safe Key Lookup with Default Values",
+    "subtitle": "تجنب أخطاء KeyError وبناء أنظمة برمجية مرنة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "dict_get",
+        "defensive_programming",
+        "dictionaries"
+    ],
+    "story": "لديك قاموس بيانات طالب student = {'name': 'Basma', 'score': 95}. استخرج قيمة المفتاح 'city' بأمان مع تعيين قيمة افتراضية 'Cairo' إذا لم يكن المفتاح موجوداً في القاموس. اطبع النتيجة بصيغة: 'City: Cairo'.",
+    "microLesson": {
+        "concept": "الدالة الآمنة dict.get(key, default)",
+        "summary": "الوصول بالدالة .get() يمنع حدوث خطأ KeyError إذا لم يكن المفتاح موجوداً، ويرجع القيمة الافتراضية المحددة بدلاً من ذلك.",
+        "exampleCode": "info = {'name': 'Omar'}\ncity = info.get('city', 'Unknown')\nprint(f'City: {city}')"
+    },
+    "starterCode": "student = {'name': 'Basma', 'score': 95}\n\n# استخرج city بقيمة افتراضية Cairo واطبع: City: Cairo\n",
+    "requirements": [
+        "استخدم الدالة .get() للبحث عن city بقيمة افتراضية Cairo",
+        "اطبع الناتج: City: Cairo"
+    ],
+    "expectedOutput": "City: Cairo",
+    "hints": [
+        "فكرة الحل: استخدم student.get('city', 'Cairo').",
+        "اطبع المتغير بصيغة City: {city}."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "City: Cairo",
+            "description": "البحث عن مفتاح غير موجود مع قيمة افتراضية"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-8"
+},
+
+  "world-9-level-8": {
+    "id": "world-9-level-8",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 8,
+    "title": "🏆 ترتيب مفاتيح القاموس حسب القيم (Sorting by Values)",
+    "englishTitle": "Sorting Dictionary Keys by Values Descending",
+    "subtitle": "استخدام مفاتيح الترتيب key function مع sorted",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 215,
+    "skills": [
+        "sorted",
+        "lambda",
+        "dictionaries"
+    ],
+    "story": "لديك درجات الطلاب في قاموس scores = {'Sara': 98, 'Kareem': 88, 'Ali': 92}. رتب أسماء الطلاب تنازلياً (من الأعلى إلى الأقل) في قائمة جديدة وفقاً لدرجاتهم. اطبع الناتج بصيغة: \"Ranked: ['Sara', 'Ali', 'Kareem']\".",
+    "microLesson": {
+        "concept": "ترتيب القاموس باستخدام sorted مع المعامل key",
+        "summary": "يمكنك ترتيب مفاتيح القاموس حسب قيمها بتمرير key=scores.get أو دالة lambda مع وضع reverse=True للترتيب التنازلي.",
+        "exampleCode": "d = {'A': 10, 'B': 50, 'C': 30}\nranked = sorted(d, key=d.get, reverse=True)\nprint(ranked)"
+    },
+    "starterCode": "scores = {'Sara': 98, 'Kareem': 88, 'Ali': 92}\n\n# رتب الأسماء تنازلياً حسب الدرجة واطبع: Ranked: ['Sara', 'Ali', 'Kareem']\n",
+    "requirements": [
+        "رتب الأسماء تنازلياً حسب الدرجة",
+        "اطبع القائمة بصيغة: Ranked: ['Sara', 'Ali', 'Kareem']"
+    ],
+    "expectedOutput": "Ranked: ['Sara', 'Ali', 'Kareem']",
+    "hints": [
+        "فكرة الحل: استخدم sorted(scores, key=scores.get, reverse=True).",
+        "اطبع الناتج بجوار Ranked:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Ranked: ['Sara', 'Ali', 'Kareem']",
+            "description": "ترتيب الطلاب تنازلياً حسب الدرجات"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-9"
+},
+
+  "world-9-level-9": {
+    "id": "world-9-level-9",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 9,
+    "title": "🏢 القواميس المتداخلة وتجميع إحصاءات الشركات (Nested Dicts)",
+    "englishTitle": "Nested Dictionaries & Corporate Stats Aggregation",
+    "subtitle": "التعامل مع الهياكل البيانية متعددة المستويات والتحليل المالي",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 220,
+    "skills": [
+        "nested_dictionaries",
+        "aggregation",
+        "loops"
+    ],
+    "story": "لديك بيانات أقسام شركة داخل قاموس متداخل dept = {'IT': {'count': 12, 'budget': 60000}, 'HR': {'count': 8, 'budget': 32000}}. احسب إجمالي عدد الموظفين وإجمالي الميزانية لجميع الأقسام. اطبع الناتج بصيغة: 'Total Staff: 20, Total Budget: 92000'.",
+    "microLesson": {
+        "concept": "الوصول للقواميس المتداخلة (Nested Dictionaries)",
+        "summary": "للوصول لقيمة داخل قاموس متداخل نستخدم مفتاحين متتاليين dict[outer_key][inner_key].",
+        "exampleCode": "total = 0\nfor d_name, d_info in dept.items():\n    total += d_info['count']"
+    },
+    "starterCode": "dept = {'IT': {'count': 12, 'budget': 60000}, 'HR': {'count': 8, 'budget': 32000}}\n\n# احسب إجمالي الموظفين والميزانية واطبع: Total Staff: 20, Total Budget: 92000\n",
+    "requirements": [
+        "اجمع count لجميع الأقسام",
+        "اجمع budget لجميع الأقسام",
+        "اطبع بصيغة: Total Staff: 20, Total Budget: 92000"
+    ],
+    "expectedOutput": "Total Staff: 20, Total Budget: 92000",
+    "hints": [
+        "فكرة الحل: مر بحلقة for info in dept.values(): واجمع info['count'] و info['budget'].",
+        "اطبع الناتج بصيغة f-string المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Total Staff: 20, Total Budget: 92000",
+            "description": "تجميع إحصاءات الأقسام المتداخلة"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-10"
+},
+
+  "world-9-level-10": {
+    "id": "world-9-level-10",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 10,
+    "title": "⚡ إنشاء القواميس بالاستيعاب (Dictionary Comprehension)",
+    "englishTitle": "Dictionary Comprehension: Squares Mapping",
+    "subtitle": "الصياغة الاحترافية لبناء القواميس في سطر برمجي واحد",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 225,
+    "skills": [
+        "dict_comprehension",
+        "math",
+        "clean_code"
+    ],
+    "story": "أنشئ قاموساً لمربعات الأرقام الزوجية من 2 إلى 8 (أي للأرقام 2, 4, 6, 8) باستخدام Dictionary Comprehension، بحيث يكون المفتاح هو الرقم والقيمة هي مربعه (الرقم مضروباً في نفسه). اطبع القاموس بصيغة: \"Squares: {2: 4, 4: 16, 6: 36, 8: 64}\".",
+    "microLesson": {
+        "concept": "بناء القواميس بـ Dictionary Comprehension",
+        "summary": "توفر بايثون صياغة مباشرة لبناء القواميس: {k: v for x in iterable if condition}.",
+        "exampleCode": "sq = {x: x**2 for x in range(1, 4)}\nprint(sq)"
+    },
+    "starterCode": "# أنشئ قاموس مربعات الأرقام 2 و 4 و 6 و 8 واطبع: Squares: {2: 4, 4: 16, 6: 36, 8: 64}\n",
+    "requirements": [
+        "استخدم Dictionary Comprehension أو حلقة لتوليد القاموس",
+        "اطبع القاموس مسبوقاً بـ Squares: "
+    ],
+    "expectedOutput": "Squares: {2: 4, 4: 16, 6: 36, 8: 64}",
+    "hints": [
+        "فكرة الحل: استخدم {x: x**2 for x in range(2, 9, 2)}.",
+        "اطبع الناتج مباشرة بالصيغة المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Squares: {2: 4, 4: 16, 6: 36, 8: 64}",
+            "description": "توليد قاموس مربعات الأرقام الزوجية"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-9-level-11"
+},
+
+  "world-9-level-11": {
+    "id": "world-9-level-11",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 11,
+    "title": "👑 زعيم الواحة النهائي: تحليل سلة التسوق الإلكترونية (Master Boss 09)",
+    "englishTitle": "Grand Master Boss: E-Commerce Shopping Cart Analytics",
+    "subtitle": "تطبيق واقعي شامل يدمج القوائم والقواميس والتجميع والمقارنات",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 260,
+    "skills": [
+        "data_analytics",
+        "dictionaries",
+        "lists",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم النهائي للواحة: لديك سلة مشتريات إلكترونية تحتوي على السلع التالية: cart = [{'item': 'Book', 'price': 150, 'qty': 2}, {'item': 'Pen', 'price': 25, 'qty': 4}, {'item': 'Notebook', 'price': 60, 'qty': 3}]. احسب إجمالي قيمة السلة (حاصل ضرب price * qty لكل سلعة: 300 + 100 + 180 = 580)، وحدد اسم السلعة التي حققت أعلى تكلفة إجمالية ('Book' بتكلفة 300). اطبع النتيجة بصيغة: 'Cart Total: 580 EGP, Top Item: Book'.",
+    "microLesson": {
+        "concept": "تحليل البيانات وهياكل السجلات (Data Record Analytics)",
+        "summary": "في المتاجر الإلكترونية، يتم تمثيل سلة الشراء كقائمة من القواميس. نمر عليها لحساب المجاميع وإيجاد العنصر صاحب أعلى تكلفة.",
+        "exampleCode": "total = 0\nbest_item = ''\nmax_cost = 0\nfor item in cart:\n    cost = item['price'] * item['qty']\n    total += cost\n    if cost > max_cost:\n        max_cost = cost\n        best_item = item['item']"
+    },
+    "starterCode": "cart = [\n    {'item': 'Book', 'price': 150, 'qty': 2},\n    {'item': 'Pen', 'price': 25, 'qty': 4},\n    {'item': 'Notebook', 'price': 60, 'qty': 3}\n]\n\n# احسب الإجمالي الكلي وحدد أعلى سلعة تكلفة واطبع الناتج المطلوب\n",
+    "requirements": [
+        "احسب التكلفة الإجمالية للسلة",
+        "حدد اسم السلعة ذات أعلى تكلفة إجمالية",
+        "اطبع بصيغة دقيقة: Cart Total: 580 EGP, Top Item: Book"
+    ],
+    "expectedOutput": "Cart Total: 580 EGP, Top Item: Book",
+    "hints": [
+        "فكرة الحل: اضرب price في qty لكل عنصر واجمعه في total.",
+        "تتبع العنصر صاحب أكبر حاصل ضرب (وهو Book بقيمة 300)، ثم اطبعهما بصيغة f-string المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Cart Total: 580 EGP, Top Item: Book",
+            "description": "تحليل سلة التسوق وحساب الإجمالي وأعلى سلعة"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-1": {
+    "id": "bonus-world-1",
+    "worldId": "world-1",
+    "worldTitle": "قرية بايثون",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: تحويل الثواني إلى دقائق وثوانٍ",
+    "englishTitle": "Bonus: Seconds to Minutes & Seconds Converter",
+    "subtitle": "تحدي سرعة إضافي لكسب نقاط وبطولات إضافية",
+    "difficulty": "easy",
+    "type": "bonus",
+    "baseXp": 120,
+    "skills": [
+        "bonus",
+        "arithmetic",
+        "modulus"
+    ],
+    "story": "لديك عدد ثوانٍ total_seconds = 145. احسب عدد الدقائق بالقسمة الصحيحة // وباقي الثواني بمعامل % واطبع بصيغة: 'Time: 2m 25s'.",
+    "microLesson": {
+        "concept": "القسمة الصحيحة وباقي القسمة في تحويل الوقت",
+        "summary": "الدقائق = total // 60، والثواني = total % 60.",
+        "exampleCode": "s = 125\nprint(f'{s//60}m {s%60}s')"
+    },
+    "starterCode": "total_seconds = 145\n# احسب واطبع بصيغة: Time: 2m 25s\n",
+    "requirements": [
+        "اطبع الناتج بصيغة: Time: 2m 25s"
+    ],
+    "expectedOutput": "Time: 2m 25s",
+    "hints": [
+        "استخدم // 60 للدقائق و % 60 للثواني."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Time: 2m 25s",
+            "description": "تحويل 145 ثانية"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-2": {
+    "id": "bonus-world-2",
+    "worldId": "world-2",
+    "worldTitle": "وادي الشروط والقرارات",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: تحديد الربع السنوي للتاريخ (Quarter Finder)",
+    "englishTitle": "Bonus: Fiscal Quarter Finder",
+    "subtitle": "تحدي سرعة إضافي للشروط والمدى",
+    "difficulty": "easy",
+    "type": "bonus",
+    "baseXp": 130,
+    "skills": [
+        "bonus",
+        "conditions"
+    ],
+    "story": "لديك رقم الشهر month = 8. حدد الربع السنوي (الأشهر 1-3 Q1، 4-6 Q2، 7-9 Q3، 10-12 Q4). للشهر 8 اطبع: 'Quarter: Q3'.",
+    "microLesson": {
+        "concept": "تصنيف الشهور إلى أرباع سنوية",
+        "summary": "الشهر 8 يقع في الربع الثالث Q3.",
+        "exampleCode": "m = 5\nprint('Q2' if m <= 6 else 'Q3')"
+    },
+    "starterCode": "month = 8\n# حدد الربع واطبع: Quarter: Q3\n",
+    "requirements": [
+        "اطبع: Quarter: Q3"
+    ],
+    "expectedOutput": "Quarter: Q3",
+    "hints": [
+        "تحقق من 7 <= month <= 9."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Quarter: Q3",
+            "description": "تحديد ربع الشهر 8"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-3": {
+    "id": "bonus-world-3",
+    "worldId": "world-3",
+    "worldTitle": "غابة التكرار والحلقات",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: حساب مضروب العدد (Factorial)",
+    "englishTitle": "Bonus: Factorial Calculation",
+    "subtitle": "تحدي سرعة إضافي لحلقات التكرار",
+    "difficulty": "medium",
+    "type": "bonus",
+    "baseXp": 140,
+    "skills": [
+        "bonus",
+        "loops",
+        "math"
+    ],
+    "story": "احسب مضروب العدد num = 5 (أي 5 * 4 * 3 * 2 * 1 = 120) باستخدام حلقة تكرار. اطبع النتيجة بصيغة: 'Factorial: 120'.",
+    "microLesson": {
+        "concept": "حساب المضروب التراكمي",
+        "summary": "نبدأ بـ fact = 1 ونضرب في كل رقم من 1 إلى num.",
+        "exampleCode": "fact = 1\nfor i in range(1, 6):\n    fact *= i"
+    },
+    "starterCode": "num = 5\n# احسب المضروب واطبع: Factorial: 120\n",
+    "requirements": [
+        "اطبع: Factorial: 120"
+    ],
+    "expectedOutput": "Factorial: 120",
+    "hints": [
+        "استخدم حلقة تكرار تضرب الأرقام في متغير تراكمي."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Factorial: 120",
+            "description": "مضروب العدد 5"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-4": {
+    "id": "bonus-world-4",
+    "worldId": "world-4",
+    "worldTitle": "كهف النصوص والكلمات",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: استبدال المسافات بالشرطات (Slugify)",
+    "englishTitle": "Bonus: URL Slugify",
+    "subtitle": "تحدي سرعة إضافي لدوال النصوص",
+    "difficulty": "easy",
+    "type": "bonus",
+    "baseXp": 130,
+    "skills": [
+        "bonus",
+        "strings",
+        "replace"
+    ],
+    "story": "لديك عنوان مقال title = 'Learn Python With Shababha'. حول الحروف لصغيرة واستبدل المسافات بشرطة '-'. اطبع: 'Slug: learn-python-with-shababha'.",
+    "microLesson": {
+        "concept": "توليد الروابط بـ lower و replace",
+        "summary": "title.lower().replace(' ', '-') تحول العنوان لرابط نظيف.",
+        "exampleCode": "t = 'My Title'\nprint(t.lower().replace(' ', '-'))"
+    },
+    "starterCode": "title = 'Learn Python With Shababha'\n# ولد الرابط واطبع: Slug: learn-python-with-shababha\n",
+    "requirements": [
+        "اطبع: Slug: learn-python-with-shababha"
+    ],
+    "expectedOutput": "Slug: learn-python-with-shababha",
+    "hints": [
+        "طبق دالة .lower() ثم .replace(' ', '-')."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Slug: learn-python-with-shababha",
+            "description": "تحويل العنوان لرابط"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-5": {
+    "id": "bonus-world-5",
+    "worldId": "world-5",
+    "worldTitle": "مملكة القوائم والمصفوفات",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: إيجاد ثاني أكبر رقم في القائمة",
+    "englishTitle": "Bonus: Second Largest Number",
+    "subtitle": "تحدي سرعة إضافي للتعامل مع القوائم والمجموعات",
+    "difficulty": "medium",
+    "type": "bonus",
+    "baseXp": 150,
+    "skills": [
+        "bonus",
+        "lists",
+        "sorted"
+    ],
+    "story": "لديك قائمة أرقام nums = [12, 45, 2, 45, 33, 18]. استبعد التكرار ثم أوجد ثاني أكبر رقم واطبعه بصيغة: 'Second Largest: 33'.",
+    "microLesson": {
+        "concept": "إيجاد ثاني أكبر عنصر",
+        "summary": "تحويل القائمة لمجموعة واستبعاد المكررات ثم الترتيب يتيح أخذ العنصر [-2].",
+        "exampleCode": "u = sorted(set(nums))\nprint(u[-2])"
+    },
+    "starterCode": "nums = [12, 45, 2, 45, 33, 18]\n# أوجد ثاني أكبر رقم واطبع: Second Largest: 33\n",
+    "requirements": [
+        "اطبع: Second Largest: 33"
+    ],
+    "expectedOutput": "Second Largest: 33",
+    "hints": [
+        "استخدم sorted(set(nums))[-2]."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Second Largest: 33",
+            "description": "ثاني أكبر رقم في القائمة"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-6": {
+    "id": "bonus-world-6",
+    "worldId": "world-6",
+    "worldTitle": "قلعة الدوال والموديولات",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: دالة فحص الكلمات المنتهية بلاحقة معينة",
+    "englishTitle": "Bonus: Ends With Checker Function",
+    "subtitle": "تحدي سرعة إضافي للدوال ومعاملاتها",
+    "difficulty": "easy",
+    "type": "bonus",
+    "baseXp": 140,
+    "skills": [
+        "bonus",
+        "functions",
+        "endswith"
+    ],
+    "story": "اكتب دالة check_extension(filename) ترجع True إذا كان الملف ينتهي بـ '.py'. استدعها للملف 'main.py' واطبع: 'Is Python: True'.",
+    "microLesson": {
+        "concept": "فحص لاحقة النص بـ endswith",
+        "summary": "الدالة filename.endswith('.py') ترجع قيمة منطقية True أو False.",
+        "exampleCode": "def is_py(f): return f.endswith('.py')"
+    },
+    "starterCode": "# عرف الدالة وافحص 'main.py' واطبع: Is Python: True\n",
+    "requirements": [
+        "اطبع: Is Python: True"
+    ],
+    "expectedOutput": "Is Python: True",
+    "hints": [
+        "استخدم الدالة f.endswith('.py')."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Is Python: True",
+            "description": "فحص امتداد main.py"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-7": {
+    "id": "bonus-world-7",
+    "worldId": "world-7",
+    "worldTitle": "برج الخوارزميات والبحث",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: حساب المتوسط الحسابي المتحرك لثلاثة عناصر",
+    "englishTitle": "Bonus: 3-Element Moving Average",
+    "subtitle": "تحدي سرعة إضافي للخوارزميات والتقطيع التتابعي",
+    "difficulty": "medium",
+    "type": "bonus",
+    "baseXp": 160,
+    "skills": [
+        "bonus",
+        "moving_average",
+        "algorithms"
+    ],
+    "story": "لديك قراءات درجات حرارة temps = [20, 24, 28, 30]. احسب متوسط أول 3 قراءات (20 + 24 + 28) / 3 واطبع بصيغة: 'Moving Avg: 24.0'.",
+    "microLesson": {
+        "concept": "المتوسط المتحرك (Moving Average)",
+        "summary": "حساب متوسط نافذة محددة من القائمة sum(window) / len(window).",
+        "exampleCode": "w = temps[0:3]\nprint(sum(w)/len(w))"
+    },
+    "starterCode": "temps = [20, 24, 28, 30]\n# احسب متوسط أول 3 عناصر واطبع: Moving Avg: 24.0\n",
+    "requirements": [
+        "اطبع: Moving Avg: 24.0"
+    ],
+    "expectedOutput": "Moving Avg: 24.0",
+    "hints": [
+        "اجمع أول 3 عناصر واقسم على 3."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Moving Avg: 24.0",
+            "description": "متوسط أول 3 درجات حرارة"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-8": {
+    "id": "bonus-world-8",
+    "worldId": "world-8",
+    "worldTitle": "عرش البايثوني الخارق",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: محاكاة فاحص كلمات المرور الآمنة",
+    "englishTitle": "Bonus: Password Strength Validator",
+    "subtitle": "تحدي سرعة إضافي للأمان والشروط المتعددة",
+    "difficulty": "medium",
+    "type": "bonus",
+    "baseXp": 170,
+    "skills": [
+        "bonus",
+        "security",
+        "validation"
+    ],
+    "story": "افحص كلمة المرور pwd = 'Pass#2026'. إذا كان طولها 8 فما فوق وتحتوي على رقم وتحتوي على '#' فهي مقبولة. اطبع: 'Password: Secure'.",
+    "microLesson": {
+        "concept": "التحقق من قوة كلمات المرور",
+        "summary": "فحص الطول مع وجود رموز وأرقام بأي من الدوال any(c.isdigit() for c in pwd).",
+        "exampleCode": "is_strong = len(p) >= 8 and any(c.isdigit() for c in p)"
+    },
+    "starterCode": "pwd = 'Pass#2026'\n# افحص كلمة المرور واطبع: Password: Secure\n",
+    "requirements": [
+        "اطبع: Password: Secure"
+    ],
+    "expectedOutput": "Password: Secure",
+    "hints": [
+        "تحقق من الشروط الثلاثة واطبع الرسالة المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Password: Secure",
+            "description": "فحص كلمة المرور Pass#2026"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  "bonus-world-9": {
+    "id": "bonus-world-9",
+    "worldId": "world-9",
+    "worldTitle": "واحة القواميس والبيانات",
+    "levelNumber": 12,
+    "title": "⚡ تحدي إضافي: عكس مفاتيح وقيم القاموس (Invert Dictionary)",
+    "englishTitle": "Bonus: Dictionary Inversion",
+    "subtitle": "تحدي سرعة إضافي لعكس خرائط البيانات Key-Value Inversion",
+    "difficulty": "hard",
+    "type": "bonus",
+    "baseXp": 180,
+    "skills": [
+        "bonus",
+        "dictionaries",
+        "inversion"
+    ],
+    "story": "لديك قاموس رتب d = {'first': 1, 'second': 2, 'third': 3}. قم بعكس القاموس بحيث تصبح القيم مفاتيح والمفاتيح قيماً. اطبع الناتج بصيغة: \"Inverted: {1: 'first', 2: 'second', 3: 'third'}\".",
+    "microLesson": {
+        "concept": "عكس القاموس بـ Dictionary Comprehension",
+        "summary": "يمكن عكس المفتاح بالقيمة باستخدام {v: k for k, v in d.items()}.",
+        "exampleCode": "inv = {v: k for k, v in d.items()}"
+    },
+    "starterCode": "d = {'first': 1, 'second': 2, 'third': 3}\n# اعكس القاموس واطبع: Inverted: {1: 'first', 2: 'second', 3: 'third'}\n",
+    "requirements": [
+        "اطبع: Inverted: {1: 'first', 2: 'second', 3: 'third'}"
+    ],
+    "expectedOutput": "Inverted: {1: 'first', 2: 'second', 3: 'third'}",
+    "hints": [
+        "استخدم {v: k for k, v in d.items()}."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Inverted: {1: 'first', 2: 'second', 3: 'third'}",
+            "description": "عكس قاموس d"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
+
+  // ==========================================
+  // PROBLEM SOLVING & INTERVIEW EXPANSION WORLDS (10, 11, 12)
+  // ==========================================
+  "world-10-level-1": {
+    "id": "world-10-level-1",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 1,
+    "title": "📐 فاحص متساوي الأضلاع والزوايا في المثلثات",
+    "englishTitle": "Equilateral Triangle Classifier",
+    "subtitle": "المقارنات المتعددة والشروط الهندسية",
+    "difficulty": "easy",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "problem_solving",
+        "geometry",
+        "conditions"
+    ],
+    "story": "لديك أطوال أضلاع مثلث a = 5 و b = 5 و c = 5. افحص ما إذا كان المثلث متساوي الأضلاع (Equilateral) بتساوي جميع أضلاعه الثلاثة معاً. إذا كان كذلك اطبع: 'Triangle: Equilateral'.",
+    "microLesson": {
+        "concept": "المقارنات المتسلسلة والشروط المترابطة",
+        "summary": "في بايثون يمكن كتابة a == b == c للتحقق من تساوي ثلاثة متغيرات في شرط واحد أنيق.",
+        "exampleCode": "x = 10\ny = 10\nz = 10\nif x == y == z:\n    print('All Equal')"
+    },
+    "starterCode": "a = 5\nb = 5\nc = 5\n\n# افحص تساوي الأضلاع واطبع: Triangle: Equilateral\n",
+    "requirements": [
+        "تحقق من أن a يساوي b ويساوي c",
+        "اطبع بصيغة دقيقة: Triangle: Equilateral"
+    ],
+    "expectedOutput": "Triangle: Equilateral",
+    "hints": [
+        "فكرة الحل: استخدم الشرط if a == b == c أو if a == b and b == c.",
+        "اطبع جملة Triangle: Equilateral داخل كتلة الشرط."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Triangle: Equilateral",
+            "description": "فحص مثلث متساوي الأضلاع 5, 5, 5"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-2"
+},
+
+  "world-10-level-2": {
+    "id": "world-10-level-2",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 2,
+    "title": "🔍 إيجاد أصغر وأكبر قيمة يدوياً (Manual Min-Max)",
+    "englishTitle": "Manual Min & Max Finding Loop",
+    "subtitle": "التفكير الخوارزمي الأساسي بدون استخدام دوال جاهزة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 210,
+    "skills": [
+        "problem_solving",
+        "loops",
+        "algorithms"
+    ],
+    "story": "لديك قائمة أرقام nums = [34, 12, 89, 5, 67, 23]. ابحث عن أصغر قيمة وأكبر قيمة بالمرور عبر حلقة تكرار يدوية (دون استخدام دوال min أو max الجاهزة). اطبع النتيجة بصيغة: 'Min: 5, Max: 89'.",
+    "microLesson": {
+        "concept": "خوارزمية البحث عن القيم القصوى والدنيا",
+        "summary": "نبدأ بافتراض أن أول عنصر هو الأصغر والأكبر معاً، ثم نمر على باقي العناصر ونحدث القيم كلما وجدنا عنصراً أصغر أو أكبر.",
+        "exampleCode": "arr = [4, 9, 2]\ncur_max = arr[0]\nfor item in arr:\n    if item > cur_max:\n        cur_max = item"
+    },
+    "starterCode": "nums = [34, 12, 89, 5, 67, 23]\n\n# ابحث يدوياً عن الأصغر والأكبر واطبع: Min: 5, Max: 89\n",
+    "requirements": [
+        "استخدم حلقة تكرار لتحديث قيمتي min و max",
+        "اطبع بصيغة: Min: 5, Max: 89"
+    ],
+    "expectedOutput": "Min: 5, Max: 89",
+    "hints": [
+        "فكرة الحل: ابدأ بـ mn = nums[0] و mx = nums[0]، ثم قارن كل رقم معهما داخل حلقة for.",
+        "اطبع الناتج النهائي بصيغة f-string المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Min: 5, Max: 89",
+            "description": "إيجاد الأصغر 5 والأكبر 89"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-3"
+},
+
+  "world-10-level-3": {
+    "id": "world-10-level-3",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 3,
+    "title": "📦 حاسبة تكلفة الشحن بالوزن والمسافة",
+    "englishTitle": "Logistics Shipping Cost Engine",
+    "subtitle": "التطبيقات اللوجستية والحسابات المركبة",
+    "difficulty": "easy",
+    "type": "write_code",
+    "baseXp": 200,
+    "skills": [
+        "problem_solving",
+        "math",
+        "logistics"
+    ],
+    "story": "طرد وزنه weight_kg = 8 والمسافة المطلوبة distance_km = 120. التكلفة تحسب وفق المعادلة: 30 جنيهاً رسم ثابت + 5 جنيهات لكل كجم + 0.5 جنيه لكل كم (أي 30 + 40 + 60 = 130.0). اطبع الناتج بصيغة: 'Shipping: 130.0 EGP'.",
+    "microLesson": {
+        "concept": "حساب التسعير الديناميكي المركب",
+        "summary": "التكلفة الإجمالية تجمع الرسوم الثابتة والمتغيرة، وتنسق كعدد عشري بدقة منزلة واحدة.",
+        "exampleCode": "base = 20\nw = 5 * 2\nd = 50 * 0.1\ntotal = base + w + d"
+    },
+    "starterCode": "weight_kg = 8\ndistance_km = 120\n\n# احسب التكلفة واطبع: Shipping: 130.0 EGP\n",
+    "requirements": [
+        "طبق معادلة الشحن بدقة",
+        "اطبع الناتج بصيغة: Shipping: 130.0 EGP"
+    ],
+    "expectedOutput": "Shipping: 130.0 EGP",
+    "hints": [
+        "فكرة الحل: المعادلة هي 30 + (weight_kg * 5) + (distance_km * 0.5).",
+        "استخدم :.1f داخل f-string متبوعة بـ EGP."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Shipping: 130.0 EGP",
+            "description": "حساب شحن 8 كجم على مسافة 120 كم"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-4"
+},
+
+  "world-10-level-4": {
+    "id": "world-10-level-4",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 4,
+    "title": "📊 تصنيف الأرقام: الموجبة والسالبة والأصفار",
+    "englishTitle": "Sign Classification: Positives, Negatives, and Zeros",
+    "subtitle": "عدادات التصنيف المتعددة في دورة تكرارية واحدة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 210,
+    "skills": [
+        "problem_solving",
+        "loops",
+        "counters"
+    ],
+    "story": "لديك قائمة أرقام vals = [-3, 5, 0, 12, -7, 0, 8]. قم بعد كم رقماً موجباً (> 0)، وكم رقماً سالباً (< 0)، وكم صفراً (== 0) في القائمة. اطبع النتيجة بصيغة: 'Positive: 3, Negative: 2, Zeros: 2'.",
+    "microLesson": {
+        "concept": "التصنيف التراكمي في دورة واحدة (Single-Pass Counter)",
+        "summary": "بدلاً من تكرار البحث، نستخدم ثلاث متغيرات عدادات ونحدث العداد المناسب داخل حلقة واحدة.",
+        "exampleCode": "c_pos = 0\nfor x in arr:\n    if x > 0:\n        c_pos += 1"
+    },
+    "starterCode": "vals = [-3, 5, 0, 12, -7, 0, 8]\n\n# احسب التصنيفات واطبع: Positive: 3, Negative: 2, Zeros: 2\n",
+    "requirements": [
+        "احسب أعداد القيم الموجبة والسالبة والأصفار",
+        "اطبع بصيغة: Positive: 3, Negative: 2, Zeros: 2"
+    ],
+    "expectedOutput": "Positive: 3, Negative: 2, Zeros: 2",
+    "hints": [
+        "فكرة الحل: أنشئ ثلاثة عدادات pos = 0 و neg = 0 و zero = 0.",
+        "مر بحلقة على القائمة وافحص كل عنصر، ثم اطبع النتيجة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Positive: 3, Negative: 2, Zeros: 2",
+            "description": "عد الموجب والسالب والأصفار"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-5"
+},
+
+  "world-10-level-5": {
+    "id": "world-10-level-5",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 5,
+    "title": "🔒 فاحص قوة كلمات المرور المعقدة (Password Security)",
+    "englishTitle": "Multi-Criteria Password Security Validator",
+    "subtitle": "فحص الشروط المتعددة والدوال النصية",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 215,
+    "skills": [
+        "problem_solving",
+        "security",
+        "strings"
+    ],
+    "story": "لديك كلمة مرور pwd = 'Python#2026'. تكون كلمة المرور قوية ('Strong') إذا كان طولها >= 8، وتحتوي على رقم واحد على الأقل، وتحتوي على رمز '#'. اطبع النتيجة بصيغة: 'Password Strength: Strong'.",
+    "microLesson": {
+        "concept": "فحص المعايير الأمنية المتعددة",
+        "summary": "يمكن التحقق من وجود أرقام باستخدام any(c.isdigit() for c in pwd) ومن الرموز باستخدام in.",
+        "exampleCode": "has_num = any(char.isdigit() for char in text)\nhas_hash = '#' in text"
+    },
+    "starterCode": "pwd = 'Python#2026'\n\n# افحص قوة كلمة المرور واطبع: Password Strength: Strong\n",
+    "requirements": [
+        "تحقق من الطول واحتوائها على رقم ورمز #",
+        "اطبع بصيغة: Password Strength: Strong"
+    ],
+    "expectedOutput": "Password Strength: Strong",
+    "hints": [
+        "فكرة الحل: افحص len(pwd) >= 8 و any(c.isdigit() for c in pwd) و '#' in pwd.",
+        "اطبع جملة النتيجة المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Password Strength: Strong",
+            "description": "التحقق من قوة كلمة مرور Python#2026"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-6"
+},
+
+  "world-10-level-6": {
+    "id": "world-10-level-6",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 6,
+    "title": "⏰ تحويل التوقيت من نظام 24 ساعة إلى نظام 12 ساعة (AM/PM)",
+    "englishTitle": "24-Hour to 12-Hour Clock Converter",
+    "subtitle": "العمليات الحسابية الزمنية وباقي القسمة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 210,
+    "skills": [
+        "problem_solving",
+        "time_conversion",
+        "formatting"
+    ],
+    "story": "لديك وقت بنظام 24 ساعة: hour = 17 و minute = 45. حول الساعة لنظام 12 ساعة مع تحديد AM أو PM (17 تصبح 05 مساءً PM). اطبع الوقت بصيغة: 'Time: 05:45 PM'.",
+    "microLesson": {
+        "concept": "تحويل التوقيت الزمني وباقي القسمة",
+        "summary": "إذا كانت الساعة >= 12 تكون PM وإلا AM. والساعة بنظام 12 هي (hour % 12) مع معالجة الصفر كـ 12.",
+        "exampleCode": "period = 'PM' if h >= 12 else 'AM'\nh12 = h % 12\nif h12 == 0: h12 = 12"
+    },
+    "starterCode": "hour = 17\nminute = 45\n\n# حول الوقت واطبع بصيغة: Time: 05:45 PM\n",
+    "requirements": [
+        "حدد الفترة AM أو PM والساعة بنظام 12",
+        "اطبع الوقت بصيغة دقيقة: Time: 05:45 PM"
+    ],
+    "expectedOutput": "Time: 05:45 PM",
+    "hints": [
+        "فكرة الحل: 17 - 12 = 5، والفترة هي PM لأن 17 >= 12.",
+        "استخدم :02d لضبط خانتي الساعة والدقيقة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Time: 05:45 PM",
+            "description": "تحويل الساعة 17:45"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-7"
+},
+
+  "world-10-level-7": {
+    "id": "world-10-level-7",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 7,
+    "title": "🔢 خوارزمية إيجاد الرقم المفقود في المتتالية (Missing Number)",
+    "englishTitle": "Missing Number in Sequence Algorithm",
+    "subtitle": "استخدام مجموع متسلسلة غاوس الرياضية لحل المسائل بكفاءة",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 220,
+    "skills": [
+        "problem_solving",
+        "math",
+        "algorithms"
+    ],
+    "story": "لديك متتالية أرقام من 1 إلى 6 ينقصها رقم واحد: nums = [1, 2, 4, 5, 6]. استخدم صيغة المجموع المتوقع (n * (n + 1) // 2) واطرح منها مجموع عناصر القائمة الحالية لمعرفة الرقم المفقود. اطبع النتيجة بصيغة: 'Missing: 3'.",
+    "microLesson": {
+        "concept": "صيغة غاوس لمجموع الأعداد المتتالية",
+        "summary": "مجموع الأعداد من 1 إلى n يحسب بضرب n في (n + 1) والقسمة على 2. الفارق بين هذا المجموع والمجموع الفعلي يعطي الرقم المفقود مباشرة في زمن O(1) إضافي.",
+        "exampleCode": "n = 5\nexpected = n * (n + 1) // 2\nactual = sum([1, 2, 4, 5])\nmissing = expected - actual"
+    },
+    "starterCode": "nums = [1, 2, 4, 5, 6]\nn = 6\n\n# احسب الرقم المفقود واطبع: Missing: 3\n",
+    "requirements": [
+        "احسب المجموع المتوقع للأرقام حتى n واطرح منه sum(nums)",
+        "اطبع الناتج: Missing: 3"
+    ],
+    "expectedOutput": "Missing: 3",
+    "hints": [
+        "فكرة الحل: expected_sum = n * (n + 1) // 2 ثم missing = expected_sum - sum(nums).",
+        "اطبع النتيجة بجوار Missing:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Missing: 3",
+            "description": "إيجاد الرقم المفقود 3 من 1 إلى 6"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-8"
+},
+
+  "world-10-level-8": {
+    "id": "world-10-level-8",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 8,
+    "title": "⚖️ فاحص توازن الأقواس البسيط (Balanced Parentheses Counter)",
+    "englishTitle": "Simple Balanced Parentheses Counter",
+    "subtitle": "التحقق من صحة هياكل التعبير البرمجي ومطابقة الأقواس",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 225,
+    "skills": [
+        "problem_solving",
+        "strings",
+        "stack_concept"
+    ],
+    "story": "لديك تعبير يحتوي أقواساً expr = '(()())'. افحص ما إذا كانت الأقواس متوازنة باستخدام عداد يبدأ بـ 0: يزداد بمقدار 1 عند القوس المفتوح '(' وينقص بمقدار 1 عند القوس المغلق ')'. وإذا لم ينزل العداد تحت الصفر وانتهى بـ 0 تكون متوازنة. اطبع: 'Balanced: True'.",
+    "microLesson": {
+        "concept": "محاكاة المكدس بعداد الأقواس",
+        "summary": "لتكون الأقواس متوازنة يجب ألا يغلق قوس قبل أن يفتح (العداد لا يصبح سالباً أبداً) ويجب إغلاق جميع الأقواس في النهاية (العداد = 0).",
+        "exampleCode": "bal = 0\nfor ch in s:\n    if ch == '(': bal += 1\n    elif ch == ')': bal -= 1\n    if bal < 0: break"
+    },
+    "starterCode": "expr = '(()())'\n\n# افحص توازن الأقواس واطبع: Balanced: True\n",
+    "requirements": [
+        "تتبع العداد لكل قوس وتأكد من توازنه",
+        "اطبع النتيجة بصيغة: Balanced: True"
+    ],
+    "expectedOutput": "Balanced: True",
+    "hints": [
+        "فكرة الحل: ابدأ بـ count = 0، وزد 1 لكل '(' وانقص 1 لكل ')'.",
+        "في النهاية افحص if count == 0 واطبع Balanced: True."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Balanced: True",
+            "description": "فحص توازن أقواس (()())"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-9"
+},
+
+  "world-10-level-9": {
+    "id": "world-10-level-9",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 9,
+    "title": "📈 حساب وسيط الأرقام الإحصائي (Median Calculation)",
+    "englishTitle": "Statistical Median Value Finder",
+    "subtitle": "الترتيب واستخراج نقطة المنتصف الإحصائية",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 220,
+    "skills": [
+        "problem_solving",
+        "statistics",
+        "sorting"
+    ],
+    "story": "لديك قائمة قراءات غير مرتبة data = [7, 1, 9, 3, 5]. رتب القائمة تصاعدياً [1, 3, 5, 7, 9] واستخرج القيمة الوسطى (الوسيط Median وهو العنصر الذي يقع في المنتصف تماماً index = len // 2). اطبع الناتج بصيغة: 'Median: 5'.",
+    "microLesson": {
+        "concept": "حساب الوسيط الإحصائي (Median)",
+        "summary": "لحساب الوسيط، يجب أولاً ترتيب القائمة ترتيباً تصاعدياً، ثم أخذ العنصر في المنتصف للقوائم فردية الطول.",
+        "exampleCode": "s = sorted(items)\nmid = s[len(s) // 2]"
+    },
+    "starterCode": "data = [7, 1, 9, 3, 5]\n\n# رتب واستخرج الوسيط واطبع: Median: 5\n",
+    "requirements": [
+        "رتب القائمة واستخرج العنصر الأوسط",
+        "اطبع بصيغة دقيقة: Median: 5"
+    ],
+    "expectedOutput": "Median: 5",
+    "hints": [
+        "فكرة الحل: استخدم sorted(data) ثم خذ العنصر عند الفهرس len(data) // 2.",
+        "اطبع الناتج بجوار كلمة Median:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Median: 5",
+            "description": "استخراج وسيط [7, 1, 9, 3, 5]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-10"
+},
+
+  "world-10-level-10": {
+    "id": "world-10-level-10",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 10,
+    "title": "🔐 تشفير قيصر التتابعي البسيط (Caesar Cipher Shift)",
+    "englishTitle": "Caesar Cipher Character Shift",
+    "subtitle": "التحويل بين المحارف وقيم الأسكي بالدالتين ord و chr",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 230,
+    "skills": [
+        "problem_solving",
+        "cryptography",
+        "ord_chr"
+    ],
+    "story": "شفر النص msg = 'ABC' بإزاحة كل حرف بمقدار 3 خانات في الأبجدية الإنجليزية باستخدام الدالتين ord() و chr() (حيث تصبح 'A' -> 'D' و 'B' -> 'E' و 'C' -> 'F'). اطبع الناتج المشفر بصيغة: 'Encrypted: DEF'.",
+    "microLesson": {
+        "concept": "التحويل بين الأحرف وقيم ASCII",
+        "summary": "الدالة ord('A') ترجع القيمة العددية للحرف (65)، وبإضافة الإزاحة ثم استخدام chr() نحصل على الحرف المشفر المقابل.",
+        "exampleCode": "shifted_char = chr(ord(ch) + shift)"
+    },
+    "starterCode": "msg = 'ABC'\nshift = 3\n\n# شفر الرسالة واطبع: Encrypted: DEF\n",
+    "requirements": [
+        "أزح كل حرف بمقدار 3 خانات",
+        "اطبع بصيغة: Encrypted: DEF"
+    ],
+    "expectedOutput": "Encrypted: DEF",
+    "hints": [
+        "فكرة الحل: مر بحلقة على حروف msg واستخدم chr(ord(c) + shift) لكل حرف.",
+        "اجمع الحروف واطبعها بجوار Encrypted:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Encrypted: DEF",
+            "description": "تشفير ABC بإزاحة 3 ليصبح DEF"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-10-level-11"
+},
+
+  "world-10-level-11": {
+    "id": "world-10-level-11",
+    "worldId": "world-10",
+    "worldTitle": "ميدان حل المشكلات والتفكير الخوارزمي",
+    "levelNumber": 11,
+    "title": "👑 زعيم الميدان: محاكي الصراف الآلي وتفكيك الفئات النقدية (ATM Dispenser)",
+    "englishTitle": "Grand Boss: Greedy ATM Currency Dispenser",
+    "subtitle": "الخوارزميات الطماعة Greedy Algorithms وتفكيك المبالغ لأقل أوراق",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 260,
+    "skills": [
+        "problem_solving",
+        "greedy",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: عميل يسحب مبلغ amount = 780 جنيهاً من الصراف الآلي. الفئات المتاحة هي [200, 100, 50, 20, 10]. لحساب أقل عدد ورقات نقدية ممكنة (الخوارزمية الطماعة Greedy): 3 ورقات فئة 200 (=600)، ثم 1 فئة 100 (=100)، ثم 1 فئة 50 (=50)، ثم 1 فئة 20 (=20)، ثم 1 فئة 10 (=10). إجمالي عدد الأوراق المصروفة هو 7 ورقات. اطبع الناتج بصيغة: 'Total Notes: 7'.",
+    "microLesson": {
+        "concept": "الخوارزميات الطماعة (Greedy Currency Breakdown)",
+        "summary": "لتقليل عدد الأوراق نأخذ أكبر عدد ممكن من أعلى فئة نقدية أولاً بالقسمة الصحيحة // ثم نأخذ الباقي بالمعامل % للفئات التالية.",
+        "exampleCode": "for note in notes:\n    count += amount // note\n    amount %= note"
+    },
+    "starterCode": "amount = 780\ndenominations = [200, 100, 50, 20, 10]\n\n# احسب إجمالي عدد الأوراق النقدية واطبع: Total Notes: 7\n",
+    "requirements": [
+        "فكك المبلغ لأقل عدد ورقات ممكن باستخدام القسمة الصحيحة وباقي القسمة",
+        "اطبع بصيغة دقيقة: Total Notes: 7"
+    ],
+    "expectedOutput": "Total Notes: 7",
+    "hints": [
+        "فكرة الحل: ابدأ بـ total_notes = 0، وفي كل فئة أضف amount // d ثم حدث amount = amount % d.",
+        "اطبع الناتج النهائي بجوار Total Notes:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Total Notes: 7",
+            "description": "صرف 780 جنيهاً بأقل عدد ورقات"
+        }
+    ],
+    "unlocksWorldId": "world-11",
+    "nextChallengeId": "world-11-level-1"
+},
+
+  "world-11-level-1": {
+    "id": "world-11-level-1",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 1,
+    "title": "🎯 مسألة الجمع الثنائي الشهيرة لمقابلات العمل (Two Sum Target)",
+    "englishTitle": "Two Sum Target Pair Problem",
+    "subtitle": "المسألة البرمجية الأشهر عالمياً في اختبارات التوظيف",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 210,
+    "skills": [
+        "interview_prep",
+        "two_sum",
+        "algorithms"
+    ],
+    "story": "أشهر مسألة في مقابلات شركات التكنولوجيا: لديك قائمة أرقام nums = [2, 7, 11, 15] وهدف target = 9. ابحث عن الرقمين اللذين مجموعهما يساوي الهدف (هما 2 و 7). اطبع النتيجة بصيغة: 'Pair: 2 + 7 = 9'.",
+    "microLesson": {
+        "concept": "مسألة Two Sum والبحث عن المكمل (Complement)",
+        "summary": "لكل رقم x، نبحث عما إذا كان المكمل (target - x) موجوداً في القائمة أو تم تخزينه في الذاكرة.",
+        "exampleCode": "seen = set()\nfor x in arr:\n    diff = target - x\n    if diff in seen:\n        # found pair!\n    seen.add(x)"
+    },
+    "starterCode": "nums = [2, 7, 11, 15]\ntarget = 9\n\n# ابحث عن الرقمين واطبع: Pair: 2 + 7 = 9\n",
+    "requirements": [
+        "ابحث عن الرقمين اللذين يحققان الجمع",
+        "اطبع بصيغة: Pair: 2 + 7 = 9"
+    ],
+    "expectedOutput": "Pair: 2 + 7 = 9",
+    "hints": [
+        "فكرة الحل: مر بحلقة ثنائية أو استخدم مكمل الجمع target - num.",
+        "اطبع الصيغة المطلوبة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Pair: 2 + 7 = 9",
+            "description": "إيجاد الزوج 2 و 7 لمجموع 9"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-2"
+},
+
+  "world-11-level-2": {
+    "id": "world-11-level-2",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 2,
+    "title": "↔️ خوارزمية المؤشرين المتعاكسين (Two Pointers In-Place)",
+    "englishTitle": "Two Pointers Array Reversal Algorithm",
+    "subtitle": "التحكم في المؤشرات بكفاءة الذاكرة الصفرية O(1) Space",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 215,
+    "skills": [
+        "interview_prep",
+        "two_pointers",
+        "arrays"
+    ],
+    "story": "لديك قائمة حروف arr = ['p', 'y', 't', 'h', 'o', 'n']. اعكس ترتيب القائمة يدوياً باستخدام أسلوب المؤشرين: مؤشر في البداية left ومؤشر في النهاية right وتبديل القيم والتحرك نحو الداخل. اطبع القائمة المعكوسة بصيغة: \"Reversed: ['n', 'o', 'h', 't', 'y', 'p']\".",
+    "microLesson": {
+        "concept": "تقنية المؤشرين (Two Pointers Pattern)",
+        "summary": "تقنية برمجية قياسية لتحريك مؤشرين من طرفي المصفوفة والتبديل المباشر حتى يلتقيا في المنتصف.",
+        "exampleCode": "l, r = 0, len(a) - 1\nwhile l < r:\n    a[l], a[r] = a[r], a[l]\n    l += 1\n    r -= 1"
+    },
+    "starterCode": "arr = ['p', 'y', 't', 'h', 'o', 'n']\n\n# اعكس القائمة بأسلوب المؤشرين واطبع النتيجة المطلوبة\n",
+    "requirements": [
+        "اعكس القائمة واطبعها مطابقة",
+        "اطبع الناتج: Reversed: ['n', 'o', 'h', 't', 'y', 'p']"
+    ],
+    "expectedOutput": "Reversed: ['n', 'o', 'h', 't', 'y', 'p']",
+    "hints": [
+        "فكرة الحل: طبق حلقة while l < r مع تبديل arr[l], arr[r] = arr[r], arr[l].",
+        "اطبع القائمة بعد العكس مسبوقة بـ Reversed: ."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Reversed: ['n', 'o', 'h', 't', 'y', 'p']",
+            "description": "عكس حروف python بالمؤشرين"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-3"
+},
+
+  "world-11-level-3": {
+    "id": "world-11-level-3",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 3,
+    "title": "⚡ إزاحة الأصفار إلى نهاية المصفوفة (Move Zeroes to End)",
+    "englishTitle": "Move Zeroes to End of Array",
+    "subtitle": "إعادة ترتيب البيانات مع الحفاظ على الترتيب النسبي للعناصر",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 215,
+    "skills": [
+        "interview_prep",
+        "arrays",
+        "filtering"
+    ],
+    "story": "سؤال مقابلات شائع: لديك قائمة nums = [0, 1, 0, 3, 12]. انقل جميع الأصفار إلى نهاية القائمة مع الحفاظ على الترتيب النسبي للأرقام غير الصفرية. اطبع القائمة بصيغة: 'Moved: [1, 3, 12, 0, 0]'.",
+    "microLesson": {
+        "concept": "تجميع العناصر غير الصفرية ثم إكمال الأصفار",
+        "summary": "يمكن استخراج الأرقام غير الصفرية في قائمة أولاً، ثم إضافة الأصفار بالعدد المتبقي لنهاية القائمة.",
+        "exampleCode": "non_zeros = [x for x in a if x != 0]\nzeros = [0] * (len(a) - len(non_zeros))\nresult = non_zeros + zeros"
+    },
+    "starterCode": "nums = [0, 1, 0, 3, 12]\n\n# انقل الأصفار للنهاية واطبع: Moved: [1, 3, 12, 0, 0]\n",
+    "requirements": [
+        "ضع الأرقام غير الصفرية أولاً ثم الأصفار في النهاية",
+        "اطبع بصيغة: Moved: [1, 3, 12, 0, 0]"
+    ],
+    "expectedOutput": "Moved: [1, 3, 12, 0, 0]",
+    "hints": [
+        "فكرة الحل: اجمع العناصر التي لا تساوي 0، ثم أضف إليها قائمة بالأصفار المتبقية.",
+        "اطبع القائمة الناتجة بجوار Moved:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Moved: [1, 3, 12, 0, 0]",
+            "description": "إزاحة أصفار [0, 1, 0, 3, 12]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-4"
+},
+
+  "world-11-level-4": {
+    "id": "world-11-level-4",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 4,
+    "title": "🔤 فاحص الجناس الناقص والكلمات المتطابقة (Valid Anagram)",
+    "englishTitle": "Valid Anagram String Verifier",
+    "subtitle": "المطابقة التكرارية للحروف وهياكل التكرار",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 220,
+    "skills": [
+        "interview_prep",
+        "anagram",
+        "strings"
+    ],
+    "story": "تعتبر كلمتان جناساً ناقصاً (Anagram) إذا كانت الكلمة الثانية تتكون من نفس حروف الكلمة الأولى تماماً بنفس عدد التكرار ولكن بترتيب مختلف. افحص هل s1 = 'listen' و s2 = 'silent' هما Anagram. اطبع: 'Anagram: True'.",
+    "microLesson": {
+        "concept": "التحقق من الجناس بترتيب الحروف أو عدادات التكرار",
+        "summary": "إذا تساوى sorted(s1) مع sorted(s2) وكان الطول متطابقاً، فإن الكلمتين جناس كامل Anagram.",
+        "exampleCode": "is_ana = (sorted(w1) == sorted(w2))"
+    },
+    "starterCode": "s1 = 'listen'\ns2 = 'silent'\n\n# افحص هل الكلمتان Anagram واطبع: Anagram: True\n",
+    "requirements": [
+        "قارن بين الحروف وترتيبها",
+        "اطبع بصيغة: Anagram: True"
+    ],
+    "expectedOutput": "Anagram: True",
+    "hints": [
+        "فكرة الحل: استخدم sorted(s1) == sorted(s2) للحصول على القيمة المنطقية.",
+        "اطبع النتيجة بالصيغة المطلوبة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Anagram: True",
+            "description": "فحص جناس listen و silent"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-5"
+},
+
+  "world-11-level-5": {
+    "id": "world-11-level-5",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 5,
+    "title": "🥇 أول حرف فريد غير مكرر في النص (First Non-Repeating Character)",
+    "englishTitle": "First Unique Character in String",
+    "subtitle": "دمج الفهرسة وقواميس التكرار في المقابلات",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 225,
+    "skills": [
+        "interview_prep",
+        "strings",
+        "frequency"
+    ],
+    "story": "لديك نص s = 'swiss'. ابحث عن أول حرف في النص يظهر لمرة واحدة فقط دون أن يتكرر في أي مكان آخر (الحرف s يتكرر 3 مرات، والحرف w يظهر مرة واحدة وهو يسبق الحرف i). اطبع الحرف بصيغة: 'First Unique: w'.",
+    "microLesson": {
+        "concept": "البحث عن العنصر الفريد الترتيبي",
+        "summary": "نحسب تكرار كل حرف أولاً، ثم نمر على النص من البداية ونختار أول حرف تكراره يساوي 1.",
+        "exampleCode": "for ch in text:\n    if text.count(ch) == 1:\n        return ch"
+    },
+    "starterCode": "s = 'swiss'\n\n# ابحث عن أول حرف غير مكرر واطبع: First Unique: w\n",
+    "requirements": [
+        "حدد أول حرف تكراره 1 في النص",
+        "اطبع بصيغة: First Unique: w"
+    ],
+    "expectedOutput": "First Unique: w",
+    "hints": [
+        "فكرة الحل: مر بحلقة على حروف s، وافحص if s.count(ch) == 1 ثم اطبعه واخرج بـ break.",
+        "اطبع الناتج بجوار First Unique:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "First Unique: w",
+            "description": "أول حرف فريد في swiss"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-6"
+},
+
+  "world-11-level-6": {
+    "id": "world-11-level-6",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 6,
+    "title": "🔗 دمج مصفوفتين مرتبتين في مصفوفة واحدة (Merge Sorted Arrays)",
+    "englishTitle": "Merge Two Sorted Lists",
+    "subtitle": "الخوارزمية الكلاسيكية المعتمدة في فرز الدمج Merge Sort",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 220,
+    "skills": [
+        "interview_prep",
+        "merge",
+        "arrays"
+    ],
+    "story": "لديك مصفوفتان مرتبتان مسبقاً: l1 = [1, 3, 5] و l2 = [2, 4, 6]. ادمجهما لإنتاج مصفوفة واحدة مدمجة ومرتبة بالكامل. اطبع النتيجة بصيغة: 'Merged: [1, 2, 3, 4, 5, 6]'.",
+    "microLesson": {
+        "concept": "دمج المصفوفات المرتبة",
+        "summary": "يمكن دمج المصفوفتين ثم ترتيب الناتج بواسطة sorted(l1 + l2) أو بمقارنة الرؤوس.",
+        "exampleCode": "merged = sorted(a + b)"
+    },
+    "starterCode": "l1 = [1, 3, 5]\nl2 = [2, 4, 6]\n\n# ادمج المصفوفتين واطبع: Merged: [1, 2, 3, 4, 5, 6]\n",
+    "requirements": [
+        "ادمج عناصر القائمتين مع الترتيب الصحيح",
+        "اطبع القائمة بصيغة: Merged: [1, 2, 3, 4, 5, 6]"
+    ],
+    "expectedOutput": "Merged: [1, 2, 3, 4, 5, 6]",
+    "hints": [
+        "فكرة الحل: استخدم sorted(l1 + l2).",
+        "اطبع القائمة المدمجة مسبوقة بـ Merged: ."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Merged: [1, 2, 3, 4, 5, 6]",
+            "description": "دمج [1, 3, 5] مع [2, 4, 6]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-7"
+},
+
+  "world-11-level-7": {
+    "id": "world-11-level-7",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 7,
+    "title": "🪟 خوارزمية النافذة المنزلقة لأكبر مجموع (Sliding Window)",
+    "englishTitle": "Maximum Sum Subarray of Size K",
+    "subtitle": "تقنية النافذة المنزلقة المتقدمة Sliding Window Pattern",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 235,
+    "skills": [
+        "interview_prep",
+        "sliding_window",
+        "algorithms"
+    ],
+    "story": "لديك قائمة أرقام arr = [2, 1, 5, 1, 3, 2] وحجم نافذة k = 3. احسب أكبر مجموع لأي 3 عناصر متتالية (النافذة [5, 1, 3] تعطي أعلى مجموع = 9). اطبع النتيجة بصيغة: 'Max Window Sum: 9'.",
+    "microLesson": {
+        "concept": "تقنية النافذة المنزلقة (Sliding Window)",
+        "summary": "بدلاً من إعادة جمع كل نافذة من الصفر، نحسب مجموع أول k عناصر ثم نطرح العنصر الخارج ونضيف العنصر الداخل في كل خطوة.",
+        "exampleCode": "w_sum = sum(arr[:k])\nmax_s = w_sum\nfor i in range(k, len(arr)):\n    w_sum += arr[i] - arr[i - k]\n    max_s = max(max_s, w_sum)"
+    },
+    "starterCode": "arr = [2, 1, 5, 1, 3, 2]\nk = 3\n\n# احسب أكبر مجموع لنافذة من 3 عناصر واطبع: Max Window Sum: 9\n",
+    "requirements": [
+        "احسب أعلى مجموع لثلاثة عناصر متتالية",
+        "اطبع بصيغة: Max Window Sum: 9"
+    ],
+    "expectedOutput": "Max Window Sum: 9",
+    "hints": [
+        "فكرة الحل: مر بحلقة من 0 إلى len(arr) - k + 1 وافحص مجموع كل نافذة sum(arr[i:i+k]).",
+        "تتبع القيمة العظمى واطبعها بجوار Max Window Sum:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Max Window Sum: 9",
+            "description": "أعلى نافذة ثلاثية في [2, 1, 5, 1, 3, 2]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-8"
+},
+
+  "world-11-level-8": {
+    "id": "world-11-level-8",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 8,
+    "title": "👑 عنصر الأغلبية الأكثر تكراراً (Majority Element)",
+    "englishTitle": "Majority Element Finder",
+    "subtitle": "خوارزمية تصويت بوير-مور Boyer-Moore Voting",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 225,
+    "skills": [
+        "interview_prep",
+        "majority",
+        "algorithms"
+    ],
+    "story": "عنصر الأغلبية في المصفوفة هو العنصر الذي يظهر أكثر من نصف مرات طول المصفوفة (> n // 2). في القائمة nums = [3, 2, 3, 1, 3, 3, 2] بطول 7، العنصر 3 يتكرر 4 مرات. أوجد هذا العنصر واطبعه بصيغة: 'Majority: 3'.",
+    "microLesson": {
+        "concept": "عنصر الأغلبية (Majority Element)",
+        "summary": "يمكن إيجاده إما بحساب التكرارات، أو بملاحظة أنه إذا رتبنا المصفوفة سيكون عنصر الأغلبية دائماً في المنتصف nums[n // 2].",
+        "exampleCode": "nums.sort()\nmajority = nums[len(nums) // 2]"
+    },
+    "starterCode": "nums = [3, 2, 3, 1, 3, 3, 2]\n\n# أوجد عنصر الأغلبية واطبع: Majority: 3\n",
+    "requirements": [
+        "استخرج العنصر الأكثر تكراراً المتجاوز للنصف",
+        "اطبع بصيغة: Majority: 3"
+    ],
+    "expectedOutput": "Majority: 3",
+    "hints": [
+        "فكرة الحل: رتب القائمة sorted(nums) ثم خذ العنصر في المنتصف len(nums) // 2.",
+        "اطبع الناتج مسبوقاً بـ Majority: ."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Majority: 3",
+            "description": "إيجاد عنصر الأغلبية 3"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-9"
+},
+
+  "world-11-level-9": {
+    "id": "world-11-level-9",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 9,
+    "title": "🗜️ ضغط السلاسل النصية التكراري (Run-Length Compression)",
+    "englishTitle": "String Run-Length Compression",
+    "subtitle": "خوارزميات الضغط البسيطة ومعالجة السلاسل",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 235,
+    "skills": [
+        "interview_prep",
+        "compression",
+        "strings"
+    ],
+    "story": "سؤال مقابلات شهير: لديك نص متكرر s = 'aaabbc'. قم بضغطه باستبدال كل مجموعة أحرف متتالية بالحرف متبوعاً بعدد تكراره المتتالي ('a3b2c1'). اطبع الناتج بصيغة: 'Compressed: a3b2c1'.",
+    "microLesson": {
+        "concept": "ضغط الأطوال المتكررة (Run-Length Encoding)",
+        "summary": "نمر على حروف النص ونحتفظ بعداد للحرف الحالي، وعند تغير الحرف نلحق الحرف وعدد تكراره بالناتج ثم نعيد تصفير العداد للحرف الجديد.",
+        "exampleCode": "# فكرة تتبع التكرارات المتتالية بحلقة وفحص التالي"
+    },
+    "starterCode": "s = 'aaabbc'\n\n# اضغط النص واطبع: Compressed: a3b2c1\n",
+    "requirements": [
+        "احسب التكرار المتتالي لكل حرف",
+        "اطبع بصيغة: Compressed: a3b2c1"
+    ],
+    "expectedOutput": "Compressed: a3b2c1",
+    "hints": [
+        "فكرة الحل: مر بحلقة لتجميع الأحرف وعدد تكرار كل حرف متتالٍ.",
+        "اطبع النتيجة بجوار Compressed:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Compressed: a3b2c1",
+            "description": "ضغط aaabbc إلى a3b2c1"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-10"
+},
+
+  "world-11-level-10": {
+    "id": "world-11-level-10",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 10,
+    "title": "🏃‍♂️ محاكي لعبة قفزات المصفوفة (Jump Game Reachability)",
+    "englishTitle": "Jump Game Reachability Verifier",
+    "subtitle": "المسائل الاستدلالية وخوارزميات الوصول للمدى الأقصى",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 240,
+    "skills": [
+        "interview_prep",
+        "greedy",
+        "reachability"
+    ],
+    "story": "لديك مصفوفة قفزات jumps = [2, 3, 1, 1, 4] حيث يمثل كل رقم أقصى عدد خطوات يمكنك قفزها من ذلك الموقع. ابدأ من الفهرس 0، هل يمكن الوصول إلى الفهرس الأخير؟ مع القيم المعطاة يمكن الوصول بنجاح. اطبع النتيجة بصيغة: 'Can Reach: True'.",
+    "microLesson": {
+        "concept": "تتبع أقصى مدى وصول (Max Reachable Index)",
+        "summary": "في كل خطوة نحتفظ بأقصى فهرس يمكن الوصول إليه max_reach = max(max_reach, i + jumps[i]). إذا تجاوزنا الهدف أو وصلناه تكون النتيجة True.",
+        "exampleCode": "reach = 0\nfor i, j in enumerate(arr):\n    if i > reach: break\n    reach = max(reach, i + j)"
+    },
+    "starterCode": "jumps = [2, 3, 1, 1, 4]\n\n# افحص إمكانية الوصول واطبع: Can Reach: True\n",
+    "requirements": [
+        "تتبع مدى الوصول وتأكد من إمكانية الوصول للنهاية",
+        "اطبع: Can Reach: True"
+    ],
+    "expectedOutput": "Can Reach: True",
+    "hints": [
+        "فكرة الحل: تتبع أقصى فهرس يمكنك بلوغه، وافحص ما إذا كان >= len(jumps) - 1.",
+        "اطبع النتيجة المطلوبة."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Can Reach: True",
+            "description": "التحقق من إمكانية الوصول في [2, 3, 1, 1, 4]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-11-level-11"
+},
+
+  "world-11-level-11": {
+    "id": "world-11-level-11",
+    "worldId": "world-11",
+    "worldTitle": "مختبر المقابلات التقنية وأسئلة التوظيف",
+    "levelNumber": 11,
+    "title": "👑 زعيم المقابلات التقنية: محاكي ذاكرة الكاش الذكية LRU (LRU Cache Simulator)",
+    "englishTitle": "Grand Boss: LRU Cache Mechanism Simulator",
+    "subtitle": "المسألة الذهبية في اختبارات عمالقة التكنولوجيا FAANG",
+    "difficulty": "hard",
+    "type": "boss",
+    "baseXp": 270,
+    "skills": [
+        "interview_prep",
+        "lru_cache",
+        "boss_challenge"
+    ],
+    "story": "تحدي الزعيم: محاكاة ذاكرة تخزين مؤقت Least Recently Used (LRU) بسعة capacity = 3 عناصر. أدخلنا العناصر بالترتيب: ['A', 'B', 'C']. عند استخدام العنصر 'A' ينتقل لنهاية القائمة ليصبح الأحدث استخداماً: ['B', 'C', 'A']. ثم عند إضافة عنصر جديد 'D'، تُحذف القيمة الأقدم استخداماً من البداية ('B') ليحل محلها الجديد وتصبح الذاكرة: ['C', 'A', 'D']. اطبع حالة الذاكرة النهائية بصيغة: \"Cache: ['C', 'A', 'D']\".",
+    "microLesson": {
+        "concept": "خوارزمية الإحلال بالأقدم استخداماً (LRU Cache)",
+        "summary": "عند الوصول لأي عنصر نرفعه إلى نهاية القائمة (أحدث استخدام). وعند امتلاء السعة نحذف العنصر الأول (الفهرس 0 وهو الأقدم).",
+        "exampleCode": "# فكرة نقل العنصر المستخدم للنهاية وحذف الأول عند الامتلاء"
+    },
+    "starterCode": "capacity = 3\n# قم بمحاكاة العمليات واطبع الناتج النهائي للذاكرة: Cache: ['C', 'A', 'D']\n",
+    "requirements": [
+        "نفذ خطوات تحديث ذاكرة LRU بدقة",
+        "اطبع القائمة بصيغة: Cache: ['C', 'A', 'D']"
+    ],
+    "expectedOutput": "Cache: ['C', 'A', 'D']",
+    "hints": [
+        "فكرة الحل: ابدأ بـ cache = ['A', 'B', 'C']، ثم cache.remove('A'); cache.append('A')، ثم cache.pop(0); cache.append('D').",
+        "اطبع الناتج بجوار كلمة Cache:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Cache: ['C', 'A', 'D']",
+            "description": "محاكاة ذاكرة LRU بسعة 3"
+        }
+    ],
+    "unlocksWorldId": "world-12",
+    "nextChallengeId": "world-12-level-1"
+},
+
+  "world-12-level-1": {
+    "id": "world-12-level-1",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 1,
+    "title": "⚡ خوارزمية كادان لأكبر مجموع مصفوفة فرعية متصلة (Kadane's Algorithm)",
+    "englishTitle": "Kadane's Algorithm for Maximum Subarray",
+    "subtitle": "البرمجة الديناميكية الخطية بكفاءة O(N) الزمنية",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 230,
+    "skills": [
+        "competitive",
+        "kadane",
+        "dynamic_programming"
+    ],
+    "story": "تحدي البرمجة التنافسية: لديك مصفوفة أرقام ومعاملات arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]. طبق خوارزمية كادان لإيجاد أكبر مجموع ممكن لمصفوفة فرعية متصلة (المصفوفة الفرعية [4, -1, 2, 1] تعطي المجموع الأقصى 6). اطبع النتيجة بصيغة: 'Max Subarray Sum: 6'.",
+    "microLesson": {
+        "concept": "خوارزمية كادان (Kadane's Algorithm)",
+        "summary": "في كل خطوة نقرر: هل نضيف العنصر الحالي للمجموع التراكمي السابق، أم نبدأ مصفوفة فرعية جديدة من العنصر الحالي max(x, cur_sum + x).",
+        "exampleCode": "cur = max_s = arr[0]\nfor x in arr[1:]:\n    cur = max(x, cur + x)\n    max_s = max(max_s, cur)"
+    },
+    "starterCode": "arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]\n\n# طبق خوارزمية كادان واطبع: Max Subarray Sum: 6\n",
+    "requirements": [
+        "احسب أكبر مجموع لمصفوفة فرعية متصلة",
+        "اطبع بصيغة: Max Subarray Sum: 6"
+    ],
+    "expectedOutput": "Max Subarray Sum: 6",
+    "hints": [
+        "فكرة الحل: طبق منطق كادان: cur = max(x, cur + x) وتتبع max_sum.",
+        "اطبع الناتج مسبوقاً بـ Max Subarray Sum:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Max Subarray Sum: 6",
+            "description": "أكبر مجموع مصفوفة فرعية في مصفوفة كادان"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-2"
+},
+
+  "world-12-level-2": {
+    "id": "world-12-level-2",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 2,
+    "title": "🎯 خوارزمية البحث الثنائي الدقيق O(log N) (Binary Search)",
+    "englishTitle": "Precise Binary Search with Step Counting",
+    "subtitle": "تقسيم مجال البحث لوغاريتمياً بكفاءة عالية",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 235,
+    "skills": [
+        "competitive",
+        "binary_search",
+        "complexity"
+    ],
+    "story": "ابحث عن العنصر target = 23 في القائمة المرتبة arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91] باستخدام خوارزمية البحث الثنائي. تتبع موقع الفهرس وعدد خطوات المقارنة. في الخطوة الأولى المنتصف 16، وفي الثانية المنتصف 56، ثم نصل لـ 23 في الفهرس 5. اطبع: 'Index: 5, Comparisons: 2'.",
+    "microLesson": {
+        "concept": "البحث الثنائي (Binary Search)",
+        "summary": "نحدد مؤشري low و high، ونفحص المنتصف mid = (low + high) // 2. إذا كان الهدف أكبر نتحرك لليمين وإلا لليسار مقلصين المجال للنصف في كل خطوة.",
+        "exampleCode": "low, high = 0, len(a) - 1\nwhile low <= high:\n    mid = (low + high) // 2\n    if a[mid] == target: break\n    elif a[mid] < target: low = mid + 1\n    else: high = mid - 1"
+    },
+    "starterCode": "arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]\ntarget = 23\n\n# ابحث ثنائياً واطبع: Index: 5, Comparisons: 2\n",
+    "requirements": [
+        "حدد موقع الهدف وعدد خطوات المقارنة",
+        "اطبع بصيغة: Index: 5, Comparisons: 2"
+    ],
+    "expectedOutput": "Index: 5, Comparisons: 2",
+    "hints": [
+        "فكرة الحل: استخدم عداداً للمقارنات داخل حلقة البحث الثنائي.",
+        "اطبع الناتج المطلوب تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Index: 5, Comparisons: 2",
+            "description": "البحث الثنائي عن 23"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-3"
+},
+
+  "world-12-level-3": {
+    "id": "world-12-level-3",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 3,
+    "title": "📅 دمج الفترات الزمنية المتداخلة (Merge Overlapping Intervals)",
+    "englishTitle": "Merge Overlapping Time Intervals",
+    "subtitle": "إدارة الجداول الزمنية والفرز المسبق للفترات",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 240,
+    "skills": [
+        "competitive",
+        "intervals",
+        "sorting"
+    ],
+    "story": "لديك فترات زمنية: intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]. قم بدمج أي فترتين متداخلتين (الفترتان [1, 3] و [2, 6] تتداخلان فتندمجان في [1, 6]). اطبع القائمة المدمجة بصيغة: 'Merged Intervals: [[1, 6], [8, 10], [15, 18]]'.",
+    "microLesson": {
+        "concept": "دمج الفترات المتداخلة (Interval Merging)",
+        "summary": "نرتب الفترات حسب البداية، ثم نقارن بداية الفترة الحالية مع نهاية الفترة السابقة. إذا كانت أصغر أو تساويها ندمجهما بتوسيع النهاية max(end1, end2).",
+        "exampleCode": "# فكرة مقارنة بداية الفترة الحالية مع نهاية السابقة"
+    },
+    "starterCode": "intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]\n\n# ادمج الفترات المتداخلة واطبع الناتج المطلوب\n",
+    "requirements": [
+        "ادمج الفترات المتداخلة بالترتيب",
+        "اطبع بصيغة: Merged Intervals: [[1, 6], [8, 10], [15, 18]]"
+    ],
+    "expectedOutput": "Merged Intervals: [[1, 6], [8, 10], [15, 18]]",
+    "hints": [
+        "فكرة الحل: الفترتان [1, 3] و [2, 6] تندمجان في [1, 6]، وباقي الفترات منفصلة.",
+        "اطبع الناتج بجوار Merged Intervals:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Merged Intervals: [[1, 6], [8, 10], [15, 18]]",
+            "description": "دمج الفترات المتداخلة"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-4"
+},
+
+  "world-12-level-4": {
+    "id": "world-12-level-4",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 4,
+    "title": "🔢 أطول متتالية أرقام متتالية في مصفوفة غير مرتبة (Longest Consecutive)",
+    "englishTitle": "Longest Consecutive Sequence in O(N)",
+    "subtitle": "البحث الذكي بالمجموعات Sets بدون ترتيب كامل",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 245,
+    "skills": [
+        "competitive",
+        "sets",
+        "consecutive"
+    ],
+    "story": "لديك مصفوفة أرقام غير مرتبة nums = [100, 4, 200, 1, 3, 2]. أوجد طول أطول متتالية من الأعداد الصحيحة المتتالية (المتتالية 1, 2, 3, 4 طولها 4). اطبع النتيجة بصيغة: 'Longest Sequence: 4'.",
+    "microLesson": {
+        "concept": "استخدام المجموعات Sets لاكتشاف المتتاليات في O(N)",
+        "summary": "نحول الأرقام إلى Set. الرقم يكون بداية متتالية إذا لم يكن (num - 1) موجوداً في المجموعة، ثم نعد الأرقام المتتالية التالية له.",
+        "exampleCode": "num_set = set(nums)\nfor x in num_set:\n    if x - 1 not in num_set:\n        # x is start of a sequence!"
+    },
+    "starterCode": "nums = [100, 4, 200, 1, 3, 2]\n\n# أوجد طول أطول متتالية متتالية واطبع: Longest Sequence: 4\n",
+    "requirements": [
+        "حدد أطول تتابع للأرقام الصحيحة",
+        "اطبع بصيغة: Longest Sequence: 4"
+    ],
+    "expectedOutput": "Longest Sequence: 4",
+    "hints": [
+        "فكرة الحل: الأرقام 1, 2, 3, 4 متتالية وتشكل تتابعاً بطول 4.",
+        "اطبع النتيجة بجوار Longest Sequence:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Longest Sequence: 4",
+            "description": "أطول متتالية متتالية في [100, 4, 200, 1, 3, 2]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-5"
+},
+
+  "world-12-level-5": {
+    "id": "world-12-level-5",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 5,
+    "title": "🌧️ مسألة سعة تخزين مياه الأمطار بين الأعمدة (Trapping Rain Water)",
+    "englishTitle": "Trapping Rain Water Simulation",
+    "subtitle": "المسألة الهندسية التنافسية الشهيرة لحساب المساحات المحتجزة",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 250,
+    "skills": [
+        "competitive",
+        "trapping_water",
+        "geometry"
+    ],
+    "story": "لديك مصفوفة ارتفاعات تضاريس heights = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]. احسب كمية مياه الأمطار المحتجزة بين الأعمدة بعد هطول المطر (كمية الماء فوق كل عمود هي min(max_left, max_right) - height). إجمالي الماء المحتجز لهذه التضاريس هو 6 وحدات. اطبع: 'Trapped Water: 6 units'.",
+    "microLesson": {
+        "concept": "حساب كمية المياه المحتجزة (Trapping Rain Water)",
+        "summary": "ارتفاع الماء المحتجز عند أي نقطة يحدده العمود الأقصر بين أطول عمود على يساره وأطول عمود على يمينه.",
+        "exampleCode": "# فكرة حساب أقصى ارتفاع يساراً ويميناً لكل نقطة"
+    },
+    "starterCode": "heights = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]\n\n# احسب كمية المياه المحتجزة واطبع: Trapped Water: 6 units\n",
+    "requirements": [
+        "احسب كمية المياه المحتجزة بدقة",
+        "اطبع بصيغة: Trapped Water: 6 units"
+    ],
+    "expectedOutput": "Trapped Water: 6 units",
+    "hints": [
+        "فكرة الحل: كمية الماء الإجمالية المحتجزة بين هذه الأعمدة هي 6 وحدات بالضبط.",
+        "اطبع الناتج بجوار Trapped Water: مع كتابة units."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Trapped Water: 6 units",
+            "description": "حساب الماء المحتجز لتضاريس heights"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-6"
+},
+
+  "world-12-level-6": {
+    "id": "world-12-level-6",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 6,
+    "title": "🏛️ تحويل الأرقام الرومانية إلى أرقام صحيحة (Roman to Integer)",
+    "englishTitle": "Roman Numeral to Integer Parser",
+    "subtitle": "معالجة الحالات الاستثنائية والرموز الطرحية في الأرقام القديمة",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 240,
+    "skills": [
+        "competitive",
+        "roman_numerals",
+        "parsing"
+    ],
+    "story": "حول الرمز الروماني roman = 'MCMXCIV' إلى عدد صحيح (حيث M=1000 و CM=900 و XC=90 و IV=4، المجموع = 1994). اطبع النتيجة بصيغة: 'Integer Value: 1994'.",
+    "microLesson": {
+        "concept": "تحليل الأرقام الرومانية وقواعد الطرح",
+        "summary": "إذا كانت قيمة الرمز الحالي أقل من الرمز الذي يليه نطرح قيمته (مثل IV = 5 - 1 = 4)، وإلا نضيف قيمته.",
+        "exampleCode": "val_map = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}"
+    },
+    "starterCode": "roman = 'MCMXCIV'\n\n# حول الرقم الروماني لعدد صحيح واطبع: Integer Value: 1994\n",
+    "requirements": [
+        "حول الرمز الروماني إلى رقم صحيح",
+        "اطبع بصيغة: Integer Value: 1994"
+    ],
+    "expectedOutput": "Integer Value: 1994",
+    "hints": [
+        "فكرة الحل: استخدم قاموساً لقيم الرموز وطبق قاعدة الطرح إذا كانت القيمة الحالية أقل من التالية.",
+        "اطبع الناتج بجوار Integer Value:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Integer Value: 1994",
+            "description": "تحويل MCMXCIV إلى 1994"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-7"
+},
+
+  "world-12-level-7": {
+    "id": "world-12-level-7",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 7,
+    "title": "🎒 مسألة حقيبة الظهر الكسرية الطماعة (Fractional Knapsack)",
+    "englishTitle": "Fractional Knapsack Problem",
+    "subtitle": "تعظيم القيمة في حدود الوزن بالخوارزميات الطماعة Greedy",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 250,
+    "skills": [
+        "competitive",
+        "greedy",
+        "knapsack"
+    ],
+    "story": "حقيبة ظهر سعتها القصوى capacity = 50 كجم. لديك ثلاث سلع: الأولى (قيمة 60، وزن 10)، والثانية (قيمة 100، وزن 20)، والثالثة (قيمة 120، وزن 30). لتعظيم القيمة نأخذ الأولى كاملة (وزن 10، قيمة 60)، والثانية كاملة (وزن 20، قيمة 100)، و20 كجم من الثالثة (بنسبة 20/30 من 120 = 80). القيمة الإجمالية القصوى هي 60 + 100 + 80 = 240.0. اطبع: 'Max Knapsack Value: 240.0'.",
+    "microLesson": {
+        "concept": "حقيبة الظهر الكسرية (Fractional Knapsack)",
+        "summary": "نرتب السلع تنازلياً حسب كثافة القيمة (القيمة مقسومة على الوزن val/wt). نأخذ السلع ذات الكثافة الأعلى بالكامل حتى تمتلئ السعة أو نأخذ جزءاً كسرياً من الأخيرة.",
+        "exampleCode": "# فكرة الفرز حسب نسبة value / weight"
+    },
+    "starterCode": "capacity = 50\nitems = [(60, 10), (100, 20), (120, 30)]\n\n# احسب القيمة القصوى واطبع: Max Knapsack Value: 240.0\n",
+    "requirements": [
+        "احسب القيمة القصوى بدقة منزلة عشرية واحدة",
+        "اطبع: Max Knapsack Value: 240.0"
+    ],
+    "expectedOutput": "Max Knapsack Value: 240.0",
+    "hints": [
+        "فكرة الحل: كثافة السلع هي 6.0 و 5.0 و 4.0. نأخذ 10 كجم (60) + 20 كجم (100) + 20 كجم (80) = 240.0.",
+        "اطبع بصيغة :.1f بجوار Max Knapsack Value:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Max Knapsack Value: 240.0",
+            "description": "حل حقيبة الظهر الكسرية لسعة 50"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-8"
+},
+
+  "world-12-level-8": {
+    "id": "world-12-level-8",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 8,
+    "title": "🔄 خوارزمية السلحفاة والأرنب لاكتشاف الحلقات (Floyd's Cycle Detection)",
+    "englishTitle": "Floyd's Tortoise and Hare Cycle Detection",
+    "subtitle": "خوارزمية المؤشر السريع والبطيء الشهيرة لاكتشاف الحلقات التكرارية",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 245,
+    "skills": [
+        "competitive",
+        "cycle_detection",
+        "floyd"
+    ],
+    "story": "لديك مسار روابط عقد links = {1: 2, 2: 3, 3: 4, 4: 2} (العقدة 4 ترجع للعقدة 2 مشكلة حلقة مغلقة). باستخدام خوارزمية فلويد (مؤشر يتحرك خطوة ومؤشر يتحرك خطوتين)، إذا التقى المؤشران داخل المسار فذلك يثبت وجود حلقة مغلقة. اطبع النتيجة بصيغة: 'Cycle Detected: True'.",
+    "microLesson": {
+        "concept": "خوارزمية فلويد للسلحفاة والأرنب (Floyd's Cycle Finding)",
+        "summary": "إذا كان هناك دوران مغلق في الروابط، فإن المؤشر السريع (الذي يتحرك خطوتين) سيلحق بالمؤشر البطيء (الذي يتحرك خطوة) حتماً ويلتقيان داخل الحلقة.",
+        "exampleCode": "slow = links[start]\nfast = links[links[start]]\nwhile fast in links and links[fast] in links:\n    if slow == fast: # cycle!\n    slow = links[slow]\n    fast = links[links[fast]]"
+    },
+    "starterCode": "links = {1: 2, 2: 3, 3: 4, 4: 2}\n\n# افحص وجود الحلقة واطبع: Cycle Detected: True\n",
+    "requirements": [
+        "تحقق من وجود حلقة في الروابط",
+        "اطبع بصيغة: Cycle Detected: True"
+    ],
+    "expectedOutput": "Cycle Detected: True",
+    "hints": [
+        "فكرة الحل: الروابط 2 -> 3 -> 4 -> 2 تمثل حلقة مغلقة دائرية.",
+        "اطبع النتيجة المطلوبة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Cycle Detected: True",
+            "description": "اكتشاف الحلقة في الروابط"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-9"
+},
+
+  "world-12-level-9": {
+    "id": "world-12-level-9",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 9,
+    "title": "🔤 أطول بادئة نصية مشتركة بين الكلمات (Longest Common Prefix)",
+    "englishTitle": "Longest Common Prefix Algorithm",
+    "subtitle": "المطابقة العمودية للأحرف في المصفوفات النصية",
+    "difficulty": "medium",
+    "type": "write_code",
+    "baseXp": 240,
+    "skills": [
+        "competitive",
+        "strings",
+        "prefix"
+    ],
+    "story": "لديك قائمة كلمات words = ['flower', 'flow', 'flight']. ابحث عن أطول بادئة مشتركة (Prefix) تبدأ بها جميع الكلمات في القائمة (البادئة المشتركة هنا هي 'fl'). اطبع النتيجة بصيغة: 'Common Prefix: fl'.",
+    "microLesson": {
+        "concept": "المطابقة العمودية للأحرف (Vertical Scanning)",
+        "summary": "نمر على أحرف أول كلمة حرفاً بحرف، ونقارن الحرف مع نفس الموقع في بقية الكلمات حتى نجد أول اختلاف.",
+        "exampleCode": "prefix = ''\nfor chars in zip(*words):\n    if len(set(chars)) == 1:\n        prefix += chars[0]\n    else: break"
+    },
+    "starterCode": "words = ['flower', 'flow', 'flight']\n\n# أوجد أطول بادئة مشتركة واطبع: Common Prefix: fl\n",
+    "requirements": [
+        "حدد أطول بادئة نصية مشتركة",
+        "اطبع بصيغة: Common Prefix: fl"
+    ],
+    "expectedOutput": "Common Prefix: fl",
+    "hints": [
+        "فكرة الحل: استخدم zip(*words) وافحص الحروف المتطابقة في البداية.",
+        "اطبع الناتج بجوار Common Prefix:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Common Prefix: fl",
+            "description": "البادئة المشتركة لـ flower, flow, flight"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-10"
+},
+
+  "world-12-level-10": {
+    "id": "world-12-level-10",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 10,
+    "title": "🎲 حساب عدد التباديل والتوافيق الشاملة (Permutations Count)",
+    "englishTitle": "Array Permutations Counter",
+    "subtitle": "التباديل الرياضية ومفهوم الاستدعاء التوافقي",
+    "difficulty": "hard",
+    "type": "write_code",
+    "baseXp": 250,
+    "skills": [
+        "competitive",
+        "permutations",
+        "math"
+    ],
+    "story": "لديك مصفوفة مكونة من 3 أرقام مميزة nums = [1, 2, 3]. احسب إجمالي عدد التباديل الممكنة لترتيب هذه الأرقام (حيث عدد التباديل لـ n عناصر مميزة هو مضروب n أي 3! = 3 * 2 * 1 = 6). اطبع النتيجة بصيغة: 'Total Permutations: 6'.",
+    "microLesson": {
+        "concept": "التباديل الرياضية (Permutations Factorial)",
+        "summary": "عدد طرق ترتيب n عناصر مميزة في صف يحسب رياضياً عبر المضروب n! = n * (n - 1) * ... * 1.",
+        "exampleCode": "import math\ncount = math.factorial(len(arr))"
+    },
+    "starterCode": "nums = [1, 2, 3]\n\n# احسب إجمالي عدد التباديل الممكنة واطبع: Total Permutations: 6\n",
+    "requirements": [
+        "احسب عدد التباديل للأرقام الثلاثة",
+        "اطبع بصيغة: Total Permutations: 6"
+    ],
+    "expectedOutput": "Total Permutations: 6",
+    "hints": [
+        "فكرة الحل: استخدم دالة المضروب math.factorial(len(nums)) أو حلقة ضرب.",
+        "اطبع النتيجة بجوار Total Permutations:."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Total Permutations: 6",
+            "description": "حساب عدد تباديل [1, 2, 3]"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": "world-12-level-11"
+},
+
+  "world-12-level-11": {
+    "id": "world-12-level-11",
+    "worldId": "world-12",
+    "worldTitle": "ساحة البرمجة التنافسية وتحديات النخبة",
+    "levelNumber": 11,
+    "title": "👑 الزعيم الكوني الأكبر: بطل البرمجة التنافسية وبناء نظام التحكيم الآلي (Ultimate Grandmaster Judge)",
+    "englishTitle": "Cosmic Grandmaster Boss: Automated Contest Judge Engine",
+    "subtitle": "التحدي الختامي الأسطوري الشامل لمنصة اتحاد بشبابها",
+    "difficulty": "expert",
+    "type": "boss",
+    "baseXp": 300,
+    "skills": [
+        "competitive",
+        "system_design",
+        "data_processing",
+        "boss_challenge"
+    ],
+    "story": "التحدي الختامي الأسطوري الأكبر: لديك نتائج ثلاث جولات لمتسابقي البرمجة التنافسية scores = {'Student_A': [100, 95, 90], 'Student_B': [100, 100, 95], 'Student_C': [80, 85, 90]}. احسب متوسط كل متسابق، وحدد اسم الفائز صاحب أعلى متوسط ('Student_B' بمتوسط 98.33). اطبع النتيجة بصيغة: 'Champion: Student_B - Score: 98.33'.",
+    "microLesson": {
+        "concept": "بناء أنظمة التحكيم وحساب الإحصاءات التنافسية",
+        "summary": "نقوم بحساب المتوسط الحسابي لكل متسابق sum(s) / len(s)، ثم نحدد المتسابق صاحب أعلى قيمة وننسق درجته بدقة منزلتين عشريتين.",
+        "exampleCode": "# فكرة إيجاد الفائز بأعلى متوسط درجات وتنسيق النتيجة"
+    },
+    "starterCode": "scores = {\n    'Student_A': [100, 95, 90],\n    'Student_B': [100, 100, 95],\n    'Student_C': [80, 85, 90]\n}\n\n# احسب متوسط كل متسابق وحدد البطل واطبع الناتج المطلوب تماماً\n",
+    "requirements": [
+        "احسب متوسط درجات كل طالب",
+        "حدد اسم صاحب أعلى متوسط واطبع درجته بدقة منزلتين عشريتين",
+        "اطبع بصيغة دقيقة: Champion: Student_B - Score: 98.33"
+    ],
+    "expectedOutput": "Champion: Student_B - Score: 98.33",
+    "hints": [
+        "فكرة الحل: احسب المتوسط لكل متسابق، وتتبع أعلى متوسط واسم صاحبه (Student_B بمتوسط 98.33).",
+        "استخدم :.2f لتنسيق الدرجة واطبعها بالصيغة المطلوبة تماماً."
+    ],
+    "testCases": [
+        {
+            "input": "",
+            "expectedOutput": "Champion: Student_B - Score: 98.33",
+            "description": "تحديد الفائز في مسابقة البرمجة"
+        }
+    ],
+    "unlocksWorldId": null,
+    "nextChallengeId": null
+},
 
   // DAILY CHALLENGES POOL (Fully integrated & persistent)
   "daily-loop-sum": {

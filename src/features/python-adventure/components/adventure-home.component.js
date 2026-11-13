@@ -45,12 +45,12 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
   let curWorldObj = WORLDS_DATA.find((w) => w.id === currentWorldId) || WORLDS_DATA[0];
   const curWorldChallenges = PythonAdventureService.getWorldChallenges(curWorldObj.id);
   const curWorldCompleted = curWorldChallenges.filter((c) => completedMap[c.id]).length;
-  const curWorldTotal = curWorldChallenges.length || curWorldObj.levelsCount || 8;
+  const curWorldTotal = curWorldChallenges.length || curWorldObj.levelsCount || 11;
   const currentWorldName = curWorldObj.title;
 
-  // 6. World Progress Road (مسار العوالم الثمانية)
+  // 6. World Progress Road (مسار العوالم التفاعلية)
   const unlockedWorldsCount = WORLDS_DATA.filter((w) => unlockedWorlds.includes(w.id)).length;
-  const roadFillPercent = Math.min(100, Math.max(12.5, Math.round((unlockedWorldsCount / 8) * 100)));
+  const roadFillPercent = Math.min(100, Math.max(10, Math.round((unlockedWorldsCount / WORLDS_DATA.length) * 100)));
 
   return `
     <div class="adventure-image5-container" dir="rtl">
@@ -215,7 +215,7 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
               <h3 class="adv5-portal-title">خريطة العوالم</h3>
             </div>
             <p class="adv5-portal-desc">
-              8 عوالم برمجية من قرية بايثون وحتى حلبة الأبطال والذكاء الاصطناعي والمشروع الختامي.
+              ${WORLDS_DATA.length} عوالم برمجية متدرجة حتى واحة القواميس وهياكل البيانات المتقدمة.
             </p>
             <div class="adv5-portal-footer">
               <span class="adv5-portal-tag">عالم 1 مفتوح</span>
@@ -315,14 +315,14 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
       <section class="adv5-world-road-card">
         <div class="adv5-world-road-header">
           <div>
-            <h2 class="adv5-road-title">مسار العوالم الثمانية (World Progress Road)</h2>
+            <h2 class="adv5-road-title">مسار العوالم التفاعلية (${WORLDS_DATA.length} عوالم)</h2>
             <p class="adv5-road-subtitle">خريطة الرحلة البرمجية</p>
           </div>
           <div class="adv5-road-slider-wrap font-mono">
             <div class="adv5-road-slider-bar">
               <div class="adv5-road-slider-fill" style="width: ${roadFillPercent}%;"></div>
             </div>
-            <span>العالم ${Math.max(1, unlockedWorldsCount)} من 8</span>
+            <span>العالم ${Math.max(1, unlockedWorldsCount)} من ${WORLDS_DATA.length}</span>
           </div>
         </div>
 
@@ -330,7 +330,7 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
           ${WORLDS_DATA.map((w, wIdx) => {
             const wChallenges = PythonAdventureService.getWorldChallenges(w.id);
             const wSolved = wChallenges.filter((c) => completedMap[c.id]).length;
-            const wTotal = wChallenges.length || w.levelsCount || 8;
+            const wTotal = wChallenges.length || w.levelsCount || 11;
             const isCompleted = wTotal > 0 && wSolved >= wTotal;
             const isUnlocked = unlockedWorlds.includes(w.id) || isCompleted;
 
