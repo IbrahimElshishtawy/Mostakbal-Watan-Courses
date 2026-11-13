@@ -882,7 +882,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "150\n350", expectedOutput: "500" },
       { input: "-20\n-30", expectedOutput: "-50" }
     ],
-    starterCode: "# اقرأ رقمين واطبع مجموعهما\na = int(input())\nb = int(input())\nprint(a + b)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l1-even-odd": {
     id: "prob-l1-even-odd",
@@ -910,7 +910,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "-5", expectedOutput: "Odd" },
       { input: "1000", expectedOutput: "Even" }
     ],
-    starterCode: "# اقرأ رقماً وافحص هل هو زوجي أم فردي\nn = int(input())\nif n % 2 == 0:\n    print('Even')\nelse:\n    print('Odd')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l1-temp-converter": {
     id: "prob-l1-temp-converter",
@@ -937,7 +937,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "37", expectedOutput: "98.6" },
       { input: "-40", expectedOutput: "-40.0" }
     ],
-    starterCode: "c = float(input())\nf = (c * 9 / 5) + 32\nprint(round(f, 1))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l1-rect-area": {
     id: "prob-l1-rect-area",
@@ -962,7 +962,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "10\n10", expectedOutput: "100\n40" },
       { input: "1\n1", expectedOutput: "1\n4" }
     ],
-    starterCode: "l = int(input())\nw = int(input())\nprint(l * w)\nprint(2 * (l + w))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l1-pass-fail": {
     id: "prob-l1-pass-fail",
@@ -990,7 +990,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "0", expectedOutput: "Fail" },
       { input: "100", expectedOutput: "Pass" }
     ],
-    starterCode: "score = int(input())\nif score >= 50:\n    print('Pass')\nelse:\n    print('Fail')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l1-stanford-pythagorean": {
     id: "prob-l1-stanford-pythagorean",
@@ -1017,7 +1017,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "5\n12", expectedOutput: "13" },
       { input: "9\n12", expectedOutput: "15" }
     ],
-    starterCode: "import math\na = float(input())\nb = float(input())\nc = math.sqrt(a**2 + b**2)\nprint(int(c))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l1-stanford-seconds": {
     id: "prob-l1-stanford-seconds",
@@ -1044,7 +1044,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "0", expectedOutput: "0m 0s" },
       { input: "365", expectedOutput: "6m 5s" }
     ],
-    starterCode: "s = int(input())\nmins = s // 60\nsecs = s % 60\nprint(f'{mins}m {secs}s')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // LEVEL 2: EASY
@@ -1072,7 +1072,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "5 5 5", expectedOutput: "5" },
       { input: "-10 -2 -50", expectedOutput: "-2" }
     ],
-    starterCode: "a, b, c = map(int, input().split())\nprint(max(a, b, c))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l2-sum-to-n": {
     id: "prob-l2-sum-to-n",
@@ -1098,7 +1098,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1", expectedOutput: "1" },
       { input: "100", expectedOutput: "5050" }
     ],
-    starterCode: "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l2-reverse-string": {
     id: "prob-l2-reverse-string",
@@ -1124,7 +1124,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "a", expectedOutput: "a" },
       { input: "hello world", expectedOutput: "dlrow olleh" }
     ],
-    starterCode: "s = input()\nprint(s[::-1])\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l2-count-evens": {
     id: "prob-l2-count-evens",
@@ -1149,7 +1149,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "3\n1 3 5", expectedOutput: "0" },
       { input: "4\n2 4 6 8", expectedOutput: "4" }
     ],
-    starterCode: "n = int(input())\nnums = list(map(int, input().split()))\ncount = sum(1 for x in nums if x % 2 == 0)\nprint(count)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l2-vowel-counter": {
     id: "prob-l2-vowel-counter",
@@ -1174,7 +1174,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "xyz", expectedOutput: "0" },
       { input: "AEIOUaeiou", expectedOutput: "10" }
     ],
-    starterCode: "s = input().lower()\nvowels = set('aeiou')\nprint(sum(1 for char in s if char in vowels))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l2-stanford-sentinel": {
     id: "prob-l2-stanford-sentinel",
@@ -1201,7 +1201,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "-1", expectedOutput: "0" },
       { input: "100\n-1", expectedOutput: "100" }
     ],
-    starterCode: "nums = []\nwhile True:\n    try:\n        x = int(input())\n        if x == -1:\n            break\n        nums.append(x)\n    except:\n        break\nprint(sum(nums) // len(nums) if nums else 0)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l2-stanford-fizzbuzz": {
     id: "prob-l2-stanford-fizzbuzz",
@@ -1227,7 +1227,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1", expectedOutput: "1" },
       { input: "3", expectedOutput: "1 2 Fizz" }
     ],
-    starterCode: "n = int(input())\nres = []\nfor i in range(1, n + 1):\n    if i % 15 == 0:\n        res.append('FizzBuzz')\n    elif i % 3 == 0:\n        res.append('Fizz')\n    elif i % 5 == 0:\n        res.append('Buzz')\n    else:\n        res.append(str(i))\nprint(' '.join(res))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // LEVEL 3: INTERMEDIATE
@@ -1254,7 +1254,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "5 5 5 5", expectedOutput: "5" },
       { input: "10 20 30", expectedOutput: "10 20 30" }
     ],
-    starterCode: "nums = list(map(int, input().split()))\nseen = set()\nres = []\nfor x in nums:\n    if x not in seen:\n        seen.add(x)\n        res.append(x)\nprint(*(res))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l3-most-frequent": {
     id: "prob-l3-most-frequent",
@@ -1281,7 +1281,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "100", expectedOutput: "100" },
       { input: "5 5 6 6 7 7", expectedOutput: "5" }
     ],
-    starterCode: "nums = list(map(int, input().split()))\nfreq = {}\nfor x in nums:\n    freq[x] = freq.get(x, 0) + 1\n# فرز حسب أعلى تكرار ثم أصغر قيمة\nbest = min(freq.keys(), key=lambda x: (-freq[x], x))\nprint(best)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l3-anagram-check": {
     id: "prob-l3-anagram-check",
@@ -1308,7 +1308,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "a\na", expectedOutput: "True" },
       { input: "aabbcc\nabc", expectedOutput: "False" }
     ],
-    starterCode: "s1 = input().strip().lower()\ns2 = input().strip().lower()\nif sorted(s1) == sorted(s2):\n    print('True')\nelse:\n    print('False')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l3-student-grades-dict": {
     id: "prob-l3-student-grades-dict",
@@ -1332,7 +1332,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     hiddenTestCases: [
       { input: "1\nAli 100", expectedOutput: "Ali 100.0" }
     ],
-    starterCode: "n = int(input())\nfor _ in range(n):\n    parts = input().split()\n    name = parts[0]\n    grades = list(map(float, parts[1:]))\n    avg = sum(grades) / len(grades)\n    print(f'{name} {round(avg, 1)}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l3-matrix-transpose": {
     id: "prob-l3-matrix-transpose",
@@ -1356,7 +1356,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     hiddenTestCases: [
       { input: "1 1\n7", expectedOutput: "7" }
     ],
-    starterCode: "r, c = map(int, input().split())\nmatrix = [list(map(int, input().split())) for _ in range(r)]\nfor j in range(c):\n    col = [str(matrix[i][j]) for i in range(r)]\n    print(' '.join(col))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l3-stanford-dna": {
     id: "prob-l3-stanford-dna",
@@ -1383,7 +1383,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "A", expectedOutput: "T" },
       { input: "C", expectedOutput: "G" }
     ],
-    starterCode: "seq = input().strip().upper()\ncomp = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}\nprint(''.join(comp.get(b, b) for b in reversed(seq)))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l3-stanford-clean-list": {
     id: "prob-l3-stanford-clean-list",
@@ -1409,7 +1409,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1 2 3\n4 5 6", expectedOutput: "" },
       { input: "7 8 9\n9 8 7", expectedOutput: "7 8 9" }
     ],
-    starterCode: "l1 = set(map(int, input().split()))\nl2 = set(map(int, input().split()))\ncommon = sorted(l1.intersection(l2))\nprint(' '.join(map(str, common)))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // LEVEL 4: ADVANCED
@@ -1439,7 +1439,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "6 1\n1 2 3 4 5 6", expectedOutput: "0" },
       { input: "6 6\n1 2 3 4 5 6", expectedOutput: "5" }
     ],
-    starterCode: "n, target = map(int, input().split())\narr = list(map(int, input().split()))\nlow, high = 0, n - 1\nans = -1\nwhile low <= high:\n    mid = (low + high) // 2\n    if arr[mid] == target:\n        ans = mid\n        break\n    elif arr[mid] < target:\n        low = mid + 1\n    else:\n        high = mid - 1\nprint(ans)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l4-custom-bubble-sort": {
     id: "prob-l4-custom-bubble-sort",
@@ -1468,7 +1468,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "5 4 3 2 1", expectedOutput: "1 2 3 4 5" },
       { input: "1 2 3", expectedOutput: "1 2 3" }
     ],
-    starterCode: "nums = list(map(int, input().split()))\nn = len(nums)\nfor i in range(n):\n    for j in range(0, n - i - 1):\n        if nums[j] > nums[j + 1]:\n            nums[j], nums[j + 1] = nums[j + 1], nums[j]\nprint(*(nums))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l4-recursive-fib": {
     id: "prob-l4-recursive-fib",
@@ -1495,7 +1495,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1", expectedOutput: "1" },
       { input: "30", expectedOutput: "832040" }
     ],
-    starterCode: "n = int(input())\nif n == 0:\n    print(0)\nelse:\n    a, b = 0, 1\n    for _ in range(n - 1):\n        a, b = b, a + b\n    print(b)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l4-valid-parentheses": {
     id: "prob-l4-valid-parentheses",
@@ -1523,7 +1523,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "((", expectedOutput: "Invalid" },
       { input: "]", expectedOutput: "Invalid" }
     ],
-    starterCode: "s = input().strip()\nstack = []\nmapping = {')': '(', ']': '[', '}': '{'}\nis_valid = True\nfor char in s:\n    if char in mapping.values():\n        stack.append(char)\n    elif char in mapping:\n        if not stack or stack[-1] != mapping[char]:\n            is_valid = False\n            break\n        stack.pop()\n    else:\n        is_valid = False\n        break\nif is_valid and len(stack) == 0:\n    print('Valid')\nelse:\n    print('Invalid')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l4-longest-consecutive": {
     id: "prob-l4-longest-consecutive",
@@ -1548,7 +1548,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "0 3 7 2 5 8 4 6 0 1", expectedOutput: "9" },
       { input: "9", expectedOutput: "1" }
     ],
-    starterCode: "line = input().strip()\nif not line:\n    print(0)\nelse:\n    nums = set(map(int, line.split()))\n    longest = 0\n    for x in nums:\n        if x - 1 not in nums:\n            curr = x\n            streak = 1\n            while curr + 1 in nums:\n                curr += 1\n                streak += 1\n            longest = max(longest, streak)\n    print(longest)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l4-stanford-pascal": {
     id: "prob-l4-stanford-pascal",
@@ -1575,7 +1575,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "0", expectedOutput: "1" },
       { input: "1", expectedOutput: "1 1" }
     ],
-    starterCode: "n = int(input())\nrow = [1]\nfor _ in range(n):\n    row = [1] + [row[i] + row[i + 1] for i in range(len(row) - 1)] + [1]\nprint(' '.join(map(str, row)))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l4-stanford-subsets": {
     id: "prob-l4-stanford-subsets",
@@ -1602,7 +1602,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "0", expectedOutput: "1" },
       { input: "10", expectedOutput: "1024" }
     ],
-    starterCode: "n = int(input())\nprint(2 ** n)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // LEVEL 5: CHALLENGE / EXPERT
@@ -1629,7 +1629,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     hiddenTestCases: [
       { input: "2 6\n3 3", expectedOutput: "0 1" }
     ],
-    starterCode: "n, target = map(int, input().split())\nnums = list(map(int, input().split()))\nseen = {}\nfor idx, val in enumerate(nums):\n    diff = target - val\n    if diff in seen:\n        print(f'{seen[diff]} {idx}')\n        break\n    seen[val] = idx\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l5-trapping-rain-water": {
     id: "prob-l5-trapping-rain-water",
@@ -1655,7 +1655,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1 2 3 4 5", expectedOutput: "0" },
       { input: "5 4 1 2", expectedOutput: "1" }
     ],
-    starterCode: "h = list(map(int, input().split()))\nif not h:\n    print(0)\nelse:\n    left, right = 0, len(h) - 1\n    left_max, right_max = h[left], h[right]\n    water = 0\n    while left < right:\n        if left_max < right_max:\n            left += 1\n            left_max = max(left_max, h[left])\n            water += left_max - h[left]\n        else:\n            right -= 1\n            right_max = max(right_max, h[right])\n            water += right_max - h[right]\n    print(water)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l5-longest-valid-parens": {
     id: "prob-l5-longest-valid-parens",
@@ -1682,7 +1682,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "", expectedOutput: "0" },
       { input: "()(())", expectedOutput: "6" }
     ],
-    starterCode: "s = input().strip()\nstack = [-1]\nmax_len = 0\nfor i, ch in enumerate(s):\n    if ch == '(':\n        stack.append(i)\n    else:\n        stack.pop()\n        if not stack:\n            stack.append(i)\n        else:\n            max_len = max(max_len, i - stack[-1])\nprint(max_len)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l5-merge-intervals": {
     id: "prob-l5-merge-intervals",
@@ -1706,7 +1706,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     hiddenTestCases: [
       { input: "2\n1 4\n4 5", expectedOutput: "1 5" }
     ],
-    starterCode: "n = int(input())\nintervals = []\nfor _ in range(n):\n    intervals.append(list(map(int, input().split())))\nintervals.sort(key=lambda x: x[0])\nmerged = [intervals[0]]\nfor current in intervals[1:]:\n    prev = merged[-1]\n    if current[0] <= prev[1]:\n        prev[1] = max(prev[1], current[1])\n    else:\n        merged.append(current)\nfor it in merged:\n    print(f'{it[0]} {it[1]}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l5-lru-cache": {
     id: "prob-l5-lru-cache",
@@ -1730,7 +1730,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
     hiddenTestCases: [
       { input: "1 3\nSET 5 50\nGET 5\nGET 6", expectedOutput: "50\n-1" }
     ],
-    starterCode: "from collections import OrderedDict\ncap, q = map(int, input().split())\ncache = OrderedDict()\nfor _ in range(q):\n    parts = input().split()\n    op = parts[0]\n    if op == 'SET':\n        k, v = parts[1], parts[2]\n        if k in cache:\n            cache.move_to_end(k)\n        cache[k] = v\n        if len(cache) > cap:\n            cache.popitem(last=False)\n    elif op == 'GET':\n        k = parts[1]\n        if k in cache:\n            cache.move_to_end(k)\n            print(cache[k])\n        else:\n            print('-1')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l5-stanford-matrix-spiral": {
     id: "prob-l5-stanford-matrix-spiral",
@@ -1757,7 +1757,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1 3\n10 20 30", expectedOutput: "10 20 30" },
       { input: "3 1\n5\n6\n7", expectedOutput: "5 6 7" }
     ],
-    starterCode: "r, c = map(int, input().split())\nmat = [list(map(int, input().split())) for _ in range(r)]\nres = []\ntop, bottom, left, right = 0, r - 1, 0, c - 1\nwhile top <= bottom and left <= right:\n    for j in range(left, right + 1):\n        res.append(mat[top][j])\n    top += 1\n    for i in range(top, bottom + 1):\n        res.append(mat[i][right])\n    right -= 1\n    if top <= bottom:\n        for j in range(right, left - 1, -1):\n            res.append(mat[bottom][j])\n        bottom -= 1\n    if left <= right:\n        for i in range(bottom, top - 1, -1):\n            res.append(mat[i][left])\n        left += 1\nprint(' '.join(map(str, res)))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   "prob-l5-stanford-median": {
     id: "prob-l5-stanford-median",
@@ -1784,7 +1784,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "0 0\n0 0", expectedOutput: "0.0" },
       { input: "1\n", expectedOutput: "1.0" }
     ],
-    starterCode: "line1 = input().strip()\nline2 = input().strip()\nl1 = list(map(int, line1.split())) if line1 else []\nl2 = list(map(int, line2.split())) if line2 else []\nmerged = sorted(l1 + l2)\nn = len(merged)\nif n % 2 == 1:\n    ans = float(merged[n // 2])\nelse:\n    ans = (merged[n // 2 - 1] + merged[n // 2]) / 2.0\nprint(f'{ans:.1f}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
   // ==========================================
   // LEVEL 1: MATH, IQ & REAL-WORLD CHALLENGES
@@ -1814,7 +1814,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1", expectedOutput: "Area: 3.14, Circumference: 6.28" },
       { input: "15", expectedOutput: "Area: 706.86, Circumference: 94.25" }
     ],
-    starterCode: "# احسب مساحة ومحيط الدائرة\nr = int(input())\npi = 3.14159\narea = pi * (r ** 2)\ncirc = 2 * pi * r\nprint(f'Area: {area:.2f}, Circumference: {circ:.2f}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l1-iq-digit-sum": {
@@ -1843,7 +1843,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "9999", expectedOutput: "36" },
       { input: "100000", expectedOutput: "1" }
     ],
-    starterCode: "# احسب مجموع خانات العدد المدخل\ns = input().strip()\ntotal = sum(int(d) for d in s)\nprint(total)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l1-real-parking-fee": {
@@ -1872,7 +1872,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "5", expectedOutput: "Total Fee: 30 EGP" },
       { input: "8", expectedOutput: "Total Fee: 35 EGP" }
     ],
-    starterCode: "# احسب رسوم ساحة الانتظار الذكية\nh = int(input())\nfee = 10 + (h - 1) * 5\nif h > 5:\n    fee -= 10\nprint(f'Total Fee: {fee} EGP')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // ==========================================
@@ -1904,7 +1904,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "54\n24", expectedOutput: "6" },
       { input: "270\n192", expectedOutput: "6" }
     ],
-    starterCode: "import math\na = int(input())\nb = int(input())\nprint(math.gcd(a, b))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l2-iq-missing-number": {
@@ -1932,7 +1932,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "6\n1 2 3 4 5", expectedOutput: "6" },
       { input: "10\n1 2 3 4 5 6 7 8 10", expectedOutput: "9" }
     ],
-    starterCode: "# حدد الرقم المفقود عبر مجموع المتسلسلة n*(n+1)//2\nn = int(input())\nnums = list(map(int, input().split()))\nexpected = n * (n + 1) // 2\nactual = sum(nums)\nprint(expected - actual)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l2-real-tiered-discount": {
@@ -1960,7 +1960,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "600", expectedOutput: "Subtotal: 600, Discount: 120.0, Final: 480.0" },
       { input: "100 100", expectedOutput: "Subtotal: 200, Discount: 20.0, Final: 195.0" }
     ],
-    starterCode: "# محرك فواتير المتجر الإلكتروني\nprices = list(map(int, input().split()))\nsubtotal = sum(prices)\nif subtotal < 200:\n    disc = 0.0\n    ship = 30\nelif subtotal < 500:\n    disc = subtotal * 0.10\n    ship = 15\nelse:\n    disc = subtotal * 0.20\n    ship = 0\nfinal = subtotal - disc + ship\nprint(f'Subtotal: {subtotal}, Discount: {disc:.1f}, Final: {final:.1f}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // ==========================================
@@ -1992,7 +1992,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "100", expectedOutput: "2 2 5 5" },
       { input: "315", expectedOutput: "3 3 5 7" }
     ],
-    starterCode: "# تحليل العدد إلى عوامله الأولية\nn = int(input())\nfactors = []\nd = 2\nwhile d * d <= n:\n    while n % d == 0:\n        factors.append(d)\n        n //= d\n    d += 1\nif n > 1:\n    factors.append(n)\nprint(' '.join(map(str, factors)))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l3-iq-matrix-diagonal-difference": {
@@ -2020,7 +2020,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "3\n1 2 3\n4 5 6\n9 8 9", expectedOutput: "2" },
       { input: "1\n42", expectedOutput: "0" }
     ],
-    starterCode: "# احسب الفارق المطلق بين قطري المصفوفة\nn = int(input())\nmat = [list(map(int, input().split())) for _ in range(n)]\nprimary = sum(mat[i][i] for i in range(n))\nsecondary = sum(mat[i][n - 1 - i] for i in range(n))\nprint(abs(primary - secondary))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l3-real-word-frequency": {
@@ -2048,7 +2048,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "a b c a b a\nx y", expectedOutput: "a: 3, b: 2" },
       { input: "apple banana apple orange apple banana\npear", expectedOutput: "apple: 3, banana: 2" }
     ],
-    starterCode: "# فهرسة وتحليل تكرار الكلمات الدلالية\ntext = input().split()\nstop_words = set(input().split())\ncounts = {}\nfor w in text:\n    if w not in stop_words:\n        counts[w] = counts.get(w, 0) + 1\nsorted_words = sorted(counts.items(), key=lambda x: (-x[1], x[0]))\nw1, c1 = sorted_words[0]\nw2, c2 = sorted_words[1]\nprint(f'{w1}: {c1}, {w2}: {c2}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // ==========================================
@@ -2080,7 +2080,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "7", expectedOutput: "Steps: 16, Max: 52" },
       { input: "27", expectedOutput: "Steps: 111, Max: 9232" }
     ],
-    starterCode: "# متتالية كولاتز وحساب الخطوات والذروة\nn = int(input())\nsteps = 0\nmax_val = n\nwhile n != 1:\n    if n % 2 == 0:\n        n //= 2\n    else:\n        n = 3 * n + 1\n    steps += 1\n    if n > max_val:\n        max_val = n\nprint(f'Steps: {steps}, Max: {max_val}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l4-iq-tower-of-hanoi": {
@@ -2108,7 +2108,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1", expectedOutput: "Total Moves: 1\nA -> C" },
       { input: "4", expectedOutput: "Total Moves: 15\nA -> B\nA -> C\nB -> C\nA -> B\nC -> A\nC -> B\nA -> B\nA -> C\nB -> C\nB -> A\nC -> A\nB -> C\nA -> B\nA -> C\nB -> C" }
     ],
-    starterCode: "# حل أبراج هانوي عودياً\ndef hanoi(n, src, dst, aux, moves):\n    if n == 1:\n        moves.append(f'{src} -> {dst}')\n        return\n    hanoi(n - 1, src, aux, dst, moves)\n    moves.append(f'{src} -> {dst}')\n    hanoi(n - 1, aux, dst, src, moves)\n\nn = int(input())\nmoves = []\nhanoi(n, 'A', 'C', 'B', moves)\nprint(f'Total Moves: {len(moves)}')\nfor m in moves:\n    print(m)\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l4-real-rate-limiter": {
@@ -2136,7 +2136,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1 5\n1 2 6 7", expectedOutput: "ALLOWED BLOCKED ALLOWED BLOCKED" },
       { input: "3 10\n1 2 3 4", expectedOutput: "ALLOWED ALLOWED ALLOWED BLOCKED" }
     ],
-    starterCode: "# محاكي Rate Limiter بالنافذة المنزلقة\nK, W = map(int, input().split())\ntimestamps = list(map(int, input().split()))\nallowed_times = []\nresults = []\nfor t in timestamps:\n    # تصفية الطلبات المقبولة خارج النافذة [t - W + 1, t]\n    allowed_times = [at for at in allowed_times if at >= t - W + 1]\n    if len(allowed_times) < K:\n        results.append('ALLOWED')\n        allowed_times.append(t)\n    else:\n        results.append('BLOCKED')\nprint(' '.join(results))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   // ==========================================
@@ -2168,7 +2168,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "3\n1 2 3\n0 4 5\n0 0 6", expectedOutput: "24" },
       { input: "2\n5 -3\n-2 4", expectedOutput: "14" }
     ],
-    starterCode: "# حساب محدد المصفوفة عودياً\ndef get_det(mat):\n    n = len(mat)\n    if n == 1:\n        return mat[0][0]\n    if n == 2:\n        return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0]\n    det = 0\n    for c in range(n):\n        sub = [row[:c] + row[c+1:] for row in mat[1:]]\n        det += ((-1) ** c) * mat[0][c] * get_det(sub)\n    return det\n\nN = int(input())\nmat = [list(map(int, input().split())) for _ in range(N)]\nprint(get_det(mat))\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l5-iq-knight-shortest-path": {
@@ -2197,7 +2197,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "a1 a1", expectedOutput: "Shortest Path: 0 moves" },
       { input: "e4 e6", expectedOutput: "Shortest Path: 2 moves" }
     ],
-    starterCode: "from collections import deque\n\ndef parse_sq(sq):\n    return (ord(sq[0]) - ord('a'), int(sq[1]) - 1)\n\nstart_str, target_str = input().split()\ns = parse_sq(start_str)\nt = parse_sq(target_str)\n\nmoves = [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]\nvisited = {s}\nq = deque([(s[0], s[1], 0)])\nans = 0\n\nwhile q:\n    r, c, d = q.popleft()\n    if (r, c) == t:\n        ans = d\n        break\n    for dr, dc in moves:\n        nr, nc = r + dr, c + dc\n        if 0 <= nr < 8 and 0 <= nc < 8 and (nr, nc) not in visited:\n            visited.add((nr, nc))\n            q.append((nr, nc, d + 1))\n\nprint(f'Shortest Path: {ans} moves')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   },
 
   "prob-l5-real-event-scheduler": {
@@ -2226,7 +2226,7 @@ export const PROBLEM_SOLVING_CHALLENGES_DATA = {
       { input: "1\n9 17", expectedOutput: "Minimum Rooms: 1" },
       { input: "5\n1 10\n2 7\n3 19\n8 12\n10 20", expectedOutput: "Minimum Rooms: 4" }
     ],
-    starterCode: "# تحسين وجدولة قاعات الاجتماعات السحابية\nimport heapq\nM = int(input())\nintervals = [list(map(int, input().split())) for _ in range(M)]\nintervals.sort(key=lambda x: x[0])\nrooms = []\nfor start, end in intervals:\n    if rooms and rooms[0] <= start:\n        heapq.heappop(rooms)\n    heapq.heappush(rooms, end)\nprint(f'Minimum Rooms: {len(rooms)}')\n"
+    starterCode: "# اكتب كود الحل بلغة بايثون هنا...\n"
   }
 
 };
