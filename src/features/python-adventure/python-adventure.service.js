@@ -316,8 +316,28 @@ export const PythonAdventureService = {
       starsEarned = Math.max(starsEarned, prevStars);
     }
 
-    const newTotalXp = (existing.xp || 0) + actualXpAwarded;
-    const newLevel = Math.floor(newTotalXp / 250) + 1;
+    const completedMap = {
+      ...(existing.completedChallenges || {}),
+      [challengeId]: {
+        completedAt: new Date().toISOString(),
+        stars: starsEarned,
+        attempts,
+        hintsUsed,
+        score: 10,
+        maxScore: 10,
+        xpAwarded: actualXpAwarded
+      }
+    };
+
+    let trueXpSum = 0;
+    for (const [chId, rec] of Object.entries(completedMap)) {
+      const chData = CHALLENGES_CLIENT_DATA[chId];
+      const baseVal = chData ? (chData.baseXp || 100) : (rec.score || 10) * 5;
+      const awarded = Math.max(rec.xpAwarded || 0, baseVal);
+      trueXpSum += awarded;
+    }
+    const newTotalXp = Math.max((existing.xp || 0) + actualXpAwarded, trueXpSum);
+    const newLevel = Math.max(1, Math.floor(newTotalXp / 250) + 1);
     const levelUp = newLevel > (existing.level || 1);
 
     const unlockedChallenges = new Set(existing.unlockedChallenges || ["world-1-level-1"]);
@@ -344,19 +364,6 @@ export const PythonAdventureService = {
       currentAchievements.add("boss_slayer");
       newlyUnlockedAchievements.push(ACHIEVEMENTS_DATA.find((a) => a.id === "boss_slayer"));
     }
-
-    const completedMap = {
-      ...(existing.completedChallenges || {}),
-      [challengeId]: {
-        completedAt: new Date().toISOString(),
-        stars: starsEarned,
-        attempts,
-        hintsUsed,
-        score: 10,
-        maxScore: 10,
-        xpAwarded: actualXpAwarded
-      }
-    };
 
     const isDaily = challengeId.startsWith("daily-");
     const lastActive = existing.streak?.lastActiveDate || "";

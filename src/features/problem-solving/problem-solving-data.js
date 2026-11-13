@@ -74,6 +74,787 @@ export const PROBLEM_SOLVING_LEVELS_DATA = [
 ];
 
 export const PROBLEM_SOLVING_CHALLENGES_DATA = {
+  "prob-l2-string-length": {
+    "id": "prob-l2-string-length",
+    "title": "طول السلسلة النصية بدون دالة len",
+    "level": 2,
+    "difficulty": "easy",
+    "points": 30,
+    "timeLimit": 3000,
+    "skills": [
+        "strings",
+        "loops",
+        "accumulator"
+    ],
+    "description": "اكتب برنامجاً يستقبل نصاً ويحسب طوله (عدد أحرفه) باستخدام حلقة تكرار وعداد يدوي دون استخدام دالة len() الجاهزة.",
+    "inputDescription": "سطر واحد يحتوي على نص.",
+    "outputDescription": "اطبع عدداً صحيحاً يمثل طول النص.",
+    "examples": [
+        {
+            "input": "shababha",
+            "output": "8",
+            "explanation": "طول الكلمة 8 أحرف."
+        }
+    ],
+    "constraints": [
+        "طول النص حتى 500 حرف"
+    ],
+    "starterCode": "# احسب طول النص يدوياً بدون len\n",
+    "publicTestCases": [
+        {
+            "input": "shababha",
+            "expectedOutput": "8"
+        },
+        {
+            "input": "hello",
+            "expectedOutput": "5"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "",
+            "expectedOutput": "0"
+        },
+        {
+            "input": "a",
+            "expectedOutput": "1"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: ابدأ بعداد count = 0 ومر بحلقة على الحروف وزد العداد بواحد."
+    ]
+},
+
+  "prob-l4-rotate-array": {
+    "id": "prob-l4-rotate-array",
+    "title": "تدوير المصفوفة بمقدار k خطوات (Rotate Array by K)",
+    "level": 4,
+    "difficulty": "hard",
+    "points": 80,
+    "timeLimit": 3000,
+    "skills": [
+        "arrays",
+        "rotation",
+        "slicing"
+    ],
+    "description": "اكتب برنامجاً يستقبل في السطر الأول أرقاماً مفصولة بمسافات، وفي السطر الثاني عدداً صحيحاً k. قم بتدوير المصفوفة لليمين بمقدار k خطوات واطبع المصفوفة الناتجة مفصولة بمسافات.",
+    "inputDescription": "السطر الأول أرقام مفصولة بمسافات، والسطر الثاني k.",
+    "outputDescription": "اطبع الأرقام بعد التدوير مفصولة بمسافات.",
+    "examples": [
+        {
+            "input": "1 2 3 4 5\n2",
+            "output": "4 5 1 2 3",
+            "explanation": "تدوير خطوتين لليمين."
+        }
+    ],
+    "constraints": [
+        "1 <= k <= 1000"
+    ],
+    "starterCode": "# دور المصفوفة واطبع الناتج مفصولاً بمسافات\n",
+    "publicTestCases": [
+        {
+            "input": "1 2 3 4 5\n2",
+            "expectedOutput": "4 5 1 2 3"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "10 20 30\n1",
+            "expectedOutput": "30 10 20"
+        },
+        {
+            "input": "1 2\n0",
+            "expectedOutput": "1 2"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: التدوير بمقدار k يعادل تقطيع arr[-k:] + arr[:-k] مع أخذ k % len(arr)."
+    ]
+},
+
+  "prob-l4-two-sum-sorted": {
+    "id": "prob-l4-two-sum-sorted",
+    "title": "مجموع الهدف في مصفوفة مرتبة بالمؤشرين (Two Sum Sorted)",
+    "level": 4,
+    "difficulty": "hard",
+    "points": 80,
+    "timeLimit": 3000,
+    "skills": [
+        "two_pointers",
+        "sorting",
+        "binary_search"
+    ],
+    "description": "اكتب برنامجاً يستقبل مصفوفة مرتبة في السطر الأول، ورقم هدف target في السطر الثاني. ابحث عن أول زوج يحقق المجموع واطبعه مفصولاً بعلامة + ومساواة (مثال: 2 + 7 = 9).",
+    "inputDescription": "السطر الأول أرقام مرتبة، والسطر الثاني هدف الجمع.",
+    "outputDescription": "اطبع بصيغة a + b = target.",
+    "examples": [
+        {
+            "input": "2 7 11 15\n9",
+            "output": "2 + 7 = 9",
+            "explanation": "2 + 7 = 9."
+        }
+    ],
+    "constraints": [
+        "يوجد حل دائماً"
+    ],
+    "starterCode": "# ابحث عن الزوج واطبع: a + b = target\n",
+    "publicTestCases": [
+        {
+            "input": "2 7 11 15\n9",
+            "expectedOutput": "2 + 7 = 9"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "1 2 3 4 6\n10",
+            "expectedOutput": "4 + 6 = 10"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: استخدم مؤشرين left و right وحركهما بناءً على مقارنة المجموع مع الهدف."
+    ]
+},
+
+  "prob-l5-matrix-zeroes": {
+    "id": "prob-l5-matrix-zeroes",
+    "title": "تصفير الصفوف والأعمدة المحتوية على أصفار (Set Matrix Zeroes)",
+    "level": 5,
+    "difficulty": "expert",
+    "points": 150,
+    "timeLimit": 3000,
+    "skills": [
+        "matrices",
+        "in_place",
+        "optimization"
+    ],
+    "description": "اكتب برنامجاً يستقبل مصفوفة 2x2 (كل صف في سطر). إذا وجد صفر في أي موقع، صفر كامل الصف وكامل العمود الذي يقع فيه الصفر واطبع المصفوفة الناتجة.",
+    "inputDescription": "سطران، في كل سطر عددان مفصولان بمسافة.",
+    "outputDescription": "سطران يمثلان المصفوفة الناتجة.",
+    "examples": [
+        {
+            "input": "1 0\n2 3",
+            "output": "0 0\n2 0",
+            "explanation": "تم تصفير الصف الأول والعمود الثاني."
+        }
+    ],
+    "constraints": [
+        "مصفوفة 2x2"
+    ],
+    "starterCode": "# صفر الصفوف والأعمدة المحتوية على أصفار\n",
+    "publicTestCases": [
+        {
+            "input": "1 0\n2 3",
+            "expectedOutput": "0 0\n2 0"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "1 2\n3 4",
+            "expectedOutput": "1 2\n3 4"
+        },
+        {
+            "input": "0 0\n1 2",
+            "expectedOutput": "0 0\n0 0"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: حدد الصفوف والأعمدة التي بها أصفار أولاً، ثم صفرها في الخطوة الثانية."
+    ]
+},
+
+
+  "prob-l1-max-of-three": {
+    "id": "prob-l1-max-of-three",
+    "title": "أكبر الأرقام الثلاثة (Maximum of Three Numbers)",
+    "level": 1,
+    "difficulty": "easy",
+    "points": 20,
+    "timeLimit": 3000,
+    "skills": [
+        "input",
+        "conditions",
+        "comparisons"
+    ],
+    "description": "اكتب برنامجاً يستقبل ثلاثة أعداد صحيحة كل منها في سطر مستقل، ثم يطبع العدد الأكبر من بينها فقط.",
+    "inputDescription": "ثلاثة أسطر، كل سطر يحتوي على عدد صحيح.",
+    "outputDescription": "اطبع عدداً واحداً يمثل القيمة الكبرى بين الأعداد الثلاثة.",
+    "examples": [
+        {
+            "input": "10\n25\n15",
+            "output": "25",
+            "explanation": "العدد 25 هو الأكبر بين الأرقام الثلاثة."
+        },
+        {
+            "input": "-5\n-2\n-9",
+            "output": "-2",
+            "explanation": "في الأعداد السالبة، -2 هو الأكبر."
+        }
+    ],
+    "constraints": [
+        "-1000 <= كل عدد <= 1000"
+    ],
+    "starterCode": "# اقرأ الأعداد الثلاثة واطبع الأكبر من بينها\n",
+    "publicTestCases": [
+        {
+            "input": "10\n25\n15",
+            "expectedOutput": "25"
+        },
+        {
+            "input": "-5\n-2\n-9",
+            "expectedOutput": "-2"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "100\n100\n50",
+            "expectedOutput": "100"
+        },
+        {
+            "input": "0\n0\n0",
+            "expectedOutput": "0"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: قارن الرقم الأول بالثاني ثم قارن الأكبر منهما بالثالث، أو استخدم دالة max()."
+    ]
+},
+
+  "prob-l1-leap-year": {
+    "id": "prob-l1-leap-year",
+    "title": "فاحص السنة الكبيسة المبسط (Leap Year Simple)",
+    "level": 1,
+    "difficulty": "easy",
+    "points": 20,
+    "timeLimit": 3000,
+    "skills": [
+        "input",
+        "conditions",
+        "modulus"
+    ],
+    "description": "اكتب برنامجاً يستقبل سنة كعدد صحيح. إذا كانت السنة تقبل القسمة على 4 بدون باقٍ اطبع 'Leap Year' وإلا اطبع 'Common Year'.",
+    "inputDescription": "سطر واحد يحتوي على سنة صحيحة (مثال: 2024).",
+    "outputDescription": "اطبع 'Leap Year' أو 'Common Year'.",
+    "examples": [
+        {
+            "input": "2024",
+            "output": "Leap Year",
+            "explanation": "2024 تقبل القسمة على 4."
+        },
+        {
+            "input": "2023",
+            "output": "Common Year",
+            "explanation": "2023 لا تقبل القسمة على 4."
+        }
+    ],
+    "constraints": [
+        "1900 <= year <= 2100"
+    ],
+    "starterCode": "# اقرأ السنة وافحص قابليتها للقسمة على 4\n",
+    "publicTestCases": [
+        {
+            "input": "2024",
+            "expectedOutput": "Leap Year"
+        },
+        {
+            "input": "2023",
+            "expectedOutput": "Common Year"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "2020",
+            "expectedOutput": "Leap Year"
+        },
+        {
+            "input": "2025",
+            "expectedOutput": "Common Year"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: استخدم معامل باقي القسمة % 4 للتحقق من انعدام الباقي."
+    ]
+},
+
+  "prob-l1-absolute-diff": {
+    "id": "prob-l1-absolute-diff",
+    "title": "حساب الفرق المطلق بين قيمتين (Absolute Difference)",
+    "level": 1,
+    "difficulty": "easy",
+    "points": 20,
+    "timeLimit": 3000,
+    "skills": [
+        "arithmetic",
+        "math",
+        "input"
+    ],
+    "description": "اكتب برنامجاً يستقبل عددين صحيحين كل منهما في سطر، ويحسب الفرق المطلق (الموجب دائماً) بينهما.",
+    "inputDescription": "سطران، في كل سطر عدد صحيح a ثم b.",
+    "outputDescription": "اطبع الفرق المطلق بين العددين كعدد صحيح موجب.",
+    "examples": [
+        {
+            "input": "15\n30",
+            "output": "15",
+            "explanation": "|15 - 30| = 15"
+        },
+        {
+            "input": "50\n20",
+            "output": "30",
+            "explanation": "|50 - 20| = 30"
+        }
+    ],
+    "constraints": [
+        "-10000 <= a, b <= 10000"
+    ],
+    "starterCode": "# اقرأ العددين واطبع الفرق المطلق\n",
+    "publicTestCases": [
+        {
+            "input": "15\n30",
+            "expectedOutput": "15"
+        },
+        {
+            "input": "50\n20",
+            "expectedOutput": "30"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "-5\n5",
+            "expectedOutput": "10"
+        },
+        {
+            "input": "0\n0",
+            "expectedOutput": "0"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: الفرق المطلق يعني تجريد الناتج من الإشارة السالبة باستخدام دالة abs()."
+    ]
+},
+
+  "prob-l2-sum-of-evens": {
+    "id": "prob-l2-sum-of-evens",
+    "title": "مجموع الأعداد الزوجية في نطاق محدد (Sum of Evens)",
+    "level": 2,
+    "difficulty": "easy",
+    "points": 30,
+    "timeLimit": 3000,
+    "skills": [
+        "loops",
+        "range",
+        "accumulator"
+    ],
+    "description": "اكتب برنامجاً يستقبل عددين start و end، ويحسب حاصل جمع جميع الأعداد الزوجية المحصورة بينهما (بما في ذلك طرفي النطاق إذا كانا زوجيين).",
+    "inputDescription": "سطران، الأول للبداية start والثاني للنهاية end.",
+    "outputDescription": "اطبع عدداً صحيحاً يمثل المجموع التراكمي للأرقام الزوجية.",
+    "examples": [
+        {
+            "input": "1\n10",
+            "output": "30",
+            "explanation": "الأعداد 2+4+6+8+10 = 30."
+        },
+        {
+            "input": "4\n8",
+            "output": "18",
+            "explanation": "الأعداد 4+6+8 = 18."
+        }
+    ],
+    "constraints": [
+        "1 <= start <= end <= 1000"
+    ],
+    "starterCode": "# اقرأ البداية والنهاية واجمع الأرقام الزوجية\n",
+    "publicTestCases": [
+        {
+            "input": "1\n10",
+            "expectedOutput": "30"
+        },
+        {
+            "input": "4\n8",
+            "expectedOutput": "18"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "1\n1",
+            "expectedOutput": "0"
+        },
+        {
+            "input": "2\n2",
+            "expectedOutput": "2"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: مر بحلقة for من start إلى end + 1 وافحص باقي القسمة على 2 قبل الإضافة للمجموع."
+    ]
+},
+
+  "prob-l2-char-frequency": {
+    "id": "prob-l2-char-frequency",
+    "title": "عد تكرار حرف محدد في جملة (Character Frequency)",
+    "level": 2,
+    "difficulty": "easy",
+    "points": 30,
+    "timeLimit": 3000,
+    "skills": [
+        "strings",
+        "count",
+        "input"
+    ],
+    "description": "اكتب برنامجاً يستقبل في السطر الأول نصاً، وفي السطر الثاني حرفاً واحداً، ثم يطبع عدد مرات ظهور هذا الحرف في النص.",
+    "inputDescription": "السطر الأول نص، والسطر الثاني حرف مفرد.",
+    "outputDescription": "اطبع عدداً صحيحاً يمثل تكرار الحرف.",
+    "examples": [
+        {
+            "input": "shababha\na",
+            "output": "3",
+            "explanation": "الحرف a ظهر 3 مرات."
+        },
+        {
+            "input": "banana\nn",
+            "output": "2",
+            "explanation": "الحرف n ظهر مرتين."
+        }
+    ],
+    "constraints": [
+        "طول النص حتى 200 حرف"
+    ],
+    "starterCode": "# اقرأ النص والحرف واطبع عدد مرات ظهوره\n",
+    "publicTestCases": [
+        {
+            "input": "shababha\na",
+            "expectedOutput": "3"
+        },
+        {
+            "input": "banana\nn",
+            "expectedOutput": "2"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "code\nz",
+            "expectedOutput": "0"
+        },
+        {
+            "input": "aaaa\na",
+            "expectedOutput": "4"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: يمكن استخدام دالة .count() أو المرور بحلقة تكرار مع عداد."
+    ]
+},
+
+  "prob-l3-list-intersection": {
+    "id": "prob-l3-list-intersection",
+    "title": "الأرقام المشتركة بين قائمتين (List Intersection)",
+    "level": 3,
+    "difficulty": "medium",
+    "points": 50,
+    "timeLimit": 3000,
+    "skills": [
+        "sets",
+        "intersection",
+        "sorting"
+    ],
+    "description": "اكتب برنامجاً يستقبل في السطر الأول أرقاماً مفصولة بمسافات، وفي السطر الثاني أرقاماً مفصولة بمسافات. استخرج الأرقام المشتركة واطبعها مرتبة تصاعدياً ومفصولة بمسافات.",
+    "inputDescription": "سطران، كل سطر يحتوي على أعداد صحيحة مفصولة بمسافات.",
+    "outputDescription": "اطبع الأرقام المشتركة بدون تكرار مرتبة تصاعدياً ومفصولة بمسافة.",
+    "examples": [
+        {
+            "input": "1 2 3 4\n3 4 5 6",
+            "output": "3 4",
+            "explanation": "الأرقام المشتركة هي 3 و 4."
+        },
+        {
+            "input": "10 20 30\n40 50 20",
+            "output": "20",
+            "explanation": "الرقم المشترك الوحيد هو 20."
+        }
+    ],
+    "constraints": [
+        "كل قائمة تحتوي حتى 100 عنصر"
+    ],
+    "starterCode": "# اقرأ القائمتين واستخرج الأرقام المشتركة مرتبة\n",
+    "publicTestCases": [
+        {
+            "input": "1 2 3 4\n3 4 5 6",
+            "expectedOutput": "3 4"
+        },
+        {
+            "input": "10 20 30\n40 50 20",
+            "expectedOutput": "20"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "5 5 1 2\n2 5 9",
+            "expectedOutput": "2 5"
+        },
+        {
+            "input": "100 200\n300 100",
+            "expectedOutput": "100"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: حول السطرين لمجموعتين set واستخدم تقاطع المجموعات & ثم رتب الناتج."
+    ]
+},
+
+  "prob-l3-word-reverser": {
+    "id": "prob-l3-word-reverser",
+    "title": "عكس كل كلمة في الجملة بمكانها (Reverse Each Word)",
+    "level": 3,
+    "difficulty": "medium",
+    "points": 50,
+    "timeLimit": 3000,
+    "skills": [
+        "strings",
+        "split",
+        "slicing"
+    ],
+    "description": "اكتب برنامجاً يستقبل جملة نصية مفصولة بمسافات، ويقوم بعكس حروف كل كلمة بمفردها مع الحفاظ على ترتيب الكلمات في الجملة.",
+    "inputDescription": "سطر واحد يحتوي على كلمات مفصولة بمسافات.",
+    "outputDescription": "اطبع الجملة بحيث تعكس حروف كل كلمة.",
+    "examples": [
+        {
+            "input": "hello world python",
+            "output": "olleh dlrow nohtyp",
+            "explanation": "عكس hello هو olleh وهكذا."
+        },
+        {
+            "input": "shababha courses",
+            "output": "ahbabahs sesruoc",
+            "explanation": "عكس الكلمتين."
+        }
+    ],
+    "constraints": [
+        "طول الجملة حتى 200 حرف"
+    ],
+    "starterCode": "# اقرأ الجملة واعكس حروف كل كلمة\n",
+    "publicTestCases": [
+        {
+            "input": "hello world python",
+            "expectedOutput": "olleh dlrow nohtyp"
+        },
+        {
+            "input": "shababha courses",
+            "expectedOutput": "ahbabahs sesruoc"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "cat dog",
+            "expectedOutput": "tac god"
+        },
+        {
+            "input": "a bb ccc",
+            "expectedOutput": "a bb ccc"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: قسم الجملة بالدالة split()، ثم اعكس كل كلمة بواسطة [::-1] وادمجهم بـ ' '.join()."
+    ]
+},
+
+  "prob-l3-dict-invert": {
+    "id": "prob-l3-dict-invert",
+    "title": "عكس قاموس المفاتيح والقيم (Dictionary Inverter)",
+    "level": 3,
+    "difficulty": "medium",
+    "points": 50,
+    "timeLimit": 3000,
+    "skills": [
+        "dictionaries",
+        "comprehensions",
+        "sorting"
+    ],
+    "description": "اكتب برنامجاً يستقبل أزواج مفاتيح وقيم بصيغة key:val مفصولة بمسافات (مثل A:1 B:2 C:3). اعكس القاموس لتصبح القيم مفاتيح واطبع الأزواج الجديدة بصيغة val:key مرتبة تصاعدياً حسب المفتاح الجديد.",
+    "inputDescription": "سطر واحد يحتوي على أزواج مفصولة بمسافات.",
+    "outputDescription": "اطبع الأزواج المعكوسة مفصولة بمسافات.",
+    "examples": [
+        {
+            "input": "A:1 B:2 C:3",
+            "output": "1:A 2:B 3:C",
+            "explanation": "تم عكس كل زوج."
+        },
+        {
+            "input": "x:10 y:20",
+            "output": "10:x 20:y",
+            "explanation": "المفتاح أصبح 10 و 20."
+        }
+    ],
+    "constraints": [
+        "القيم فريدة دائماً"
+    ],
+    "starterCode": "# اقرأ الأزواج واعكس المفاتيح بالقيم\n",
+    "publicTestCases": [
+        {
+            "input": "A:1 B:2 C:3",
+            "expectedOutput": "1:A 2:B 3:C"
+        },
+        {
+            "input": "x:10 y:20",
+            "output": "10:x 20:y",
+            "expectedOutput": "10:x 20:y"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "first:1 second:2",
+            "expectedOutput": "1:first 2:second"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: فكك الأزواج بالتقسيم عند ':' ثم اعكس الموقع واطبعها مرتبة."
+    ]
+},
+
+  "prob-l4-matrix-transpose": {
+    "id": "prob-l4-matrix-transpose",
+    "title": "تدوير المصفوفة الثنائية (2x2 Matrix Transpose)",
+    "level": 4,
+    "difficulty": "hard",
+    "points": 80,
+    "timeLimit": 3000,
+    "skills": [
+        "matrices",
+        "nested_lists",
+        "linear_algebra"
+    ],
+    "description": "اكتب برنامجاً يستقبل صفي مصفوفة 2x2 (كل صف في سطر مفصولاً بمسافة)، ويقوم بتدوير المصفوفة بجعل الصفوف أعمدة والأعمدة صفوفاً، ثم يطبع المصفوفة المدورة.",
+    "inputDescription": "سطران، كل سطر يحتوي على عددين مفصولين بمسافة.",
+    "outputDescription": "سطران، يمثلان صفوف المصفوفة المدورة.",
+    "examples": [
+        {
+            "input": "1 2\n3 4",
+            "output": "1 3\n2 4",
+            "explanation": "تم تبديل الصفوف بالأعمدة."
+        }
+    ],
+    "constraints": [
+        "الأعداد صحيحة"
+    ],
+    "starterCode": "# اقرأ المصفوفة واطبع تدويرها\n",
+    "publicTestCases": [
+        {
+            "input": "1 2\n3 4",
+            "expectedOutput": "1 3\n2 4"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "5 6\n7 8",
+            "expectedOutput": "5 7\n6 8"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: إذا كانت العناصر a b في السطر الأول و c d في الثاني، فإن التدوير يكون a c ثم b d."
+    ]
+},
+
+  "prob-l5-kadane-max-subarray": {
+    "id": "prob-l5-kadane-max-subarray",
+    "title": "أكبر مجموع مصفوفة فرعية متصلة (Kadane's Algorithm)",
+    "level": 5,
+    "difficulty": "expert",
+    "points": 150,
+    "timeLimit": 3000,
+    "skills": [
+        "dynamic_programming",
+        "kadane",
+        "optimization"
+    ],
+    "description": "اكتب برنامجاً يستقبل في سطر واحد أرقاماً مفصولة بمسافات (تحتوي قيماً موجبة وسالبة). احسب واطبع أكبر مجموع ممكن لأي مصفوفة فرعية متصلة باستخدام خوارزمية كادان.",
+    "inputDescription": "سطر واحد يحتوي على أعداد صحيحة مفصولة بمسافات.",
+    "outputDescription": "اطبع عدداً واحداً يمثل المجموع الأقصى.",
+    "examples": [
+        {
+            "input": "-2 1 -3 4 -1 2 1 -5 4",
+            "output": "6",
+            "explanation": "المصفوفة الفرعية [4, -1, 2, 1] مجموعها 6."
+        },
+        {
+            "input": "1 2 3 -2 5",
+            "output": "9",
+            "explanation": "المجموع الكلي باستثناء -2 أو معها يعطي 9."
+        }
+    ],
+    "constraints": [
+        "طول القائمة حتى 1000 عنصر"
+    ],
+    "starterCode": "# طبق خوارزمية كادان واطبع المجموع الأقصى\n",
+    "publicTestCases": [
+        {
+            "input": "-2 1 -3 4 -1 2 1 -5 4",
+            "expectedOutput": "6"
+        },
+        {
+            "input": "1 2 3 -2 5",
+            "expectedOutput": "9"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "-1 -2 -3",
+            "expectedOutput": "-1"
+        },
+        {
+            "input": "5 4 -1 7 8",
+            "expectedOutput": "23"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: تتبع المجموع الحالي cur = max(x, cur + x) وقارنه مع max_sum في كل خطوة."
+    ]
+},
+
+  "prob-l5-longest-increasing-subsequence": {
+    "id": "prob-l5-longest-increasing-subsequence",
+    "title": "أطول متتالية متزايدة (Longest Increasing Subsequence)",
+    "level": 5,
+    "difficulty": "expert",
+    "points": 150,
+    "timeLimit": 3000,
+    "skills": [
+        "dynamic_programming",
+        "subsequence",
+        "lis"
+    ],
+    "description": "اكتب برنامجاً يستقبل في سطر واحد أرقاماً مفصولة بمسافات. احسب واطبع طول أطول متتالية متزايدة قطعياً (Longest Strictly Increasing Subsequence).",
+    "inputDescription": "سطر واحد يحتوي أعداداً صحيحة مفصولة بمسافات.",
+    "outputDescription": "اطبع رقماً واحداً يمثل طول المتتالية المتزايدة.",
+    "examples": [
+        {
+            "input": "10 9 2 5 3 7 101 18",
+            "output": "4",
+            "explanation": "المتتالية 2, 3, 7, 101 طولها 4."
+        }
+    ],
+    "constraints": [
+        "طول القائمة حتى 100 عنصر"
+    ],
+    "starterCode": "# احسب طول أطول متتالية متزايدة LIS\n",
+    "publicTestCases": [
+        {
+            "input": "10 9 2 5 3 7 101 18",
+            "expectedOutput": "4"
+        }
+    ],
+    "hiddenTestCases": [
+        {
+            "input": "0 1 0 3 2 3",
+            "expectedOutput": "4"
+        },
+        {
+            "input": "7 7 7",
+            "expectedOutput": "1"
+        }
+    ],
+    "hints": [
+        "فكرة التفكير: استخدم مصفوفة برمجة ديناميكية dp حيث dp[i] هو طول أطول متتالية تنتهي عند العنصر i."
+    ]
+},
+
+
   // LEVEL 1: BEGINNER
   "prob-l1-sum": {
     id: "prob-l1-sum",

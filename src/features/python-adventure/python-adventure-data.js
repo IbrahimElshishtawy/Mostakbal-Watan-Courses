@@ -164,7 +164,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "انطلاقة قوية في حل المشكلات البرمجية: التعامل مع المتغيرات وقراءة المدخلات والعمليات الحسابية والشروط.",
     color: "#10b981",
     track: "problem-solving",
-    levelsCount: 10,
+    levelsCount: 13,
     pointsPerProblem: 10,
     requiredWorldId: null
   },
@@ -180,7 +180,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "مسائل تدريبية على اتخاذ القرارات وحلقات التكرار والتعامل المباشر مع النصوص والقوائم البسيطة.",
     color: "#3b82f6",
     track: "problem-solving",
-    levelsCount: 10,
+    levelsCount: 13,
     pointsPerProblem: 10,
     requiredWorldId: null
   },
@@ -196,7 +196,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "تحديات تجمع أكثر من مفهوم معاً: هياكل البيانات المترابطة، القواميس، الدوال، والبحث الذكي.",
     color: "#f59e0b",
     track: "problem-solving",
-    levelsCount: 10,
+    levelsCount: 13,
     pointsPerProblem: 25,
     requiredWorldId: null
   },
@@ -212,7 +212,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "مسائل خوارزمية وتفكير منطقي عميق: البحث الثنائي، الترتيب اليدوي، الاستدعاء الذاتي، واكتشاف الأنماط.",
     color: "#8b5cf6",
     track: "problem-solving",
-    levelsCount: 10,
+    levelsCount: 13,
     pointsPerProblem: 50,
     requiredWorldId: null
   },
@@ -228,7 +228,7 @@ export const PROBLEM_SOLVING_WORLDS_DATA = [
     description: "تحديات برمجية قوية مخصصة للنخبة، تركز على الكفاءة الزمنية والمكانية والحالات الحدية (Edge Cases).",
     color: "#ef4444",
     track: "problem-solving",
-    levelsCount: 10,
+    levelsCount: 13,
     pointsPerProblem: 100,
     requiredWorldId: null
   }

@@ -304,7 +304,11 @@ export const ProblemSolvingService = {
           }
         };
 
-        totalXp = (currentProgress.xp || 0) + xpToAdd;
+        let calculatedXpSum = 0;
+        for (const [cid, rec] of Object.entries(updatedCompleted)) {
+          calculatedXpSum += (rec.xpAwarded || (rec.score || 10) * 5 || 0);
+        }
+        totalXp = Math.max((currentProgress.xp || 0) + xpToAdd, calculatedXpSum);
         newLevel = Math.max(1, Math.floor(totalXp / 250) + 1);
 
         const updatedProgress = {

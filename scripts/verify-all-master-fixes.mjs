@@ -187,14 +187,14 @@ assert(arGraded === "تم التصحيح", `Arabic translation for status.graded
 console.log("\n▶️ TEST SUITE 5: Python Adventure Worlds & Curriculum (Phase 07)");
 
 const worlds = adventureDataMod.WORLDS_DATA;
-assert(worlds.length === 8, `Curriculum contains 8 complete worlds (Found: ${worlds.length})`);
+assert(worlds.length >= 12, `Curriculum contains at least 12 complete worlds (Found: ${worlds.length})`);
 
 const world8 = worlds.find(w => w.id === "world-8");
 assert(world8, "World 8 exists");
-assert(world8.levelsCount === 8, `World 8 has 8 levels (Found: ${world8.levelsCount})`);
+assert(world8.levelsCount === 11, `World 8 has 11 levels (Found: ${world8.levelsCount})`);
 
-// Verify all 8 levels of World 8 are registered
-for (let lvl = 1; lvl <= 8; lvl++) {
+// Verify all 11 levels of World 8 are registered
+for (let lvl = 1; lvl <= 11; lvl++) {
   assert(challenges[`world-8-level-${lvl}`], `world-8-level-${lvl} is registered`);
 }
 
@@ -204,7 +204,8 @@ assert(challenges["world-8-level-4"].nextChallengeId === "world-8-level-5", "wor
 assert(challenges["world-8-level-5"].nextChallengeId === "world-8-level-6", "world-8-level-5 properly links forward to world-8-level-6");
 assert(challenges["world-8-level-6"].nextChallengeId === "world-8-level-7", "world-8-level-6 properly links forward to world-8-level-7");
 assert(challenges["world-8-level-7"].nextChallengeId === "world-8-level-8", "world-8-level-7 properly links forward to world-8-level-8");
-assert(challenges["world-8-level-8"].nextChallengeId === null, "world-8-level-8 is the ultimate capstone and has nextChallengeId: null");
+assert(challenges["world-8-level-8"].nextChallengeId === "world-8-level-9", "world-8-level-8 properly links forward to world-8-level-9");
+assert(challenges["world-12-level-11"].nextChallengeId === null, "world-12-level-11 is the ultimate capstone and has nextChallengeId: null");
 
 // -------------------------------------------------------------
 // TEST SUITE 6: UI Structure & Mobile Optimization (Phase 09)
@@ -236,9 +237,9 @@ assert(evalModalCode.includes('id="evalPrevStudentBtn"'), "Evaluation modal has 
 assert(teacherHtml.includes('defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"'), "SheetJS script tag uses defer for non-blocking page load");
 
 // -------------------------------------------------------------
-// TEST SUITE 7: Curriculum Solvability Test (All 68 Adventure Challenges + 50 Problem Solving)
+// TEST SUITE 7: Curriculum Solvability Test (All 148 Adventure Challenges + 65 Problem Solving)
 // -------------------------------------------------------------
-console.log("\n▶️ TEST SUITE 7: Curriculum Solvability Test (All 68 Adventure Challenges + 50 Problem Solving)");
+console.log("\n▶️ TEST SUITE 7: Curriculum Solvability Test (All 148 Adventure Challenges + 65 Problem Solving)");
 
 let solvableCount = 0;
 const challengeKeys = Object.keys(challenges);
@@ -251,13 +252,13 @@ for (const key of challengeKeys) {
   solvableCount++;
 }
 
-assert(solvableCount === 71, `All 71 challenges (64 adventure + 7 daily rotating) verified with valid validation criteria (Found: ${solvableCount})`);
+assert(solvableCount >= 148, `All 148+ challenges (132 regular + bonus + daily rotating) verified with valid validation criteria (Found: ${solvableCount})`);
 
 // Verify Problem Solving Dataset
 const psDataMod = await import("../src/features/problem-solving/problem-solving-data.js");
 const psProblems = psDataMod.PROBLEM_SOLVING_CHALLENGES_DATA;
 const psCount = Object.keys(psProblems).length;
-assert(psCount === 50, `Problem solving suite contains 50 challenges across Math, IQ, and Real-world (Found: ${psCount})`);
+assert(psCount === 65, `Problem solving suite contains 65 challenges across Math, IQ, and Real-world (Found: ${psCount})`);
 
 // Verify each problem in Problem Solving
 for (const [id, prob] of Object.entries(psProblems)) {

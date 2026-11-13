@@ -79,7 +79,7 @@ export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTr
           <span>🌐 جميع العوالم والتحديات (13 محطة)</span>
         </button>
         <button type="button" class="map-track-pill ${activeTrack === "concepts" ? "active" : ""}" data-track="concepts">
-          <span>🏰 مسار عوالم التأسيس (8 عوالم)</span>
+          <span>🏰 مسار عوالم التأسيس (${WORLDS_DATA.length} عوالم)</span>
         </button>
         <button type="button" class="map-track-pill ${activeTrack === "problem-solving" ? "active" : ""}" data-track="problem-solving">
           <span>⚡ مسار تحديات البرمجة (5 مستويات)</span>
@@ -96,7 +96,7 @@ export function renderWorldMap({ progress, selectedWorldId = "world-1", activeTr
               <span class="track-header-icon">🏰</span>
               <h3 class="track-header-title">عوالم مسار التأسيس والمفاهيم البرمجية</h3>
             </div>
-            <span class="track-header-subtitle">8 عوالم متدرجة من قرية بايثون حتى البرمجة كائنية التوجه والمشروع الختامي</span>
+            <span class="track-header-subtitle">${WORLDS_DATA.length} عوالم متدرجة من قرية بايثون وحتى ساحة البرمجة التنافسية وحل المشكلات</span>
           </div>
 
           <div class="worlds-grid">
