@@ -262,6 +262,16 @@ export function renderProblemWorkspace({
 
               <button
                 type="button"
+                id="psAddCustomTestcaseBtn"
+                class="btn btn-secondary btn-outline"
+                title="إضافة مدخلات اختبار مخصصة لتجربتها قبل التسليم"
+                ${isRunning || isSubmitting ? "disabled" : ""}
+              >
+                <span>➕ إضافة Case تجريبية</span>
+              </button>
+
+              <button
+                type="button"
                 id="psSubmitCodeBtn"
                 class="btn btn-primary"
                 ${isRunning || isSubmitting ? "disabled" : ""}
@@ -299,6 +309,45 @@ export function renderProblemWorkspace({
                   <p class="ps-banner-desc">${escapeHtml(submissionResult.feedback || "")}</p>
 
                   ${
+                    !submissionResult.passed && submissionResult.failedCase
+                      ? `
+                    <div class="ps-failed-case-card mt-3">
+                      <div class="d-flex items-center justify-between gap-2 flex-wrap mb-2">
+                        <span class="ps-failed-badge">
+                          ❌ تفاصيل الحالة الفاشلة (${submissionResult.failedCase.isHidden ? "حالة سرية" : "حالة عامة"} #${submissionResult.failedCase.caseNumber}):
+                        </span>
+                        <button
+                          type="button"
+                          id="psAddFailedCaseToInputsBtn"
+                          class="btn btn-secondary btn-sm ps-btn-add-testcase"
+                          data-case-input="${escapeHtml(submissionResult.failedCase.input)}"
+                          data-case-expected="${escapeHtml(submissionResult.failedCase.expected)}"
+                          data-case-desc="${escapeHtml(submissionResult.failedCase.description || "")}"
+                        >
+                          <span>➕ إضافة هذه الحالة لحالات الاختبار للتجربة (Visual Testcase)</span>
+                        </button>
+                      </div>
+
+                      <div class="ps-case-grid">
+                        <div>
+                          <small class="text-muted font-bold">المدخلات (Input):</small>
+                          <pre class="ps-mini-pre ps-highlight-input">${escapeHtml(submissionResult.failedCase.input || "(لا توجد مدخلات)")}</pre>
+                        </div>
+                        <div>
+                          <small class="text-muted font-bold">المتوقع (Expected Output):</small>
+                          <pre class="ps-mini-pre text-success font-bold">${escapeHtml(submissionResult.failedCase.expected || "")}</pre>
+                        </div>
+                        <div>
+                          <small class="text-muted font-bold">ناتج كودك (Your Output):</small>
+                          <pre class="ps-mini-pre text-danger font-bold">${escapeHtml(submissionResult.failedCase.actual || "(فارغ)")}</pre>
+                        </div>
+                      </div>
+                    </div>
+                  `
+                      : ""
+                  }
+
+                  ${
                     submissionResult.passed
                       ? `
                     <div class="ps-rewards-chips">
@@ -330,7 +379,10 @@ export function renderProblemWorkspace({
                       (tc, i) => `
                     <div class="ps-case-card ${tc.passed ? "passed" : "failed"}">
                       <div class="ps-case-header">
-                        <span class="ps-case-num">حالة #${tc.caseNumber || i + 1}: ${escapeHtml(tc.description || "")}</span>
+                        <span class="ps-case-num">
+                          ${tc.isHidden ? '<span class="badge badge-dark text-xs mr-2">حالة سرية 🔒</span>' : ''}
+                          حالة #${tc.caseNumber || i + 1}: ${escapeHtml(tc.description || "")}
+                        </span>
                         <span class="ps-case-badge ${tc.passed ? "passed" : "failed"}">
                           ${tc.passed ? "✅ نجاح" : "❌ فشل"}
                         </span>
@@ -338,11 +390,11 @@ export function renderProblemWorkspace({
                       <div class="ps-case-grid">
                         <div>
                           <small class="text-muted">المدخلات (Input):</small>
-                          <pre class="ps-mini-pre">${escapeHtml(tc.input ?? "")}</pre>
+                          <pre class="ps-mini-pre ${!tc.passed ? "ps-highlight-input" : ""}">${escapeHtml(tc.input ?? "")}</pre>
                         </div>
                         <div>
                           <small class="text-muted">المتوقع (Expected):</small>
-                          <pre class="ps-mini-pre">${escapeHtml(tc.expected ?? "")}</pre>
+                          <pre class="ps-mini-pre ${tc.passed ? "text-success" : ""}">${escapeHtml(tc.expected ?? "")}</pre>
                         </div>
                         <div>
                           <small class="text-muted">الناتج الفعلي (Actual):</small>

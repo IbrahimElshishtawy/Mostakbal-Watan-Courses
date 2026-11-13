@@ -239,16 +239,19 @@ export const ProblemSolvingService = {
             passedCount++;
           }
 
-          testResultsList.push({
+          const caseInput = String(tc.input ?? "");
+          const failedCaseObj = {
             caseNumber: i + 1,
             description: tc.description || (isHidden ? `حالة سرية #${i + 1 - publicCases.length}` : `حالة عامة #${i + 1}`),
-            input: isHidden ? "🔒 (حالة اختبار سرية للتحقق من كفاءة الحل)" : tc.input,
-            expected: isHidden ? "🔒 (مخرجات حالة سرية)" : expected,
+            input: caseInput,
+            expected: expected,
             actual: hasError ? res.error : (actual || "(لا توجد مخرجات)"),
             passed,
             isHidden,
             error: hasError ? res.error : null
-          });
+          };
+
+          testResultsList.push(failedCaseObj);
 
           if (!passed) {
             // Check if failure was merely case-sensitivity (e.g. leap year vs Leap Year)
@@ -260,9 +263,10 @@ export const ProblemSolvingService = {
             return {
               success: false,
               passed: false,
+              failedCase: failedCaseObj,
               feedback: hasError
                 ? `فشل تشغيل الكود أثناء فحص الحالة #${i + 1}: ${res.error}`
-                : `لم يجتز الحل جميع الاختبارات. فشل في ${isHidden ? "الحالة السرية" : "الحالة"} #${i + 1}: المتوقع كان "${isHidden ? "المطلوب بالوصف" : expected}" ولكن الناتج الفعلي كان "${actual || "(فارغ)"}"${hintMsg}`,
+                : `لم يجتز الحل جميع الاختبارات. فشل في ${isHidden ? "الحالة السرية" : "الحالة"} #${i + 1}: المتوقع كان "${expected}" ولكن الناتج الفعلي كان "${actual || "(فارغ)"}"${hintMsg}`,
               testResults: {
                 publicResults: testResultsList,
                 passedCount,

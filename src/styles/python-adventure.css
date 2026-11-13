@@ -4326,6 +4326,39 @@ textarea.ps-code-editor:focus {
   border: 1px solid rgba(239, 68, 68, 0.35);
 }
 
+.ps-failed-case-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-top: 0.85rem;
+}
+
+.ps-failed-badge {
+  color: #f87171;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.ps-highlight-input {
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  color: #38bdf8 !important;
+  font-weight: 700;
+}
+
+.ps-btn-add-testcase {
+  background: rgba(56, 189, 248, 0.15) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  color: #38bdf8 !important;
+  font-size: 0.76rem !important;
+  padding: 4px 10px !important;
+}
+
+.ps-btn-add-testcase:hover {
+  background: rgba(56, 189, 248, 0.28) !important;
+  color: #ffffff !important;
+}
+
 .ps-banner-title {
   font-size: 1.05rem;
   font-weight: 800;

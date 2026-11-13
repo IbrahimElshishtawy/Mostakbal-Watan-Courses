@@ -275,6 +275,58 @@ export const ProblemSolvingController = {
       this.runPublicTests();
     });
 
+    // Add Failed Case to Visual Test Cases (LeetCode Style)
+    document.getElementById("psAddFailedCaseToInputsBtn")?.addEventListener("click", (e) => {
+      const btn = e.currentTarget;
+      const caseInput = btn.getAttribute("data-case-input") || "";
+      const caseExpected = btn.getAttribute("data-case-expected") || "";
+      const caseDesc = btn.getAttribute("data-case-desc") || "حالة من محاولة سابقة";
+
+      if (this._currentProblem) {
+        if (!Array.isArray(this._currentProblem.publicTestCases)) {
+          this._currentProblem.publicTestCases = [];
+        }
+
+        const alreadyExists = this._currentProblem.publicTestCases.some(
+          (tc) => String(tc.input ?? "").trim() === caseInput.trim()
+        );
+
+        if (!alreadyExists) {
+          this._currentProblem.publicTestCases.push({
+            input: caseInput,
+            expectedOutput: caseExpected,
+            description: `حالة من الاختبار السابق (${caseDesc})`
+          });
+        }
+
+        showToast("💡 تمت إضافة الحالة بنجاح إلى حالات الاختبار! يمكنك الآن تشغيلها وتعديل الكود للتأكد منها.", "info", 4500);
+        this.renderWorkspace();
+      }
+    });
+
+    // Add Custom Test Case Button
+    document.getElementById("psAddCustomTestcaseBtn")?.addEventListener("click", () => {
+      const customInput = prompt("أدخل المدخلات التجريبية التي ترغب في اختبار كودك عليها (Input):");
+      if (customInput === null) return; // user cancelled
+
+      const customExpected = prompt("أدخل المخرجات المتوقعة (Expected Output) - اختياري:") || "";
+
+      if (this._currentProblem) {
+        if (!Array.isArray(this._currentProblem.publicTestCases)) {
+          this._currentProblem.publicTestCases = [];
+        }
+
+        this._currentProblem.publicTestCases.push({
+          input: customInput,
+          expectedOutput: customExpected,
+          description: `حالة اختبار تجريبية مخصصة #${this._currentProblem.publicTestCases.length + 1}`
+        });
+
+        showToast("✅ تمت إضافة الحالة المخصصة! اضغط 'تشغيل الحالات العامة ▶️' لتجربتها.", "success");
+        this.renderWorkspace();
+      }
+    });
+
     // Submit Final Code Button
     document.getElementById("psSubmitCodeBtn")?.addEventListener("click", () => {
       this.submitSolution();
