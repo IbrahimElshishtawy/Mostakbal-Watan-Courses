@@ -10,6 +10,7 @@ import { renderAdventureHome } from "./components/adventure-home.component.js";
 import { renderWorldMap } from "./components/world-map.component.js";
 import { renderMissionModal } from "./components/mission-modal.component.js";
 import { renderChallengeView, renderHintsCardContent } from "./components/challenge-view.component.js";
+import { PythonCodeAnalyzer } from "./python-code-analyzer.service.js";
 import { wireCodeEditorEvents } from "./components/code-editor.component.js";
 import { renderResultModal } from "./components/result-modal.component.js";
 import { renderSkillTree } from "./components/skill-tree.component.js";
@@ -416,7 +417,11 @@ export const PythonAdventureController = {
             output: state.terminalOutput,
             error: state.terminalError,
             hintsRevealed: state.hintsRevealed,
-            attempts: state.attemptsCount,
+            attempts: state.attemptsCount || 0,
+            maxAttempts: state.maxAttempts || 2,
+            timeRemainingSeconds: state.timeRemainingSeconds,
+            timeLimitMinutes: state.timeLimitMinutes,
+            isTimeExpired: state.isTimeExpired,
             isRunning: state.isRunning,
             isSubmitting: state.isSubmitting,
             solutionRevealed: state.solutionRevealed
@@ -461,6 +466,10 @@ export const PythonAdventureController = {
     if (this._dailyTimerInterval) {
       clearInterval(this._dailyTimerInterval);
       this._dailyTimerInterval = null;
+    }
+    if (this._challengeTimerInterval) {
+      clearInterval(this._challengeTimerInterval);
+      this._challengeTimerInterval = null;
     }
     adventureStore.setState({ activeView: view, ...extraState });
   },
@@ -873,12 +882,105 @@ export const PythonAdventureController = {
   },
 
   openChallengeWorkspace(challenge) {
+    if (this._challengeTimerInterval) {
+      clearInterval(this._challengeTimerInterval);
+      this._challengeTimerInterval = null;
+    }
+
+    const diff = challenge.difficulty || "medium";
+    let defaultMins = 12;
+    if (diff === "easy") defaultMins = 8;
+    else if (diff === "hard") defaultMins = 18;
+    else if (diff === "expert" || diff === "boss") defaultMins = 25;
+
+    const limitMinutes = challenge.timeLimitMinutes || defaultMins;
+    const totalSeconds = limitMinutes * 60;
+
+    // Persistent anti-cheat session start timestamp
+    const timerStorageKey = `py_challenge_timer_${challenge.id}`;
+    let startTime = Date.now();
+    try {
+      const saved = sessionStorage.getItem(timerStorageKey);
+      if (saved) {
+        startTime = parseInt(saved, 10);
+      } else {
+        sessionStorage.setItem(timerStorageKey, String(startTime));
+      }
+    } catch (_) {}
+
+    const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+    const initialRemaining = Math.max(0, totalSeconds - elapsedSeconds);
+    const isExpired = initialRemaining <= 0;
+
     adventureStore.resetEditor(challenge.starterCode || "");
     adventureStore.setState({
       activeChallengeId: challenge.id,
       activeChallenge: challenge,
-      activeView: "challenge"
+      activeView: "challenge",
+      attemptsCount: 0,
+      maxAttempts: 2,
+      timeLimitMinutes: limitMinutes,
+      timeRemainingSeconds: initialRemaining,
+      isTimeExpired: isExpired,
+      codeAnalysis: null
     });
+
+    if (!isExpired) {
+      this._challengeTimerInterval = setInterval(() => {
+        const curState = adventureStore.getState();
+        if (curState.activeView !== "challenge" || curState.activeChallengeId !== challenge.id) {
+          clearInterval(this._challengeTimerInterval);
+          this._challengeTimerInterval = null;
+          return;
+        }
+
+        const rem = Math.max(0, (curState.timeRemainingSeconds ?? initialRemaining) - 1);
+        adventureStore.setState({ timeRemainingSeconds: rem }, { notify: false });
+
+        // Update DOM live countdown digits
+        const digitsEl = document.getElementById("pyLiveTimerDigits");
+        const pillEl = document.getElementById("pyLiveTimerPill");
+        if (digitsEl) {
+          const m = Math.floor(rem / 60);
+          const s = rem % 60;
+          digitsEl.textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+        }
+        if (pillEl) {
+          if (rem <= 60) {
+            pillEl.className = "challenge-timer-pill urgent";
+          } else if (rem <= 180) {
+            pillEl.className = "challenge-timer-pill warning";
+          } else {
+            pillEl.className = "challenge-timer-pill safe";
+          }
+        }
+
+        if (rem <= 0) {
+          clearInterval(this._challengeTimerInterval);
+          this._challengeTimerInterval = null;
+          adventureStore.setState({ isTimeExpired: true }, { notify: false });
+
+          const submitBtn = document.getElementById("pySubmitBtn");
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.classList.add("btn-disabled-locked");
+            submitBtn.innerHTML = "<span>🔒 انتهت المهلة</span>";
+          }
+          const runBtn = document.getElementById("pyRunBtn");
+          if (runBtn) runBtn.disabled = true;
+
+          const editorSlot = document.getElementById("challengeEditorSlot");
+          if (editorSlot) editorSlot.classList.add("editor-locked");
+
+          this.showResultModal({
+            passed: false,
+            isTimeout: true,
+            feedback: `انتهت المهلة الزمنية المحددة للتحدي (${limitMinutes} دقائق) لمنع الغش (Time's Up).`,
+            errorDetails: "تم قفل التحدي تلقائياً بعد استنفاد الوقت المحدد للتسليم."
+          });
+        }
+      }, 1000);
+    }
   },
 
   // ========================================================
@@ -1075,6 +1177,25 @@ export const PythonAdventureController = {
     const state = adventureStore.getState();
     if (state.isSubmitting || !state.activeChallenge) return;
 
+    // 1. Anti-Cheat Time Limit Check
+    if (state.isTimeExpired) {
+      showToast("انتهت المهلة الزمنية المحددة لهذا التحدي لمنع الغش (Time's Up). تم قفل إمكانية التسليم.", "warning");
+      return;
+    }
+
+    // 2. Strict 2-Attempt Limit Check
+    const currentAttempts = state.attemptsCount || 0;
+    if (currentAttempts >= 2) {
+      showToast("استنفدت جميع محاولات الحل المتاحة (محاولتان فقط) لهذا التحدي!", "warning");
+      const submitBtn = document.getElementById("pySubmitBtn");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add("btn-disabled-locked");
+        submitBtn.innerHTML = "<span>🚫 استنفدت المحاولات (0/2)</span>";
+      }
+      return;
+    }
+
     const textareaEl = document.getElementById("pyCodeTextarea");
     let code = textareaEl ? textareaEl.value : state.editorCode;
 
@@ -1089,14 +1210,27 @@ export const PythonAdventureController = {
       );
     }
 
-    adventureStore.setState({ isSubmitting: true }, { notify: false });
+    // Perform In-Depth Code Analysis (Complexity, Anti-Cheat, Quality)
+    const codeAnalysis = PythonCodeAnalyzer.analyze(code, state.activeChallenge);
+
+    adventureStore.setState({ isSubmitting: true, codeAnalysis }, { notify: false });
     const submitBtn = document.getElementById("pySubmitBtn");
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = "<span>⏳ جاري التحقق...</span>";
+      submitBtn.innerHTML = "<span>⏳ جاري التحقق وتحليل الكود...</span>";
     }
 
     const terminalEl = document.getElementById("pyTerminalOutput");
+    const newAttempts = currentAttempts + 1;
+    const attemptsLeft = Math.max(0, 2 - newAttempts);
+
+    // Update attempts badge in UI immediately
+    const attemptsCountEl = document.getElementById("pyChallengeAttemptsCount");
+    const attemptsPillEl = document.getElementById("pyChallengeAttemptsPill");
+    if (attemptsCountEl) attemptsCountEl.textContent = `${attemptsLeft} من 2`;
+    if (attemptsPillEl) {
+      attemptsPillEl.className = `challenge-attempts-pill ${attemptsLeft === 2 ? "safe" : (attemptsLeft === 1 ? "warning" : "danger")}`;
+    }
 
     try {
       // 1. Run local syntax & runtime check first
@@ -1108,7 +1242,6 @@ export const PythonAdventureController = {
             <div class="terminal-error">${escapeHtml(runCheck.error)}</div>
           `;
         }
-        const newAttempts = (state.attemptsCount || 1) + 1;
         adventureStore.setState({
           editorCode: code,
           terminalError: runCheck.error,
@@ -1117,16 +1250,21 @@ export const PythonAdventureController = {
           attemptsCount: newAttempts
         }, { notify: false });
 
-        const attemptsEl = document.getElementById("pyChallengeAttemptsCount");
-        if (attemptsEl) {
-          attemptsEl.textContent = `المحاولات: ${newAttempts}`;
-        }
         this.updateHintsCardInChallengeView();
+
+        if (newAttempts >= 2 && submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add("btn-disabled-locked");
+          submitBtn.innerHTML = "<span>🚫 استنفدت المحاولات (0/2)</span>";
+        }
 
         this.showResultModal({
           passed: false,
           feedback: "الكود يحتوي على أخطاء برمجية تمنع تنفيذه.",
-          errorDetails: runCheck.error
+          errorDetails: runCheck.error,
+          codeAnalysis,
+          attemptsCount: newAttempts,
+          maxAttempts: 2
         });
         return;
       }
@@ -1136,13 +1274,19 @@ export const PythonAdventureController = {
         challengeId: state.activeChallenge.id,
         code,
         hintsUsed: state.hintsRevealed,
-        attempts: state.attemptsCount,
+        attempts: newAttempts,
         currentProgress: state.progress
       });
 
       adventureStore.setState({ isSubmitting: false }, { notify: false });
 
       if (result.passed) {
+        // Clear countdown timer on success
+        if (this._challengeTimerInterval) {
+          clearInterval(this._challengeTimerInterval);
+          this._challengeTimerInterval = null;
+        }
+
         // Update local state progress
         const studentId = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId;
         const updatedProgress = await PythonAdventureService.getStudentProgress(studentId);
@@ -1158,44 +1302,61 @@ export const PythonAdventureController = {
           skillsGained: result.skillsGained,
           newlyUnlockedAchievements: result.newlyUnlockedAchievements,
           hasNextChallenge: !!result.unlockedNextChallengeId,
-          nextChallengeId: result.unlockedNextChallengeId
+          nextChallengeId: result.unlockedNextChallengeId,
+          codeAnalysis,
+          attemptsCount: newAttempts,
+          maxAttempts: 2
         });
 
       } else {
         if (terminalEl && result.testResults?.stdout) {
           terminalEl.innerHTML = `<div class="terminal-stdout">${escapeHtml(result.testResults.stdout)}</div>`;
         }
-        const newAttempts = (state.attemptsCount || 1) + 1;
         adventureStore.setState({
           attemptsCount: newAttempts,
           terminalOutput: result.testResults?.stdout || state.terminalOutput
         }, { notify: false });
 
-        const attemptsEl = document.getElementById("pyChallengeAttemptsCount");
-        if (attemptsEl) {
-          attemptsEl.textContent = `المحاولات: ${newAttempts}`;
-        }
         this.updateHintsCardInChallengeView();
+
+        if (newAttempts >= 2 && submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add("btn-disabled-locked");
+          submitBtn.innerHTML = "<span>🚫 استنفدت المحاولات (0/2)</span>";
+        }
 
         this.showResultModal({
           passed: false,
           feedback: result.feedback,
-          errorDetails: result.errorDetails
+          errorDetails: result.errorDetails,
+          codeAnalysis,
+          attemptsCount: newAttempts,
+          maxAttempts: 2
         });
       }
 
     } catch (err) {
       console.error("Submission failed:", err);
-      adventureStore.setState({ isSubmitting: false, editorCode: code }, { notify: false });
+      adventureStore.setState({ isSubmitting: false, editorCode: code, attemptsCount: newAttempts }, { notify: false });
       this.showResultModal({
         passed: false,
         feedback: "حدث خطأ أثناء إرسال الحل للتحقق: " + (err.message || "يرجى المحاولة مرة أخرى."),
-        errorDetails: err.message || "تعذر التحقق من الحل. تم حفظ الكود في المحرر ويمكنك إعادة المحاولة فوراً."
+        errorDetails: err.message || "تعذر التحقق من الحل. تم حفظ الكود في المحرر ويمكنك إعادة المحاولة فوراً.",
+        codeAnalysis,
+        attemptsCount: newAttempts,
+        maxAttempts: 2
       });
     } finally {
+      const curState = adventureStore.getState();
+      const exhausted = (curState.attemptsCount || 0) >= 2 || curState.isTimeExpired;
       if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = "<span>🚀 تسليم الحل والتحقق</span>";
+        submitBtn.disabled = exhausted;
+        if (exhausted) {
+          submitBtn.classList.add("btn-disabled-locked");
+          submitBtn.innerHTML = `<span>${curState.isTimeExpired ? "🔒 انتهت المهلة" : "🚫 استنفدت المحاولات (0/2)"}</span>`;
+        } else {
+          submitBtn.innerHTML = "<span>🚀 تسليم الحل والتحقق</span>";
+        }
       }
     }
   },

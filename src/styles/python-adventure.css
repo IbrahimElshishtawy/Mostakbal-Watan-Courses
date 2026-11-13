@@ -870,6 +870,70 @@
   margin-bottom: var(--space-4, 1rem);
 }
 
+.micro-thinking-guidance-box {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(99, 102, 241, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: var(--radius-md, 12px);
+  padding: 1.1rem;
+  margin-top: 0.75rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.thinking-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.thinking-icon {
+  font-size: 1.25rem;
+}
+
+.thinking-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.thinking-desc {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin: 0 0 0.65rem 0;
+}
+
+.thinking-skills-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skills-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.skills-pills-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.skill-tag-pill {
+  font-size: 0.75rem;
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
 .micro-code-box {
   background: #0d1117;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -6988,5 +7052,260 @@ pre.ps-mini-pre {
   .btn-daily-challenge {
     justify-content: center;
   }
- }
+}
+
+/* ========================================================
+   ANTI-CHEAT TIMER & ATTEMPTS BADGE STYLES
+   ======================================================== */
+.challenge-timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  transition: all 0.25s ease;
+}
+
+.challenge-timer-pill .timer-digits {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+.challenge-timer-pill.safe {
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  background: rgba(14, 165, 233, 0.12);
+}
+
+.challenge-timer-pill.warning {
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  animation: pulse-timer-warning 1.8s infinite;
+}
+
+.challenge-timer-pill.urgent {
+  border-color: rgba(239, 68, 68, 0.8);
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+  animation: pulse-timer-urgent 0.9s infinite;
+}
+
+@keyframes pulse-timer-warning {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.02); }
+}
+
+@keyframes pulse-timer-urgent {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+  50% { opacity: 0.75; transform: scale(1.04); box-shadow: 0 0 25px rgba(239, 68, 68, 0.8); }
+}
+
+/* Attempts Indicator Pill */
+.challenge-attempts-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.challenge-attempts-pill.safe {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.challenge-attempts-pill.warning {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fbbf24;
+}
+
+.challenge-attempts-pill.danger {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #f87171;
+}
+
+.editor-slot.editor-locked {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.65;
+  filter: grayscale(0.5);
+}
+
+.btn-disabled-locked {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  background: #334155 !important;
+  border-color: #475569 !important;
+  color: #94a3b8 !important;
+}
+
+/* ========================================================
+   ACADEMIC CODE ANALYSIS CARD IN RESULT MODAL
+   ======================================================== */
+.result-code-analysis-card {
+  margin: 1.25rem 0;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: var(--radius-lg, 12px);
+  padding: 1.15rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  text-align: right;
+  direction: rtl;
+}
+
+.analysis-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.65rem;
+}
+
+.analysis-icon {
+  font-size: 1.25rem;
+}
+
+.analysis-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.integrity-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.integrity-chip.safe {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.integrity-chip.warning {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.analysis-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.95rem;
+}
+
+@media (max-width: 600px) {
+  .analysis-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.analysis-metric-box {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md, 8px);
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: center;
+  text-align: center;
+}
+
+.analysis-metric-box .metric-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.analysis-metric-box .metric-val {
+  font-family: var(--font-mono, monospace);
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.analysis-metric-box .metric-val.optimal {
+  color: #34d399;
+}
+
+.analysis-metric-box .metric-val.acceptable {
+  color: #38bdf8;
+}
+
+.analysis-metric-box .metric-val.warning {
+  color: #f59e0b;
+}
+
+.analysis-metric-box .metric-val.quality {
+  color: #a855f7;
+}
+
+.analysis-metric-box .metric-sub {
+  font-size: 0.675rem;
+  color: #cbd5e1;
+}
+
+.analysis-feedback-quote {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: var(--radius-md, 8px);
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.analysis-feedback-quote .quote-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.analysis-feedback-quote .quote-text {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #e0e7ff;
+}
+
+.analysis-badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.analysis-badge-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.12);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+}
+
 

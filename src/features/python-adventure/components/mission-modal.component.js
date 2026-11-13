@@ -80,16 +80,28 @@ export function renderMissionModal(challenge, currentStep = "story") {
             <div class="mission-micro-pane">
               <div class="micro-concept-title">
                 <span class="book-icon">💡</span>
-                <h4>${escapeHtml(micro.concept || "المفهوم البرمجي")}</h4>
+                <h4>${escapeHtml(micro.concept || "المفهوم البرمجي والأداة المطلوبة")}</h4>
               </div>
               <p class="micro-concept-summary">${escapeHtml(micro.summary || "")}</p>
 
-              ${micro.exampleCode ? `
-                <div class="micro-code-box">
-                  <div class="micro-code-label">مثال توضيحي (Python):</div>
-                  <pre class="micro-code-pre" dir="ltr"><code>${escapeHtml(micro.exampleCode)}</code></pre>
+              <!-- Educational Thinking Challenge (No solution spoilers) -->
+              <div class="micro-thinking-guidance-box">
+                <div class="thinking-header">
+                  <span class="thinking-icon">🧠</span>
+                  <span class="thinking-title">تحدي التفكير والبرمجة المستقلة:</span>
                 </div>
-              ` : ""}
+                <p class="thinking-desc">
+                  تعرّفت على المفهوم والأداة الأساسية بالأعلى! لا توجد حلول جاهزة معطاة — فكّر في خطوات بناء الكود بنفسك واكتب المنطق واختبره في المحرر.
+                </p>
+                ${challenge.skills && challenge.skills.length > 0 ? `
+                  <div class="thinking-skills-row">
+                    <span class="skills-label">الأدوات المستهدفة:</span>
+                    <div class="skills-pills-list">
+                      ${challenge.skills.map((s) => `<span class="skill-tag-pill font-mono">${escapeHtml(s)}</span>`).join("")}
+                    </div>
+                  </div>
+                ` : ""}
+              </div>
             </div>
           `}
         </div>

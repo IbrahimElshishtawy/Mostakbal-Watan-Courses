@@ -3,7 +3,8 @@ import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 import { renderCodeEditor } from "./code-editor.component.js";
 
 /**
- * Renders the full interactive Coding Challenge Workspace.
+ * Renders the full interactive Coding Challenge Workspace
+ * with Anti-Cheat Countdown Timer and Strict 2-Attempt Limit.
  */
 export function renderChallengeView({
   challenge,
@@ -11,7 +12,11 @@ export function renderChallengeView({
   output,
   error,
   hintsRevealed = 0,
-  attempts = 1,
+  attempts = 0,
+  maxAttempts = 2,
+  timeRemainingSeconds = null,
+  timeLimitMinutes = 15,
+  isTimeExpired = false,
   isRunning = false,
   isSubmitting = false,
   solutionRevealed = false
@@ -19,17 +24,17 @@ export function renderChallengeView({
   if (!challenge) return "";
 
   const hints = challenge.hints || [];
-  const revealedHints = hints.slice(0, hintsRevealed);
-  const hasMoreHints = hintsRevealed < hints.length;
-
-  // XP discount label
-  let penaltyLabel = "100% XP (كامل المكافأة)";
-  if (solutionRevealed) penaltyLabel = "20% XP (تم عرض الحل)";
-  else if (hintsRevealed === 1) penaltyLabel = "90% XP (-10% لاستخدام مساعدة)";
-  else if (hintsRevealed === 2) penaltyLabel = "75% XP (-25% لمساعدتين)";
-  else if (hintsRevealed >= 3) penaltyLabel = "50% XP (-50% لـ 3 مساعدات)";
-
   const requirements = challenge.requirements || [];
+
+  const effectiveLimitMinutes = challenge.timeLimitMinutes || timeLimitMinutes || 15;
+  const currentRemaining = timeRemainingSeconds !== null ? timeRemainingSeconds : effectiveLimitMinutes * 60;
+  const minutes = Math.floor(Math.max(0, currentRemaining) / 60);
+  const seconds = Math.max(0, currentRemaining) % 60;
+  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+  const attemptsLeft = Math.max(0, maxAttempts - (attempts || 0));
+  const attemptsExhausted = attemptsLeft <= 0;
+  const isLocked = isTimeExpired || attemptsExhausted;
 
   return `
     <div class="adventure-challenge-wrapper">
@@ -46,6 +51,13 @@ export function renderChallengeView({
         </div>
 
         <div class="challenge-topbar-actions">
+          <!-- Anti-Cheat Countdown Timer -->
+          <div class="challenge-timer-pill ${currentRemaining <= 60 ? "urgent" : (currentRemaining <= 180 ? "warning" : "safe")}" id="pyLiveTimerPill" title="مهلة التحدي الزمنية لمكافحة الغش">
+            <span class="timer-icon">⏱️</span>
+            <span class="timer-label">المتبقي:</span>
+            <strong class="timer-digits" id="pyLiveTimerDigits">${formattedTime}</strong>
+          </div>
+
           <button type="button" class="btn btn-sm btn-secondary" id="challengeLessonBtn">
             <span>📖 مراجعة الشرح</span>
           </button>
@@ -87,25 +99,29 @@ export function renderChallengeView({
         <!-- Main Code Editor & Terminal Pane -->
         <main class="challenge-editor-pane">
           <!-- Editor Slot -->
-          <div class="editor-slot" id="challengeEditorSlot">
+          <div class="editor-slot ${isLocked ? "editor-locked" : ""}" id="challengeEditorSlot">
             ${renderCodeEditor({ initialCode: code })}
           </div>
 
           <!-- Interactive Action Buttons Bar -->
           <div class="challenge-actions-bar">
             <div class="d-flex items-center gap-2">
-              <button type="button" class="btn btn-secondary btn-run" id="pyRunBtn" ${isRunning || isSubmitting ? "disabled" : ""}>
+              <button type="button" class="btn btn-secondary btn-run" id="pyRunBtn" ${isRunning || isSubmitting || isTimeExpired ? "disabled" : ""}>
                 <span class="btn-icon">${isRunning ? "⏳" : "▶"}</span>
                 <span>${isRunning ? "جاري التشغيل..." : "تشغيل الكود"}</span>
               </button>
-              <button type="button" class="btn btn-primary btn-submit" id="pySubmitBtn" ${isRunning || isSubmitting ? "disabled" : ""}>
-                <span class="btn-icon">${isSubmitting ? "⏳" : "🚀"}</span>
-                <span>${isSubmitting ? "جاري التحقق..." : "تسليم الحل والتحقق"}</span>
+              <button type="button" class="btn btn-primary btn-submit ${isLocked ? "btn-disabled-locked" : ""}" id="pySubmitBtn" ${isRunning || isSubmitting || isLocked ? "disabled" : ""}>
+                <span class="btn-icon">${isSubmitting ? "⏳" : (isLocked ? "🔒" : "🚀")}</span>
+                <span>${isSubmitting ? "جاري التحقق..." : (isTimeExpired ? "انتهت المهلة" : (attemptsExhausted ? "استنفدت المحاولات (0/2)" : "تسليم الحل والتحقق"))}</span>
               </button>
             </div>
 
+            <!-- Attempts Badge -->
             <div class="challenge-status-indicator">
-              <span class="text-xs text-muted font-bold" id="pyChallengeAttemptsCount">المحاولات: ${attempts}</span>
+              <div class="challenge-attempts-pill ${attemptsLeft === 2 ? "safe" : (attemptsLeft === 1 ? "warning" : "danger")}" id="pyChallengeAttemptsPill">
+                <span class="attempts-icon">🎯</span>
+                <span class="attempts-text">المحاولات المتبقية: <strong id="pyChallengeAttemptsCount">${attemptsLeft} من ${maxAttempts}</strong></span>
+              </div>
             </div>
           </div>
 
@@ -138,7 +154,7 @@ export function renderChallengeView({
 /**
  * Renders only the inner HTML of the hints card for surgical, lag-free updates.
  */
-export function renderHintsCardContent({ challenge, hintsRevealed = 0, attempts = 1, solutionRevealed = false }) {
+export function renderHintsCardContent({ challenge, hintsRevealed = 0, attempts = 0, solutionRevealed = false }) {
   if (!challenge) return "";
 
   const hints = challenge.hints || [];
@@ -156,7 +172,7 @@ export function renderHintsCardContent({ challenge, hintsRevealed = 0, attempts 
     <div class="card-header-mini">
       <div class="d-flex items-center gap-2">
         <span class="icon">💡</span>
-        <h3>نظام التلميحات الذكي</h3>
+        <h3>إرشادات التفكير والتلميحات</h3>
       </div>
       <span class="hints-penalty-badge text-xs">${penaltyLabel}</span>
     </div>
@@ -165,13 +181,13 @@ export function renderHintsCardContent({ challenge, hintsRevealed = 0, attempts 
     <div class="hints-container">
       ${revealedHints.length === 0 ? `
         <p class="no-hints-msg text-xs text-muted">
-          حاول حل المهمة بنفسك أولاً للحصول على الدرجة الكاملة و 3 نجوم! كل تلميح تفتحه يخصم جزءاً بسيطاً من الـ XP.
+          حاول حل المهمة بنفسك أولاً للحصول على الدرجة الكاملة و 3 نجوم! لديك محاولتان فقط للتسليم النهائي، فاختبر كودك جيداً بزر "تشغيل الكود".
         </p>
       ` : `
         <div class="revealed-hints-list">
           ${revealedHints.map((hint, idx) => `
             <div class="hint-bubble">
-              <strong class="hint-num">تلميح ${idx + 1}:</strong>
+              <strong class="hint-num">إرشاد ${idx + 1}:</strong>
               <span>${escapeHtml(hint)}</span>
             </div>
           `).join("")}
@@ -183,26 +199,13 @@ export function renderHintsCardContent({ challenge, hintsRevealed = 0, attempts 
     <div class="hint-actions-row">
       ${hasMoreHints ? `
         <button type="button" class="btn btn-sm btn-secondary w-100" id="revealNextHintBtn">
-          <span>💡 فتح تلميح جديد (${hintsRevealed + 1} من ${hints.length})</span>
+          <span>💡 إرشاد خطوة إضافي (${hintsRevealed + 1} من ${hints.length})</span>
         </button>
       ` : `
         <div class="all-hints-used text-xs text-muted text-center py-1">
-          تم فتح جميع التلميحات المتاحة لهذه المهمة.
+          تم فتح جميع الإرشادات التوجيهية المتاحة لهذه المهمة.
         </div>
       `}
-
-      ${attempts >= 3 && !solutionRevealed ? `
-        <button type="button" class="btn btn-sm btn-outline-warning w-100 mt-2" id="revealSolutionPromptBtn">
-          <span>🔓 عرض الحل النموذجي مع الشرح</span>
-        </button>
-      ` : ""}
     </div>
-
-    ${solutionRevealed ? `
-      <div class="solution-revealed-box mt-3">
-        <div class="solution-title">الكود النموذجي مع التفسير:</div>
-        <pre class="solution-pre" dir="ltr"><code>${escapeHtml(challenge.solutionCode || challenge.hints?.[challenge.hints?.length - 1] || challenge.expectedOutput)}</code></pre>
-      </div>
-    ` : ""}
   `;
 }
