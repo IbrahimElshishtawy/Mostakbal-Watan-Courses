@@ -173,7 +173,7 @@ export const ProblemSolvingController = {
 
     try {
       this._currentProblem = await ProblemSolvingService.getProblemDetails(problemId);
-      this._userCode = "";
+      this._userCode = this._currentProblem.starterCode || "";
       this._testResults = null;
       this._submissionResult = null;
       this._workspaceTab = "description";
@@ -287,10 +287,15 @@ export const ProblemSolvingController = {
   async runPublicTests() {
     if (!this._currentProblem || this._isRunning) return;
 
+    // 1. Always capture latest text directly from editor
+    const codeArea = document.getElementById("psCodeTextarea");
+    if (codeArea) {
+      this._userCode = codeArea.value;
+    }
+
     const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(this._userCode);
     if (hasChanges) {
       this._userCode = sanitizedCode;
-      const codeArea = document.getElementById("psCodeTextarea");
       if (codeArea) codeArea.value = sanitizedCode;
       showToast(
         `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
@@ -404,10 +409,15 @@ export const ProblemSolvingController = {
   async submitSolution() {
     if (!this._currentProblem || this._isSubmitting) return;
 
+    // 1. Always capture latest text directly from editor
+    const codeArea = document.getElementById("psCodeTextarea");
+    if (codeArea) {
+      this._userCode = codeArea.value;
+    }
+
     const { sanitizedCode, corrections, hasChanges } = detectAndSanitizePythonCode(this._userCode);
     if (hasChanges) {
       this._userCode = sanitizedCode;
-      const codeArea = document.getElementById("psCodeTextarea");
       if (codeArea) codeArea.value = sanitizedCode;
       showToast(
         `💡 تم تحسين الكود للموبايل تلقائياً: ${corrections.join("، ")} ليتوافق مع بايثون.`,
@@ -417,8 +427,13 @@ export const ProblemSolvingController = {
     }
 
     const code = (this._userCode || "").trim();
-    if (!code) {
-      showToast("يرجى كتابة كود بايثون قبل التسليم.", "warning");
+    const nonComment = code
+      .split("\n")
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#"));
+
+    if (nonComment.length === 0) {
+      showToast("المحرر فارغ! اكتب كود بايثون لحل المسألة قبل التسليم ⚠️", "warning");
       return;
     }
 
@@ -435,16 +450,20 @@ export const ProblemSolvingController = {
       });
 
       this._submissionResult = result;
+      if (result.testResults) {
+        this._testResults = result.testResults;
+      }
 
       if (result.passed) {
         showToast(
           `🏆 مبروك! تم قبول الحل وحصلت على ${result.competitionPointsAwarded || this._currentProblem.points} نقطة تنافسية!`,
           "success"
         );
-        // Reload problem details to update history
-        this._currentProblem = await ProblemSolvingService.getProblemDetails(this._currentProblem.id);
+        try {
+          this._currentProblem = await ProblemSolvingService.getProblemDetails(this._currentProblem.id);
+        } catch (_) {}
       } else {
-        showToast(result.feedback || "لم يجتز الحل جميع الاختبارات. راجع الملاحظات وحاول مجدداً.", "error");
+        showToast(result.feedback || "لم يجتز الحل جميع الاختبارات. راجع الملاحظات وحاول مجدداً.", "warning");
       }
     } catch (err) {
       console.error("Submission error:", err);

@@ -206,10 +206,12 @@ export const ProblemSolvingService = {
     }
 
     // 2. Validate against ALL test cases (public + hidden)
-    const allTestCases = [
-      ...(p.publicTestCases || []),
-      ...(p.hiddenTestCases || [])
-    ];
+    const publicCases = p.publicTestCases || [];
+    const hiddenCases = p.hiddenTestCases || [];
+    const allTestCases = [...publicCases, ...hiddenCases];
+
+    const testResultsList = [];
+    let passedCount = 0;
 
     if (allTestCases.length > 0) {
       try {
@@ -218,6 +220,7 @@ export const ProblemSolvingService = {
 
         for (let i = 0; i < allTestCases.length; i++) {
           const tc = allTestCases[i];
+          const isHidden = i >= publicCases.length;
           const rawInput = String(tc.input ?? "").replace(/\r\n/g, "\n");
           const inputLines = rawInput.length > 0 ? rawInput.split("\n") : [];
           let inputIdx = 0;
@@ -229,20 +232,42 @@ export const ProblemSolvingService = {
 
           const expected = String(tc.expectedOutput ?? "").replace(/\r\n/g, "\n").trim();
           const actual = String(res.output ?? "").replace(/\r\n/g, "\n").trim();
+          const hasError = !!res.error;
+          const passed = !hasError && (actual === expected);
 
-          if (res.error) {
-            return {
-              success: false,
-              passed: false,
-              feedback: `فشل الكود أثناء فحص الحالات (حالة رقم ${i + 1}): ${res.error}`
-            };
+          if (passed) {
+            passedCount++;
           }
 
-          if (actual !== expected) {
+          testResultsList.push({
+            caseNumber: i + 1,
+            description: tc.description || (isHidden ? `حالة سرية #${i + 1 - publicCases.length}` : `حالة عامة #${i + 1}`),
+            input: isHidden ? "🔒 (حالة اختبار سرية للتحقق من كفاءة الحل)" : tc.input,
+            expected: isHidden ? "🔒 (مخرجات حالة سرية)" : expected,
+            actual: hasError ? res.error : (actual || "(لا توجد مخرجات)"),
+            passed,
+            isHidden,
+            error: hasError ? res.error : null
+          });
+
+          if (!passed) {
+            // Check if failure was merely case-sensitivity (e.g. leap year vs Leap Year)
+            let hintMsg = "";
+            if (!hasError && actual.toLowerCase() === expected.toLowerCase()) {
+              hintMsg = ` (تنبيه: انتبه لحالة الأحرف الكبيرة والصغيرة Capital/Small، المطلوب كتابتها بدقة: "${expected}").`;
+            }
+
             return {
               success: false,
               passed: false,
-              feedback: `لم يجتز الحل جميع الحالات. فشل في حالة اختبار: المتوقع كان "${expected}" ولكن الناتج الفعلي كان "${actual || "(فارغ)"}".`
+              feedback: hasError
+                ? `فشل تشغيل الكود أثناء فحص الحالة #${i + 1}: ${res.error}`
+                : `لم يجتز الحل جميع الاختبارات. فشل في ${isHidden ? "الحالة السرية" : "الحالة"} #${i + 1}: المتوقع كان "${isHidden ? "المطلوب بالوصف" : expected}" ولكن الناتج الفعلي كان "${actual || "(فارغ)"}"${hintMsg}`,
+              testResults: {
+                publicResults: testResultsList,
+                passedCount,
+                totalCount: allTestCases.length
+              }
             };
           }
         }
@@ -251,7 +276,12 @@ export const ProblemSolvingService = {
         return {
           success: false,
           passed: false,
-          feedback: `حدث خطأ أثناء فحص الكود: ${testErr.message || testErr}`
+          feedback: `حدث خطأ أثناء فحص الكود: ${testErr.message || testErr}`,
+          testResults: {
+            publicResults: testResultsList,
+            passedCount,
+            totalCount: allTestCases.length
+          }
         };
       }
     }
@@ -355,8 +385,13 @@ export const ProblemSolvingService = {
       stars: 3,
       competitionPointsAwarded: points,
       totalCompetitionPoints: points,
-      feedback: `🎉 أحسنت صنعاً! تم اجتياز المسألة "${p.title || problemId}" بنجاح!`,
-      newlyUnlockedAchievements: []
+      feedback: `🎉 أحسنت صنعاً! تم اجتياز المسألة "${p.title || problemId}" واجتياز جميع حالات الاختبار (${allTestCases.length}/${allTestCases.length}) بنجاح!`,
+      newlyUnlockedAchievements: [],
+      testResults: {
+        publicResults: testResultsList,
+        passedCount: allTestCases.length,
+        totalCount: allTestCases.length
+      }
     };
   },
 
