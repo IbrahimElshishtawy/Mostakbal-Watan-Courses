@@ -1,9 +1,12 @@
-import * as admin from "firebase-admin";
+import { getApps, initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
+import { getStorage } from "firebase-admin/storage";
 
-if (!admin.apps.length) {
-  admin.initializeApp();
+if (!getApps().length) {
+  initializeApp();
 }
 
-export const db = admin.firestore();
-export const auth = admin.auth();
-export const storage = admin.storage();
+export const db = getFirestore();
+export const auth = getAuth();
+export const storage = getStorage();

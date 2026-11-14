@@ -50,7 +50,24 @@ import {
   joinCompetitionHandler,
   getNotificationsHandler,
   markNotificationAsReadHandler,
-  markAllNotificationsAsReadHandler
+  markAllNotificationsAsReadHandler,
+  createDailyChallengeHandler,
+  submitDailyAnswerHandler,
+  saveCodeSnapshotHandler,
+  recordCodeExecutionHandler,
+  evaluateCodingTaskHandler,
+  getStoreCatalogHandler,
+  getStudentInventoryHandler,
+  purchaseRewardHandler,
+  equipRewardHandler,
+  getStudentsOverviewHandler,
+  getStudentReportHandler,
+  getCodeHistoryHandler,
+  getDailyReportsHandler,
+  getWeeklyReportsHandler,
+  getActiveSeasonHandler,
+  getSeasonResetPreviewHandler,
+  resetGamificationSeasonHandler
 } from "./modules/gamification";
 
 // Set global options: European region, timeout, memory
@@ -119,3 +136,35 @@ export const getNotifications = onCall(getNotificationsHandler);
 export const markNotificationAsRead = onCall(markNotificationAsReadHandler);
 export const markAllNotificationsAsRead = onCall(markAllNotificationsAsReadHandler);
 
+// ==========================================
+// 8. ADAPTIVE QUESTIONS & CODE ANALYTICS
+// ==========================================
+export const createDailyChallenge = onCall(createDailyChallengeHandler);
+export const submitDailyAnswer = onCall(submitDailyAnswerHandler);
+export const saveCodeSnapshot = onCall(saveCodeSnapshotHandler);
+export const recordCodeExecution = onCall(recordCodeExecutionHandler);
+export const evaluateCodingTask = onCall(evaluateCodingTaskHandler);
+
+// ==========================================
+// 9. VIRTUAL REWARD STORE & INVENTORY
+// ==========================================
+export const getStoreCatalog = onCall(getStoreCatalogHandler);
+export const getStudentInventory = onCall(getStudentInventoryHandler);
+export const purchaseReward = onCall(purchaseRewardHandler);
+export const equipReward = onCall(equipRewardHandler);
+
+// ==========================================
+// 10. TEACHER ANALYTICS & CODE HISTORY
+// ==========================================
+export const getStudentsOverview = onCall(getStudentsOverviewHandler);
+export const getStudentReport = onCall(getStudentReportHandler);
+export const getCodeHistory = onCall(getCodeHistoryHandler);
+export const getDailyReports = onCall(getDailyReportsHandler);
+export const getWeeklyReports = onCall(getWeeklyReportsHandler);
+
+// ==========================================
+// 11. SEASON MANAGEMENT & CONTROLLED RESET
+// ==========================================
+export const getActiveSeason = onCall(getActiveSeasonHandler);
+export const getSeasonResetPreview = onCall(getSeasonResetPreviewHandler);
+export const resetGamificationSeason = onCall(resetGamificationSeasonHandler);
