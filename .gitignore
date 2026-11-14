@@ -1,15 +1,24 @@
+# ==============================================================================
+#  ETIHAD BESHABABHA - BULLETPROOF .GITIGNORE (حماية كاملة للمشروع والبيانات)
+# ==============================================================================
+
 # ==========================================
-# 1. Firebase Credentials & Sensitive Keys (مفاتيح وبيانات فايربيز الحساسة)
+# 1. Firebase Credentials, Service Accounts & API Keys (مفاتيح وبيانات فايربيز الحساسة)
 # ==========================================
 serviceAccountKey.json
 *serviceAccount*.json
 *-firebase-adminsdk-*.json
+*firebase-adminsdk*.json
+*adminsdk*.json
 google-services.json
 GoogleService-Info.plist
 .runtimeconfig.json
 *.pem
 *.key
 *.cert
+*.p12
+*.keystore
+*.jks
 
 # Firebase CLI & Emulator Caches / Logs
 .firebase/
@@ -23,7 +32,43 @@ database-debug.log*
 *.local.json
 
 # ==========================================
-# 2. Project Data & Database Backups (بيانات المشروع والنسخ الاحتياطية)
+# 2. Private Student Data, National IDs & Registrations (بيانات الطلاب والأرقام القومية)
+# ==========================================
+students_registration.json
+*registration*.json
+*students_registration*
+*student_registration*
+*student_export*
+*students_backup*
+*students_list*.json
+*students_roster*.json
+*.csv
+*.tsv
+*.xlsx
+*.xls
+exports/
+reports/private/
+students_data/
+students_export/
+
+# ==========================================
+# 3. Environment Variables & Secrets (المتغيرات البيئية، الرموز والمفاتيح السرية)
+# ==========================================
+.env
+.env.*
+!.env.example
+*.env
+*.env.local
+*.secret
+*.token
+*.credential
+*.credentials
+private/
+secrets/
+scratch/
+
+# ==========================================
+# 4. Project Data & Database Backups (بيانات المشروع والنسخ الاحتياطية)
 # ==========================================
 data/
 backup/
@@ -33,19 +78,11 @@ scripts/backups/
 *.dump
 *.backup
 *.sqlite
+*.db
 firestore-export/
 
 # ==========================================
-# 3. Environment Variables & Secrets (المتغيرات البيئية والرموز السرية)
-# ==========================================
-.env
-.env.*
-!.env.example
-*.env
-*.env.local
-
-# ==========================================
-# 4. Dependencies & Build Artifacts (الاعتماديات ومخرجات البناء)
+# 5. Dependencies & Build Artifacts (الاعتماديات ومخرجات البناء)
 # ==========================================
 node_modules/
 backend/node_modules/
@@ -58,8 +95,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # ==========================================
-# 5. AI Agents & Skills Tooling (مجلدات أدوات الذكاء الاصطناعي و npx skills)
+# 6. AI Agents & Local Agent Caches (مجلدات أدوات الذكاء الاصطناعي و npx skills)
 # ==========================================
+.gemini/
 skills/
 skills-lock.json
 .agents/
@@ -110,7 +148,7 @@ skills-lock.json
 .zencoder/
 
 # ==========================================
-# 6. Operating System & Editor Files (ملفات النظام ومحرر الأكواد)
+# 7. Operating System & Editor Files (ملفات النظام ومحرر الأكواد)
 # ==========================================
 .DS_Store
 Thumbs.db
@@ -118,17 +156,6 @@ Thumbs.db
 .idea/
 *.sublime-project
 *.sublime-workspace
-
-# ==========================================
-# 7. Private Student Data, Exports & Spreadsheets (بيانات الطلاب والتصديرات)
-# ==========================================
-*.csv
-*.xlsx
-*.xls
-*student_export*
-*students_backup*
-exports/
-reports/private/
 
 # ==========================================
 # 8. Python Runtimes & Bytecode (مخلفات تشغيل بايثون والبيئات الافتراضية)
@@ -143,17 +170,9 @@ env/
 ENV/
 
 # ==========================================
-# 9. Private Archives, Bundles & Keys (المضغوطات والمفاتيح المشفرة)
+# 9. Private Archives & Compressed Bundles (المضغوطات والمفاتيح المشفرة)
 # ==========================================
 *.tar.gz
 *.rar
 *.7z
-*.p12
-*.keystore
-*.jks
-*.secret
-*.token
-private/
-secrets/
-scratch/
-
+*.zip
