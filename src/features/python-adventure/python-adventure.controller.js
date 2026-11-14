@@ -480,6 +480,13 @@ export const PythonAdventureController = {
       this._challengeTimerInterval = null;
     }
     adventureStore.setState({ activeView: view, ...extraState });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      const mainView = document.querySelector(".student-main-content") || document.querySelector("main");
+      if (mainView && typeof mainView.scrollTo === "function") {
+        mainView.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
   },
 
   // ========================================================

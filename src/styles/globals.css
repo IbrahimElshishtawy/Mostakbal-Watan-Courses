@@ -16,8 +16,11 @@ html {
   overflow-y: auto;
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #38bdf8 var(--bg-primary);
+  scrollbar-color: rgba(56, 189, 248, 0.35) transparent;
 }
 
 *, *::before, *::after {
@@ -95,25 +98,34 @@ pre, code, kbd, samp {
   color: var(--text-primary);
 }
 
-/* Clean, modern, visible scrollbar */
+/* Clean, ultra-sleek, modern micro-scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: rgba(148, 163, 184, 0.28);
   border-radius: var(--radius-full);
-  border: 2px solid var(--bg-primary);
   transition: background-color var(--transition-fast);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #38bdf8;
+  background: rgba(56, 189, 248, 0.65);
+}
+
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.2);
+  }
 }
 
 /* Fluid responsive container */

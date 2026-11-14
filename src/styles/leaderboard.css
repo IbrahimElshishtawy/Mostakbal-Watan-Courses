@@ -1497,7 +1497,7 @@
 @media (max-width: 1100px) {
   .lb-podium-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 1.25rem;
   }
   .lb-podium-card.rank-gold {
     order: -1;
@@ -1509,19 +1509,85 @@
 
 @media (max-width: 768px) {
   .lb-page-container {
-    padding: 1rem;
+    padding: 0.75rem;
+    overflow-x: clip;
   }
   .lb-topbar {
     flex-direction: column;
     align-items: flex-start;
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+    border-radius: 14px;
+  }
+  .lb-podium-grid {
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+  .lb-podium-card {
+    padding: 1.25rem 0.85rem 1rem !important;
+    border-radius: 20px;
+    min-height: auto !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .lb-podium-card.rank-gold {
+    min-height: auto !important;
+    padding: 1.35rem 0.85rem 1.15rem !important;
+    border-radius: 22px;
+  }
+  .lb-podium-card.rank-silver,
+  .lb-podium-card.rank-bronze {
+    min-height: auto !important;
+  }
+  .podium-avatar-box {
+    width: 62px;
+    height: 62px;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .rank-gold .podium-avatar-box.gold-glow {
+    width: 72px;
+    height: 72px;
+  }
+  .podium-avatar-box .avatar-initials {
+    font-size: 1.4rem;
+  }
+  .rank-gold .podium-avatar-box .avatar-initials {
+    font-size: 1.7rem;
+  }
+  .podium-name-title {
+    font-size: 1.05rem;
+  }
+  .podium-role-badge {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
+  .podium-metrics-subgrid {
+    gap: 6px;
+    margin: 0.75rem 0;
+  }
+  .podium-stat-pill {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+  .lb-action-audio-btn {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+    width: 100%;
+    max-width: 380px;
+    justify-content: center;
+    box-sizing: border-box;
   }
   .lb-filter-telemetry-row {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
   .lb-standing-strip {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
   }
   .lb-standing-metrics {
     width: 100%;
@@ -1529,6 +1595,9 @@
   }
   .lb-table-card {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px;
+    overscroll-behavior-x: contain;
   }
 }
 

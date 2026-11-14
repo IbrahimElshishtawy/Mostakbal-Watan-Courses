@@ -7086,39 +7086,259 @@ pre.ps-mini-pre {
 @media (max-width: 768px) {
   .adv5-road-nodes-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
 }
 
 @media (max-width: 640px) {
   .adventure-image5-container {
-    padding: 1rem;
+    padding: 0.5rem 0.35rem;
+    max-width: 100vw;
+    overflow-x: clip;
+    box-sizing: border-box;
   }
+
   .adv5-topbar {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+    gap: 0.5rem;
   }
+
+  .adv5-hero-card {
+    padding: 0.9rem;
+    border-radius: 14px;
+    margin-bottom: 0.75rem;
+  }
+
+  .adv5-hero-title {
+    font-size: 1.25rem;
+    line-height: 1.3;
+    margin-bottom: 0.35rem;
+  }
+
+  .adv5-hero-desc {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .adv5-hero-actions-col {
+    width: 100%;
+    min-width: 0;
+    gap: 0.5rem;
+  }
+
+  .adv5-btn-hero-primary,
+  .adv5-btn-hero-glass {
+    width: 100%;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    min-height: 44px;
+  }
+
+  /* Compact 2-column metrics grid on mobile (XP card spans full width) */
   .adv5-metrics-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-bottom: 0.75rem;
   }
-  .adv5-portals-grid {
-    grid-template-columns: 1fr;
+
+  .adv5-metric-card:first-child {
+    grid-column: 1 / -1;
   }
+
+  .adv5-metric-card {
+    padding: 0.65rem 0.75rem;
+    border-radius: 12px;
+    min-width: 0;
+  }
+
+  .adv5-metric-val {
+    font-size: 1.15rem;
+  }
+
+  .adv5-metric-note {
+    font-size: 0.68rem;
+  }
+
+  /* Middle Split Spotlight on Mobile */
+  .adv5-middle-split-grid {
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .adv5-quest-spotlight-card {
+    padding: 0.85rem;
+    border-radius: 14px;
+  }
+
+  .adv5-quest-title {
+    font-size: 1.05rem;
+  }
+
+  .adv5-quest-desc {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin-bottom: 0.65rem;
+  }
+
+  .adv5-code-preview {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.75rem;
+    max-height: 100px;
+  }
+
   .adv5-quest-actions-row {
     flex-direction: column;
+    gap: 0.5rem;
   }
+
   .adv5-btn-play-now,
   .adv5-btn-open-map,
   .adv5-btn-sandbox {
     width: 100%;
     justify-content: center;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.82rem;
+    border-radius: 10px;
+    min-height: 42px;
+  }
+
+  .adv5-leaderboard-card {
+    padding: 0.85rem;
+    border-radius: 14px;
+  }
+
+  /* Compact 2-column Portals on Mobile */
+  .adv5-portals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .adv5-portal-card:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .adv5-portal-card {
+    padding: 0.65rem 0.75rem;
+    border-radius: 12px;
+    min-width: 0;
+  }
+
+  .adv5-portal-top {
+    gap: 6px;
+    margin-bottom: 0.25rem;
+  }
+
+  .adv5-portal-icon-box {
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+
+  .adv5-portal-title {
+    font-size: 0.82rem;
+  }
+
+  .adv5-portal-desc {
+    font-size: 0.68rem;
+    line-height: 1.35;
+    margin-bottom: 0.4rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .adv5-portal-footer {
+    padding-top: 0.4rem;
+    font-size: 0.68rem;
+  }
+
+  /* 20 Worlds Road section on Mobile */
+  .adv5-world-road-card {
+    padding: 0.85rem;
+    border-radius: 14px;
+  }
+
+  .adv5-world-road-header {
+    margin-bottom: 0.65rem;
+    gap: 0.5rem;
+  }
+
+  .adv5-road-title {
+    font-size: 1.05rem;
+  }
+
+  .adv5-road-subtitle {
+    font-size: 0.72rem;
+  }
+
+  .adv5-road-filters-bar {
+    gap: 0.35rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .adv5-road-filter-btn {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.7rem;
+  }
+
+  .adv5-road-nodes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .adv5-road-node {
+    padding: 0.65rem 0.75rem;
+    border-radius: 12px;
+    min-width: 0;
+  }
+
+  .adv5-node-top {
+    margin-bottom: 0.45rem;
+  }
+
+  .adv5-node-bubble {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
+  .adv5-node-name {
+    font-size: 0.8rem;
+    min-height: 2.2em;
+  }
+
+  .adv5-node-concept {
+    font-size: 0.68rem;
+    min-height: 1.8em;
   }
 }
 
 @media (max-width: 480px) {
+  .adv5-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .adv5-portals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
   .adv5-road-nodes-grid {
     grid-template-columns: 1fr;
-    gap: 0.65rem;
+    gap: 0.55rem;
   }
 }
 

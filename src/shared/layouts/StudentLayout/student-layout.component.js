@@ -365,6 +365,16 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
     }
 
     closeMobile();
+
+    // Smooth scroll to top on tab transition for high-quality fluid experience
+    try {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      const mainView = container.querySelector(".main-view");
+      if (mainView && typeof mainView.scrollTo === "function") {
+        mainView.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch (_) {}
+
     if (typeof onTabChange === "function") {
       onTabChange(sectionId);
     }

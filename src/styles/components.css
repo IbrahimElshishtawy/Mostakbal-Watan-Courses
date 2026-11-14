@@ -2978,6 +2978,10 @@ body.is-in-exam-mode .main-view {
     grid-template-columns: 1fr;
     gap: var(--space-3, 0.875rem);
   }
+  .student-assignment-card {
+    padding: 1rem 1rem 0.9rem;
+    border-radius: 14px;
+  }
 }
 
 /* Student Assignment Card (Dark Theme First, Calm & Premium) */
@@ -5222,6 +5226,10 @@ body.is-in-exam-mode .main-view {
 @media (max-width: 768px) {
   .student-lessons-grid {
     grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+  .lecture-thumb-wrap {
+    height: 145px;
   }
 }
 
