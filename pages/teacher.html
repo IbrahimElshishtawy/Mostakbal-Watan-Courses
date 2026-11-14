@@ -17,6 +17,7 @@
 
   <!-- Font Awesome 6 CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../src/styles/gamification.css">
 
   <!-- SheetJS CDN for Excel Import & Export (deferred for non-blocking page load) -->
   <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -203,6 +204,7 @@
         students: () => import(`../src/features/students/students.controller.js?v=3.5.3&t=${ts}`).then((m) => m.StudentsController),
         attendance: () => import(`../src/features/attendance/attendance.controller.js?v=3.5.3&t=${ts}`).then((m) => m.AttendanceController),
         pythonAdventure: () => import(`../src/features/python-adventure/python-adventure.controller.js?v=3.5.3&t=${ts}`).then((m) => m.PythonAdventureController),
+        codeAnalytics: () => import(`../src/features/gamification/gamification.controller.js?v=3.5.3&t=${ts}`).then((m) => m.GamificationController),
         profile: () => import(`../src/features/profile/profile.controller.js?v=3.5.3&t=${ts}`).then((m) => m.ProfileController)
       };
 
@@ -222,6 +224,8 @@
             lazyLoaders.attendance().then((c) => c.loadTeacherAttendance("teacherAttendanceContainer"));
           } else if (tabId === "python-adventure") {
             lazyLoaders.pythonAdventure().then((c) => c.init("teacherPythonAdventureContainer", { role: "teacher", uid: "teacher_admin" }));
+          } else if (tabId === "code-analytics") {
+            lazyLoaders.codeAnalytics().then((c) => c.initTeacher("teacherCodeAnalyticsContainer", user));
           } else if (tabId === "settings") {
             lazyLoaders.profile().then((c) => c.loadSettingsView("teacherSettingsContainer"));
           }

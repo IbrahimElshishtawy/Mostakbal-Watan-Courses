@@ -114,6 +114,15 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
               </div>
               <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-bold">تحديات</span>
             </button>
+
+            <!-- Code Analytics & Telemetry -->
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="code-analytics" id="tab-btn-code-analytics">
+              <div class="flex items-center gap-3">
+                <span class="text-sm">💻</span>
+                <span>تحليلات وسجل الأكواد</span>
+              </div>
+              <span class="text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-1.5 py-0.5 rounded font-bold">جديد</span>
+            </button>
           </nav>
         </div>
 
@@ -230,6 +239,11 @@ export function mountTeacherLayout(container, { onLogout, onTabChange }) {
 
         <section id="sec-python-adventure" class="tab-content hidden" aria-labelledby="tab-btn-python-adventure">
           <div id="teacherPythonAdventureContainer"></div>
+        </section>
+
+        <!-- Code Analytics Dashboard Section -->
+        <section id="sec-code-analytics" class="tab-content hidden" aria-labelledby="tab-btn-code-analytics">
+          <div id="teacherCodeAnalyticsContainer"></div>
         </section>
 
         <section id="sec-settings" class="tab-content hidden" aria-labelledby="tab-btn-settings">

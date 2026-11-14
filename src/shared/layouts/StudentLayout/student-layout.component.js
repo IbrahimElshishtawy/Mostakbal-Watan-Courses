@@ -114,6 +114,12 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
             <span class="side-text">لوحة المتصدرين</span>
           </button>
 
+          <button type="button" class="sidebar-item" data-section="gamification">
+            <span class="side-icon" aria-hidden="true">🎯</span>
+            <span class="side-text">التحدي اليومي والمتجر</span>
+            <span class="side-badge-pill" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">Coins</span>
+          </button>
+
           <button type="button" class="sidebar-item" data-section="cloud-console">
             <span class="side-icon" aria-hidden="true">💻</span>
             <span class="side-text">الكونسول السحابي</span>
@@ -259,6 +265,11 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
             <div id="cloudConsoleContainer"></div>
           </section>
 
+          <!-- Gamification Section (Daily Challenges, Coins & Store) -->
+          <section id="sec-gamification" class="tab-content" aria-labelledby="heading-gamification">
+            <div id="gamificationContainer"></div>
+          </section>
+
           <!-- Profile Section -->
           <section id="sec-profile" class="tab-content" aria-labelledby="heading-profile">
             <div id="profileContainer"></div>
@@ -317,6 +328,7 @@ export function mountStudentLayout(container, { onLogout, onTabChange, initialSt
     "python-adventure": "🐍 مغامرة بايثون",
     "problem-solving": "⚡ تحديات البرمجة (5 مستويات)",
     leaderboard: "🏆 لوحة المتصدرين والأبطال",
+    gamification: "🎯 التحدي اليومي ومتجر المكافآت",
     "cloud-console": "💻 الكونسول السحابي (Python 3 IDE)",
     profile: "👤 حسابي الشخصي",
     settings: "⚙️ الإعدادات والمظهر"

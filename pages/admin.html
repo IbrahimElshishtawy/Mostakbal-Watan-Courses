@@ -81,6 +81,7 @@
   <link rel="stylesheet" href="../src/styles/attendance.css">
   <link rel="stylesheet" href="../src/styles/profile.css">
   <link rel="stylesheet" href="../src/styles/admin-dashboard.css">
+  <link rel="stylesheet" href="../src/styles/gamification.css">
   <link rel="stylesheet" href="../src/styles/print.css">
 </head>
 <body>
@@ -170,7 +171,8 @@
       const lazyLoaders = {
         students: () => import(`../src/features/students/students.controller.js?v=3.5.3&t=${ts}`).then((m) => m.StudentsController),
         exams: () => import(`../src/features/exams/exam.controller.js?v=3.5.3&t=${ts}`).then((m) => m.ExamController),
-        profile: () => import(`../src/features/profile/profile.controller.js?v=3.5.3&t=${ts}`).then((m) => m.ProfileController)
+        profile: () => import(`../src/features/profile/profile.controller.js?v=3.5.3&t=${ts}`).then((m) => m.ProfileController),
+        gamification: () => import(`../src/features/gamification/gamification.controller.js?v=3.5.3&t=${ts}`).then((m) => m.GamificationController)
       };
 
       // 2. Mount Admin Layout Immediately
@@ -185,6 +187,8 @@
             lazyLoaders.exams().then((c) => c.loadAdminExams("adminExamsContainer"));
           } else if (tabId === "settings") {
             lazyLoaders.profile().then((c) => c.loadSettingsView("adminSettingsContainer"));
+          } else if (tabId === "gamification-admin") {
+            lazyLoaders.gamification().then((c) => c.initAdmin("adminGamificationContainer", user));
           }
         }
       });

@@ -97,6 +97,15 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
         <div class="px-4 mt-6">
           <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">النظام والتحكم الفني</p>
           <nav class="space-y-1">
+            <!-- Gamification & Seasons Admin -->
+            <button type="button" class="admin-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="gamification-admin" id="tab-btn-gamification-admin">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-gamepad w-4 text-center text-slate-400 group-hover:text-amber-400"></i>
+                <span>إدارة المواسم واقتصاد النقاط</span>
+              </div>
+              <span class="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.5 rounded">تحكم</span>
+            </button>
+
             <button type="button" class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-[#182133] hover:text-white transition-all text-xs font-semibold group cursor-pointer text-right" data-section="settings" id="tab-btn-settings">
               <i class="fa-solid fa-sliders w-4 text-center text-slate-400 group-hover:text-purple-400"></i>
               <span>إعدادات النظام والمظهر</span>
@@ -198,6 +207,11 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
         <section id="sec-settings" class="tab-content hidden" aria-labelledby="tab-btn-settings">
           <div id="adminSettingsContainer"></div>
         </section>
+
+        <!-- Tab 5: Gamification Admin Center -->
+        <section id="sec-gamification-admin" class="tab-content hidden" aria-labelledby="tab-btn-gamification-admin">
+          <div id="adminGamificationContainer"></div>
+        </section>
       </main>
     </div>
   `;
@@ -211,6 +225,7 @@ export function mountAdminLayout(container, { onLogout, onTabChange }) {
     attendance: `<i class="fa-solid fa-chart-pie mr-1"></i> <span>إدارة الغياب والحضور العام</span>`,
     students: `<i class="fa-solid fa-users-gear mr-1"></i> <span>إدارة شؤون الطلاب</span>`,
     exams: `<i class="fa-solid fa-file-pen mr-1"></i> <span>الامتحانات والاختبارات</span>`,
+    "gamification-admin": `<i class="fa-solid fa-gamepad mr-1"></i> <span>إدارة المواسم واقتصاد النقاط</span>`,
     settings: `<i class="fa-solid fa-sliders mr-1"></i> <span>إعدادات النظام والمظهر</span>`
   };
 

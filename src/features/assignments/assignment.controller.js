@@ -606,6 +606,16 @@ if __name__ == "__main__":
         // Clear draft from localStorage
         localStorage.removeItem(`task_draft_${assignmentId}`);
 
+        // Code Activity Tracking & Gamification Verified Coin Award
+        import("../gamification/gamification.service.js").then(({ GamificationService }) => {
+          GamificationService.saveCodeSnapshot(assignmentId, code, "submission", { passed: true }).catch(() => {});
+          GamificationService.evaluateCodingTask(assignmentId, "simple", true, code).then((evalRes) => {
+            if (evalRes?.coinsAwarded > 0) {
+              showToast(evalRes.message || `+${evalRes.coinsAwarded} عملة ذهبية! 🪙`, "success");
+            }
+          }).catch(() => {});
+        }).catch(() => {});
+
         showToast("تم تسليم واعتماد الكود البرمجي بنجاح وحفظه في حسابك الأكاديمي! 🎉", "success");
 
         // Immediately update Student Tasks Center with active task in submitted state
