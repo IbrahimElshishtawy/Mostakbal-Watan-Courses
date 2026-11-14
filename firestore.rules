@@ -228,5 +228,117 @@ service cloud.firestore {
       allow create: if isAuthenticated() && request.resource.data.studentUid == request.auth.uid;
       allow update, delete: if isStaff();
     }
+
+    // ========================================================
+    // 16. DAILY CHALLENGES (Adaptive Learning & Practice Cycles)
+    // ========================================================
+    match /daily_challenges/{challengeId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.studentUid == request.auth.uid;
+      allow update: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // ========================================================
+    // 17. QUESTION BANK (Adaptive & Problem Solving Repository)
+    // ========================================================
+    match /question_bank/{questionId} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
+    }
+
+    // ========================================================
+    // 18. REWARD CATALOG (Virtual Store Items & Economy)
+    // ========================================================
+    match /reward_catalog/{rewardId} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
+    }
+
+    // ========================================================
+    // 19. STUDENT INVENTORY & ITEMS (Owned Rewards & Badges)
+    // ========================================================
+    match /student_inventory/{studentUid} {
+      allow read: if isOwner(studentUid) || isStaff();
+      allow write: if isOwner(studentUid) || isStaff();
+
+      // Owned items subcollection
+      match /items/{itemId} {
+        allow read: if isOwner(studentUid) || isStaff();
+        allow write: if isOwner(studentUid) || isStaff();
+      }
+    }
+
+    // ========================================================
+    // 20. REWARD TRANSACTIONS (Virtual Store Purchase Auditing)
+    // ========================================================
+    match /reward_transactions/{transactionId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.studentUid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // ========================================================
+    // 21. CODE ACTIVITIES (Student Coding Sessions & Telemetry)
+    // ========================================================
+    match /code_activities/{activityId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow create, update: if isStaff() || (isAuthenticated() && (request.resource.data.studentUid == request.auth.uid || resource.data.studentUid == request.auth.uid));
+      allow delete: if isAdmin();
+    }
+
+    // ========================================================
+    // 22. CODE SNAPSHOTS (Code Evolution & Version History)
+    // ========================================================
+    match /code_snapshots/{snapshotId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.studentUid == request.auth.uid;
+      allow update, delete: if isStaff();
+    }
+
+    // ========================================================
+    // 23. CODE EXECUTIONS (Sandbox Runs & Execution Telemetry)
+    // ========================================================
+    match /code_executions/{executionId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.studentUid == request.auth.uid;
+      allow update, delete: if isStaff();
+    }
+
+    // ========================================================
+    // 24. XP & COIN LEDGERS (Immutable Double-Entry Economy)
+    // ========================================================
+    match /xp_ledger/{entryId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow write: if isStaff();
+    }
+
+    match /coin_ledger/{entryId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow write: if isStaff();
+    }
+
+    // ========================================================
+    // 25. SEASONS (Educational Seasons & Gamification Cycles)
+    // ========================================================
+    match /seasons/{seasonId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ========================================================
+    // 26. SEASON ARCHIVES (Historical Season Snapshot Records)
+    // ========================================================
+    match /season_archives/{archiveId} {
+      allow read: if isStaff() || (isAuthenticated() && resource.data.studentUid == request.auth.uid);
+      allow write: if isAdmin();
+    }
+
+    // ========================================================
+    // 27. AUDIT LOGS (Admin Operations & Security Events)
+    // ========================================================
+    match /audit_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
   }
 }

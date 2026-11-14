@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="../src/styles/attendance.css">
   <link rel="stylesheet" href="../src/styles/leaderboard.css">
   <link rel="stylesheet" href="../src/styles/profile.css">
+  <link rel="stylesheet" href="../src/styles/gamification.css">
 
   <!-- Python Engine Preload (Non-blocking deferred load) -->
   <script defer src="../assets/vendor/skulpt/skulpt.min.js" data-loaded="true"></script>
@@ -251,6 +252,7 @@
         problemSolving: () => import(`../src/features/problem-solving/problem-solving.controller.js?v=3.5.4&t=${ts}`).then((m) => m.ProblemSolvingController),
         leaderboard: () => import(`../src/features/leaderboard/leaderboard.controller.js?v=3.5.4&t=${ts}`).then((m) => m.LeaderboardController),
         cloudConsole: () => import(`../src/features/cloud-console/cloud-console.controller.js?v=3.5.4&t=${ts}`).then((m) => m.CloudConsoleController),
+        gamification: () => import(`../src/features/gamification/gamification.controller.js?v=3.5.4&t=${ts}`).then((m) => m.GamificationController),
         profile: () => Promise.all([
           import(`../src/features/profile/profile.controller.js?v=3.5.4&t=${ts}`),
           import(`../src/features/attendance/attendance.service.js?v=3.5.4&t=${ts}`),
@@ -283,6 +285,8 @@
             lazyLoaders.leaderboard().then((ctrl) => ctrl.init("leaderboardContainer", student));
           } else if (tabId === "cloud-console") {
             lazyLoaders.cloudConsole().then((ctrl) => ctrl.init("cloudConsoleContainer", student));
+          } else if (tabId === "gamification") {
+            lazyLoaders.gamification().then((ctrl) => ctrl.initStudent("gamificationContainer", student));
           } else if (tabId === "profile") {
             lazyLoaders.profile().then(({ ProfileController, AttendanceService, renderProfileAttendanceCard }) => {
               ProfileController.loadProfileView("profileContainer", student);
@@ -347,6 +351,8 @@
         layout.switchTab("leaderboard");
       } else if (targetTab === "cloud-console") {
         layout.switchTab("cloud-console");
+      } else if (targetTab === "gamification") {
+        layout.switchTab("gamification");
       } else if (targetTab === "exams") {
         layout.switchTab("exams");
       } else if (targetTab === "tasks") {

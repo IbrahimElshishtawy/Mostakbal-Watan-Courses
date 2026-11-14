@@ -302,13 +302,13 @@ export async function resetGamificationSeasonHandler(request: CallableRequest) {
 export async function getCompetitionsHandler(request: CallableRequest) {
   getAuthenticatedUser(request);
   const input = validateInput(GetCompetitionsSchema, request.data || {});
-  return getCompetitionsList(input.filter);
+  return getCompetitionsList(input.filter || "all");
 }
 
 export async function getCompetitionDetailsHandler(request: CallableRequest) {
-  getAuthenticatedUser(request);
+  const user = getAuthenticatedUser(request);
   const input = validateInput(GetCompetitionDetailsSchema, request.data);
-  return getCompetitionDetails(input.competitionId);
+  return getCompetitionDetails(user.uid, input.competitionId);
 }
 
 export async function joinCompetitionHandler(request: CallableRequest) {
