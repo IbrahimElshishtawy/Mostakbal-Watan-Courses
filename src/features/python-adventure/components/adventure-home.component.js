@@ -317,12 +317,15 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
         </div>
       </section>
 
-      <!-- 6. World Progress Road (مسار العوالم الثمانية) -->
-      <section class="adv5-world-road-card">
+      <!-- 6. World Progress Road (مسار العوالم التفاعلية) -->
+      <section class="adv5-world-road-card" aria-label="خريطة العوالم البرمجية">
         <div class="adv5-world-road-header">
-          <div>
-            <h2 class="adv5-road-title">مسار العوالم التفاعلية (${WORLDS_DATA.length} عوالم)</h2>
-            <p class="adv5-road-subtitle">خريطة الرحلة البرمجية</p>
+          <div class="adv5-road-title-group">
+            <div class="adv5-road-title-row">
+              <span class="adv5-road-badge-icon">🗺️</span>
+              <h2 class="adv5-road-title">مسار العوالم التفاعلية (${WORLDS_DATA.length} عالماً)</h2>
+            </div>
+            <p class="adv5-road-subtitle">خريطة الرحلة البرمجية الشاملة من المفاهيم الأساسية حتى بطولات النخبة</p>
           </div>
           <div class="adv5-road-slider-wrap font-mono">
             <div class="adv5-road-slider-bar">
@@ -332,41 +335,106 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
           </div>
         </div>
 
-        <div class="adv5-road-nodes-grid">
+        <!-- Filter tabs by phase -->
+        <div class="adv5-road-filters-bar" role="tablist" aria-label="تصنيفات مراحل العوالم">
+          <button type="button" class="adv5-road-filter-btn active" data-road-filter="all">
+            <span>الكل</span>
+            <span class="filter-count">20</span>
+          </button>
+          <button type="button" class="adv5-road-filter-btn" data-road-filter="phase-1">
+            <span>🌱 1. التأسيس</span>
+            <span class="filter-count">1-5</span>
+          </button>
+          <button type="button" class="adv5-road-filter-btn" data-road-filter="phase-2">
+            <span>📦 2. الهياكل والحل</span>
+            <span class="filter-count">6-10</span>
+          </button>
+          <button type="button" class="adv5-road-filter-btn" data-road-filter="phase-3">
+            <span>🧠 3. الخوارزميات</span>
+            <span class="filter-count">11-15</span>
+          </button>
+          <button type="button" class="adv5-road-filter-btn" data-road-filter="phase-4">
+            <span>👑 4. النخبة والبطولات</span>
+            <span class="filter-count">16-20</span>
+          </button>
+        </div>
+
+        <div class="adv5-road-nodes-grid" id="adv5RoadNodesGrid">
           ${WORLDS_DATA.map((w, wIdx) => {
             const wChallenges = PythonAdventureService.getWorldChallenges(w.id);
             const wSolved = wChallenges.filter((c) => completedMap[c.id]).length;
             const wTotal = wChallenges.length || w.levelsCount || 11;
             const isCompleted = wTotal > 0 && wSolved >= wTotal;
             const isUnlocked = unlockedWorlds.includes(w.id) || isCompleted;
+            const progressPercent = wTotal > 0 ? Math.min(100, Math.round((wSolved / wTotal) * 100)) : 0;
+
+            const phaseNum = Math.ceil(w.number / 5);
+            const phaseLabels = {
+              1: "تأسيس",
+              2: "هياكل",
+              3: "خوارزميات",
+              4: "احتراف"
+            };
+            const phaseLabel = phaseLabels[phaseNum] || "متقدم";
 
             let statusText = "مقفل";
-            let statusClass = "text-slate-500";
+            let statusPillClass = "status-locked";
             let nodeClass = "locked";
             let bubbleContent = '<i class="fa-solid fa-lock"></i>';
+            let bubbleClass = "locked";
 
             if (isCompleted) {
               statusText = `مكتمل (${wSolved}/${wTotal})`;
-              statusClass = "text-emerald-400 font-mono";
+              statusPillClass = "status-completed";
               nodeClass = "active completed";
-              bubbleContent = `✓`;
+              bubbleContent = `<i class="fa-solid fa-check"></i>`;
+              bubbleClass = "completed font-bold";
             } else if (isUnlocked) {
               statusText = `مفتوح (${wSolved}/${wTotal})`;
-              statusClass = "status-open font-mono text-cyan-400";
-              nodeClass = "active";
+              statusPillClass = "status-open";
+              nodeClass = "active open";
               bubbleContent = `${w.number}`;
+              bubbleClass = "unlocked font-mono font-bold";
             } else if (wIdx === 1 || (wIdx > 0 && unlockedWorlds.includes(WORLDS_DATA[wIdx - 1]?.id))) {
               statusText = "المرحلة التالية";
-              statusClass = "text-slate-400";
+              statusPillClass = "status-next";
               nodeClass = "next";
               bubbleContent = `${w.number}`;
+              bubbleClass = "next font-mono";
             }
 
             return `
-              <div class="adv5-road-node ${nodeClass}" data-world-node="${w.id}" role="button" tabindex="${isUnlocked ? '0' : '-1'}">
-                <div class="adv5-node-bubble ${isCompleted ? 'cyan font-bold' : isUnlocked ? 'cyan' : 'dark font-mono'}">${bubbleContent}</div>
-                <h4 class="adv5-node-name">${escapeHtml(w.title)}</h4>
-                <span class="adv5-node-sub ${statusClass}">${statusText}</span>
+              <div class="adv5-road-node ${nodeClass}" data-world-node="${w.id}" data-road-phase="phase-${phaseNum}" role="button" tabindex="${isUnlocked ? '0' : '-1'}" title="${escapeHtml(w.title)}: ${escapeHtml(w.concept || '')}">
+                <div class="adv5-node-top">
+                  <div class="adv5-node-identity">
+                    <div class="adv5-node-bubble ${bubbleClass}">
+                      ${bubbleContent}
+                    </div>
+                    <div class="adv5-node-meta">
+                      <span class="adv5-node-num">عالم #${w.number}</span>
+                      <span class="adv5-node-phase-tag">${phaseLabel}</span>
+                    </div>
+                  </div>
+                  <span class="adv5-node-status-pill ${statusPillClass}">${statusText}</span>
+                </div>
+
+                <div class="adv5-node-body">
+                  <div class="adv5-node-icon-title">
+                    <span class="adv5-node-world-icon">${w.icon || "🗺️"}</span>
+                    <h4 class="adv5-node-name">${escapeHtml(w.title)}</h4>
+                  </div>
+                  <p class="adv5-node-concept">${escapeHtml(w.concept || w.englishTitle || "")}</p>
+                </div>
+
+                <div class="adv5-node-footer">
+                  <div class="adv5-node-progress-info font-mono">
+                    <span>مكتمل</span>
+                    <strong>${wSolved} / ${wTotal}</strong>
+                  </div>
+                  <div class="adv5-node-progress-track">
+                    <div class="adv5-node-progress-fill" style="width: ${progressPercent}%; background: ${w.color || '#38bdf8'};"></div>
+                  </div>
+                </div>
               </div>
             `;
           }).join("")}

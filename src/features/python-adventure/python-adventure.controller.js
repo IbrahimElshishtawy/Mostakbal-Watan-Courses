@@ -527,11 +527,37 @@ export const PythonAdventureController = {
       });
     });
 
-    // 9. World Progress Road Nodes (8 World Nodes)
-    containerElement.querySelectorAll("[data-world-node]").forEach((node) => {
+    // 9. World Progress Road Nodes & Phase Filtering
+    const filterButtons = containerElement.querySelectorAll("[data-road-filter]");
+    const roadNodes = containerElement.querySelectorAll("[data-world-node]");
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.getAttribute("data-road-filter");
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        roadNodes.forEach((node) => {
+          const nodePhase = node.getAttribute("data-road-phase");
+          if (filter === "all" || nodePhase === filter) {
+            node.style.display = "flex";
+          } else {
+            node.style.display = "none";
+          }
+        });
+      });
+    });
+
+    roadNodes.forEach((node) => {
       node.addEventListener("click", () => {
         const worldId = node.getAttribute("data-world-node");
-        if (worldId === "world-1" || worldId === "world-2") {
+        const unlockedWorlds = state.progress?.unlockedWorlds || ["world-1"];
+        const completedChallenges = state.progress?.completedChallenges || {};
+        const challenges = PythonAdventureService.getWorldChallenges(worldId);
+        const isCompleted = challenges.length > 0 && challenges.every((c) => completedChallenges[c.id]);
+        const isUnlocked = unlockedWorlds.includes(worldId) || worldId === "world-1" || isCompleted;
+
+        if (isUnlocked) {
           this.openWorldMapTrack("all", worldId);
         } else {
           showToast(`هذا العالم مقفل حالياً. أكمل مستويات العوالم السابقة لفتحه 🔒`, "info");

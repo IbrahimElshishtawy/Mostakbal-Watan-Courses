@@ -472,6 +472,44 @@ assert(heartsPillHtml.includes("adv-hearts-pill"), "Pill HTML contains adv-heart
 assert(heartsPillHtml.includes("3/3"), "Pill displays 3/3 hearts ratio");
 assert(heartsPillHtml.includes("رصيد القلوب"), "Pill has Arabic title description");
 
+// -------------------------------------------------------------
+// TEST SUITE 12: Python 20 Worlds Roadmap UI & Phase Filtering
+// -------------------------------------------------------------
+console.log("\n▶️ TEST SUITE 12: Python 20 Worlds Roadmap UI & Phase Filtering");
+
+const homeCompSrc = fs.readFileSync(path.join(projectRoot, "src/features/python-adventure/components/adventure-home.component.js"), "utf8");
+const cssSrc = fs.readFileSync(path.join(projectRoot, "src/styles/python-adventure.css"), "utf8");
+const { WORLDS_DATA: testWorldsData } = await import("../src/features/python-adventure/python-adventure-data.js");
+
+assert(homeCompSrc.includes("مسار العوالم التفاعلية (${WORLDS_DATA.length} عالماً)"), "Road title uses correct Arabic grammar (عالماً)");
+assert(homeCompSrc.includes("adv5-road-filters-bar"), "Phase filter bar is present in home markup");
+assert(homeCompSrc.includes('data-road-filter="all"'), "Filter 'all' exists");
+assert(homeCompSrc.includes('data-road-filter="phase-1"'), "Filter 'phase-1' exists");
+assert(homeCompSrc.includes('data-road-filter="phase-2"'), "Filter 'phase-2' exists");
+assert(homeCompSrc.includes('data-road-filter="phase-3"'), "Filter 'phase-3' exists");
+assert(homeCompSrc.includes('data-road-filter="phase-4"'), "Filter 'phase-4' exists");
+assert(homeCompSrc.includes('data-road-phase="phase-${phaseNum}"'), "World nodes bind to phase attributes");
+assert(homeCompSrc.includes("adv5-node-progress-track"), "Progress bar track is rendered on world cards");
+assert(homeCompSrc.includes("adv5-node-concept"), "Concept summary text is rendered on world cards");
+
+// 2. Verify all 20 worlds are partitioned into 4 distinct phases (5 worlds each)
+assert(testWorldsData.length === 20, "WORLDS_DATA contains exactly 20 worlds");
+const phaseCounts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+for (const w of testWorldsData) {
+  const p = Math.ceil(w.number / 5);
+  phaseCounts[p] = (phaseCounts[p] || 0) + 1;
+}
+assert(phaseCounts[1] === 5, "Phase 1 has exactly 5 worlds (Worlds 1-5)");
+assert(phaseCounts[2] === 5, "Phase 2 has exactly 5 worlds (Worlds 6-10)");
+assert(phaseCounts[3] === 5, "Phase 3 has exactly 5 worlds (Worlds 11-15)");
+assert(phaseCounts[4] === 5, "Phase 4 has exactly 5 worlds (Worlds 16-20)");
+
+// 3. Verify CSS prevents overflow and enforces responsive 5-column layout
+assert(cssSrc.includes("grid-template-columns: repeat(5, minmax(0, 1fr))"), "CSS enforces 5-column grid for 20 worlds");
+assert(cssSrc.includes(".adv5-road-node {\n  min-width: 0;"), "adv5-road-node has min-width: 0 to prevent grid blowout");
+assert(cssSrc.includes("grid-template-columns: repeat(4, minmax(0, 1fr))"), "Responsive 4-column layout defined for medium screens");
+assert(cssSrc.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "Responsive 2-column layout defined for mobile");
+
 console.log("\n=======================================================");
 console.log(`🎉 ALL ${passedTests}/${totalTests} TESTS PASSED SUCCESSFULLY!`);
 console.log("=======================================================\n");
