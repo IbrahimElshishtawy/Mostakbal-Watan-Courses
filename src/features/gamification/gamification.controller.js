@@ -44,8 +44,12 @@ export const GamificationController = {
   /**
    * Initializes the Student Gamification Experience.
    */
-  async initStudent(container, student) {
-    if (!container) return;
+  async initStudent(containerInput, student) {
+    const container = typeof containerInput === "string" ? document.getElementById(containerInput) : containerInput;
+    if (!container) {
+      console.warn("[GamificationController] Container element not found:", containerInput);
+      return;
+    }
     this._studentContainer = container;
     this._state.student = student;
 
@@ -94,12 +98,25 @@ export const GamificationController = {
     this._wireStaticEvents();
 
     try {
-      // Parallel loading of student gamification data
+      const studentUid = student?.id || student?.firestoreId || student?.uid || student?.phone;
+      // Parallel loading of student gamification data with safe fallbacks
       const [profile, challenge, catalog, inventory] = await Promise.all([
-        GamificationService.getStudentGamificationProfile(student?.id || student?.firestoreId),
-        GamificationService.getDailyChallenge(),
-        GamificationService.getStoreCatalog(),
-        GamificationService.getStudentInventory(student?.id || student?.firestoreId)
+        GamificationService.getStudentGamificationProfile(studentUid).catch((e) => {
+          console.warn("Profile fetch error:", e);
+          return null;
+        }),
+        GamificationService.getDailyChallenge().catch((e) => {
+          console.warn("Daily challenge fetch error:", e);
+          return null;
+        }),
+        GamificationService.getStoreCatalog().catch((e) => {
+          console.warn("Store catalog error:", e);
+          return [];
+        }),
+        GamificationService.getStudentInventory(studentUid).catch((e) => {
+          console.warn("Inventory fetch error:", e);
+          return [];
+        })
       ]);
 
       this._state.profile = profile || {};
@@ -118,7 +135,7 @@ export const GamificationController = {
    * Renders the active sub-tab view inside student portal.
    */
   renderStudentView() {
-    const slot = document.getElementById("gamMainContentSlot");
+    const slot = this._studentContainer?.querySelector("#gamMainContentSlot") || document.getElementById("gamMainContentSlot");
     if (!slot) return;
 
     const { activeSubTab, challenge, activeQuestionIndex, selectedOption, submittedResult, isSubmitting, profile, catalog, inventory, storeCategory, isPurchasing, isEquipping } = this._state;
@@ -359,8 +376,12 @@ export const GamificationController = {
   /**
    * Initializes Teacher Analytics Dashboard.
    */
-  async initTeacher(container, teacher) {
-    if (!container) return;
+  async initTeacher(containerInput, teacher) {
+    const container = typeof containerInput === "string" ? document.getElementById(containerInput) : containerInput;
+    if (!container) {
+      console.warn("[GamificationController] Teacher container not found:", containerInput);
+      return;
+    }
     this._teacherContainer = container;
 
     container.innerHTML = `
@@ -410,8 +431,12 @@ export const GamificationController = {
   /**
    * Initializes Administrative Gamification Center.
    */
-  async initAdmin(container, admin) {
-    if (!container) return;
+  async initAdmin(containerInput, admin) {
+    const container = typeof containerInput === "string" ? document.getElementById(containerInput) : containerInput;
+    if (!container) {
+      console.warn("[GamificationController] Admin container not found:", containerInput);
+      return;
+    }
     this._adminContainer = container;
 
     try {
