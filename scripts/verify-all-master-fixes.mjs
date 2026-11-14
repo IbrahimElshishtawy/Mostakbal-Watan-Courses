@@ -187,7 +187,7 @@ assert(arGraded === "تم التصحيح", `Arabic translation for status.graded
 console.log("\n▶️ TEST SUITE 5: Python Adventure Worlds & Curriculum (Phase 07)");
 
 const worlds = adventureDataMod.WORLDS_DATA;
-assert(worlds.length >= 12, `Curriculum contains at least 12 complete worlds (Found: ${worlds.length})`);
+assert(worlds.length >= 20, `Curriculum contains at least 20 complete worlds (Found: ${worlds.length})`);
 
 const world8 = worlds.find(w => w.id === "world-8");
 assert(world8, "World 8 exists");
@@ -205,7 +205,18 @@ assert(challenges["world-8-level-5"].nextChallengeId === "world-8-level-6", "wor
 assert(challenges["world-8-level-6"].nextChallengeId === "world-8-level-7", "world-8-level-6 properly links forward to world-8-level-7");
 assert(challenges["world-8-level-7"].nextChallengeId === "world-8-level-8", "world-8-level-7 properly links forward to world-8-level-8");
 assert(challenges["world-8-level-8"].nextChallengeId === "world-8-level-9", "world-8-level-8 properly links forward to world-8-level-9");
-assert(challenges["world-12-level-11"].nextChallengeId === null, "world-12-level-11 is the ultimate capstone and has nextChallengeId: null");
+assert(challenges["world-12-level-11"].nextChallengeId === "world-13-level-1", "world-12-level-11 links forward to world-13-level-1");
+assert(challenges["world-20-level-11"].nextChallengeId === null, "world-20-level-11 is the ultimate capstone and has nextChallengeId: null");
+
+// Verify all 8 new worlds (13 to 20) are registered with 11 levels each
+for (let w = 13; w <= 20; w++) {
+  const worldObj = worlds.find(wo => wo.id === `world-${w}`);
+  assert(worldObj, `World ${w} exists in WORLDS_DATA`);
+  assert(worldObj.levelsCount === 11, `World ${w} has 11 levels`);
+  for (let l = 1; l <= 11; l++) {
+    assert(challenges[`world-${w}-level-${l}`], `world-${w}-level-${l} is registered`);
+  }
+}
 
 // -------------------------------------------------------------
 // TEST SUITE 6: UI Structure & Mobile Optimization (Phase 09)
@@ -296,6 +307,36 @@ assert(res2.sanitizedCode.includes("x >= y"), "≥ is converted to >=");
 // Ensure Python3 can execute the sanitized code directly
 const executionResult = execSync(`python3 -c "${res1.sanitizedCode.replace(/"/g, '\\"')}\nprint('Sanitized Execution Success')"`, { encoding: "utf8" }).trim();
 assert(executionResult.includes("Sanitized Execution Success"), "Sanitized code executes cleanly in standard Python3 engine without SyntaxError");
+
+// -------------------------------------------------------------
+// TEST SUITE 9: Python Code & Complexity Analyzer (Anti-Cheat & Big-O)
+// -------------------------------------------------------------
+console.log("\n▶️ TEST SUITE 9: Python Code & Complexity Analyzer (Anti-Cheat & Big-O)");
+
+const { PythonCodeAnalyzer } = await import("../src/features/python-adventure/python-code-analyzer.service.js");
+
+// 1. Test Anti-Cheat detection for hardcoded print
+const hardcodedReport = PythonCodeAnalyzer.analyze("print('Max Rectangle Area: 10')", {
+  type: "boss",
+  expectedOutput: "Max Rectangle Area: 10"
+});
+assert(hardcodedReport.antiCheat.isHardcoded === true, "Anti-cheat flags direct hardcoded print without calculation");
+assert(hardcodedReport.antiCheat.passed === false, "Anti-cheat passed is false on hardcoded code");
+
+// 2. Test Time Complexity for single loop O(N)
+const linearReport = PythonCodeAnalyzer.analyze("total = 0\nfor x in range(10):\n    total += x\nprint(total)", {
+  expectedOutput: "45"
+});
+assert(linearReport.timeComplexity.notation === "O(N)", "Linear loop correctly classified as O(N)");
+assert(linearReport.antiCheat.passed === true, "Algorithmic code passes anti-cheat check");
+
+// 3. Test Time Complexity for nested loops O(N^2)
+const quadraticReport = PythonCodeAnalyzer.analyze("for i in range(10):\n    for j in range(10):\n        print(i, j)", {});
+assert(quadraticReport.timeComplexity.notation === "O(N²)", "Nested loops correctly classified as O(N²)");
+
+// 4. Test Clean Code Score
+assert(linearReport.cleanCode.score >= 80, `Clean code score is healthy (${linearReport.cleanCode.score})`);
+assert(typeof linearReport.academicFeedback === "string" && linearReport.academicFeedback.length > 20, "Academic feedback generated in Arabic");
 
 console.log("\n=======================================================");
 console.log(`🎉 ALL ${passedTests}/${totalTests} TESTS PASSED SUCCESSFULLY!`);

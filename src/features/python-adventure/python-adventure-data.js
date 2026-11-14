@@ -1,5 +1,6 @@
 // src/features/python-adventure/python-adventure-data.js
 import { PROBLEM_SOLVING_LEVELS_DATA, PROBLEM_SOLVING_CHALLENGES_DATA } from "../problem-solving/problem-solving-data.js";
+import { WORLDS_13_TO_20_DATA, CHALLENGES_13_TO_20_DATA } from "./python-adventure-worlds-13-20.js";
 export { PROBLEM_SOLVING_LEVELS_DATA, PROBLEM_SOLVING_CHALLENGES_DATA };
 
 export const WORLDS_DATA = [
@@ -148,6 +149,7 @@ export const WORLDS_DATA = [
     "levelsCount": 11,
     "requiredWorldId": "world-11"
   },
+  ...WORLDS_13_TO_20_DATA
 ];
 
 // PROBLEM SOLVING COMPETITIVE LEVEL WORLDS (5 PROGRESSIVE LEVELS)
@@ -5711,9 +5713,11 @@ export const CHALLENGES_CLIENT_DATA = {
             "description": "تحديد الفائز في مسابقة البرمجة"
         }
     ],
-    "unlocksWorldId": null,
-    "nextChallengeId": null
+    "unlocksWorldId": "world-13",
+    "nextChallengeId": "world-13-level-1"
 },
+
+  ...CHALLENGES_13_TO_20_DATA,
 
   // DAILY CHALLENGES POOL (Fully integrated & persistent)
   "daily-loop-sum": {
