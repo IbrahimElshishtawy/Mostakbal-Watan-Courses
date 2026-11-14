@@ -1,6 +1,5 @@
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 import { formatDate, formatDateTime, isDeadlinePassed } from "../../../shared/utils/date.utils.js";
-import { formatAssignmentGradeDisplay } from "../assignment.service.js";
 
 /**
  * Resolves task status and details against the student's submission.
@@ -99,6 +98,7 @@ export function renderStudentTasksCenter({
   // Dynamic KPI computation based on actual data
   let completedCount = 0;
   let inProgressCount = 0;
+  let expiredCount = 0;
   let upcomingCount = 0;
   let earnedScoreSum = 0;
   let maxScoreSum = 0;
@@ -119,7 +119,7 @@ export function renderStudentTasksCenter({
     } else if (status.type === "active") {
       inProgressCount++;
     } else if (status.type === "expired") {
-      // counted in total
+      expiredCount++;
     }
   });
 
@@ -129,16 +129,35 @@ export function renderStudentTasksCenter({
   const upcomingTasks = kpis?.upcomingTasks ?? "00";
   const averageGrade = kpis?.averageGrade ?? (maxScoreSum > 0 ? `${Math.round((earnedScoreSum / maxScoreSum) * 100)}%` : "—");
 
-  // Determine which task is featured as Hero
-  const heroTask = activeTask || directoryTasks.find((t) => {
-    const s = submissionsMap?.get(t.id);
-    return !s; // First unsubmitted task
-  }) || directoryTasks[0] || null;
+  // Determine which task is featured as Hero:
+  // 1. Explicitly selected task (e.g. user clicked a card in the directory)
+  let heroTask = activeTask || null;
 
+  // 2. If no active task was explicitly chosen, search ONLY for an unsubmitted, unexpired active task:
+  if (!heroTask) {
+    heroTask = directoryTasks.find((t) => {
+      const s = submissionsMap?.get(t.id);
+      const status = resolveTaskStatus(t, s);
+      return !s && status.type === "active";
+    }) || null;
+  }
+
+  // 3. Fallback to an unexpired submitted task in-progress (student can still revise code):
+  if (!heroTask) {
+    heroTask = directoryTasks.find((t) => {
+      const s = submissionsMap?.get(t.id);
+      const status = resolveTaskStatus(t, s);
+      return status.type === "submitted";
+    }) || null;
+  }
+
+  // 4. If ALL tasks are expired (or graded), heroTask remains NULL.
+  // This triggers the Empty Hero State so the student sees that NO tasks are currently open for submission!
   const heroSubmission = heroTask ? submissionsMap?.get(heroTask.id) : null;
   const heroStatus = heroTask ? resolveTaskStatus(heroTask, heroSubmission) : null;
   const isHeroSubmitted = !!heroSubmission;
   const isHeroGraded = heroStatus?.type === "graded";
+  const isHeroExpired = heroStatus?.type === "expired";
 
   const defaultStarterCode = "";
   const initialEditorCode = (heroSubmission?.answerText || "").trim();
@@ -254,16 +273,16 @@ export function renderStudentTasksCenter({
       <!-- BEGIN: HeroActiveAssignment -->
       ${heroTask ? `
         <section class="glass-card hero-active-assignment shadow-glow-cyan" data-purpose="primary-active-assignment" id="heroActiveAssignmentSection" data-hero-task-id="${escapeHtml(heroTask.id)}">
-          <div class="assignment-header-band">
+          <div class="assignment-header-band ${isHeroExpired ? 'is-expired' : ''}">
             <div class="band-left-tags">
               <span class="badge-task-code font-mono">${escapeHtml(heroTask.code || heroTask.id)}</span>
-              <span class="${heroStatus?.badgeClass || 'badge-status-open'}">
-                <span class="pulse-dot"></span>
-                <span>${heroStatus?.label || 'مفتوح للتسليم'}</span>
+              <span class="${heroStatus?.badgeClass || (isHeroExpired ? 'badge-status-expired' : 'badge-status-open')}">
+                <span class="${isHeroExpired ? 'status-dot-expired' : 'pulse-dot'}"></span>
+                <span>${heroStatus?.label || (isHeroExpired ? 'انتهى موعد التسليم' : 'مفتوح للتسليم')}</span>
               </span>
             </div>
-            <div class="badge-deadline-countdown">
-              <i class="fa-regular fa-clock text-amber-400"></i>
+            <div class="badge-deadline-countdown ${isHeroExpired ? 'is-expired' : ''}">
+              <i class="fa-regular ${isHeroExpired ? 'fa-calendar-xmark text-rose-400' : 'fa-clock text-amber-400'}"></i>
               <span>${formatDeadlineText(heroTask.dueDate || heroTask.deadline)}</span>
             </div>
           </div>
@@ -271,6 +290,15 @@ export function renderStudentTasksCenter({
           <div class="assignment-main-grid">
             <!-- Right side details -->
             <div class="assignment-details-col">
+              ${isHeroExpired ? `
+                <div class="hero-expired-top-banner" role="alert">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  <div>
+                    <strong class="block text-xs font-bold text-rose-300">انتهت المهلة الرسمية المحددة لتسليم هذا التكليف 🔒</strong>
+                    <span class="text-[11px] text-slate-300">تم إغلاق إمكانية اعتماد حلول جديدة نظراً لانقضاء الديدلاين. يمكنك تجربة الكود واستعراض المتطلبات فقط.</span>
+                  </div>
+                </div>
+              ` : ""}
               <div class="assignment-title-area">
                 <div class="assignment-lecture-tag">
                   <i class="fa-solid fa-layer-group text-brand-cyan"></i>
@@ -530,19 +558,19 @@ export function renderStudentTasksCenter({
 
                   <!-- Submission Action Bar (Direct Code Submission from Card!) -->
                   <div class="submission-action-area">
-                    <div class="submission-verify-notice">
-                      <i class="fa-solid fa-circle-check text-brand-cyan"></i>
-                      <span>${isHeroSubmitted ? "يمكنك اختبار الكود في الكونسول ثم الضغط على الزر أدناه لتحديث واعتماد الكود المسلم مباشرة." : "تأكد من تجربة وتشغيل الكود في الكونسول وظهور النتائج المطلوبة بنجاح قبل الاعتماد النهائي."}</span>
+                    <div class="submission-verify-notice ${isHeroExpired ? 'submission-expired-notice' : ''}">
+                      <i class="fa-solid ${isHeroExpired ? 'fa-triangle-exclamation text-rose-400' : 'fa-circle-check text-brand-cyan'}"></i>
+                      <span>${isHeroExpired ? "تم إغلاق إمكانية تسليم الحلول لهذا التكليف نظراً لانقضاء المهلة الزمنية المحددة من قبل المحاضر." : (isHeroSubmitted ? "يمكنك اختبار الكود في الكونسول ثم الضغط على الزر أدناه لتحديث واعتماد الكود المسلم مباشرة." : "تأكد من تجربة وتشغيل الكود في الكونسول وظهور النتائج المطلوبة بنجاح قبل الاعتماد النهائي.")}</span>
                     </div>
 
-                    <button type="button" class="btn-submit-assignment" id="btnSubmitHeroAssignment" data-assignment-id="${escapeHtml(heroTask.id)}">
-                      <i class="fa-solid fa-paper-plane"></i>
-                      <span id="btnSubmitHeroAssignmentText">${isHeroSubmitted ? "تحديث واعتماد الكود المسلم 🚀" : "تسليم واعتماد الكود للتقييم 🚀"}</span>
+                    <button type="button" class="btn-submit-assignment ${isHeroExpired ? 'btn-disabled-expired' : ''}" id="btnSubmitHeroAssignment" data-assignment-id="${escapeHtml(heroTask.id)}" ${isHeroExpired ? 'disabled' : ''}>
+                      <i class="fa-solid ${isHeroExpired ? 'fa-lock' : 'fa-paper-plane'}"></i>
+                      <span id="btnSubmitHeroAssignmentText">${isHeroExpired ? "انتهت فترة التسليم المحددة (مغلق) 🔒" : (isHeroSubmitted ? "تحديث واعتماد الكود المسلم 🚀" : "تسليم واعتماد الكود للتقييم 🚀")}</span>
                     </button>
 
-                    <p class="submission-subtext">
+                    <p class="submission-subtext ${isHeroExpired ? 'text-rose-400/80' : ''}">
                       <i class="fa-solid fa-lock text-[11px] ml-1"></i>
-                      يتم تسليم الكود وتوثيق الوقت مباشرة في حسابك الأكاديمي لدى المحاضر من هذا الكارد مباشرة
+                      ${isHeroExpired ? "تم إغلاق التسليم التلقائي لانقضاء الديدلاين الرسمي من قِبل المحاضر" : "يتم تسليم الكود وتوثيق الوقت مباشرة في حسابك الأكاديمي لدى المحاضر من هذا الكارد مباشرة"}
                     </p>
                   </div>
 
@@ -553,12 +581,27 @@ export function renderStudentTasksCenter({
         </section>
       ` : `
         <!-- Empty Hero State when no assignments available -->
-        <section class="glass-card p-8 text-center my-6 border border-brand-border">
-          <div class="max-w-md mx-auto space-y-3">
-            <span style="font-size: 3rem;">🎉</span>
-            <h3 class="text-white font-bold text-lg">لا توجد واجبات مفتوحة للتسليم حالياً</h3>
-            <p class="text-slate-400 text-sm leading-relaxed">
-              أنت على اطلاع بكافة متطلبات مسارك الأكاديمي. يمكنك استعراض دروسك السابقة أو المشاركة في تحديات بايثون ولوحة المتصدرين.
+        <section class="glass-card hero-empty-state-card text-center my-6 border border-brand-border" data-purpose="empty-hero-state">
+          <div class="max-w-lg mx-auto py-10 px-4 space-y-4">
+            <span style="font-size: 3.2rem;">🎉</span>
+            <h3 class="text-white font-bold text-xl">لا توجد واجبات أو تاسكات مفتوحة للتسليم حالياً</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              ${directoryTasks.length > 0 
+                ? "أنت على اطلاع بكافة متطلبات مسارك الأكاديمي! جميع التكليفات السابقة إما تم إنجازها واعتمادها بنجاح، أو انتهت المهلة الزمنية المحددة لتسليمها." 
+                : "لم يتم نشر أي تكليفات أو واجبات برمجية جديدة لمجموعتك حتى الآن."}
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
+              <span class="badge-status-approved">
+                <i class="fa-solid fa-circle-check"></i> ${completedCount} واجب مكتمل ومعتمد
+              </span>
+              ${expiredCount > 0 ? `
+                <span class="badge-status-expired">
+                  <i class="fa-solid fa-clock-rotate-left"></i> ${expiredCount} تكليف منتهي المهلة (في الأرشيف)
+                </span>
+              ` : ""}
+            </div>
+            <p class="text-xs text-slate-400">
+              يمكنك استعراض تفاصيل التكليفات والحلول المسجلة من سجل المهام أدناه في أي وقت.
             </p>
           </div>
         </section>
@@ -581,6 +624,7 @@ export function renderStudentTasksCenter({
             <button type="button" role="tab" class="dir-tab-btn active" data-dir-filter="all">الكل (${directoryTasks.length})</button>
             <button type="button" role="tab" class="dir-tab-btn" data-dir-filter="active">سارية ومتاحة (${inProgressCount})</button>
             <button type="button" role="tab" class="dir-tab-btn" data-dir-filter="graded">تم التقييم (${completedCount})</button>
+            ${expiredCount > 0 ? `<button type="button" role="tab" class="dir-tab-btn" data-dir-filter="expired">منتهية المهلة (${expiredCount})</button>` : ""}
           </div>
         </div>
 
@@ -685,6 +729,14 @@ export function renderStudentTasksCenter({
                         مسلّم ✓
                       </span>
                     `}
+                  ` : (status.type === "expired" ? `
+                    <button type="button" class="btn-card-action text-slate-300 hover:text-white" data-action="select-task" data-assignment-id="${escapeHtml(task.id)}">
+                      <i class="fa-solid fa-eye ml-1"></i>
+                      <span>${isHeroActive ? "معروض في المحرر (منتهي) 🔒" : "استعراض التكليف (منتهي)"}</span>
+                    </button>
+                    <span class="text-xs text-rose-400 font-mono font-bold">
+                      منتهي المهلة 🔒
+                    </span>
                   ` : `
                     <button type="button" class="btn-card-action text-brand-cyan hover:text-white" data-action="select-task" data-assignment-id="${escapeHtml(task.id)}">
                       <i class="fa-solid fa-upload ml-1"></i>
@@ -693,7 +745,7 @@ export function renderStudentTasksCenter({
                     <span class="text-xs text-slate-400 font-mono">
                       ${task.maxScore || 100} نقطة
                     </span>
-                  `}
+                  `)}
                 </div>
               </div>
             `;

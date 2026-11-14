@@ -338,6 +338,63 @@ assert(quadraticReport.timeComplexity.notation === "O(N²)", "Nested loops corre
 assert(linearReport.cleanCode.score >= 80, `Clean code score is healthy (${linearReport.cleanCode.score})`);
 assert(typeof linearReport.academicFeedback === "string" && linearReport.academicFeedback.length > 20, "Academic feedback generated in Arabic");
 
+// -------------------------------------------------------------
+// TEST SUITE 10: Student Tasks Deadline Enforcement & Expired State Handling
+// -------------------------------------------------------------
+console.log("\n▶️ TEST SUITE 10: Student Tasks Deadline Enforcement & Expired State Handling");
+
+const { isDeadlinePassed } = await import("../src/shared/utils/date.utils.js");
+const { renderStudentTasksCenter } = await import("../src/features/assignments/components/student-tasks-center.component.js");
+
+// 1. Verify deadline logic
+assert(isDeadlinePassed("2020-01-01") === true, "Past deadline is correctly recognized as expired");
+assert(isDeadlinePassed("2099-12-31") === false, "Future deadline is recognized as not expired");
+
+// 2. Test Empty Hero State when all tasks are expired
+const expiredTasksList = [
+  { id: "task-exp-1", title: "تاسك المتغيرات المنتهي", dueDate: "2023-01-01", maxScore: 100 },
+  { id: "task-exp-2", title: "تاسك الدوال المنتهي", deadline: "2023-02-01", maxScore: 100 }
+];
+
+const emptyHeroMarkup = renderStudentTasksCenter({
+  student: { name: "أحمد محمد" },
+  directoryTasks: expiredTasksList,
+  submissionsMap: new Map()
+});
+
+assert(emptyHeroMarkup.includes("لا توجد واجبات أو تاسكات مفتوحة للتسليم حالياً"), "Hero empty state shown when all tasks are expired");
+assert(emptyHeroMarkup.includes("hero-empty-state-card"), "Empty state card class is rendered");
+assert(!emptyHeroMarkup.includes('id="btnSubmitHeroAssignment"'), "No active submission button shown in Hero when all tasks expired");
+
+// 3. Test Expired Hero Card when student explicitly clicks an expired task
+const selectedExpiredMarkup = renderStudentTasksCenter({
+  student: { name: "أحمد محمد" },
+  activeTask: expiredTasksList[0],
+  directoryTasks: expiredTasksList,
+  submissionsMap: new Map()
+});
+
+assert(selectedExpiredMarkup.includes("hero-expired-top-banner"), "Expired top banner is rendered on clicked expired task");
+assert(selectedExpiredMarkup.includes("btn-disabled-expired"), "Submit button gets btn-disabled-expired class");
+assert(selectedExpiredMarkup.includes("انتهت فترة التسليم المحددة (مغلق) 🔒"), "Submit button text shows closed / expired message");
+assert(selectedExpiredMarkup.includes("disabled"), "Submit button has HTML disabled attribute");
+
+// 4. Test Active Task Rendering when an open unexpired task exists
+const mixedTasksList = [
+  { id: "task-exp-1", title: "تاسك منتهي", dueDate: "2023-01-01", maxScore: 100 },
+  { id: "task-active-1", title: "تاسك ساري جديد", dueDate: "2099-12-31", maxScore: 100 }
+];
+
+const activeHeroMarkup = renderStudentTasksCenter({
+  student: { name: "أحمد محمد" },
+  directoryTasks: mixedTasksList,
+  submissionsMap: new Map()
+});
+
+assert(activeHeroMarkup.includes("تاسك ساري جديد"), "Hero automatically features the active unexpired task");
+assert(activeHeroMarkup.includes("تسليم واعتماد الكود للتقييم 🚀"), "Active task has enabled submission button");
+assert(!activeHeroMarkup.includes("btn-disabled-expired"), "Active task submit button is not disabled");
+
 console.log("\n=======================================================");
 console.log(`🎉 ALL ${passedTests}/${totalTests} TESTS PASSED SUCCESSFULLY!`);
 console.log("=======================================================\n");

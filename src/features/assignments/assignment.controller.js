@@ -530,7 +530,6 @@ if __name__ == "__main__":
 
     // 7. Submit Hero Assignment (Direct Code Submission from Card - NO MODALS!)
     btnSubmitHero?.addEventListener("click", async () => {
-      const code = (codeEditor?.value || "").trim();
       const assignmentId = btnSubmitHero.getAttribute("data-assignment-id") || currentAssignmentId;
 
       if (!assignmentId) {
@@ -538,6 +537,20 @@ if __name__ == "__main__":
         return;
       }
 
+      // Check deadline before anything!
+      const currentTask = relevantAssignments.find((a) => a.id === assignmentId);
+      const rawDeadline = currentTask?.dueDate || currentTask?.deadline;
+      if (rawDeadline && isDeadlinePassed(rawDeadline)) {
+        showToast("عفواً، لقد انتهت المهلة المحددة لتسليم هذا التكليف ولا يمكن اعتماده ⚠️", "error");
+        btnSubmitHero.disabled = true;
+        btnSubmitHero.classList.add("btn-disabled-expired");
+        if (btnSubmitText) {
+          btnSubmitText.innerHTML = `<i class="fa-solid fa-lock ml-1"></i> انتهت مهلة التسليم (مغلق) 🔒`;
+        }
+        return;
+      }
+
+      const code = (codeEditor?.value || "").trim();
       if (!code) {
         showToast("يرجى كتابة كود الحل في المحرر وتجربته قبل التسليم ⚠️", "warning");
         codeEditor?.focus();
@@ -550,13 +563,24 @@ if __name__ == "__main__":
         return;
       }
 
+      const originalText = isHeroSubmitted ? "تحديث واعتماد الكود المسلم 🚀" : "تسليم واعتماد الكود للتقييم 🚀";
+
       try {
         btnSubmitHero.disabled = true;
+        btnSubmitHero.classList.add("is-loading");
         if (btnSubmitText) {
           btnSubmitText.innerHTML = `<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-left:6px;"></span> جاري تسليم واعتماد الكود... 🚀`;
         }
 
-        const result = await AssignmentService.submitTask(assignmentId, code, null);
+        // 15-second safety timeout so network issues never hang the button indefinitely
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("استغرقت عملية التسليم وقتاً أطول من المتوقع، يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.")), 15000)
+        );
+
+        const result = await Promise.race([
+          AssignmentService.submitTask(assignmentId, code, null),
+          timeoutPromise
+        ]);
 
         // Optimistically record submission in memory
         const studentUid = auth.currentUser?.uid || currentStudent?.firestoreId || currentStudent?.id || "";
@@ -605,8 +629,9 @@ if __name__ == "__main__":
       } catch (submitErr) {
         console.error("Submission failed:", submitErr);
         btnSubmitHero.disabled = false;
+        btnSubmitHero.classList.remove("is-loading");
         if (btnSubmitText) {
-          btnSubmitText.textContent = isHeroSubmitted ? "تحديث واعتماد الكود المسلم 🚀" : "تسليم واعتماد الكود للتقييم 🚀";
+          btnSubmitText.textContent = originalText;
         }
         showToast(submitErr.message || "حدث خطأ أثناء اعتماد الحل. يرجى المحاولة مرة أخرى.", "error");
       }
@@ -630,6 +655,8 @@ if __name__ == "__main__":
             card.style.display = category === "active" || category === "submitted" ? "flex" : "none";
           } else if (filter === "graded") {
             card.style.display = category === "graded" ? "flex" : "none";
+          } else if (filter === "expired") {
+            card.style.display = category === "expired" ? "flex" : "none";
           }
         });
       });
@@ -702,7 +729,7 @@ if __name__ == "__main__":
 
     assignments.forEach((a) => {
       const hasSub = submissionsMap.has(a.id);
-      const expired = isDeadlinePassed(a.deadline);
+      const expired = isDeadlinePassed(a.dueDate || a.deadline);
       if (hasSub) {
         submittedCount++;
       } else if (expired) {
@@ -794,11 +821,11 @@ if __name__ == "__main__":
 
     let filtered = assignments;
     if (tab === "pending") {
-      filtered = assignments.filter((a) => !submissionsMap.has(a.id) && !isDeadlinePassed(a.deadline));
+      filtered = assignments.filter((a) => !submissionsMap.has(a.id) && !isDeadlinePassed(a.dueDate || a.deadline));
     } else if (tab === "submitted") {
       filtered = assignments.filter((a) => submissionsMap.has(a.id));
     } else if (tab === "expired") {
-      filtered = assignments.filter((a) => !submissionsMap.has(a.id) && isDeadlinePassed(a.deadline));
+      filtered = assignments.filter((a) => !submissionsMap.has(a.id) && isDeadlinePassed(a.dueDate || a.deadline));
     }
 
     if (filtered.length === 0) {
@@ -875,7 +902,7 @@ if __name__ == "__main__":
     }
 
     // Bind file upload zone & form submission if unsubmitted
-    if (!submission && !isDeadlinePassed(assignment.deadline)) {
+    if (!submission && !isDeadlinePassed(assignment.dueDate || assignment.deadline)) {
       bindFileUploadZone("detailsTaskUploadZone", "detailsTaskSubmissionFile");
       this.bindDetailsSubmissionForm(assignment, container, currentStudent);
     }

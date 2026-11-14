@@ -2,6 +2,7 @@
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 import { WORLDS_DATA, ACHIEVEMENTS_DATA } from "../python-adventure-data.js";
 import { PythonAdventureService } from "../python-adventure.service.js";
+import { PythonHeartsService } from "../python-hearts.service.js";
 
 /**
  * Renders the Python Adventure Student Experience Home matching Image 5.png.
@@ -16,6 +17,8 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
   const studentName = student?.studentName || student?.name || "بطل بايثون";
   const safeName = escapeHtml(studentName);
   const studentGroup = escapeHtml(student?.studentGroup || student?.group || "مسار بايثون وهندسة النظم");
+  const studentUid = student?.uid || student?.id || student?.firestoreId;
+  const heartsState = PythonHeartsService.getHeartsState(studentUid, progress);
 
   // Real Dynamic Progression Metrics
   const norm = PythonAdventureService.normalizeProgress(progress);

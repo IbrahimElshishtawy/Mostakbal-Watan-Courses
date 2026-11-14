@@ -18,6 +18,7 @@ import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/fireba
 import { COLLECTIONS, STORAGE_PATHS, FEATURES } from "../../core/constants.js";
 import { normalizeError, isCloudFunctionUnavailable } from "../../core/errors.js";
 import { StudentsService } from "../students/students.service.js";
+import { isDeadlinePassed } from "../../shared/utils/date.utils.js";
 
 /**
  * Normalizes any raw assignment grade to a 10-point scale.
@@ -264,36 +265,20 @@ export const AssignmentService = {
 
       const studentUid = user.uid;
 
-      // Check deadline if present in Firestore
+      // Check deadline if present in Firestore (checks both dueDate and deadline)
       try {
         const assignmentSnap = await getDoc(doc(db, COLLECTIONS.ASSIGNMENTS, assignmentId));
         if (assignmentSnap.exists()) {
           const assignmentData = assignmentSnap.data();
-          if (assignmentData.deadline) {
-            let deadlineTime;
-            if (assignmentData.deadline.toDate) {
-              deadlineTime = assignmentData.deadline.toDate().getTime();
-            } else if (assignmentData.deadline instanceof Date) {
-              deadlineTime = assignmentData.deadline.getTime();
-            } else if (typeof assignmentData.deadline === "string") {
-              const trimmed = assignmentData.deadline.trim();
-              if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
-                const eod = new Date(`${trimmed}T23:59:59.999`);
-                deadlineTime = isNaN(eod.getTime()) ? new Date(trimmed).getTime() : eod.getTime();
-              } else {
-                deadlineTime = new Date(trimmed).getTime();
-              }
-            } else {
-              deadlineTime = new Date(assignmentData.deadline).getTime();
-            }
-
-            if (!isNaN(deadlineTime) && Date.now() > deadlineTime) {
-              throw new Error("انتهى الموعد المحدد لتسليم هذا الواجب.");
-            }
+          const rawDeadline = assignmentData.dueDate || assignmentData.deadline;
+          if (rawDeadline && isDeadlinePassed(rawDeadline)) {
+            throw new Error("عفواً، لقد انتهت المهلة المحددة لتسليم هذا التكليف ولا يمكن قبول تسليمات جديدة.");
           }
         }
       } catch (deadlineErr) {
-        if (deadlineErr.message?.includes("انتهى الموعد")) throw deadlineErr;
+        if (deadlineErr.message?.includes("انتهت المهلة") || deadlineErr.message?.includes("انتهى الموعد")) {
+          throw deadlineErr;
+        }
       }
 
       // Fetch student profile data
@@ -321,16 +306,23 @@ export const AssignmentService = {
         submittedAt: serverTimestamp()
       };
 
-      // Write to target subcollection: /assignments/{id}/submissions/{studentUid}
-      await setDoc(
-        doc(db, COLLECTIONS.ASSIGNMENTS, assignmentId, COLLECTIONS.SUBMISSIONS, studentUid),
-        submissionPayload,
-        { merge: true }
-      );
-
-      // Also write to legacy top-level collection: /submissions/{studentUid}_{assignmentId}
+      // Write to target subcollection with timeout protection
       const legacyDocId = `${studentUid}_${assignmentId}`;
-      await setDoc(doc(db, COLLECTIONS.SUBMISSIONS, legacyDocId), submissionPayload, { merge: true });
+      const writePromise = Promise.all([
+        setDoc(
+          doc(db, COLLECTIONS.ASSIGNMENTS, assignmentId, COLLECTIONS.SUBMISSIONS, studentUid),
+          submissionPayload,
+          { merge: true }
+        ),
+        setDoc(doc(db, COLLECTIONS.SUBMISSIONS, legacyDocId), submissionPayload, { merge: true })
+      ]);
+
+      await Promise.race([
+        writePromise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("استغرقت عملية التسليم وقتاً أطول من المتوقع، يرجى التحقق من اتصال الإنترنت والمحاولة ثانية.")), 12000)
+        )
+      ]);
 
       return {
         success: true,

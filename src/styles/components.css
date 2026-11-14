@@ -9436,6 +9436,69 @@ body.is-in-exam-mode .main-view {
   margin: 0;
 }
 
+.btn-submit-assignment.btn-disabled-expired,
+.btn-submit-assignment:disabled {
+  background: rgba(30, 41, 59, 0.75) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 0.85;
+}
+
+.submission-verify-notice.submission-expired-notice {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #fca5a5 !important;
+}
+
+.hero-expired-top-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 0.75rem;
+  color: #fca5a5;
+  margin-bottom: 1rem;
+}
+
+.badge-status-expired {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.badge-status-expired .status-dot-expired {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  display: inline-block;
+}
+
+.badge-deadline-countdown.is-expired {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.hero-empty-state-card {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 1rem;
+  backdrop-filter: blur(16px);
+}
+
 @media (max-width: 640px) {
   .hero-active-assignment {
     padding: 0.85rem;
