@@ -409,59 +409,665 @@
 }
 
 /* ========================================================
-   5. PROGRESS & BADGES ROADMAP
+   5. PROGRESS & BADGES ROADMAP - HIGH-FIDELITY RPG DESIGN
    ======================================================== */
-.gam-progress-roadmap {
-  background: rgba(15, 23, 42, 0.8);
+.gam-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 5.1 Hero RPG Level Showcase Card */
+.gam-hero-level-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(16, 24, 40, 0.95) 0%, rgba(11, 17, 32, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 2rem;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.gam-hero-level-glow {
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(6, 182, 212, 0.08) 50%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.gam-hero-level-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+@media (max-width: 900px) {
+  .gam-hero-level-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
+
+/* Emblem Ring */
+.gam-hero-emblem-wrap {
+  flex-shrink: 0;
+}
+
+.gam-hero-emblem {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #1e293b, #090d16);
+  border: 4px solid var(--rank-color, #10b981);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 35px var(--rank-color, rgba(16, 185, 129, 0.5)), inset 0 0 20px rgba(0, 0, 0, 0.8);
+  animation: emblemPulse 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes emblemPulse {
+  0% { transform: scale(1); box-shadow: 0 0 25px var(--rank-color, rgba(16, 185, 129, 0.4)); }
+  100% { transform: scale(1.04); box-shadow: 0 0 45px var(--rank-color, rgba(16, 185, 129, 0.7)); }
+}
+
+.gam-hero-emblem-icon {
+  font-size: 3rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+.gam-hero-emblem-rank {
+  position: absolute;
+  bottom: -8px;
+  background: var(--rank-color, #10b981);
+  color: #021a10;
+  font-weight: 900;
+  font-size: 0.72rem;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Details */
+.gam-hero-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.gam-hero-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+@media (max-width: 900px) {
+  .gam-hero-header-row {
+    justify-content: center;
+  }
+}
+
+.gam-rank-tag {
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 9999px;
+}
+
+.gam-season-active-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 1.5rem;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.gam-hero-title {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.5px;
+}
+
+.gam-hero-subtitle {
+  font-size: 0.92rem;
+  color: #94a3b8;
+  margin: 0 0 1.25rem 0;
+}
+
+/* Stats Strip */
+.gam-hero-stats-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
 }
 
-.gam-level-gauge {
+@media (max-width: 900px) {
+  .gam-hero-stats-strip {
+    justify-content: center;
+  }
+}
+
+.gam-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 1rem;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.gam-stat-chip:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.gam-stat-chip .chip-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.gam-stat-chip .chip-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.gam-stat-chip .chip-label {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.gam-stat-chip .chip-val {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: #f8fafc;
+}
+
+.gam-stat-chip.xp-chip .chip-val {
+  color: #34d399;
+}
+
+.gam-stat-chip.coins-chip .chip-val {
+  color: #fbbf24;
+}
+
+.gam-stat-chip.streak-chip .chip-val {
+  color: #f97316;
+}
+
+.gam-stat-chip.badges-chip .chip-val {
+  color: #38bdf8;
+}
+
+/* Hero Progress Gauge */
+.gam-gauge-block {
+  background: rgba(10, 15, 29, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+}
+
+.gam-gauge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+.gam-gauge-label {
+  color: #cbd5e1;
+}
+
+.gam-gauge-percent {
+  font-weight: 900;
+  color: #38bdf8;
+  font-size: 0.95rem;
+}
+
+.gam-hero-gauge-track {
   width: 100%;
-  height: 12px;
-  background: rgba(30, 41, 59, 0.8);
+  height: 16px;
+  background: rgba(30, 41, 59, 0.7);
   border-radius: 9999px;
   overflow: hidden;
-  margin: 1rem 0;
   position: relative;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.gam-level-gauge-fill {
+.gam-hero-gauge-bar {
   height: 100%;
-  background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
   border-radius: 9999px;
-  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(90deg, #10b981 0%, var(--bar-color, #06b6d4) 100%);
+  position: relative;
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 15px var(--bar-color, rgba(16, 185, 129, 0.5));
 }
 
-.gam-badges-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+.gam-gauge-glow-head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  filter: blur(4px);
+  border-radius: 9999px;
+  animation: headShimmer 2s infinite linear;
+}
+
+@keyframes headShimmer {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.3; }
+}
+
+.gam-gauge-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.gam-xp-remaining {
+  color: #38bdf8;
+  font-weight: 800;
+}
+
+/* 5.2 Section Headings */
+.gam-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
   gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.gam-badge-card {
-  background: rgba(30, 41, 59, 0.5);
+.gam-heading-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.gam-heading-title .heading-icon {
+  font-size: 1.35rem;
+}
+
+.gam-heading-desc {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.gam-ranks-counter,
+.gam-badge-counter-pill {
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(30, 41, 59, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  color: #cbd5e1;
+}
+
+.gam-badge-counter-pill .unlocked-num {
+  color: #34d399;
+}
+
+/* 5.3 10-Rank Responsive Grid Pathway */
+.gam-ranks-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .gam-ranks-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .gam-ranks-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+.gam-rank-node {
+  position: relative;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
   padding: 1.25rem 1rem;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
-.gam-badge-card.unlocked {
-  border-color: rgba(16, 185, 129, 0.4);
+.gam-rank-node:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Current Node */
+.gam-rank-node.is-current {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.18) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 2px solid var(--node-color, #10b981);
+  box-shadow: 0 0 30px var(--node-color, rgba(16, 185, 129, 0.45));
+}
+
+.gam-rank-node.is-current::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--node-color, #10b981);
+  box-shadow: 0 0 10px var(--node-color, #10b981);
+}
+
+/* Achieved Node */
+.gam-rank-node.is-achieved {
   background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.35);
 }
 
-.gam-badge-card.locked {
-  opacity: 0.5;
-  filter: grayscale(0.8);
+/* Locked Node */
+.gam-rank-node.is-locked {
+  opacity: 0.65;
+  background: rgba(10, 15, 29, 0.5);
+  border-color: rgba(255, 255, 255, 0.04);
 }
 
-.gam-badge-icon {
-  font-size: 2.2rem;
+/* Rank Node Elements */
+.rank-node-badge {
+  min-height: 22px;
   margin-bottom: 0.5rem;
+}
+
+.status-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+.status-pill.current-pill {
+  background: var(--node-color, #10b981);
+  color: #021a10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.status-pill.achieved-pill {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.status-pill.locked-pill {
+  background: rgba(100, 116, 139, 0.2);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.rank-node-icon-box {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 0.65rem auto;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.6);
+  border: 2px solid var(--node-color, #38bdf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.rank-node-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.rank-node-lvl {
+  position: absolute;
+  bottom: -6px;
+  background: #0b1120;
+  border: 1px solid var(--node-color, #38bdf8);
+  color: #f8fafc;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 9999px;
+}
+
+.rank-node-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.15rem 0;
+}
+
+.rank-node-en {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.rank-node-desc {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin: 0 0 0.85rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rank-node-footer {
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.xp-threshold {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--node-color, #38bdf8);
+}
+
+.rank-progress-hint {
+  font-size: 0.68rem;
+  color: #34d399;
+  font-weight: 800;
+}
+
+.rank-lock-hint {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+/* 5.4 Educational Badges & Achievements Grid */
+.gam-achieve-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.gam-achieve-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.gam-achieve-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+/* Rarity Accents */
+.gam-achieve-card.badge-bronze { --rarity-color: #cd7f32; }
+.gam-achieve-card.badge-silver { --rarity-color: #94a3b8; }
+.gam-achieve-card.badge-gold { --rarity-color: #f59e0b; }
+.gam-achieve-card.badge-diamond { --rarity-color: #06b6d4; }
+.gam-achieve-card.badge-mythic { --rarity-color: #a855f7; }
+
+.gam-achieve-card.is-unlocked {
+  border-color: var(--rarity-color, #10b981);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.9) 100%);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.gam-achieve-card.is-locked {
+  opacity: 0.6;
+  filter: grayscale(0.6);
+  background: rgba(10, 15, 29, 0.5);
+}
+
+.achieve-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.achieve-rarity-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--rarity-color, #94a3b8);
+  color: var(--rarity-color, #94a3b8);
+}
+
+.achieve-status-icon {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 900;
+}
+
+.gam-achieve-card.is-unlocked .achieve-status-icon {
+  color: #34d399;
+}
+
+.achieve-icon-wrapper {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 0.85rem auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #1e293b, #090d16);
+  border: 3px solid var(--rarity-color, #38bdf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.gam-achieve-card.is-unlocked .achieve-icon-wrapper {
+  box-shadow: 0 0 25px var(--rarity-color, rgba(16, 185, 129, 0.4));
+}
+
+.achieve-medal-icon {
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.achieve-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.4rem 0;
+}
+
+.achieve-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin: 0 0 1.15rem 0;
+  min-height: 2.4em;
+}
+
+.achieve-footer {
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.achieve-earned-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #34d399;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.achieve-req-tag {
+  font-size: 0.72rem;
+  color: #e2e8f0;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-block;
 }
