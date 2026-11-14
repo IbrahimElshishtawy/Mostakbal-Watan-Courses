@@ -395,6 +395,83 @@ assert(activeHeroMarkup.includes("تاسك ساري جديد"), "Hero automatica
 assert(activeHeroMarkup.includes("تسليم واعتماد الكود للتقييم 🚀"), "Active task has enabled submission button");
 assert(!activeHeroMarkup.includes("btn-disabled-expired"), "Active task submit button is not disabled");
 
+// -------------------------------------------------------------
+// TEST SUITE 11: Python Hearts & Challenge Cooldown Gamification System
+// -------------------------------------------------------------
+console.log("\n▶️ TEST SUITE 11: Python Hearts & Challenge Cooldown System");
+
+const { PythonHeartsService, MAX_HEARTS, HEART_REGEN_INTERVAL_MS, CHALLENGE_RETRY_COOLDOWN_MS } = await import("../src/features/python-adventure/python-hearts.service.js");
+
+// Mock localStorage for Node.js test environment
+const mockStorage = {};
+global.localStorage = {
+  getItem: (key) => mockStorage[key] || null,
+  setItem: (key, val) => { mockStorage[key] = String(val); },
+  removeItem: (key) => { delete mockStorage[key]; }
+};
+
+assert(MAX_HEARTS === 3, "MAX_HEARTS constant is exactly 3");
+assert(HEART_REGEN_INTERVAL_MS === 10 * 60 * 1000, "HEART_REGEN_INTERVAL_MS is 10 minutes");
+assert(CHALLENGE_RETRY_COOLDOWN_MS === 3 * 60 * 1000, "CHALLENGE_RETRY_COOLDOWN_MS is 3 minutes");
+
+// 1. Initial Hearts state
+const initialHearts = PythonHeartsService.getHeartsState("std_gamify_01");
+assert(initialHearts.hearts === 3, "New student starts with full 3/3 hearts");
+assert(initialHearts.maxHearts === 3, "maxHearts is 3");
+assert(initialHearts.isEmpty === false, "Hearts isEmpty is false initially");
+assert(initialHearts.activeCooldownsCount === 0, "No active cooldowns initially");
+
+// 2. Consume heart after 2 failed attempts
+const afterFirstFail = PythonHeartsService.consumeHeart("std_gamify_01", "world-1-level-1");
+assert(afterFirstFail.hearts === 2, "Student loses 1 heart (3 -> 2)");
+assert(afterFirstFail.challengeCooldownSeconds > 0, "Challenge cooldown has active remaining seconds");
+
+// 3. Challenge Cooldown Isolation
+const cdLevel1 = PythonHeartsService.getChallengeCooldown("std_gamify_01", "world-1-level-1");
+const cdLevel2 = PythonHeartsService.getChallengeCooldown("std_gamify_01", "world-1-level-2");
+assert(cdLevel1.isOnCooldown === true, "world-1-level-1 is on cooldown");
+assert(cdLevel2.isOnCooldown === false, "world-1-level-2 is NOT on cooldown (independent)");
+
+// 4. canAttemptChallenge checking
+const canAttemptL1 = PythonHeartsService.canAttemptChallenge("std_gamify_01", "world-1-level-1");
+const canAttemptL2 = PythonHeartsService.canAttemptChallenge("std_gamify_01", "world-1-level-2");
+assert(canAttemptL1.allowed === false, "Attempting world-1-level-1 during cooldown is blocked");
+assert(canAttemptL1.reason === "COOLDOWN", "Blocked reason is 'COOLDOWN'");
+assert(canAttemptL2.allowed === true, "Attempting world-1-level-2 is allowed with 2 hearts");
+
+// 5. Exhausting remaining hearts (2 -> 1 -> 0)
+PythonHeartsService.consumeHeart("std_gamify_01", "world-1-level-2");
+const afterThirdFail = PythonHeartsService.consumeHeart("std_gamify_01", "world-1-level-3");
+assert(afterThirdFail.hearts === 0, "Hearts reaches 0 after 3 failures");
+assert(afterThirdFail.isEmpty === true, "isEmpty is true when hearts reach 0");
+
+const canAttemptAny = PythonHeartsService.canAttemptChallenge("std_gamify_01", "world-2-level-1");
+assert(canAttemptAny.allowed === false, "Attempting ANY challenge with 0 hearts is blocked");
+assert(canAttemptAny.reason === "NO_HEARTS", "Blocked reason is 'NO_HEARTS'");
+
+// 6. Natural Heart Regeneration over time
+const storedState = JSON.parse(mockStorage["python_adventure_hearts_std_gamify_01"]);
+// Fast-forward 10 minutes in time for 1 heart
+storedState.lastRegenTime = Date.now() - (10 * 60 * 1000 + 500);
+mockStorage["python_adventure_hearts_std_gamify_01"] = JSON.stringify(storedState);
+
+const regenState1 = PythonHeartsService.getHeartsState("std_gamify_01");
+assert(regenState1.hearts === 1, "1 heart regenerates after 10 minutes");
+assert(regenState1.isEmpty === false, "isEmpty becomes false after 1 heart restored");
+
+// Fast-forward 30 minutes in time to cap at max hearts
+storedState.lastRegenTime = Date.now() - (35 * 60 * 1000);
+mockStorage["python_adventure_hearts_std_gamify_01"] = JSON.stringify(storedState);
+
+const regenStateFull = PythonHeartsService.getHeartsState("std_gamify_01");
+assert(regenStateFull.hearts === 3, "Hearts regenerate and cap at MAX_HEARTS (3)");
+
+// 7. HTML Rendering
+const heartsPillHtml = PythonHeartsService.renderHeartsPillHtml(regenStateFull);
+assert(heartsPillHtml.includes("adv-hearts-pill"), "Pill HTML contains adv-hearts-pill container");
+assert(heartsPillHtml.includes("3/3"), "Pill displays 3/3 hearts ratio");
+assert(heartsPillHtml.includes("رصيد القلوب"), "Pill has Arabic title description");
+
 console.log("\n=======================================================");
 console.log(`🎉 ALL ${passedTests}/${totalTests} TESTS PASSED SUCCESSFULLY!`);
 console.log("=======================================================\n");

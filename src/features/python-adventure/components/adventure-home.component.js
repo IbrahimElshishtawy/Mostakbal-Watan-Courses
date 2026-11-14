@@ -84,6 +84,9 @@ export function renderAdventureHome({ student, progress, onContinue, onNavigate 
             <span>الموسم 2026 / 2027</span>
           </div>
 
+          <!-- Hearts System Pill -->
+          ${PythonHeartsService.renderHeartsPillHtml(heartsState)}
+
           <!-- Notification Bell -->
           <button type="button" class="adv5-icon-btn" id="adv5NotificationBtn" title="الإشعارات" aria-label="الإشعارات">
             <i class="fa-regular fa-bell"></i>

@@ -108,6 +108,7 @@ export const PythonHeartsService = {
       maxHearts: MAX_HEARTS,
       lastRegenTime,
       challengeCooldowns,
+      activeCooldownsCount: Object.keys(challengeCooldowns).length,
       nextHeartInSeconds,
       formattedNextHeart: this.formatTime(nextHeartInSeconds),
       isFull: hearts >= MAX_HEARTS,

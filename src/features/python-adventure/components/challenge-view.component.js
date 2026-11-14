@@ -1,10 +1,11 @@
 // src/features/python-adventure/components/challenge-view.component.js
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
 import { renderCodeEditor } from "./code-editor.component.js";
+import { PythonHeartsService } from "../python-hearts.service.js";
 
 /**
  * Renders the full interactive Coding Challenge Workspace
- * with Anti-Cheat Countdown Timer and Strict 2-Attempt Limit.
+ * with Anti-Cheat Countdown Timer, Hearts System (3 Hearts), and 2-Attempt Limit with Cooldown.
  */
 export function renderChallengeView({
   challenge,
@@ -14,6 +15,8 @@ export function renderChallengeView({
   hintsRevealed = 0,
   attempts = 0,
   maxAttempts = 2,
+  heartsState = null,
+  challengeCooldown = null,
   timeRemainingSeconds = null,
   timeLimitMinutes = 15,
   isTimeExpired = false,
@@ -34,7 +37,16 @@ export function renderChallengeView({
 
   const attemptsLeft = Math.max(0, maxAttempts - (attempts || 0));
   const attemptsExhausted = attemptsLeft <= 0;
-  const isLocked = isTimeExpired || attemptsExhausted;
+  const isCooldownLocked = Boolean(challengeCooldown?.isOnCooldown);
+  const isNoHeartsLocked = Boolean(heartsState?.isEmpty);
+  const isLocked = isTimeExpired || attemptsExhausted || isCooldownLocked || isNoHeartsLocked;
+
+  let submitBtnText = "تسليم الحل والتحقق";
+  if (isSubmitting) submitBtnText = "جاري التحقق...";
+  else if (isNoHeartsLocked) submitBtnText = "💔 نفدت القلوب (0/3)";
+  else if (isCooldownLocked) submitBtnText = `⏳ استراحة تفكير (${challengeCooldown?.formattedRemaining || "03:00"})`;
+  else if (isTimeExpired) submitBtnText = "انتهت المهلة";
+  else if (attemptsExhausted) submitBtnText = "استنفدت المحاولات (0/2)";
 
   return `
     <div class="adventure-challenge-wrapper">
@@ -51,6 +63,9 @@ export function renderChallengeView({
         </div>
 
         <div class="challenge-topbar-actions">
+          <!-- Hearts Indicator Pill -->
+          ${PythonHeartsService.renderHeartsPillHtml(heartsState)}
+
           <!-- Anti-Cheat Countdown Timer -->
           <div class="challenge-timer-pill ${currentRemaining <= 60 ? "urgent" : (currentRemaining <= 180 ? "warning" : "safe")}" id="pyLiveTimerPill" title="مهلة التحدي الزمنية لمكافحة الغش">
             <span class="timer-icon">⏱️</span>
@@ -98,6 +113,32 @@ export function renderChallengeView({
 
         <!-- Main Code Editor & Terminal Pane -->
         <main class="challenge-editor-pane">
+          ${isNoHeartsLocked ? `
+            <div class="challenge-cooldown-banner no-hearts-banner" role="alert">
+              <div class="cooldown-banner-icon">💔</div>
+              <div class="cooldown-banner-content">
+                <h4 class="text-rose-400 font-bold">نفدت جميع قلوبك (0/${heartsState?.maxHearts || 3})</h4>
+                <p>لقد استنفدت كل القلوب المتاحة للتحديات. خذ استراحة وراجع دروس وشروحات بايثون... سيتجدد قلب إضافي تلقائياً خلال:</p>
+                <div class="cooldown-timer-badge">
+                  <span>⏳ متبقي لشحن قلب:</span>
+                  <strong class="font-mono text-cyan-300" id="pyBannerHeartsCountdown">${heartsState?.formattedNextHeart || "10:00"}</strong>
+                </div>
+              </div>
+            </div>
+          ` : (isCooldownLocked ? `
+            <div class="challenge-cooldown-banner challenge-waiting-banner" role="alert">
+              <div class="cooldown-banner-icon">⏳</div>
+              <div class="cooldown-banner-content">
+                <h4 class="text-amber-400 font-bold">استراحة تفكير ومراجعة (المحاولتان استنفدتا)</h4>
+                <p>لقد أخطأت في المحاولتين السابقتين وخسرت قلباً واحداً (تبقى لديك ${heartsState?.hearts ?? 2} من 3 ❤️). خذ استراحة لمراجعة الشرح وتصحيح المنطق قبل فتح المحاولة الجديدة.</p>
+                <div class="cooldown-timer-badge">
+                  <span>⏳ متبقي لإعادة فتح المحاولة:</span>
+                  <strong class="font-mono text-amber-300" id="pyBannerCooldownCountdown">${challengeCooldown?.formattedRemaining || "03:00"}</strong>
+                </div>
+              </div>
+            </div>
+          ` : "")}
+
           <!-- Editor Slot -->
           <div class="editor-slot ${isLocked ? "editor-locked" : ""}" id="challengeEditorSlot">
             ${renderCodeEditor({ initialCode: code })}
@@ -112,7 +153,7 @@ export function renderChallengeView({
               </button>
               <button type="button" class="btn btn-primary btn-submit ${isLocked ? "btn-disabled-locked" : ""}" id="pySubmitBtn" ${isRunning || isSubmitting || isLocked ? "disabled" : ""}>
                 <span class="btn-icon">${isSubmitting ? "⏳" : (isLocked ? "🔒" : "🚀")}</span>
-                <span>${isSubmitting ? "جاري التحقق..." : (isTimeExpired ? "انتهت المهلة" : (attemptsExhausted ? "استنفدت المحاولات (0/2)" : "تسليم الحل والتحقق"))}</span>
+                <span>${submitBtnText}</span>
               </button>
             </div>
 

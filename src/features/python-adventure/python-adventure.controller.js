@@ -5,6 +5,7 @@ import { runPythonCode } from "./python-adventure-runtime.js";
 import { detectAndSanitizePythonCode } from "../../shared/utils/python-sanitizer.js";
 import { CHALLENGES_CLIENT_DATA, WORLDS_DATA } from "./python-adventure-data.js";
 import { escapeHtml } from "../../shared/utils/dom.utils.js";
+import { PythonHeartsService } from "./python-hearts.service.js";
 
 import { renderAdventureHome } from "./components/adventure-home.component.js";
 import { renderWorldMap } from "./components/world-map.component.js";
@@ -83,6 +84,7 @@ export const PythonAdventureController = {
       }
 
       this.renderCurrentView(adventureStore.getState());
+      this.startHeartsTicker();
 
     } catch (err) {
       console.error("Failed to initialize Python Adventure:", err);
@@ -411,6 +413,10 @@ export const PythonAdventureController = {
 
       case "challenge":
         if (activeChallenge) {
+          const studentId = student?.uid || student?.id || student?.firestoreId;
+          const heartsState = PythonHeartsService.getHeartsState(studentId, progress);
+          const challengeCooldown = PythonHeartsService.getChallengeCooldown(studentId, activeChallenge.id, progress);
+
           containerElement.innerHTML = renderChallengeView({
             challenge: activeChallenge,
             code: state.editorCode,
@@ -419,6 +425,8 @@ export const PythonAdventureController = {
             hintsRevealed: state.hintsRevealed,
             attempts: state.attemptsCount || 0,
             maxAttempts: state.maxAttempts || 2,
+            heartsState,
+            challengeCooldown,
             timeRemainingSeconds: state.timeRemainingSeconds,
             timeLimitMinutes: state.timeLimitMinutes,
             isTimeExpired: state.isTimeExpired,
@@ -912,13 +920,21 @@ export const PythonAdventureController = {
     const initialRemaining = Math.max(0, totalSeconds - elapsedSeconds);
     const isExpired = initialRemaining <= 0;
 
+    const curStudent = currentStudent || adventureStore.getState().student;
+    const studentId = curStudent?.uid || curStudent?.id || curStudent?.firestoreId;
+    const curProgress = adventureStore.getState().progress;
+    const heartsState = PythonHeartsService.getHeartsState(studentId, curProgress);
+    const cooldown = PythonHeartsService.getChallengeCooldown(studentId, challenge.id, curProgress);
+    const initialAttempts = cooldown.isOnCooldown ? 2 : 0;
+
     adventureStore.resetEditor(challenge.starterCode || "");
     adventureStore.setState({
       activeChallengeId: challenge.id,
       activeChallenge: challenge,
       activeView: "challenge",
-      attemptsCount: 0,
+      attemptsCount: initialAttempts,
       maxAttempts: 2,
+      heartsState,
       timeLimitMinutes: limitMinutes,
       timeRemainingSeconds: initialRemaining,
       isTimeExpired: isExpired,
@@ -1177,6 +1193,15 @@ export const PythonAdventureController = {
     const state = adventureStore.getState();
     if (state.isSubmitting || !state.activeChallenge) return;
 
+    // 0. Hearts & Cooldown Check
+    const curStudent = currentStudent || state.student;
+    const studentId = curStudent?.uid || curStudent?.id || curStudent?.firestoreId;
+    const canAttempt = PythonHeartsService.canAttemptChallenge(studentId, state.activeChallenge?.id, state.progress);
+    if (!canAttempt.allowed) {
+      showToast(canAttempt.message, "warning", 5000);
+      return;
+    }
+
     // 1. Anti-Cheat Time Limit Check
     if (state.isTimeExpired) {
       showToast("انتهت المهلة الزمنية المحددة لهذا التحدي لمنع الغش (Time's Up). تم قفل إمكانية التسليم.", "warning");
@@ -1252,10 +1277,19 @@ export const PythonAdventureController = {
 
         this.updateHintsCardInChallengeView();
 
+        let updatedHearts = null;
+        let heartLost = false;
+        if (newAttempts >= 2) {
+          heartLost = true;
+          updatedHearts = PythonHeartsService.consumeHeart(studentId, state.activeChallenge?.id, state.progress);
+          adventureStore.setState({ heartsState: updatedHearts }, { notify: false });
+          showToast(`💔 استنفدت المحاولتين وخسرت قلباً! متبقي لديك (${updatedHearts.hearts}/${PythonHeartsService.MAX_HEARTS}) قلوب.`, "warning", 6000);
+        }
+
         if (newAttempts >= 2 && submitBtn) {
           submitBtn.disabled = true;
           submitBtn.classList.add("btn-disabled-locked");
-          submitBtn.innerHTML = "<span>🚫 استنفدت المحاولات (0/2)</span>";
+          submitBtn.innerHTML = `<span>${updatedHearts?.isEmpty ? "💔 نفدت القلوب (0/3)" : "⏳ استراحة تفكير (03:00)"}</span>`;
         }
 
         this.showResultModal({
@@ -1264,7 +1298,11 @@ export const PythonAdventureController = {
           errorDetails: runCheck.error,
           codeAnalysis,
           attemptsCount: newAttempts,
-          maxAttempts: 2
+          maxAttempts: 2,
+          heartLost,
+          remainingHearts: updatedHearts?.hearts ?? state.heartsState?.hearts ?? 2,
+          cooldownSeconds: Math.ceil(PythonHeartsService.CHALLENGE_RETRY_COOLDOWN_MS / 1000),
+          nextHeartInSeconds: updatedHearts?.nextHeartInSeconds ?? state.heartsState?.nextHeartInSeconds ?? 600
         });
         return;
       }
@@ -1288,7 +1326,6 @@ export const PythonAdventureController = {
         }
 
         // Update local state progress
-        const studentId = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId;
         const updatedProgress = await PythonAdventureService.getStudentProgress(studentId);
         adventureStore.setState({ progress: updatedProgress }, { notify: false });
 
@@ -1319,10 +1356,19 @@ export const PythonAdventureController = {
 
         this.updateHintsCardInChallengeView();
 
+        let updatedHearts = null;
+        let heartLost = false;
+        if (newAttempts >= 2) {
+          heartLost = true;
+          updatedHearts = PythonHeartsService.consumeHeart(studentId, state.activeChallenge?.id, state.progress);
+          adventureStore.setState({ heartsState: updatedHearts }, { notify: false });
+          showToast(`💔 استنفدت المحاولتين وخسرت قلباً! متبقي لديك (${updatedHearts.hearts}/${PythonHeartsService.MAX_HEARTS}) قلوب.`, "warning", 6000);
+        }
+
         if (newAttempts >= 2 && submitBtn) {
           submitBtn.disabled = true;
           submitBtn.classList.add("btn-disabled-locked");
-          submitBtn.innerHTML = "<span>🚫 استنفدت المحاولات (0/2)</span>";
+          submitBtn.innerHTML = `<span>${updatedHearts?.isEmpty ? "💔 نفدت القلوب (0/3)" : "⏳ استراحة تفكير (03:00)"}</span>`;
         }
 
         this.showResultModal({
@@ -1331,7 +1377,11 @@ export const PythonAdventureController = {
           errorDetails: result.errorDetails,
           codeAnalysis,
           attemptsCount: newAttempts,
-          maxAttempts: 2
+          maxAttempts: 2,
+          heartLost,
+          remainingHearts: updatedHearts?.hearts ?? state.heartsState?.hearts ?? 2,
+          cooldownSeconds: Math.ceil(PythonHeartsService.CHALLENGE_RETRY_COOLDOWN_MS / 1000),
+          nextHeartInSeconds: updatedHearts?.nextHeartInSeconds ?? state.heartsState?.nextHeartInSeconds ?? 600
         });
       }
 
@@ -1348,12 +1398,24 @@ export const PythonAdventureController = {
       });
     } finally {
       const curState = adventureStore.getState();
-      const exhausted = (curState.attemptsCount || 0) >= 2 || curState.isTimeExpired;
+      const stId = currentStudent?.uid || currentStudent?.id || currentStudent?.firestoreId;
+      const hState = PythonHeartsService.getHeartsState(stId, curState.progress);
+      const cCooldown = PythonHeartsService.getChallengeCooldown(stId, curState.activeChallenge?.id, curState.progress);
+
+      const exhausted = (curState.attemptsCount || 0) >= 2 || curState.isTimeExpired || cCooldown.isOnCooldown || hState.isEmpty;
       if (submitBtn) {
         submitBtn.disabled = exhausted;
         if (exhausted) {
           submitBtn.classList.add("btn-disabled-locked");
-          submitBtn.innerHTML = `<span>${curState.isTimeExpired ? "🔒 انتهت المهلة" : "🚫 استنفدت المحاولات (0/2)"}</span>`;
+          if (hState.isEmpty) {
+            submitBtn.innerHTML = "<span>💔 نفدت القلوب (0/3)</span>";
+          } else if (cCooldown.isOnCooldown) {
+            submitBtn.innerHTML = `<span>⏳ استراحة تفكير (${cCooldown.formattedRemaining})</span>`;
+          } else if (curState.isTimeExpired) {
+            submitBtn.innerHTML = "<span>🔒 انتهت المهلة</span>";
+          } else {
+            submitBtn.innerHTML = "<span>🚫 استنفدت المحاولات (0/2)</span>";
+          }
         } else {
           submitBtn.innerHTML = "<span>🚀 تسليم الحل والتحقق</span>";
         }
@@ -1392,6 +1454,87 @@ export const PythonAdventureController = {
       document.getElementById("adventureResultModal")?.remove();
       this.navigateTo("world-map");
     });
+  },
+
+  startHeartsTicker() {
+    if (this._heartsTickerInterval) return;
+    this._heartsTickerInterval = setInterval(() => {
+      this.tickHeartsAndCooldowns();
+    }, 1000);
+  },
+
+  stopHeartsTicker() {
+    if (this._heartsTickerInterval) {
+      clearInterval(this._heartsTickerInterval);
+      this._heartsTickerInterval = null;
+    }
+  },
+
+  tickHeartsAndCooldowns() {
+    const state = adventureStore.getState();
+    const student = currentStudent || state.student;
+    const studentId = student?.uid || student?.id || student?.firestoreId;
+    if (!studentId) return;
+
+    const heartsState = PythonHeartsService.getHeartsState(studentId, state.progress);
+    adventureStore.setState({ heartsState }, { notify: false });
+
+    // 1. Update countdown digits in Topbar Hearts Pill if present
+    const heartsCountdownEl = document.getElementById("pyHeartsCountdownDigits");
+    if (heartsCountdownEl) {
+      if (heartsState.isFull) {
+        heartsCountdownEl.textContent = "";
+      } else {
+        heartsCountdownEl.textContent = `⏳ ${heartsState.formattedNextHeart}`;
+      }
+    }
+
+    // 2. Update No-Hearts banner countdown if present
+    const bannerHeartsCountdownEl = document.getElementById("pyBannerHeartsCountdown");
+    if (bannerHeartsCountdownEl) {
+      bannerHeartsCountdownEl.textContent = heartsState.formattedNextHeart;
+    }
+
+    // 3. Update Challenge Cooldown if on active challenge
+    if (state.activeView === "challenge" && state.activeChallengeId) {
+      const cooldown = PythonHeartsService.getChallengeCooldown(studentId, state.activeChallengeId, state.progress);
+
+      const bannerCooldownEl = document.getElementById("pyBannerCooldownCountdown");
+      if (bannerCooldownEl) {
+        bannerCooldownEl.textContent = cooldown.formattedRemaining;
+      }
+
+      const submitBtn = document.getElementById("pySubmitBtn");
+      if (cooldown.isOnCooldown) {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add("btn-disabled-locked");
+          submitBtn.innerHTML = `<span>⏳ استراحة تفكير (${cooldown.formattedRemaining})</span>`;
+        }
+      } else {
+        // Cooldown just finished!
+        const curAttempts = state.attemptsCount || 0;
+        if (curAttempts >= 2 && !state.isTimeExpired && !heartsState.isEmpty) {
+          adventureStore.setState({ attemptsCount: 0 }, { notify: false });
+
+          const waitingBanner = document.querySelector(".challenge-waiting-banner");
+          if (waitingBanner) waitingBanner.remove();
+
+          const attemptsCountEl = document.getElementById("pyChallengeAttemptsCount");
+          const attemptsPillEl = document.getElementById("pyChallengeAttemptsPill");
+          if (attemptsCountEl) attemptsCountEl.textContent = "2 من 2";
+          if (attemptsPillEl) attemptsPillEl.className = "challenge-attempts-pill safe";
+
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("btn-disabled-locked");
+            submitBtn.innerHTML = "<span>🚀 تسليم الحل والتحقق</span>";
+          }
+
+          showToast("انتهت استراحة التفكير! تم تجديد محاولاتك وتوفير فرصتين جديدتين للحل 🎯", "success", 5000);
+        }
+      }
+    }
   },
 
   updateHintsCardInChallengeView() {
@@ -1480,6 +1623,7 @@ export const PythonAdventureController = {
           this._dailyTransitionTriggered = false;
           if (adventureStore.getState().activeView === "daily") {
             this.renderCurrentView(adventureStore.getState());
+      this.startHeartsTicker();
           }
         }, 1200);
       }

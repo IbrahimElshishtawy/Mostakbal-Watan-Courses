@@ -1,5 +1,6 @@
 // src/features/python-adventure/components/result-modal.component.js
 import { escapeHtml } from "../../../shared/utils/dom.utils.js";
+import { PythonHeartsService } from "../python-hearts.service.js";
 
 /**
  * Renders the Challenge Result Feedback Modal (Success or Failure)
@@ -20,7 +21,11 @@ export function renderResultModal({
   codeAnalysis = null,
   attemptsCount = 1,
   maxAttempts = 2,
-  isTimeout = false
+  isTimeout = false,
+  heartLost = false,
+  remainingHearts = 3,
+  cooldownSeconds = 0,
+  nextHeartInSeconds = 0
 }) {
   const attemptsLeft = Math.max(0, maxAttempts - attemptsCount);
   const attemptsExhausted = attemptsLeft <= 0;
@@ -98,18 +103,32 @@ export function renderResultModal({
         ` : `
           <!-- FAILURE / CONSTRUCTIVE STATE -->
           <div class="result-fail-header">
-            <div class="result-badge-anim fail">${isTimeout ? "⏱️" : "❌"}</div>
+            <div class="result-badge-anim fail">${isTimeout ? "⏱️" : (heartLost ? "💔" : "❌")}</div>
             <h3 class="result-title text-warning">
-              ${isTimeout ? "انتهت المهلة المحددة للتحدي" : (attemptsExhausted ? "استنفدت محاولات الحل المتاحة" : "لم تنجح المهمة بعد")}
+              ${isTimeout ? "انتهت المهلة المحددة للتحدي" : (attemptsExhausted ? (remainingHearts <= 0 ? "نفدت جميع قلوب المحاولات!" : "استنفدت المحاولتين وخسرت قلباً!") : "لم تنجح المهمة بعد")}
             </h3>
             <p class="result-subtitle">
               ${isTimeout
                 ? "انتهى الوقت المسموح به لحل هذا التحدي لمنع الغش البرمجي."
                 : (attemptsExhausted
-                  ? `تم استنفاد المحاولتين المسموحتين (${maxAttempts}/${maxAttempts}) لهذا التحدي لمنع التخمين العشوائي.`
+                  ? (remainingHearts <= 0 
+                    ? `استنفدت محاولاتك وفقدت آخر قلب (0/${maxAttempts + 1}). يرجى الانتظار لتجدد القلوب.` 
+                    : `استنفدت محاولتي الحل (${maxAttempts}/${maxAttempts}) وخسرت قلباً واحداً (تبقى لديك ${remainingHearts} من 3 ❤️).`)
                   : `تبقت لك فرصة واحدة فقط (${attemptsLeft} من ${maxAttempts})! راجع كودك بعناية واختبره قبل التسليم.`)}
             </p>
           </div>
+
+          ${heartLost ? `
+            <div class="result-heart-loss-strip ${remainingHearts <= 0 ? 'empty' : 'warning'}">
+              <span class="heart-loss-icon">${remainingHearts <= 0 ? "💔" : "💔"}</span>
+              <div class="heart-loss-info">
+                <strong>${remainingHearts <= 0 ? "نفدت جميع قلوب المحاولات (0/3) 💔" : `خسرت قلباً واحداً! متبقي لديك: ${remainingHearts} من 3 ❤️`}</strong>
+                <p>${remainingHearts <= 0 
+                  ? `عليك الانتظار حتى يتجدد قلبك القادم (${PythonHeartsService.formatTime(nextHeartInSeconds)}) لاستئناف حل التحديات.` 
+                  : `تم تفعيل استراحة تفكير ومراجعة لمدة 3 دقائق (${PythonHeartsService.formatTime(cooldownSeconds)}) قبل إعادة فتح محاولات هذا التحدي.`}</p>
+              </div>
+            </div>
+          ` : ""}
 
           <!-- ACADEMIC CODE ANALYSIS CARD (EVEN ON FAIL) -->
           ${renderCodeAnalysisSection(codeAnalysis)}
@@ -130,11 +149,18 @@ export function renderResultModal({
               <button type="button" class="btn btn-secondary w-100 mt-2" id="resultGetHintBtn">
                 <span>💡 طلب تلميح إضافي</span>
               </button>
-            ` : `
+            ` : (remainingHearts <= 0 ? `
               <button type="button" class="btn btn-primary btn-lg w-100" id="resultReturnMapBtn">
+                <span>🗺️ العودة لخريطة العوالم (انتظار شحن القلوب)</span>
+              </button>
+            ` : `
+              <button type="button" class="btn btn-primary btn-lg w-100" id="resultTryAgainBtn">
+                <span>⏳ استراحة تفكير (متبقي ${PythonHeartsService.formatTime(cooldownSeconds)})</span>
+              </button>
+              <button type="button" class="btn btn-secondary w-100 mt-2" id="resultReturnMapBtn">
                 <span>🗺️ العودة لخريطة العوالم</span>
               </button>
-            `}
+            `)}
           </div>
         `}
       </div>
