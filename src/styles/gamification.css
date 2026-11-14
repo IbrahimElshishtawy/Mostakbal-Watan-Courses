@@ -341,7 +341,7 @@
   padding: 1.5rem 1.25rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
   text-align: center;
   position: relative;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -350,21 +350,27 @@
 
 .gam-store-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(245, 158, 11, 0.4);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(245, 158, 11, 0.15);
 }
 
 .gam-store-thumb {
-  width: 80px;
-  height: 80px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  background: #090d16;
-  border: 2px dashed rgba(245, 158, 11, 0.4);
+  background: radial-gradient(circle at 30% 30%, #1e293b, #090d16);
+  border: 2px solid var(--thumb-accent, rgba(245, 158, 11, 0.5));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.2rem;
-  margin-bottom: 1rem;
+  margin: 0.25rem auto 0.85rem auto;
+  box-shadow: 0 0 20px var(--thumb-accent, rgba(245, 158, 11, 0.3));
+  transition: transform 0.25s ease;
+}
+
+.gam-store-card:hover .gam-store-thumb {
+  transform: scale(1.08);
 }
 
 .gam-store-price-tag {

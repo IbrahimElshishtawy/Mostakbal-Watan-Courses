@@ -279,7 +279,8 @@ export interface RewardItem {
   name: string;
   nameEn: string;
   description: string;
-  image: string;
+  image?: string;
+  icon?: string;
   priceInCoins: number;
   availability: "in_stock" | "limited" | "exclusive";
   purchaseLimit: number;
