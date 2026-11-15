@@ -891,10 +891,11 @@
   color: #ffffff;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-  white-space: normal;
+  white-space: nowrap;
   text-align: center;
-  word-break: break-word;
+  word-break: keep-all;
 }
 
 .stat-chip-lbl {

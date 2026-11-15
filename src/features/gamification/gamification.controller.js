@@ -34,9 +34,16 @@ export const GamificationController = {
     teacherActiveSubTab: "overview",
     overview: null,
     selectedStudent: null,
+    selectedStudentUid: null,
     codeHistory: null,
     dailyReport: null,
     weeklyReport: null,
+    searchQuery: "",
+    groupFilter: "ALL",
+    levelFilter: "ALL",
+    currentPage: 1,
+    pageSize: 25,
+    isLoading: false,
     activeSeason: null,
     resetPreview: null,
     adminActiveTab: "seasons"
@@ -548,13 +555,163 @@ export const GamificationController = {
       </div>
     `;
 
-    // Wire sub-tab switching
+    // 1. Wire sub-tab switching
     this._teacherContainer.querySelectorAll("[data-teacher-tab]").forEach(btn => {
       btn.addEventListener("click", () => {
         this._state.activeSubTab = btn.getAttribute("data-teacher-tab");
         this.renderTeacherView();
       });
     });
+
+    // 2. Wire Search input
+    const searchInput = this._teacherContainer.querySelector("#teacherStudentSearchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        this._state.searchQuery = e.target.value;
+        this._state.currentPage = 1;
+        this.renderTeacherView();
+        const updatedInput = this._teacherContainer.querySelector("#teacherStudentSearchInput");
+        if (updatedInput) {
+          updatedInput.focus();
+          updatedInput.setSelectionRange(updatedInput.value.length, updatedInput.value.length);
+        }
+      });
+    }
+
+    // 3. Wire Group filter
+    const groupSelect = this._teacherContainer.querySelector("#teacherGroupFilterSelect");
+    if (groupSelect) {
+      groupSelect.addEventListener("change", (e) => {
+        this._state.groupFilter = e.target.value;
+        this._state.currentPage = 1;
+        this.renderTeacherView();
+      });
+    }
+
+    // 4. Wire Level filter
+    const levelSelect = this._teacherContainer.querySelector("#teacherLevelFilterSelect");
+    if (levelSelect) {
+      levelSelect.addEventListener("change", (e) => {
+        this._state.levelFilter = e.target.value;
+        this._state.currentPage = 1;
+        this.renderTeacherView();
+      });
+    }
+
+    // 5. Wire Pagination buttons
+    const prevBtn = this._teacherContainer.querySelector("#teacherPrevPageBtn");
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        if (this._state.currentPage > 1) {
+          this._state.currentPage--;
+          this.renderTeacherView();
+        }
+      });
+    }
+
+    const nextBtn = this._teacherContainer.querySelector("#teacherNextPageBtn");
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        this._state.currentPage++;
+        this.renderTeacherView();
+      });
+    }
+
+    // 6. Wire view student report buttons (from table or card)
+    this._teacherContainer.querySelectorAll('[data-action="view-student-report"]').forEach(btn => {
+      btn.addEventListener("click", () => {
+        const uid = btn.getAttribute("data-uid");
+        this.viewStudentReport(uid);
+      });
+    });
+
+    // 7. Wire view code history buttons
+    this._teacherContainer.querySelectorAll('[data-action="view-code-history"]').forEach(btn => {
+      btn.addEventListener("click", () => {
+        const uid = btn.getAttribute("data-uid");
+        this.viewCodeHistory(uid);
+      });
+    });
+
+    // 8. Wire Dropdown for Student Report (Tab 2)
+    const studentReportDropdown = this._teacherContainer.querySelector("#teacherSelectStudentDropdown");
+    if (studentReportDropdown) {
+      studentReportDropdown.addEventListener("change", (e) => {
+        const uid = e.target.value;
+        if (uid) {
+          this.viewStudentReport(uid);
+        }
+      });
+    }
+
+    // 9. Wire Dropdown for Code History (Tab 3)
+    const historyStudentDropdown = this._teacherContainer.querySelector("#teacherHistoryStudentDropdown");
+    if (historyStudentDropdown) {
+      historyStudentDropdown.addEventListener("change", (e) => {
+        const uid = e.target.value;
+        if (uid) {
+          this.viewCodeHistory(uid);
+        }
+      });
+    }
+
+    // 10. Wire Copy Code Snippet buttons
+    this._teacherContainer.querySelectorAll('[data-action="copy-code-snippet"]').forEach(btn => {
+      btn.addEventListener("click", () => {
+        const code = btn.getAttribute("data-code");
+        if (navigator.clipboard && code) {
+          navigator.clipboard.writeText(code).then(() => {
+            showToast("تم نسخ الكود البرمجي بنجاح! 📋", "success");
+          });
+        }
+      });
+    });
+  },
+
+  async viewStudentReport(uid) {
+    if (!uid) return;
+    this._state.isLoading = true;
+    this._state.activeSubTab = "student";
+    this._state.selectedStudentUid = uid;
+    this.renderTeacherView();
+
+    try {
+      const report = await GamificationService.getStudentReport(uid);
+      this._state.selectedStudent = report;
+    } catch (e) {
+      console.warn("Failed to load student report:", e);
+      showToast("تعذر جلب التقرير الفردي للطالب.", "error");
+    } finally {
+      this._state.isLoading = false;
+      this.renderTeacherView();
+    }
+  },
+
+  async viewCodeHistory(uid) {
+    if (!uid) return;
+    this._state.isLoading = true;
+    this._state.activeSubTab = "history";
+    this._state.selectedStudentUid = uid;
+    this.renderTeacherView();
+
+    try {
+      const [history, report] = await Promise.all([
+        GamificationService.getCodeHistory(uid),
+        this._state.selectedStudent?.studentUid === uid
+          ? Promise.resolve(this._state.selectedStudent)
+          : GamificationService.getStudentReport(uid)
+      ]);
+      this._state.codeHistory = history;
+      if (report) {
+        this._state.selectedStudent = report;
+      }
+    } catch (e) {
+      console.warn("Failed to load code history:", e);
+      showToast("تعذر جلب سجل نسخ الكود.", "error");
+    } finally {
+      this._state.isLoading = false;
+      this.renderTeacherView();
+    }
   },
 
   /**

@@ -169,6 +169,8 @@ export const LeaderboardService = {
       const adv = advByUid.get(itemUid) || {};
 
       const points = Math.max(
+        Number(gam.xp || 0),
+        Number(gam.points || 0),
         Number(gam.competitionPoints || 0),
         Number(adv.xp || 0),
         Number(item.xp || 0)
@@ -176,6 +178,7 @@ export const LeaderboardService = {
 
       const solved = Math.max(
         Number(gam.challengesCompleted || 0),
+        Number(gam.tasksCompleted || 0),
         Number(adv.stats?.totalCompleted || 0),
         Object.keys(adv.completedChallenges || {}).length
       );
