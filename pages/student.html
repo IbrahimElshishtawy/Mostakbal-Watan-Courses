@@ -248,7 +248,7 @@
       const lazyLoaders = {
         exams: () => import(`../src/features/exams/exam.controller.js?v=3.5.4&t=${ts}`).then((m) => m.ExamController),
         tasks: () => import(`../src/features/assignments/assignment.controller.js?v=3.5.4&t=${ts}`).then((m) => m.AssignmentController),
-        adventure: () => import(`../src/features/python-adventure/python-adventure.controller.js?v=3.5.8&t=${ts}`).then((m) => m.PythonAdventureController),
+        adventure: () => import(`../src/features/python-adventure/python-adventure.controller.js?v=3.6.1&t=${ts}`).then((m) => m.PythonAdventureController),
         problemSolving: () => import(`../src/features/problem-solving/problem-solving.controller.js?v=3.5.8&t=${ts}`).then((m) => m.ProblemSolvingController),
         leaderboard: () => import(`../src/features/leaderboard/leaderboard.controller.js?v=3.6.0&t=${ts}`).then((m) => m.LeaderboardController),
         cloudConsole: () => import(`../src/features/cloud-console/cloud-console.controller.js?v=3.6.0&t=${ts}`).then((m) => m.CloudConsoleController),

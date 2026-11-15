@@ -557,12 +557,23 @@ export const PythonAdventureController = {
 
     roadNodes.forEach((node) => {
       node.addEventListener("click", () => {
+        const state = adventureStore.getState();
         const worldId = node.getAttribute("data-world-node");
-        const unlockedWorlds = state.progress?.unlockedWorlds || ["world-1"];
-        const completedChallenges = state.progress?.completedChallenges || {};
+        const progress = state.progress || {};
+        const norm = PythonAdventureService.normalizeProgress(progress);
+        const unlockedWorlds = norm?.unlockedWorlds || ["world-1"];
+        const completedChallenges = norm?.completedChallenges || {};
         const challenges = PythonAdventureService.getWorldChallenges(worldId);
         const isCompleted = challenges.length > 0 && challenges.every((c) => completedChallenges[c.id]);
-        const isUnlocked = unlockedWorlds.includes(worldId) || worldId === "world-1" || isCompleted;
+        const isStaff = currentStudent?.role === "teacher" || currentStudent?.role === "admin";
+        const isUnlocked =
+          isStaff ||
+          unlockedWorlds.includes(worldId) ||
+          worldId === "world-1" ||
+          isCompleted ||
+          node.classList.contains("open") ||
+          node.classList.contains("completed") ||
+          node.classList.contains("active");
 
         if (isUnlocked) {
           this.openWorldMapTrack("all", worldId);
@@ -610,11 +621,19 @@ export const PythonAdventureController = {
   // ========================================================
   openWorldMapTrack(track = "all", worldId = null) {
     const defaultWorld = track === "problem-solving" ? "ps-level-1" : "world-1";
-    adventureStore.setState({
-      activeView: "world-map",
+    const targetWorld = worldId || defaultWorld;
+
+    this.navigateTo("world-map", {
       activeTrack: track,
-      selectedWorldId: worldId || defaultWorld
+      selectedWorldId: targetWorld
     });
+
+    setTimeout(() => {
+      const levelsSection = document.getElementById("worldLevelsSection");
+      if (levelsSection) {
+        levelsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 150);
   },
 
   async openProblemSolvingChallenge(problemId) {
@@ -667,10 +686,13 @@ export const PythonAdventureController = {
         const worldId = card.getAttribute("data-world-id");
         const { progress } = adventureStore.getState();
         const norm = PythonAdventureService.normalizeProgress(progress);
+        const isStaff = currentStudent?.role === "teacher" || currentStudent?.role === "admin";
         const isUnlocked =
+          isStaff ||
           worldId.startsWith("ps-level-") ||
           (norm?.unlockedWorlds || ["world-1"]).includes(worldId) ||
           card.classList.contains("unlocked") ||
+          card.classList.contains("active") ||
           card.classList.contains("completed");
         if (isUnlocked) {
           adventureStore.setState({ selectedWorldId: worldId, progress: norm });
