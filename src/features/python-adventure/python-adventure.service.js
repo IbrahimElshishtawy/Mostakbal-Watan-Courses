@@ -13,7 +13,8 @@ import {
   getTodayDailyChallenge
 } from "./python-adventure-data.js";
 
-const LOCAL_STORAGE_KEY = "python_adventure_local_progress";
+export const CURRENT_SEASON_ID = "season_2026_v2";
+const LOCAL_STORAGE_KEY = `python_adventure_local_progress_${CURRENT_SEASON_ID}`;
 const CUSTOM_LEVELS_STORAGE_KEY = "python_adventure_custom_levels";
 const WORLD_ORDERS_STORAGE_KEY = "python_adventure_world_orders";
 
@@ -72,6 +73,7 @@ export const PythonAdventureService = {
     if (cached) return this.normalizeProgress(cached);
 
     const initial = {
+      seasonId: CURRENT_SEASON_ID,
       studentUid: uid,
       currentWorldId: "world-1",
       currentLevelId: "world-1-level-1",
@@ -914,7 +916,12 @@ export const PythonAdventureService = {
   _getLocalCache(uid) {
     try {
       const raw = localStorage.getItem(`${LOCAL_STORAGE_KEY}_${uid}`);
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (data && data.seasonId === CURRENT_SEASON_ID) {
+        return data;
+      }
+      return null;
     } catch (_) {
       return null;
     }
@@ -922,6 +929,9 @@ export const PythonAdventureService = {
 
   _saveLocalCache(uid, data) {
     try {
+      if (data && typeof data === "object") {
+        data.seasonId = CURRENT_SEASON_ID;
+      }
       localStorage.setItem(`${LOCAL_STORAGE_KEY}_${uid}`, JSON.stringify(data));
     } catch (_) {}
   }
