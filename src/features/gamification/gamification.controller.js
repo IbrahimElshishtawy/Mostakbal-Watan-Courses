@@ -4,6 +4,7 @@ import { renderDailyChallengeView } from "./components/daily-challenge.component
 import { renderRewardStoreView } from "./components/reward-store.component.js";
 import { renderStudentInventoryView } from "./components/student-inventory.component.js";
 import { renderStudentProgressView } from "./components/student-progress.component.js";
+import { renderPointsExchangeView, EXCHANGE_PACKAGES } from "./components/points-exchange.component.js";
 import { renderHowToPlayModal } from "./components/how-to-play-modal.component.js";
 import { renderTeacherCodeAnalyticsView } from "./components/teacher-code-analytics.component.js";
 import { renderAdminGamificationCenterView } from "./components/admin-gamification-center.component.js";
@@ -69,6 +70,10 @@ export const GamificationController = {
             <button type="button" class="gam-tab-btn" data-subtab="store">
               <span>🛍️</span>
               <span>متجر المكافآت (Coins)</span>
+            </button>
+            <button type="button" class="gam-tab-btn" data-subtab="exchange">
+              <span>🔄</span>
+              <span>صرافة النقاط (تبديل بكوينز)</span>
             </button>
             <button type="button" class="gam-tab-btn" data-subtab="inventory">
               <span>🎒</span>
@@ -168,6 +173,12 @@ export const GamificationController = {
         isPurchasing
       });
       this._wireStoreEvents();
+    } else if (activeSubTab === "exchange") {
+      slot.innerHTML = renderPointsExchangeView({
+        profile,
+        isExchanging: this._state.isExchanging || false
+      });
+      this._wireExchangeEvents();
     } else if (activeSubTab === "inventory") {
       slot.innerHTML = renderStudentInventoryView({
         inventory,
@@ -337,6 +348,124 @@ export const GamificationController = {
           }
         }
       });
+    });
+
+    // Go to Exchange shortcut buttons
+    document.getElementById("gamStoreGoToExchangeBtn")?.addEventListener("click", () => {
+      this._state.activeSubTab = "exchange";
+      this.renderStudentView();
+    });
+
+    document.querySelectorAll("[data-store-go-exchange]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        this._state.activeSubTab = "exchange";
+        this.renderStudentView();
+      });
+    });
+  },
+
+  _wireExchangeEvents() {
+    document.getElementById("exchangeGoToStoreBtn")?.addEventListener("click", () => {
+      this._state.activeSubTab = "store";
+      this.renderStudentView();
+    });
+
+    const currentPoints = Math.max(
+      Number(this._state.profile?.xp || 0),
+      Number(this._state.profile?.points || 0),
+      Number(this._state.profile?.competitionPoints || 0)
+    );
+
+    // Preset Bundles
+    document.querySelectorAll("[data-exchange-pack-id]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const points = Number(btn.getAttribute("data-points"));
+        const coins = Number(btn.getAttribute("data-coins"));
+
+        if (confirm(`هل أنت متأكد من رغبتك في استبدال ${points} نقطة والحصول على ${coins} عملة ذهبية (Coin)؟ 🪙`)) {
+          this._state.isExchanging = true;
+          this.renderStudentView();
+
+          try {
+            const res = await GamificationService.exchangePointsForCoins(points, coins);
+            showToast(res.message || "تم تحويل النقاط إلى عملات بنجاح! 🪙", "success");
+
+            if (this._state.profile) {
+              this._state.profile.xp = res.balanceAfterPoints;
+              this._state.profile.points = res.balanceAfterPoints;
+              this._state.profile.coins = res.balanceAfterCoins;
+            }
+          } catch (e) {
+            showToast(e.message || "تعذر إتمام عملية التحويل.", "error");
+          } finally {
+            this._state.isExchanging = false;
+            this.renderStudentView();
+          }
+        }
+      });
+    });
+
+    // Custom Converter
+    const pointsInput = document.getElementById("customPointsInput");
+    const previewSpan = document.getElementById("customCoinsGainPreview");
+
+    const updatePreview = () => {
+      const val = Math.max(0, Number(pointsInput?.value || 0));
+      const coins = Math.floor(val / 10);
+      if (previewSpan) {
+        previewSpan.textContent = `+${coins}`;
+      }
+    };
+
+    if (pointsInput) {
+      pointsInput.addEventListener("input", updatePreview);
+    }
+
+    // Quick percentage pills
+    document.querySelectorAll(".btn-percent-pill[data-percent]").forEach(pill => {
+      pill.addEventListener("click", () => {
+        const pct = Number(pill.getAttribute("data-percent"));
+        const targetPts = Math.floor((currentPoints * (pct / 100)) / 10) * 10;
+        if (pointsInput) {
+          pointsInput.value = targetPts;
+          updatePreview();
+        }
+      });
+    });
+
+    // Execute custom exchange
+    document.getElementById("executeCustomExchangeBtn")?.addEventListener("click", async () => {
+      const val = Number(pointsInput?.value || 0);
+      if (val < 10) {
+        showToast("الحد الأدنى للتحويل هو 10 نقاط.", "warning");
+        return;
+      }
+      if (val > currentPoints) {
+        showToast(`رصيدك الحالي (${currentPoints} نقطة) لا يكفي لإتمام هذا التحويل.`, "error");
+        return;
+      }
+
+      const coins = Math.floor(val / 10);
+      if (confirm(`هل أنت متأكد من تحويل ${val} نقطة إلى ${coins} عملة ذهبية؟ 🪙`)) {
+        this._state.isExchanging = true;
+        this.renderStudentView();
+
+        try {
+          const res = await GamificationService.exchangePointsForCoins(val, coins);
+          showToast(res.message || "تم تحويل النقاط إلى عملات بنجاح! 🪙", "success");
+
+          if (this._state.profile) {
+            this._state.profile.xp = res.balanceAfterPoints;
+            this._state.profile.points = res.balanceAfterPoints;
+            this._state.profile.coins = res.balanceAfterCoins;
+          }
+        } catch (e) {
+          showToast(e.message || "تعذر إتمام عملية التحويل.", "error");
+        } finally {
+          this._state.isExchanging = false;
+          this.renderStudentView();
+        }
+      }
     });
   },
 

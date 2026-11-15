@@ -1077,3 +1077,315 @@
   border-radius: 8px;
   display: inline-block;
 }
+
+/* ========================================================
+   7. POINTS TO COINS EXCHANGE BUREAU STYLES
+   ======================================================== */
+.gam-exchange-wrapper {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.gam-exchange-bundles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1200px) {
+  .gam-exchange-bundles-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.gam-exchange-card {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.4rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.gam-exchange-card.can-afford {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.gam-exchange-card.can-afford:hover {
+  transform: translateY(-5px);
+  border-color: var(--pkg-color, #fbbf24);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.2);
+}
+
+.gam-exchange-card.cannot-afford {
+  opacity: 0.75;
+  filter: grayscale(0.2);
+}
+
+.exchange-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.exchange-pkg-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--pkg-color, #fbbf24);
+  color: var(--pkg-color, #fbbf24);
+}
+
+.exchange-pkg-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.exchange-pkg-title {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.exchange-flow-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 0.75rem 0.5rem;
+  margin-bottom: 0.85rem;
+  text-align: center;
+}
+
+.flow-label {
+  display: block;
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.flow-val {
+  font-size: 1rem;
+  font-weight: 900;
+  display: block;
+}
+
+.flow-val.points-val {
+  color: #38bdf8;
+}
+
+.flow-val.coins-val {
+  color: #fbbf24;
+}
+
+.exchange-arrow {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  animation: pulseArrow 1.5s infinite;
+}
+
+@keyframes pulseArrow {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.exchange-bonus-pill {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(236, 72, 153, 0.2));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+  padding: 5px 8px;
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.exchange-standard-rate {
+  text-align: center;
+  font-size: 0.68rem;
+  color: #64748b;
+  margin-bottom: 1rem;
+  padding: 5px 0;
+}
+
+.btn-exchange-action {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-exchange-action.btn-enabled {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000000;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+}
+
+.btn-exchange-action.btn-enabled:hover {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-exchange-action.btn-disabled {
+  background: rgba(30, 41, 59, 0.6);
+  color: #64748b;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
+}
+
+/* Custom Converter Card */
+.gam-custom-exchange-card {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+.custom-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.25rem;
+}
+
+.custom-converter-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .custom-converter-grid {
+    grid-template-columns: 1.4fr 1.2fr 1fr;
+  }
+}
+
+.converter-input-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 1.15rem;
+}
+
+.input-with-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gam-number-input {
+  width: 100%;
+  background: #090d16;
+  border: 2px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 0.75rem 4.5rem 0.75rem 1rem;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 900;
+  font-family: monospace;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.gam-number-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+}
+
+.input-unit {
+  position: absolute;
+  right: 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #38bdf8;
+  pointer-events: none;
+}
+
+.quick-percent-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-percent-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: #cbd5e1;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-percent-pill:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.btn-percent-pill.max-pill {
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.btn-percent-pill.max-pill:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #fbbf24;
+}
+
+.converter-result-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 14px;
+  padding: 1.15rem;
+  text-align: center;
+}
+
+.coins-preview-huge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0.35rem 0;
+}
+
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}

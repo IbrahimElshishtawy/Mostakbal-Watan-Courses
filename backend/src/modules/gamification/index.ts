@@ -15,6 +15,7 @@ import {
   RecordCodeExecutionSchema,
   EvaluateCodingTaskSchema,
   PurchaseRewardSchema,
+  ExchangePointsForCoinsSchema,
   EquipRewardSchema,
   SeasonResetPreviewSchema,
   ExecuteSeasonResetSchema,
@@ -42,6 +43,7 @@ import {
   getStoreCatalog,
   getStudentInventory,
   purchaseStoreItem,
+  exchangePointsForCoins,
   equipStoreItem
 } from "./store";
 import {
@@ -223,6 +225,16 @@ export async function purchaseRewardHandler(request: CallableRequest) {
   return purchaseStoreItem({
     studentUid: user.uid,
     rewardId: input.rewardId
+  });
+}
+
+export async function exchangePointsForCoinsHandler(request: CallableRequest) {
+  const user = getAuthenticatedUser(request);
+  const input = validateInput(ExchangePointsForCoinsSchema, request.data);
+  return exchangePointsForCoins({
+    studentUid: user.uid,
+    pointsToDeduct: input.pointsToDeduct,
+    coinsToCredit: input.coinsToCredit
   });
 }
 

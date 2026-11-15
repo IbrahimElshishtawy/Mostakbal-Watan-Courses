@@ -603,3 +603,75 @@ export async function equipStoreItem(options: {
     message: "تم تفعيل العنصر وتحديث مظهر حسابك بنجاح! ✨"
   };
 }
+
+// ==========================================
+// 5. POINTS TO COINS EXCHANGE CENTER
+// ==========================================
+
+export async function exchangePointsForCoins(options: {
+  studentUid: string;
+  pointsToDeduct: number;
+  coinsToCredit: number;
+}) {
+  const { studentUid, pointsToDeduct, coinsToCredit } = options;
+
+  if (pointsToDeduct <= 0 || coinsToCredit <= 0) {
+    throw new HttpsError("invalid-argument", "عدد النقاط والعملات يجب أن يكون أكبر من الصفر.");
+  }
+
+  // Maximum coins credited cannot exceed pointsToDeduct (prevents arbitrage/exploits)
+  if (coinsToCredit > pointsToDeduct) {
+    throw new HttpsError("invalid-argument", "معدل التحويل غير صالح.");
+  }
+
+  const gamDocRef = db.collection(GAMIFICATION_COLLECTION).doc(studentUid);
+  const txRef = db.collection(REWARD_TRANSACTIONS_COLLECTION).doc(`exchange_${studentUid}_${Date.now()}`);
+
+  let balanceAfterCoins = 0;
+  let balanceAfterPoints = 0;
+
+  await db.runTransaction(async (t) => {
+    const gamSnap = await t.get(gamDocRef);
+    if (!gamSnap.exists) {
+      throw new HttpsError("not-found", "ملف الطالب الجيميفيكيشن غير موجود.");
+    }
+    const data = gamSnap.data()!;
+    const currentPoints = Math.max(Number(data.xp || 0), Number(data.points || 0));
+    const currentCoins = Number(data.coins || 0);
+
+    if (currentPoints < pointsToDeduct) {
+      throw new HttpsError(
+        "failed-precondition",
+        `رصيدك الحالي (${currentPoints} نقطة) لا يكفي لإتمام هذا التحويل (${pointsToDeduct} نقطة).`
+      );
+    }
+
+    balanceAfterPoints = Math.max(0, currentPoints - pointsToDeduct);
+    balanceAfterCoins = currentCoins + coinsToCredit;
+
+    t.set(gamDocRef, {
+      xp: balanceAfterPoints,
+      points: balanceAfterPoints,
+      coins: balanceAfterCoins,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
+    t.set(txRef, {
+      transactionId: txRef.id,
+      studentUid,
+      type: "points_to_coins_exchange",
+      pointsDeducted: pointsToDeduct,
+      coinsCredited: coinsToCredit,
+      balanceAfterPoints,
+      balanceAfterCoins,
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  return {
+    success: true,
+    message: `تم تحويل ${pointsToDeduct} نقطة إلى ${coinsToCredit} عملة ذهبية بنجاح! 🪙`,
+    balanceAfterPoints,
+    balanceAfterCoins
+  };
+}

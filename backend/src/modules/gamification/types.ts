@@ -412,6 +412,11 @@ export const PurchaseRewardSchema = z.object({
   rewardId: z.string().min(1, "معرف العنصر مطلوب")
 });
 
+export const ExchangePointsForCoinsSchema = z.object({
+  pointsToDeduct: z.number().int().positive("عدد النقاط يجب أن يكون رقماً صحيحاً وموجباً"),
+  coinsToCredit: z.number().int().positive("عدد العملات يجب أن يكون رقماً صحيحاً وموجباً")
+});
+
 export const EquipRewardSchema = z.object({
   rewardId: z.string().min(1, "معرف العنصر مطلوب"),
   category: z.enum(["avatar", "frame", "title", "name_effect", "theme"])

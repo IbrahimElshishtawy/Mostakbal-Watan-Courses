@@ -55,12 +55,23 @@ export function renderRewardStoreView(state) {
           </p>
         </div>
 
-        <div class="gam-balance-card coins-card">
-          <span style="font-size: 1.5rem;">🪙</span>
-          <div>
-            <span class="text-xs text-amber-300 d-block font-normal">رصيدك المتاح للشراء</span>
-            <strong class="text-xl font-black">${currentCoins.toLocaleString()} Coin</strong>
+        <div class="d-flex items-center gap-3 flex-wrap">
+          <div class="gam-balance-card coins-card">
+            <span style="font-size: 1.5rem;">🪙</span>
+            <div>
+              <span class="text-xs text-amber-300 d-block font-normal">رصيدك المتاح للشراء</span>
+              <strong class="text-xl font-black">${currentCoins.toLocaleString()} Coin</strong>
+            </div>
           </div>
+
+          <button type="button" 
+                  class="btn" 
+                  id="gamStoreGoToExchangeBtn" 
+                  style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #000; font-weight: 800; border-radius: 9999px; padding: 0.65rem 1.35rem; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);">
+            <span>🔄</span>
+            <span>صرافة النقاط (تبديل بكوينز)</span>
+            <span>⚡</span>
+          </button>
         </div>
       </div>
 
@@ -155,6 +166,14 @@ export function renderRewardStoreView(state) {
                         ${!canAfford || isPurchasing ? "disabled" : ""}>
                   ${isPurchasing ? "جاري الشراء... ⏳" : canAfford ? "شراء الآن 🛍️" : "رصيد عملات غير كافٍ 🔒"}
                 </button>
+                ${!canAfford ? `
+                  <button type="button" 
+                          class="btn btn-sm text-xs mt-2 py-1.5 w-100 font-bold d-flex items-center justify-center gap-1.5" 
+                          data-store-go-exchange="true" 
+                          style="border: 1px dashed rgba(245, 158, 11, 0.45); color: #fbbf24; background: rgba(245, 158, 11, 0.08); border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                    <span>🔄 استبدل نقاطك بكوينز للشراء ⚡</span>
+                  </button>
+                ` : ""}
               `}
             </div>
           `;

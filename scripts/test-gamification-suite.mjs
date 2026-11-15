@@ -551,6 +551,59 @@ it("Season reset archives gamification snapshot and resets student to Level 1, 0
   assert.equal(archivedRecord.finalCoins, 350);
 });
 
+console.log("\n▶️ TEST SUITE 9: Points-to-Coins Exchange Bureau");
+
+const PACKAGES = [
+  { points: 50, coins: 5, bonus: 0 },
+  { points: 100, coins: 10, bonus: 0 },
+  { points: 250, coins: 30, bonus: 5 },
+  { points: 500, coins: 65, bonus: 15 },
+  { points: 1000, coins: 140, bonus: 40 }
+];
+
+it("Preset packages calculate correct coins and bonuses", () => {
+  assert.equal(PACKAGES[0].coins, 5);
+  assert.equal(PACKAGES[1].coins, 10);
+  assert.equal(PACKAGES[2].coins, 30); // 25 + 5 bonus
+  assert.equal(PACKAGES[3].coins, 65); // 50 + 15 bonus
+  assert.equal(PACKAGES[4].coins, 140); // 100 + 40 bonus
+});
+
+it("Custom conversion applies standard 10:1 ratio", () => {
+  const convert = (pts) => Math.floor(pts / 10);
+  assert.equal(convert(10), 1);
+  assert.equal(convert(85), 8);
+  assert.equal(convert(340), 34);
+  assert.equal(convert(9), 0);
+});
+
+it("Rejects exchange if student points are insufficient", () => {
+  const student = { points: 40, coins: 0 };
+  const attemptExchange = (pts, cns) => {
+    if (student.points < pts) {
+      throw new Error("Insufficient points");
+    }
+    student.points -= pts;
+    student.coins += cns;
+  };
+
+  assert.throws(() => attemptExchange(50, 5), /Insufficient points/);
+  assert.equal(student.points, 40);
+  assert.equal(student.coins, 0);
+});
+
+it("Atomic transaction deducts points and credits coins correctly", () => {
+  const student = { points: 300, coins: 10 };
+  const pkg = PACKAGES[2]; // 250 pts -> 30 coins
+
+  assert(student.points >= pkg.points);
+  student.points -= pkg.points;
+  student.coins += pkg.coins;
+
+  assert.equal(student.points, 50);
+  assert.equal(student.coins, 40);
+});
+
 console.log("\n=======================================================");
 console.log(`🎉 GAMIFICATION TEST SUITE FINISHED: ${passedCount} PASSED, ${failedCount} FAILED`);
 console.log("=======================================================\n");

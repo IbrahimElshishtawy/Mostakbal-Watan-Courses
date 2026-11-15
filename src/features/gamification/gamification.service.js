@@ -1,7 +1,7 @@
 // src/features/gamification/gamification.service.js
 import { callApi } from "../../repositories/api.client.js";
 import { db, auth } from "../../core/firebase.js";
-import { doc, getDoc, setDoc, collection, getDocs, query, where, orderBy, limit as firestoreLimit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, collection, getDocs, query, where, orderBy, limit as firestoreLimit, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { FEATURES } from "../../core/constants.js";
 import { normalizeError } from "../../core/errors.js";
 
@@ -16,8 +16,9 @@ export const GamificationService = {
    * Fetches the current student's gamification profile.
    */
   async getStudentGamificationProfile(studentUid) {
-    const uid = studentUid || auth.currentUser?.uid;
+    const uid = studentUid || auth.currentUser?.uid || this._activeStudentUid;
     if (!uid) return null;
+    this._activeStudentUid = uid;
 
     if (FEATURES.USE_CLOUD_FUNCTIONS) {
       try {
@@ -535,7 +536,7 @@ export const GamificationService = {
    * Fetches Student's Owned Inventory Items.
    */
   async getStudentInventory(studentUid) {
-    const uid = studentUid || auth.currentUser?.uid;
+    const uid = studentUid || auth.currentUser?.uid || this._activeStudentUid;
     if (!uid) return [];
 
     if (FEATURES.USE_CLOUD_FUNCTIONS) {
@@ -559,14 +560,211 @@ export const GamificationService = {
    * Purchases an item with coins.
    */
   async purchaseReward(rewardId) {
-    return callApi("purchaseReward", { rewardId });
+    const uid = auth.currentUser?.uid || this._activeStudentUid;
+    if (FEATURES.USE_CLOUD_FUNCTIONS) {
+      try {
+        return await callApi("purchaseReward", { rewardId });
+      } catch (err) {
+        console.warn("Cloud function purchaseReward fallback:", err);
+      }
+    }
+
+    if (!uid || !db) {
+      throw new Error("يرجى تسجيل الدخول أولاً لإتمام عملية الشراء.");
+    }
+
+    // Direct Firestore transaction fallback
+    const itemRef = doc(db, REWARD_CATALOG_COLLECTION, rewardId);
+    const gamRef = doc(db, GAMIFICATION_COLLECTION, uid);
+    const invItemRef = doc(db, "student_inventory", uid, "items", rewardId);
+
+    let balanceAfter = 0;
+    let purchasedItem = null;
+
+    await runTransaction(db, async (t) => {
+      let itemSnap = await t.get(itemRef);
+      if (!itemSnap.exists()) {
+        const fallbackCatalog = await this.getStoreCatalog();
+        purchasedItem = fallbackCatalog.find(i => i.rewardId === rewardId);
+        if (!purchasedItem) {
+          throw new Error("العنصر المطلوب غير موجود في المتجر.");
+        }
+      } else {
+        purchasedItem = itemSnap.data();
+      }
+
+      const existingInvSnap = await t.get(invItemRef);
+      if (existingInvSnap.exists()) {
+        throw new Error("أنت تمتلك هذا العنصر بالفعل في حقيبتك!");
+      }
+
+      const gamSnap = await t.get(gamRef);
+      const gamData = gamSnap.exists() ? gamSnap.data() : {};
+      const currentCoins = Number(gamData.coins || 0);
+
+      if (currentCoins < purchasedItem.priceInCoins) {
+        throw new Error(
+          `رصيدك من العملات (${currentCoins} 🪙) غير كافٍ لشراء هذا العنصر (${purchasedItem.priceInCoins} 🪙). استبدل نقاطك بكوينز من صرافة النقاط أو أكمل مهام برمجية!`
+        );
+      }
+
+      balanceAfter = currentCoins - purchasedItem.priceInCoins;
+      t.set(gamRef, {
+        coins: balanceAfter,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+
+      t.set(invItemRef, {
+        rewardId: purchasedItem.rewardId,
+        category: purchasedItem.category,
+        name: purchasedItem.name,
+        nameEn: purchasedItem.nameEn || "",
+        icon: purchasedItem.icon || "🎁",
+        purchasedAt: new Date().toISOString(),
+        pricePaid: purchasedItem.priceInCoins,
+        isEquipped: false
+      });
+    });
+
+    return {
+      success: true,
+      rewardId: purchasedItem.rewardId,
+      name: purchasedItem.name,
+      pricePaid: purchasedItem.priceInCoins,
+      balanceAfter,
+      message: `تهانينا! تم شراء "${purchasedItem.name}" بنجاح وإضافته إلى حقيبتك! 🛍️`
+    };
   },
 
   /**
-   * Equips a cosmetic perk (avatar, frame, title).
+   * Equips a cosmetic perk (avatar, frame, title, name_effect).
    */
   async equipReward(rewardId, category) {
-    return callApi("equipReward", { rewardId, category });
+    const uid = auth.currentUser?.uid || this._activeStudentUid;
+    if (FEATURES.USE_CLOUD_FUNCTIONS) {
+      try {
+        return await callApi("equipReward", { rewardId, category });
+      } catch (err) {
+        console.warn("Cloud function equipReward fallback:", err);
+      }
+    }
+
+    if (!uid || !db) {
+      throw new Error("يرجى تسجيل الدخول أولاً لتفعيل وتجهيز العنصر.");
+    }
+
+    const gamRef = doc(db, GAMIFICATION_COLLECTION, uid);
+    const catMap = {
+      avatar: "avatarId",
+      frame: "frameId",
+      title: "titleId",
+      name_effect: "nameEffectId"
+    };
+    const propKey = catMap[category] || "avatarId";
+
+    await setDoc(gamRef, {
+      equippedItems: {
+        [propKey]: rewardId
+      },
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
+    return {
+      success: true,
+      equippedRewardId: rewardId,
+      category,
+      message: "تم تفعيل العنصر وتحديث مظهر حسابك بنجاح! ✨"
+    };
+  },
+
+  /**
+   * Exchanges educational / competition points for purchasing coins.
+   */
+  async exchangePointsForCoins(pointsToDeduct, coinsToCredit) {
+    const uid = auth.currentUser?.uid || this._activeStudentUid;
+
+    if (pointsToDeduct <= 0 || coinsToCredit <= 0) {
+      throw new Error("القيم المدخلة غير صحيحة.");
+    }
+
+    if (FEATURES.USE_CLOUD_FUNCTIONS) {
+      try {
+        return await callApi("exchangePointsForCoins", { pointsToDeduct, coinsToCredit });
+      } catch (err) {
+        console.warn("Cloud function exchangePointsForCoins fallback:", err);
+      }
+    }
+
+    if (!uid || !db) {
+      throw new Error("يرجى تسجيل الدخول لإتمام عملية تحويل النقاط.");
+    }
+
+    const gamRef = doc(db, GAMIFICATION_COLLECTION, uid);
+    const advRef = doc(db, "python_adventure_progress", uid);
+    const txId = `exchange_${uid}_${Date.now()}`;
+    const txRef = doc(db, "reward_transactions", txId);
+
+    let balanceAfterPoints = 0;
+    let balanceAfterCoins = 0;
+
+    await runTransaction(db, async (t) => {
+      const gamSnap = await t.get(gamRef);
+      const advSnap = await t.get(advRef);
+
+      const gamData = gamSnap.exists() ? gamSnap.data() : {};
+      const advData = advSnap.exists() ? advSnap.data() : {};
+
+      const currentPoints = Math.max(
+        Number(gamData.xp || 0),
+        Number(gamData.points || 0),
+        Number(advData.xp || 0)
+      );
+      const currentCoins = Number(gamData.coins || 0);
+
+      if (currentPoints < pointsToDeduct) {
+        throw new Error(
+          `رصيدك الحالي (${currentPoints} نقطة) لا يكفي لإتمام هذا التحويل (${pointsToDeduct} نقطة).`
+        );
+      }
+
+      balanceAfterPoints = Math.max(0, currentPoints - pointsToDeduct);
+      balanceAfterCoins = currentCoins + coinsToCredit;
+
+      t.set(gamRef, {
+        studentUid: uid,
+        xp: balanceAfterPoints,
+        points: balanceAfterPoints,
+        coins: balanceAfterCoins,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+
+      if (advSnap.exists()) {
+        t.set(advRef, {
+          xp: balanceAfterPoints,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      }
+
+      t.set(txRef, {
+        transactionId: txId,
+        studentUid: uid,
+        type: "points_to_coins_exchange",
+        pointsDeducted: pointsToDeduct,
+        coinsCredited: coinsToCredit,
+        balanceAfterPoints,
+        balanceAfterCoins,
+        timestamp: new Date().toISOString()
+      });
+    });
+
+    return {
+      success: true,
+      balanceAfterPoints,
+      balanceAfterCoins,
+      pointsDeducted: pointsToDeduct,
+      coinsCredited: coinsToCredit,
+      message: `تم تحويل ${pointsToDeduct} نقطة إلى ${coinsToCredit} عملة ذهبية بنجاح! 🪙`
+    };
   },
 
   /**
