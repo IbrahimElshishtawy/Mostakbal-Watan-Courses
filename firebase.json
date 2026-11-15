@@ -101,10 +101,6 @@
         {
           "source": "/admin.html",
           "destination": "/pages/admin.html"
-        },
-        {
-          "source": "/api/**",
-          "function": "api"
         }
       ]
     },
