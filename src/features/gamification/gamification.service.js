@@ -717,6 +717,7 @@ export const GamificationService = {
       const currentPoints = Math.max(
         Number(gamData.xp || 0),
         Number(gamData.points || 0),
+        Number(gamData.competitionPoints || 0),
         Number(advData.xp || 0)
       );
       const currentCoins = Number(gamData.coins || 0);
@@ -734,6 +735,7 @@ export const GamificationService = {
         studentUid: uid,
         xp: balanceAfterPoints,
         points: balanceAfterPoints,
+        competitionPoints: balanceAfterPoints,
         coins: balanceAfterCoins,
         updatedAt: new Date().toISOString()
       }, { merge: true });

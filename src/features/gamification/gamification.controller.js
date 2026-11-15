@@ -9,6 +9,7 @@ import { renderHowToPlayModal } from "./components/how-to-play-modal.component.j
 import { renderTeacherCodeAnalyticsView } from "./components/teacher-code-analytics.component.js";
 import { renderAdminGamificationCenterView } from "./components/admin-gamification-center.component.js";
 import { showToast } from "../../shared/utils/dom.utils.js";
+import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm-dialog.component.js";
 
 export const GamificationController = {
   _studentContainer: null,
@@ -389,25 +390,35 @@ export const GamificationController = {
         const points = Number(btn.getAttribute("data-points"));
         const coins = Number(btn.getAttribute("data-coins"));
 
-        if (confirm(`هل أنت متأكد من رغبتك في استبدال ${points} نقطة والحصول على ${coins} عملة ذهبية (Coin)؟ 🪙`)) {
-          this._state.isExchanging = true;
-          this.renderStudentView();
+        const confirmed = await showConfirmDialog({
+          title: "تأكيد صرافة واستبدال النقاط",
+          message: `هل ترغب في استبدال ${points.toLocaleString()} نقطة والحصول على ${coins} عملة ذهبية (Coin) في رصيدك فورياً؟ 🪙`,
+          confirmText: "استبدال فوري الآن ⚡",
+          cancelText: "إلغاء",
+          variant: "warning",
+          icon: "🪙"
+        });
 
-          try {
-            const res = await GamificationService.exchangePointsForCoins(points, coins);
-            showToast(res.message || "تم تحويل النقاط إلى عملات بنجاح! 🪙", "success");
+        if (!confirmed) return;
 
-            if (this._state.profile) {
-              this._state.profile.xp = res.balanceAfterPoints;
-              this._state.profile.points = res.balanceAfterPoints;
-              this._state.profile.coins = res.balanceAfterCoins;
-            }
-          } catch (e) {
-            showToast(e.message || "تعذر إتمام عملية التحويل.", "error");
-          } finally {
-            this._state.isExchanging = false;
-            this.renderStudentView();
+        this._state.isExchanging = true;
+        this.renderStudentView();
+
+        try {
+          const res = await GamificationService.exchangePointsForCoins(points, coins);
+          showToast(res.message || "تم تحويل النقاط إلى عملات بنجاح! 🪙", "success");
+
+          if (this._state.profile) {
+            this._state.profile.xp = res.balanceAfterPoints;
+            this._state.profile.points = res.balanceAfterPoints;
+            this._state.profile.competitionPoints = res.balanceAfterPoints;
+            this._state.profile.coins = res.balanceAfterCoins;
           }
+        } catch (e) {
+          showToast(e.message || "تعذر إتمام عملية التحويل.", "error");
+        } finally {
+          this._state.isExchanging = false;
+          this.renderStudentView();
         }
       });
     });
@@ -453,25 +464,35 @@ export const GamificationController = {
       }
 
       const coins = Math.floor(val / 10);
-      if (confirm(`هل أنت متأكد من تحويل ${val} نقطة إلى ${coins} عملة ذهبية؟ 🪙`)) {
-        this._state.isExchanging = true;
-        this.renderStudentView();
+      const confirmed = await showConfirmDialog({
+        title: "تأكيد صرافة واستبدال النقاط المخصصة",
+        message: `هل ترغب في استبدال ${val.toLocaleString()} نقطة والحصول على ${coins} عملة ذهبية (Coin)؟ 🪙`,
+        confirmText: "تأكيد التبديل 🔄",
+        cancelText: "إلغاء",
+        variant: "warning",
+        icon: "🪙"
+      });
 
-        try {
-          const res = await GamificationService.exchangePointsForCoins(val, coins);
-          showToast(res.message || "تم تحويل النقاط إلى عملات بنجاح! 🪙", "success");
+      if (!confirmed) return;
 
-          if (this._state.profile) {
-            this._state.profile.xp = res.balanceAfterPoints;
-            this._state.profile.points = res.balanceAfterPoints;
-            this._state.profile.coins = res.balanceAfterCoins;
-          }
-        } catch (e) {
-          showToast(e.message || "تعذر إتمام عملية التحويل.", "error");
-        } finally {
-          this._state.isExchanging = false;
-          this.renderStudentView();
+      this._state.isExchanging = true;
+      this.renderStudentView();
+
+      try {
+        const res = await GamificationService.exchangePointsForCoins(val, coins);
+        showToast(res.message || "تم تحويل النقاط إلى عملات بنجاح! 🪙", "success");
+
+        if (this._state.profile) {
+          this._state.profile.xp = res.balanceAfterPoints;
+          this._state.profile.points = res.balanceAfterPoints;
+          this._state.profile.competitionPoints = res.balanceAfterPoints;
+          this._state.profile.coins = res.balanceAfterCoins;
         }
+      } catch (e) {
+        showToast(e.message || "تعذر إتمام عملية التحويل.", "error");
+      } finally {
+        this._state.isExchanging = false;
+        this.renderStudentView();
       }
     });
   },

@@ -59,6 +59,7 @@ import {
   getStoreCatalogHandler,
   getStudentInventoryHandler,
   purchaseRewardHandler,
+  exchangePointsForCoinsHandler,
   equipRewardHandler,
   getStudentsOverviewHandler,
   getStudentReportHandler,
@@ -151,6 +152,7 @@ export const evaluateCodingTask = onCall(evaluateCodingTaskHandler);
 export const getStoreCatalog = onCall(getStoreCatalogHandler);
 export const getStudentInventory = onCall(getStudentInventoryHandler);
 export const purchaseReward = onCall(purchaseRewardHandler);
+export const exchangePointsForCoins = onCall(exchangePointsForCoinsHandler);
 export const equipReward = onCall(equipRewardHandler);
 
 // ==========================================

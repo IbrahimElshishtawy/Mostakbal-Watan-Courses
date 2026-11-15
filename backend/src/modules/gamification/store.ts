@@ -5,6 +5,7 @@ import { RewardItem, StudentInventoryItem, RewardTransaction } from "./types";
 const REWARD_CATALOG_COLLECTION = "reward_catalog";
 const GAMIFICATION_COLLECTION = "student_gamification";
 const REWARD_TRANSACTIONS_COLLECTION = "reward_transactions";
+const PYTHON_PROGRESS_COLLECTION = "python_adventure_progress";
 
 // ==========================================
 // 1. DEFAULT VIRTUAL REWARD CATALOG SEEDING
@@ -625,6 +626,7 @@ export async function exchangePointsForCoins(options: {
   }
 
   const gamDocRef = db.collection(GAMIFICATION_COLLECTION).doc(studentUid);
+  const advDocRef = db.collection(PYTHON_PROGRESS_COLLECTION).doc(studentUid);
   const txRef = db.collection(REWARD_TRANSACTIONS_COLLECTION).doc(`exchange_${studentUid}_${Date.now()}`);
 
   let balanceAfterCoins = 0;
@@ -632,11 +634,20 @@ export async function exchangePointsForCoins(options: {
 
   await db.runTransaction(async (t) => {
     const gamSnap = await t.get(gamDocRef);
+    const advSnap = await t.get(advDocRef);
+
     if (!gamSnap.exists) {
       throw new HttpsError("not-found", "ملف الطالب الجيميفيكيشن غير موجود.");
     }
     const data = gamSnap.data()!;
-    const currentPoints = Math.max(Number(data.xp || 0), Number(data.points || 0));
+    const advData = advSnap.exists ? advSnap.data()! : {};
+
+    const currentPoints = Math.max(
+      Number(data.xp || 0),
+      Number(data.points || 0),
+      Number(data.competitionPoints || 0),
+      Number(advData.xp || 0)
+    );
     const currentCoins = Number(data.coins || 0);
 
     if (currentPoints < pointsToDeduct) {
@@ -652,9 +663,17 @@ export async function exchangePointsForCoins(options: {
     t.set(gamDocRef, {
       xp: balanceAfterPoints,
       points: balanceAfterPoints,
+      competitionPoints: balanceAfterPoints,
       coins: balanceAfterCoins,
       updatedAt: new Date().toISOString()
     }, { merge: true });
+
+    if (advSnap.exists) {
+      t.set(advDocRef, {
+        xp: balanceAfterPoints,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    }
 
     t.set(txRef, {
       transactionId: txRef.id,
