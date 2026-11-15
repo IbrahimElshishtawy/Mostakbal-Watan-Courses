@@ -2,6 +2,7 @@
 import { LeaderboardService } from "./leaderboard.service.js";
 import { LeaderboardAudioService } from "./leaderboard-audio.service.js";
 import { renderLeaderboardView } from "./components/leaderboard.component.js";
+import { openPerformanceAnalysisModal } from "./components/performance-analysis-modal.component.js";
 import { setHtml } from "../../shared/utils/dom.utils.js";
 import { showToast } from "../../shared/components/Toast/toast.component.js";
 import { showConfirmDialog } from "../../shared/components/ConfirmDialog/confirm-dialog.component.js";
@@ -175,32 +176,23 @@ export const LeaderboardController = {
     this._container.querySelector("#lbBtnAnalyze")?.addEventListener("click", () => {
       const cur = this._data?.currentUserEntry;
       const top = this._data?.topStudents || [];
-      const rank = cur?.rank || 1;
-      const xp = cur?.xp || 0;
+      const totalStudents = this._data?.totalStudents || top.length || 220;
 
-      let msg = `أنت تحتل المركز #${rank} برصيد ${xp.toLocaleString()} XP!\n\n`;
-      if (rank === 1) {
-        msg += "أنت حالياً في المركز الأول وتتصدر الترتيب العام! استمر في إتمام التحديات للحفاظ على الصدارة 🏆";
-      } else {
-        const ahead = top[rank - 2];
-        if (ahead) {
-          const diff = Math.max(10, (ahead.xp || 0) - xp + 10);
-          msg += `متبقي ${diff.toLocaleString()} XP لتخطي '${ahead.studentName}' (${(ahead.xp || 0).toLocaleString()} XP) والصعود إلى المركز #${ahead.rank} بالمنصة. حل تحديات بايثون يمنحك نقاطاً إضافية ترفع ترتيبك مباشرة! 🚀`;
-        } else {
-          msg += "استمر في خوض تحديات بايثون وحل الواجبات لرفع رصيدك من الـ XP!";
-        }
-      }
-
-      showConfirmDialog({
-        title: "تحليل أدائي ومقارنة النقاط 📊",
-        message: msg,
-        confirmText: "خوض التحديات الآن",
-        cancelText: "إغلاق",
-        variant: "primary"
-      }).then((confirmed) => {
-        if (confirmed) {
-          const advBtn = document.querySelector('.sidebar-item[data-section="python-adventure"]');
-          if (advBtn) advBtn.click();
+      openPerformanceAnalysisModal({
+        currentUser: cur || {
+          studentName: this._student?.name || "حسابك الشخصي",
+          rank: 168,
+          xp: 0,
+          level: 1,
+          streak: 1,
+          tasksDone: 0,
+          accuracy: "100%"
+        },
+        topStudents: top,
+        totalStudents,
+        onNavigate: (tabId) => {
+          const btn = document.querySelector(`.sidebar-item[data-section="${tabId}"]`);
+          if (btn) btn.click();
         }
       });
     });
