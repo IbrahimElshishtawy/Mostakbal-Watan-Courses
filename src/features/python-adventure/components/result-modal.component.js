@@ -5,6 +5,7 @@ import { PythonHeartsService } from "../python-hearts.service.js";
 /**
  * Renders the Challenge Result Feedback Modal (Success or Failure)
  * with deep Code Complexity, Anti-Cheat, and Clean Code Review.
+ * Fully responsive on mobile, with fixed header/footer and smooth touch scrolling.
  */
 export function renderResultModal({
   passed = false,
@@ -30,139 +31,171 @@ export function renderResultModal({
   const attemptsLeft = Math.max(0, maxAttempts - attemptsCount);
   const attemptsExhausted = attemptsLeft <= 0;
 
+  const modalIcon = passed ? "🎉" : (isTimeout ? "⏱️" : (heartLost ? "💔" : "💡"));
+  const modalTitle = passed
+    ? "أحسنت صنعاً! تم اجتياز التحدي"
+    : (isTimeout ? "انتهت المهلة المحددة" : "مراجعة الكود والمحاولة");
+
   return `
-    <div class="adventure-modal-overlay" id="adventureResultModal" role="dialog" aria-modal="true">
+    <div class="adventure-modal-overlay" id="adventureResultModal" role="dialog" aria-modal="true" aria-labelledby="resultModalTitle">
       <div class="adventure-modal-card result-card ${passed ? "success" : "failure"}">
-        ${passed ? `
-          <!-- SUCCESS STATE -->
-          <div class="result-celebration-header">
-            <div class="result-badge-anim">🎉</div>
-            <h3 class="result-title">أحسنت صنعاً! تم اجتياز التحدي</h3>
-            <p class="result-subtitle">تم إثبات كفاءة الكود واجتياز جميع حالات الاختبار بنجاح.</p>
-          </div>
-
-          <div class="result-rewards-row">
-            <div class="result-xp-chip">+${earnedXp} XP</div>
-            <div class="result-stars-chip">
-              <span class="${stars >= 1 ? "star-lit" : "star-dim"}">★</span>
-              <span class="${stars >= 2 ? "star-lit" : "star-dim"}">★</span>
-              <span class="${stars >= 3 ? "star-lit" : "star-dim"}">★</span>
-            </div>
-            <div class="result-attempts-chip">
-              المحاولة: ${attemptsCount} من ${maxAttempts}
+        
+        <!-- Sticky Header with Close Button -->
+        <div class="adventure-modal-header result-modal-header">
+          <div class="d-flex items-center gap-2">
+            <span class="modal-challenge-icon">${modalIcon}</span>
+            <div>
+              <span class="text-xs text-muted font-bold d-block">مغامرة بايثون • تقييم المحاولة</span>
+              <h3 id="resultModalTitle" class="modal-challenge-title ${passed ? "text-success" : "text-warning"}">
+                ${modalTitle}
+              </h3>
             </div>
           </div>
+          <button type="button" class="adventure-modal-close" id="resultModalCloseBtn" aria-label="إغلاق التقرير والعودة للكود">✕</button>
+        </div>
 
-          ${levelUp ? `
-            <div class="result-levelup-banner">
-              <span>🚀 ارتقيت إلى الرتبة البرمجية: <strong>Level ${newLevel}</strong>!</span>
+        <!-- Scrollable Modal Body -->
+        <div class="adventure-modal-body result-modal-body">
+          ${passed ? `
+            <!-- SUCCESS STATE -->
+            <div class="result-celebration-header">
+              <div class="result-badge-anim">🎉</div>
+              <h3 class="result-title">كود مثالي وحل معتمد!</h3>
+              <p class="result-subtitle">تم إثبات كفاءة الكود واجتياز جميع حالات الاختبار بنجاح.</p>
             </div>
-          ` : ""}
 
-          <!-- ACADEMIC CODE ANALYSIS CARD -->
-          ${renderCodeAnalysisSection(codeAnalysis)}
+            <div class="result-rewards-row">
+              <div class="result-xp-chip">+${earnedXp} XP</div>
+              <div class="result-stars-chip">
+                <span class="${stars >= 1 ? "star-lit" : "star-dim"}">★</span>
+                <span class="${stars >= 2 ? "star-lit" : "star-dim"}">★</span>
+                <span class="${stars >= 3 ? "star-lit" : "star-dim"}">★</span>
+              </div>
+              <div class="result-attempts-chip">
+                المحاولة: ${attemptsCount} من ${maxAttempts}
+              </div>
+            </div>
 
-          ${newlyUnlockedAchievements.length > 0 ? `
-            <div class="result-achievement-unlock">
-              ${newlyUnlockedAchievements.map((ach) => `
-                <div class="ach-unlock-card">
-                  <span class="ach-icon">${ach.icon || "🏆"}</span>
-                  <div>
-                    <strong>وسام جديد: ${escapeHtml(ach.title)}</strong>
-                    <p class="text-xs text-muted">${escapeHtml(ach.description || "")}</p>
+            ${levelUp ? `
+              <div class="result-levelup-banner">
+                <span>🚀 ارتقيت إلى الرتبة البرمجية: <strong>Level ${newLevel}</strong>!</span>
+              </div>
+            ` : ""}
+
+            <!-- ACADEMIC CODE ANALYSIS CARD -->
+            ${renderCodeAnalysisSection(codeAnalysis)}
+
+            ${newlyUnlockedAchievements.length > 0 ? `
+              <div class="result-achievement-unlock">
+                ${newlyUnlockedAchievements.map((ach) => `
+                  <div class="ach-unlock-card">
+                    <span class="ach-icon">${ach.icon || "🏆"}</span>
+                    <div>
+                      <strong>وسام جديد: ${escapeHtml(ach.title)}</strong>
+                      <p class="text-xs text-muted">${escapeHtml(ach.description || "")}</p>
+                    </div>
                   </div>
+                `).join("")}
+              </div>
+            ` : ""}
+
+            ${skillsGained.length > 0 ? `
+              <div class="result-skills-box">
+                <strong class="text-xs text-muted">المهارات المكتسبة:</strong>
+                <div class="skills-tags-wrap">
+                  ${skillsGained.map((sk) => `<span class="skill-tag">✓ ${escapeHtml(sk)}</span>`).join("")}
                 </div>
-              `).join("")}
-            </div>
-          ` : ""}
+              </div>
+            ` : ""}
 
-          ${skillsGained.length > 0 ? `
-            <div class="result-skills-box">
-              <strong class="text-xs text-muted">المهارات المكتسبة:</strong>
-              <div class="skills-tags-wrap">
-                ${skillsGained.map((sk) => `<span class="skill-tag">✓ ${escapeHtml(sk)}</span>`).join("")}
+          ` : `
+            <!-- FAILURE / CONSTRUCTIVE STATE -->
+            <div class="result-fail-header">
+              <div class="result-badge-anim fail">${isTimeout ? "⏱️" : (heartLost ? "💔" : "❌")}</div>
+              <h3 class="result-title text-warning">
+                ${isTimeout ? "انتهت المهلة المحددة للتحدي" : (attemptsExhausted ? (remainingHearts <= 0 ? "نفدت جميع قلوب المحاولات!" : "استنفدت المحاولتين وخسرت قلباً!") : "لم تنجح المهمة بعد")}
+              </h3>
+              <p class="result-subtitle">
+                ${isTimeout
+                  ? "انتهى الوقت المسموح به لحل هذا التحدي لمنع الغش البرمجي."
+                  : (attemptsExhausted
+                    ? (remainingHearts <= 0 
+                      ? `استنفدت محاولاتك وفقدت آخر قلب (0/${maxAttempts + 1}). يرجى الانتظار لتجدد القلوب.` 
+                      : `استنفدت محاولتي الحل (${maxAttempts}/${maxAttempts}) وخسرت قلباً واحداً (تبقى لديك ${remainingHearts} من 3 ❤️).`)
+                    : `تبقت لك فرصة واحدة فقط (${attemptsLeft} من ${maxAttempts})! راجع كودك بعناية واختبره قبل التسليم.`)}
+              </p>
+            </div>
+
+            ${heartLost ? `
+              <div class="result-heart-loss-strip ${remainingHearts <= 0 ? 'empty' : 'warning'}">
+                <span class="heart-loss-icon">${remainingHearts <= 0 ? "💔" : "💔"}</span>
+                <div class="heart-loss-info">
+                  <strong>${remainingHearts <= 0 ? "نفدت جميع قلوب المحاولات (0/3) 💔" : `خسرت قلباً واحداً! متبقي لديك: ${remainingHearts} من 3 ❤️`}</strong>
+                  <p>${remainingHearts <= 0 
+                    ? `عليك الانتظار حتى يتجدد قلبك القادم (${PythonHeartsService.formatTime(nextHeartInSeconds)}) لاستئناف حل التحديات.` 
+                    : `تم تفعيل استراحة تفكير ومراجعة لمدة 3 دقائق (${PythonHeartsService.formatTime(cooldownSeconds)}) قبل إعادة فتح محاولات هذا التحدي.`}</p>
+                </div>
+              </div>
+            ` : ""}
+
+            <!-- ACADEMIC CODE ANALYSIS CARD (EVEN ON FAIL) -->
+            ${renderCodeAnalysisSection(codeAnalysis)}
+
+            <div class="result-feedback-box">
+              <div class="feedback-icon">${isTimeout ? "⏳" : "💡"}</div>
+              <div class="feedback-text">
+                <p>${escapeHtml(feedback || "الكود لم يحقق الناتج المطلوب تماماً. راجع المتطلبات وجرب مرة أخرى.")}</p>
+                ${errorDetails ? `<pre class="feedback-error-pre" dir="ltr"><code>${escapeHtml(errorDetails)}</code></pre>` : ""}
               </div>
             </div>
-          ` : ""}
+          `}
+        </div>
 
+        <!-- Sticky Footer with Action Buttons -->
+        <div class="adventure-modal-footer result-modal-footer">
           <div class="result-actions-row">
-            ${hasNextChallenge ? `
-              <button type="button" class="btn btn-primary btn-lg w-100" id="resultNextMissionBtn">
-                <span>المهمة التالية ➔</span>
+            ${passed ? `
+              ${hasNextChallenge ? `
+                <button type="button" class="btn btn-primary btn-lg w-100" id="resultNextMissionBtn">
+                  <span>المهمة التالية ➔</span>
+                </button>
+              ` : `
+                <button type="button" class="btn btn-primary btn-lg w-100" id="resultReturnMapBtn">
+                  <span>🏆 تم إكمال هذا المسار - العودة للخريطة</span>
+                </button>
+              `}
+              <button type="button" class="btn btn-secondary w-100" id="resultReturnMapBtnSecondary">
+                <span>🗺️ خريطة العوالم</span>
               </button>
             ` : `
-              <button type="button" class="btn btn-primary btn-lg w-100" id="resultReturnMapBtn">
-                <span>🏆 تم إكمال هذا المسار - العودة للخريطة</span>
-              </button>
+              ${!attemptsExhausted && !isTimeout ? `
+                <button type="button" class="btn btn-primary btn-lg w-100" id="resultTryAgainBtn">
+                  <span>🔄 العودة وتعديل الكود (فرصة أخيرة ${attemptsLeft}/${maxAttempts})</span>
+                </button>
+                <div class="d-flex gap-2 w-100">
+                  <button type="button" class="btn btn-secondary flex-1" id="resultGetHintBtn">
+                    <span>💡 تلميح</span>
+                  </button>
+                  <button type="button" class="btn btn-secondary flex-1" id="resultReturnMapBtnSecondary">
+                    <span>🗺️ الخريطة</span>
+                  </button>
+                </div>
+              ` : (remainingHearts <= 0 ? `
+                <button type="button" class="btn btn-primary btn-lg w-100" id="resultReturnMapBtn">
+                  <span>🗺️ العودة لخريطة العوالم (انتظار شحن القلوب)</span>
+                </button>
+              ` : `
+                <button type="button" class="btn btn-primary btn-lg w-100" id="resultTryAgainBtn">
+                  <span>⏳ استراحة تفكير (متبقي ${PythonHeartsService.formatTime(cooldownSeconds)})</span>
+                </button>
+                <button type="button" class="btn btn-secondary w-100" id="resultReturnMapBtn">
+                  <span>🗺️ العودة لخريطة العوالم</span>
+                </button>
+              `)}
             `}
-            <button type="button" class="btn btn-secondary w-100 mt-2" id="resultReturnMapBtnSecondary">
-              <span>خريطة العوالم</span>
-            </button>
           </div>
+        </div>
 
-        ` : `
-          <!-- FAILURE / CONSTRUCTIVE STATE -->
-          <div class="result-fail-header">
-            <div class="result-badge-anim fail">${isTimeout ? "⏱️" : (heartLost ? "💔" : "❌")}</div>
-            <h3 class="result-title text-warning">
-              ${isTimeout ? "انتهت المهلة المحددة للتحدي" : (attemptsExhausted ? (remainingHearts <= 0 ? "نفدت جميع قلوب المحاولات!" : "استنفدت المحاولتين وخسرت قلباً!") : "لم تنجح المهمة بعد")}
-            </h3>
-            <p class="result-subtitle">
-              ${isTimeout
-                ? "انتهى الوقت المسموح به لحل هذا التحدي لمنع الغش البرمجي."
-                : (attemptsExhausted
-                  ? (remainingHearts <= 0 
-                    ? `استنفدت محاولاتك وفقدت آخر قلب (0/${maxAttempts + 1}). يرجى الانتظار لتجدد القلوب.` 
-                    : `استنفدت محاولتي الحل (${maxAttempts}/${maxAttempts}) وخسرت قلباً واحداً (تبقى لديك ${remainingHearts} من 3 ❤️).`)
-                  : `تبقت لك فرصة واحدة فقط (${attemptsLeft} من ${maxAttempts})! راجع كودك بعناية واختبره قبل التسليم.`)}
-            </p>
-          </div>
-
-          ${heartLost ? `
-            <div class="result-heart-loss-strip ${remainingHearts <= 0 ? 'empty' : 'warning'}">
-              <span class="heart-loss-icon">${remainingHearts <= 0 ? "💔" : "💔"}</span>
-              <div class="heart-loss-info">
-                <strong>${remainingHearts <= 0 ? "نفدت جميع قلوب المحاولات (0/3) 💔" : `خسرت قلباً واحداً! متبقي لديك: ${remainingHearts} من 3 ❤️`}</strong>
-                <p>${remainingHearts <= 0 
-                  ? `عليك الانتظار حتى يتجدد قلبك القادم (${PythonHeartsService.formatTime(nextHeartInSeconds)}) لاستئناف حل التحديات.` 
-                  : `تم تفعيل استراحة تفكير ومراجعة لمدة 3 دقائق (${PythonHeartsService.formatTime(cooldownSeconds)}) قبل إعادة فتح محاولات هذا التحدي.`}</p>
-              </div>
-            </div>
-          ` : ""}
-
-          <!-- ACADEMIC CODE ANALYSIS CARD (EVEN ON FAIL) -->
-          ${renderCodeAnalysisSection(codeAnalysis)}
-
-          <div class="result-feedback-box">
-            <div class="feedback-icon">${isTimeout ? "⏳" : "💡"}</div>
-            <div class="feedback-text">
-              <p>${escapeHtml(feedback || "الكود لم يحقق الناتج المطلوب تماماً. راجع المتطلبات وجرب مرة أخرى.")}</p>
-              ${errorDetails ? `<pre class="feedback-error-pre" dir="ltr"><code>${escapeHtml(errorDetails)}</code></pre>` : ""}
-            </div>
-          </div>
-
-          <div class="result-actions-row">
-            ${!attemptsExhausted && !isTimeout ? `
-              <button type="button" class="btn btn-primary btn-lg w-100" id="resultTryAgainBtn">
-                <span>🔄 العودة وتعديل الكود (فرصة أخيرة ${attemptsLeft}/${maxAttempts})</span>
-              </button>
-              <button type="button" class="btn btn-secondary w-100 mt-2" id="resultGetHintBtn">
-                <span>💡 طلب تلميح إضافي</span>
-              </button>
-            ` : (remainingHearts <= 0 ? `
-              <button type="button" class="btn btn-primary btn-lg w-100" id="resultReturnMapBtn">
-                <span>🗺️ العودة لخريطة العوالم (انتظار شحن القلوب)</span>
-              </button>
-            ` : `
-              <button type="button" class="btn btn-primary btn-lg w-100" id="resultTryAgainBtn">
-                <span>⏳ استراحة تفكير (متبقي ${PythonHeartsService.formatTime(cooldownSeconds)})</span>
-              </button>
-              <button type="button" class="btn btn-secondary w-100 mt-2" id="resultReturnMapBtn">
-                <span>🗺️ العودة لخريطة العوالم</span>
-              </button>
-            `)}
-          </div>
-        `}
       </div>
     </div>
   `;

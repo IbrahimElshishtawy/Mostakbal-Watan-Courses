@@ -1482,17 +1482,40 @@ export const PythonAdventureController = {
     document.getElementById("adventureResultModal")?.remove();
     document.body.insertAdjacentHTML("beforeend", renderResultModal(params));
 
-    document.getElementById("resultTryAgainBtn")?.addEventListener("click", () => {
+    const closeModal = () => {
       document.getElementById("adventureResultModal")?.remove();
+      window.removeEventListener("keydown", onEscape);
+    };
+
+    const onEscape = (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    };
+    window.addEventListener("keydown", onEscape);
+
+    // Close button (X)
+    document.getElementById("resultModalCloseBtn")?.addEventListener("click", closeModal);
+
+    // Click outside backdrop to close
+    const modalOverlay = document.getElementById("adventureResultModal");
+    modalOverlay?.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    document.getElementById("resultTryAgainBtn")?.addEventListener("click", () => {
+      closeModal();
     });
 
     document.getElementById("resultGetHintBtn")?.addEventListener("click", () => {
-      document.getElementById("adventureResultModal")?.remove();
+      closeModal();
       this.revealNextHint();
     });
 
     document.getElementById("resultNextMissionBtn")?.addEventListener("click", () => {
-      document.getElementById("adventureResultModal")?.remove();
+      closeModal();
       if (params.nextChallengeId) {
         this.startMissionFlow(params.nextChallengeId);
       } else {
@@ -1501,12 +1524,12 @@ export const PythonAdventureController = {
     });
 
     document.getElementById("resultReturnMapBtn")?.addEventListener("click", () => {
-      document.getElementById("adventureResultModal")?.remove();
+      closeModal();
       this.navigateTo("world-map");
     });
 
     document.getElementById("resultReturnMapBtnSecondary")?.addEventListener("click", () => {
-      document.getElementById("adventureResultModal")?.remove();
+      closeModal();
       this.navigateTo("world-map");
     });
   },
